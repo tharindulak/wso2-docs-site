@@ -27,6 +27,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 
 - [How the existing WSO2 Docusaurus sites are built](issues/01-existing-docusaurus-sites.md): three single-instance sites with different search and hosting; Agent Manager's hand-forked "cloud" version is already drifting; hosting, theme CSS and CI checks are reusable.
 - [Search options for a multi-product versioned Docusaurus site](issues/03-search-options.md): Algolia DocSearch likely free but discretionary and needs legal review; stock search is global, a swizzled SearchBar adds product scope; Typesense is plan B; local search ruled out.
+- [Ways to pull content sources into one Docusaurus build](issues/02-pulling-content-sources.md): every approach must copy into Docusaurus's fixed versioned-docs layout; only commit SHAs pin docs-apim and docs-mi; unpinned pulls are a supply-chain risk; pinned fetch script recommended.
 - [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md): Oxygen look via Infima CSS variables plus plain MUI islands (193 KB vs 621 KB per page with the package); adopt the real package once it is tree-shakeable or ships tokens.
 
 ## Not yet specified
