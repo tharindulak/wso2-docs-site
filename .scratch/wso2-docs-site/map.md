@@ -30,13 +30,14 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - [Ways to pull content sources into one Docusaurus build](issues/02-pulling-content-sources.md): every approach must copy into Docusaurus's fixed versioned-docs layout; only commit SHAs pin docs-apim and docs-mi; unpinned pulls are a supply-chain risk; pinned fetch script recommended.
 - [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md): Oxygen look via Infima CSS variables plus plain MUI islands (193 KB vs 621 KB per page with the package); adopt the real package once it is tree-shakeable or ships tokens.
 - [Content format for content sources](issues/06-content-format.md): teams keep MkDocs; the site converts and merges cloud and self-hosted at build time into labelled unified pages; shared text says "Identity Platform", self-hosted-only content "Identity Server".
+- [How the docs site pulls content](issues/07-content-pull-mechanism.md): SHA lock file in the docs-site repo, hourly pull-based bump PRs that auto-merge on a green build; Latest = cloud + newest GA self-hosted; local override for writer preview.
 
 ## Not yet specified
 
 - Redirects from current docs URLs (wso2.com docs, Asgardeo, Devant) to the docs site.
-- Contribution workflow for product teams: previews, reviews, ownership of shared pages.
+- Contribution workflow for product teams: pull-request previews in content repos (needs hosting), reviews, ownership of shared pages.
 - API reference rendering (OpenAPI) inside product sections.
-- Build time and cost once all products and versions are in.
+- Build time and cost once all products and versions are in, including image storage (dedup or CDN instead of copying 250 to 640 MB of images per version).
 - Internationalisation.
 
 ## Out of scope
