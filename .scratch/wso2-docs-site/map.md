@@ -31,6 +31,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md): Oxygen look via Infima CSS variables plus plain MUI islands (193 KB vs 621 KB per page with the package); adopt the real package once it is tree-shakeable or ships tokens.
 - [Content format for content sources](issues/06-content-format.md): teams keep MkDocs; the site converts and merges cloud and self-hosted at build time into labelled unified pages; shared text says "Identity Platform", self-hosted-only content "Identity Server".
 - [How the docs site pulls content](issues/07-content-pull-mechanism.md): SHA lock file in the docs-site repo, hourly pull-based bump PRs that auto-merge on a green build; Latest = cloud + newest GA self-hosted; local override for writer preview.
+- [Versioning details](issues/08-versioning-details.md): Latest plus 2 previous releases per self-hosted distribution, older ones linked on current sites; `/identity/7.2.0/…` URLs; Integration Platform gets one versioned section per distribution; new releases detected automatically, promotion PR needs docs-team approval.
 
 ## Not yet specified
 

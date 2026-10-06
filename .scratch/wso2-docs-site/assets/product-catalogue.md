@@ -11,3 +11,5 @@ Agreed with the user; awaiting product-team confirmation in [Confirm the product
 | API Analytics Platform | moesif.com (stays external) | (none) | No |
 
 Later (not in this effort until confirmed): APK (docs-apk), API Microgateway (docs-mg), Streaming Integrator (docs-si).
+
+Each self-hosted distribution (Identity Server; Micro Integrator, WSO2 Integrator, ICP, BI; API Manager) is versioned separately with its own version selector. See [Versioning details](../issues/08-versioning-details.md).
