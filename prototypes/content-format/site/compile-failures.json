@@ -1,0 +1,712 @@
+[
+  {
+    "file": "apis/organization-apis/authentication.mdx",
+    "line": 338,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<table>` (321:5-321:12)"
+  },
+  {
+    "file": "apis/retrieve-tenant-resources-based-on-search-parameters.mdx",
+    "line": 492,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<div>` (392:1-392:34)"
+  },
+  {
+    "file": "apis/scim2/scim2-batch-operations.mdx",
+    "line": 201,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (201:12-201:16)"
+  },
+  {
+    "file": "apis/scim2/scim2-patch-operations.mdx",
+    "line": 54,
+    "msg": "Expected a closing tag for `<td>` (55:9-55:13) before the end of `paragraph`"
+  },
+  {
+    "file": "apis/scim2-batch-operations.mdx",
+    "line": 93,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (93:12-93:16)"
+  },
+  {
+    "file": "apis/scim2-patch-operations.mdx",
+    "line": 22,
+    "msg": "Expected a closing tag for `<td>` (23:9-23:13) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/configure/configure-cors.mdx",
+    "line": 202,
+    "msg": "Unexpected closing tag `</p>`, expected corresponding closing tag for `<td>` (201:13-201:17)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-datasource-agent-identity.mdx",
+    "line": 241,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<div>` (238:13-238:46)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-datasource-consent-management.mdx",
+    "line": 245,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<div>` (242:13-242:46)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-datasource-registry-data.mdx",
+    "line": 256,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<div>` (253:13-253:46)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-datasource-session.mdx",
+    "line": 750,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<div>` (747:13-747:46)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-ibm-db2.mdx",
+    "line": 65,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (44:1-44:8)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-mssql.mdx",
+    "line": 65,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (44:1-44:8)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-mysql.mdx",
+    "line": 65,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (44:1-44:8)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-oracle-rac.mdx",
+    "line": 65,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (44:1-44:8)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-oracle.mdx",
+    "line": 65,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (44:1-44:8)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-postgresql.mdx",
+    "line": 63,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (42:1-42:8)"
+  },
+  {
+    "file": "deploy/configure/databases/carbon-database/change-to-remote-h2.mdx",
+    "line": 71,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (58:1-58:8)"
+  },
+  {
+    "file": "deploy/configure/databases/remove-references-to-deleted-user-identities.mdx",
+    "line": 269,
+    "msg": "Expected a closing tag for `<p>` (272:9-272:12) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/configure/email-sending-module.mdx",
+    "line": 77,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tr>` (37:7-37:11)"
+  },
+  {
+    "file": "deploy/configure/user-stores/configure-system-administrator.mdx",
+    "line": 93,
+    "msg": "Expected a closing tag for `<td>` (94:1-94:5) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/configure/user-stores/secure-userstore-using-pbkdf2.mdx",
+    "line": 99,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tr>` (94:9-94:13)"
+  },
+  {
+    "file": "deploy/deployment-checklist.mdx",
+    "line": 51,
+    "msg": "Unexpected closing tag `</div>`, expected corresponding closing tag for `<td>` (38:16-38:20)"
+  },
+  {
+    "file": "deploy/deployment-guide.mdx",
+    "line": 66,
+    "msg": "Expected a closing tag for `<td>` (67:1-67:5) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/disaster-recovery/disaster-recovery-deployment-patterns.mdx",
+    "line": 101,
+    "msg": "Unexpected character `3` (U+0033) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "deploy/elk-configuring-alerts.mdx",
+    "line": 42,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "deploy/get-started/install.mdx",
+    "line": 49,
+    "msg": "Expected a closing tag for `<li>` (51:9-51:13) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/monitor/http-access-logging.mdx",
+    "line": 54,
+    "msg": "Expected a closing tag for `<li>` (56:17-56:21) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/monitor/work-with-product-observability.mdx",
+    "line": 234,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<td>` (202:5-202:21)"
+  },
+  {
+    "file": "deploy/performance/performance-tuning-recommendations.mdx",
+    "line": 162,
+    "msg": "Expected a closing tag for `<td>` (164:13-164:17) before the end of `paragraph`"
+  },
+  {
+    "file": "deploy/security/enable-java-security-manager.mdx",
+    "line": 191,
+    "msg": "Expected a closing tag for `<details>` (199:5-199:14) before the end of `listItem`"
+  },
+  {
+    "file": "deploy/security/enable-mutual-ssl.mdx",
+    "line": 13,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "get-started/try-it-application.mdx",
+    "line": 12,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "get-started/try-samples/qsg-oidc-webapp-java-ee.mdx",
+    "line": 80,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "get-started/try-samples/qsg-saml-webapp-java-ee.mdx",
+    "line": 89,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "get-started/try-samples/qsg-spa-javascript.mdx",
+    "line": 77,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "get-started/try-samples/qsg-spa-react.mdx",
+    "line": 77,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "get-started/try-your-own-app/java-ee-oidc.mdx",
+    "line": 152,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "get-started/try-your-own-app/java-ee-saml.mdx",
+    "line": 258,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "get-started/try-your-own-app/javascript.mdx",
+    "line": 13,
+    "msg": "Unexpected character `=` (U+003D) in local name, expected a name character such as letters, digits, `$`, or `_`; whitespace before attributes; or the end of the"
+  },
+  {
+    "file": "guides/account-configurations/account-recovery/password-recovery.mdx",
+    "line": 30,
+    "msg": "Expected a closing tag for `<table>` (31:5-31:12) before the end of `listItem`"
+  },
+  {
+    "file": "guides/account-configurations/login-security/bot-detection.mdx",
+    "line": 63,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/account-configurations/login-security/password-validation.mdx",
+    "line": 258,
+    "msg": "Expected a closing tag for `<td>` (259:9-259:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/account-configurations/login-security/session-management.mdx",
+    "line": 86,
+    "msg": "Expected the closing tag `</li>` either after the end of `paragraph` (86:38) or another opening tag after the start of `paragraph` (86:2)"
+  },
+  {
+    "file": "guides/account-configurations/user-onboarding/self-registration.mdx",
+    "line": 32,
+    "msg": "Expected a closing tag for `<table>` (34:5-34:12) before the end of `listItem`"
+  },
+  {
+    "file": "guides/agentic-ai/mcp/mcp-server-authorization.mdx",
+    "line": 111,
+    "msg": "Expected a closing tag for `<tr>` (121:9-121:13) before the end of `listItem`"
+  },
+  {
+    "file": "guides/applications/register-oidc-web-app.mdx",
+    "line": 41,
+    "msg": "Expected the closing tag `</p>` either after the end of `paragraph` (42:197) or another opening tag after the start of `paragraph` (41:13)"
+  },
+  {
+    "file": "guides/applications/register-single-page-app.mdx",
+    "line": 38,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (38:13-38:17)"
+  },
+  {
+    "file": "guides/authentication/add-identifier-first-login.mdx",
+    "line": 144,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/authentication/app-native-authentication/secure-app-native-authentication-flows.mdx",
+    "line": 35,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/concurrent-session-based-template.mdx",
+    "line": 103,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (103:17-103:21)"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/ip-based-template.mdx",
+    "line": 118,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (118:17-118:21)"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/login-attempt-based-template.mdx",
+    "line": 57,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<p>` (57:20-57:23)"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/on-demand-silent-password-migration-template.mdx",
+    "line": 345,
+    "msg": "Expected a closing tag for `<td>` (346:9-346:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/sign-in-option-based-template.mdx",
+    "line": 93,
+    "msg": "Expected a closing tag for `<td>` (94:17-94:21) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/user-age-based-template.mdx",
+    "line": 112,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (112:17-112:21)"
+  },
+  {
+    "file": "guides/authentication/conditional-auth/user-store-based-template.mdx",
+    "line": 62,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<p>` (62:20-62:23)"
+  },
+  {
+    "file": "guides/authentication/configure-jwt-bearer-grant.mdx",
+    "line": 41,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<tr>` (37:7-37:11)"
+  },
+  {
+    "file": "guides/authentication/decentralized-login/index.mdx",
+    "line": 11,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<a>` (10:5-10:112)"
+  },
+  {
+    "file": "guides/authentication/eid-login/add-france-connect-login.mdx",
+    "line": 46,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<table>` (31:8-31:15)"
+  },
+  {
+    "file": "guides/authentication/eid-login/add-franceconnect-login.mdx",
+    "line": 44,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<table>` (29:8-29:15)"
+  },
+  {
+    "file": "guides/authentication/eid-login/add-signicat-login.mdx",
+    "line": 82,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<table>` (63:5-63:12)"
+  },
+  {
+    "file": "guides/authentication/eid-login/add-swiss-id-login.mdx",
+    "line": 46,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<table>` (31:8-31:15)"
+  },
+  {
+    "file": "guides/authentication/eid-login/add-swissid-login.mdx",
+    "line": 46,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<table>` (31:8-31:15)"
+  },
+  {
+    "file": "guides/authentication/enterprise-login/add-iwa-login.mdx",
+    "line": 112,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (112:13-112:17)"
+  },
+  {
+    "file": "guides/authentication/enterprise-login/add-microsoft-365-login.mdx",
+    "line": 47,
+    "msg": "Expected a closing tag for `<td>` (48:13-48:17) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/authentication/federated-login/index.mdx",
+    "line": 46,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<a>` (45:5-45:102)"
+  },
+  {
+    "file": "guides/authentication/login-flow-ai.mdx",
+    "line": 18,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/authentication/oidc/implement-oidc-hybrid-flow.mdx",
+    "line": 398,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/authentication/oidc/jarm.mdx",
+    "line": 32,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (31:9-31:13)"
+  },
+  {
+    "file": "guides/authentication/oidc/private-key-jwt-client-auth.mdx",
+    "line": 157,
+    "msg": "Expected a closing tag for `<code>` (174:13-174:19) before the end of `listItem`"
+  },
+  {
+    "file": "guides/authentication/oidc/validate-jwt-with-jwks.mdx",
+    "line": 138,
+    "msg": "Expected a closing tag for `<td>` (139:9-139:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/authentication/social-login/add-x-login.mdx",
+    "line": 78,
+    "msg": "Unexpected character `\"` (U+0022) in name, expected a name character such as letters, digits, `$`, or `_`; whitespace before attributes; or the end of the tag"
+  },
+  {
+    "file": "guides/authentication/social-login/index.mdx",
+    "line": 85,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<a>` (83:5-83:97)"
+  },
+  {
+    "file": "guides/authentication/standard-based-login/add-ws-federation.mdx",
+    "line": 38,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (38:13-38:17)"
+  },
+  {
+    "file": "guides/authentication/standard-based-login/index.mdx",
+    "line": 23,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<a>` (22:1-22:105)"
+  },
+  {
+    "file": "guides/authentication/user-attributes/enable-attributes-for-oidc-app.mdx",
+    "line": 50,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/authorization/api-authorization/api-authorization.mdx",
+    "line": 25,
+    "msg": "Expected a closing tag for `<td>` (26:9-26:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/branding/branding-ai.mdx",
+    "line": 20,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/branding/configure-ui-branding.mdx",
+    "line": 212,
+    "msg": "Expected a closing tag for `<td>` (213:9-213:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/branding/customize-email-templates.mdx",
+    "line": 76,
+    "msg": "Unexpected closing tag `</code>`, expected corresponding closing tag for `<td>` (76:9-76:13)"
+  },
+  {
+    "file": "guides/branding/localization.mdx",
+    "line": 442,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/flows/flow-ai.mdx",
+    "line": 20,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/flows/flow-extension-configuration.mdx",
+    "line": 55,
+    "msg": "Unexpected closing tag `</video>`, expected corresponding closing tag for `<source>` (53:5-53:112)"
+  },
+  {
+    "file": "guides/identity-platform-logs/audit-logs/index.mdx",
+    "line": 92,
+    "msg": "Unexpected character `=` (U+003D) in local name, expected a name character such as letters, digits, `$`, or `_`; whitespace before attributes; or the end of the"
+  },
+  {
+    "file": "guides/monitoring/identity-platform-events.mdx",
+    "line": 54,
+    "msg": "Unexpected character `=` (U+003D) in local name, expected a name character such as letters, digits, `$`, or `_`; whitespace before attributes; or the end of the"
+  },
+  {
+    "file": "guides/multitenancy/manage-tenants.mdx",
+    "line": 38,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/notification-channels/configure-email-provider.mdx",
+    "line": 121,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/notification-channels/configure-sms-provider.mdx",
+    "line": 116,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/organization-insights.mdx",
+    "line": 39,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/organization-management/onboard-org-admins/self-service-approach.mdx",
+    "line": 57,
+    "msg": "Expected a closing tag for `<td>` (58:13-58:17) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/organization-management/organization-discovery/email-domain-based-organization-discovery.mdx",
+    "line": 319,
+    "msg": "Expected a closing tag for `<td>` (320:13-320:17) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/organization-management/try-a-b2b-use-case.mdx",
+    "line": 130,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (130:13-130:17)"
+  },
+  {
+    "file": "guides/service-extensions/in-flow-extensions/custom-authentication.mdx",
+    "line": 259,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<tbody>` (250:1-250:8)"
+  },
+  {
+    "file": "guides/service-extensions/pre-flow-extensions/pre-issue-access-token-action.mdx",
+    "line": 160,
+    "msg": "Expected a closing tag for `<td>` (161:1-161:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/service-extensions/pre-flow-extensions/pre-issue-id-token-action.mdx",
+    "line": 122,
+    "msg": "Expected a closing tag for `<td>` (123:1-123:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/service-extensions/pre-flow-extensions/pre-update-password-action.mdx",
+    "line": 91,
+    "msg": "Expected a closing tag for `<td>` (92:1-92:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/service-extensions/pre-flow-extensions/pre-update-profile-action.mdx",
+    "line": 87,
+    "msg": "Expected a closing tag for `<td>` (88:1-88:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/user-accounts/account-security/password-validation.mdx",
+    "line": 108,
+    "msg": "Expected a closing tag for `<td>` (109:9-109:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/user-accounts/configure-self-registration.mdx",
+    "line": 28,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (27:21-27:25)"
+  },
+  {
+    "file": "guides/user-self-service/change-password.mdx",
+    "line": 26,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/users/attributes/email-verification-on-update.mdx",
+    "line": 350,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/users/attributes/enable-email-as-username.mdx",
+    "line": 44,
+    "msg": "Expected a closing tag for `<td>` (44:5-44:9) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/attributes/manage-scim2-attribute-mappings.mdx",
+    "line": 15,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/users/attributes/mobile-verification-on-update.mdx",
+    "line": 455,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/users/attributes/user-attributes/attribute-configurations-reference.mdx",
+    "line": 54,
+    "msg": "Expected a closing tag for `<td>` (55:215-55:219) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/attributes/user-attributes/configure-attributes.mdx",
+    "line": 61,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (61:13-61:17)"
+  },
+  {
+    "file": "guides/users/migrate-users/migrate-passwords.mdx",
+    "line": 84,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/users/onboard-users.mdx",
+    "line": 159,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "guides/users/outbound-provisioning/outbound-connectors/salesforce.mdx",
+    "line": 45,
+    "msg": "Expected a closing tag for `<td>` (46:17-46:21) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/outbound-provisioning/outbound-connectors/scim2.mdx",
+    "line": 20,
+    "msg": "Expected a closing tag for `<td>` (21:9-21:13) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/outbound-provisioning/setup-outbound-provisioning.mdx",
+    "line": 42,
+    "msg": "Expected a closing tag for `<ul>` (45:9-45:13) before the end of `directiveContainer`"
+  },
+  {
+    "file": "guides/users/user-stores/primary-user-store/index.mdx",
+    "line": 56,
+    "msg": "Expected a closing tag for `<td>` (58:5-58:9) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/user-stores/user-store-properties/index.mdx",
+    "line": 165,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<strong>` (165:108-165:116)"
+  },
+  {
+    "file": "guides/users/user-stores/user-store-properties/properties-jdbc-user-store.mdx",
+    "line": 18,
+    "msg": "Expected a closing tag for `<td>` (21:1-21:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/user-stores/user-store-properties/properties-read-only-ldap-user-store.mdx",
+    "line": 15,
+    "msg": "Expected a closing tag for `<td>` (17:1-17:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/user-stores/user-store-properties/properties-read-write-active-directory-user-store.mdx",
+    "line": 16,
+    "msg": "Expected a closing tag for `<td>` (18:1-18:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/users/user-stores/user-store-properties/properties-read-write-ldap-user-store.mdx",
+    "line": 15,
+    "msg": "Expected a closing tag for `<td>` (17:1-17:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/webhooks/webhook-events-and-payloads.mdx",
+    "line": 400,
+    "msg": "Expected a closing tag for `<li>` (401:1-401:5) before the end of `paragraph`"
+  },
+  {
+    "file": "guides/your-identity-platform/identity-platform-self-service.mdx",
+    "line": 62,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/your-identity-platform/manage-root-organizations.mdx",
+    "line": 82,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "guides/your-is/is-self-service.mdx",
+    "line": 64,
+    "msg": "Unexpected closing slash `/` in tag, expected an open tag first"
+  },
+  {
+    "file": "includes/db-basic-config.mdx",
+    "line": 33,
+    "msg": "Unexpected closing tag `</table>`, expected corresponding closing tag for `<tbody>` (12:1-12:8)"
+  },
+  {
+    "file": "includes/db-config-table.mdx",
+    "line": 38,
+    "msg": "Unexpected closing tag `</td>`, expected corresponding closing tag for `<div>` (35:13-35:46)"
+  },
+  {
+    "file": "quick-starts/crew-ai-py.mdx",
+    "line": 26,
+    "msg": "Unexpected character `'` (U+0027) before attribute name, expected a character that can start an attribute name, such as a letter, `$`, or `_`; whitespace before"
+  },
+  {
+    "file": "quick-starts/google-adk-py.mdx",
+    "line": 26,
+    "msg": "Unexpected character `'` (U+0027) before attribute name, expected a character that can start an attribute name, such as a letter, `$`, or `_`; whitespace before"
+  },
+  {
+    "file": "quick-starts/langchain-py.mdx",
+    "line": 26,
+    "msg": "Unexpected character `'` (U+0027) before attribute name, expected a character that can start an attribute name, such as a letter, `$`, or `_`; whitespace before"
+  },
+  {
+    "file": "quick-starts/springboot.mdx",
+    "line": 267,
+    "msg": "Unexpected closing tag `</Applies>`, expected corresponding closing tag for `<TabItem>` (156:1-156:34)"
+  },
+  {
+    "file": "quick-starts/vercel-ai-py.mdx",
+    "line": 26,
+    "msg": "Unexpected character `'` (U+0027) before attribute name, expected a character that can start an attribute name, such as a letter, `$`, or `_`; whitespace before"
+  },
+  {
+    "file": "references/app-settings/oidc-settings-for-app.mdx",
+    "line": 342,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (342:7-342:11)"
+  },
+  {
+    "file": "references/conditional-auth/api-reference.mdx",
+    "line": 102,
+    "msg": "Expected a closing tag for `<td>` (103:5-103:9) before the end of `paragraph`"
+  },
+  {
+    "file": "references/extend/authentication/write-a-post-authentication-handler.mdx",
+    "line": 50,
+    "msg": "Expected a closing tag for `<td>` (51:1-51:5) before the end of `paragraph`"
+  },
+  {
+    "file": "references/extend/user-mgt/provisioning/add-scim2-custom-user-schema-support.mdx",
+    "line": 55,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<tbody>` (54:9-54:16)"
+  },
+  {
+    "file": "references/identity-platform-outbound-ip-addresses.mdx",
+    "line": 25,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (24:9-24:13)"
+  },
+  {
+    "file": "references/rate-limits.mdx",
+    "line": 18,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<th>` (18:5-18:9)"
+  },
+  {
+    "file": "references/troubleshoot/app-native-error-codes.mdx",
+    "line": 15,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "references/tutorials/configure-choreo-for-password-migration.mdx",
+    "line": 31,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "references/tutorials/send-notification-external-schedular.mdx",
+    "line": 45,
+    "msg": "Unexpected character `5` (U+0035) before attribute value, expected a character that can start an attribute value, such as `\"`, `'`, or `{`"
+  },
+  {
+    "file": "sdks/asgardeo-mcp-server.mdx",
+    "line": 169,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "sdks/nextjs/middleware/asgardeo-middleware.mdx",
+    "line": 81,
+    "msg": "Could not parse expression with acorn"
+  },
+  {
+    "file": "tutorials/auth-users-into-flutter-apps.mdx",
+    "line": 190,
+    "msg": "Unexpected closing tag `</br>`, expected corresponding closing tag for `<td>` (189:15-189:19)"
+  },
+  {
+    "file": "tutorials/smart-on-fhir.mdx",
+    "line": 82,
+    "msg": "Unexpected closing tag `</tr>`, expected corresponding closing tag for `<td>` (74:13-74:17)"
+  }
+]

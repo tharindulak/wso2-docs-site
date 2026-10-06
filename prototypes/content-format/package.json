@@ -1,0 +1,17 @@
+{
+  "name": "prototype-content-format",
+  "private": true,
+  "description": "PROTOTYPE, throwaway: can docs-is MkDocs content become one unified Docusaurus doc set? See .scratch/wso2-docs-site/issues/06-content-format.md",
+  "scripts": {
+    "convert": "node scripts/convert-docs-is.mjs",
+    "check": "node scripts/compile-check.mjs site/content/identity",
+    "prototype": "cd site && docusaurus build && docusaurus serve --port 3010 --no-open"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "@mdx-js/react": "3.1.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
+}

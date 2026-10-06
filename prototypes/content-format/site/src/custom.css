@@ -1,0 +1,5 @@
+.proto-deploy { border: 1px solid var(--ifm-toc-border-color); border-radius: 8px; padding: .5rem 1rem; margin-bottom: 1rem; }
+.proto-applies { border-left: 4px solid; padding: .25rem 1rem; margin: 1rem 0; border-radius: 4px; }
+.proto-applies--cloud { border-color: #2e7dd7; background: rgba(46, 125, 215, .06); }
+.proto-applies--self { border-color: #b25000; background: rgba(178, 80, 0, .06); }
+.proto-applies__label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; opacity: .8; margin-bottom: .25rem; }
