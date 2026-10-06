@@ -27,7 +27,7 @@ function Mode() {
 const Logo = () => <Typography component={Link} to="/" fontWeight={700} sx={{ color: 'inherit', textDecoration: 'none', mr: 1 }}>WSO2 Docs</Typography>;
 const bar = { position: 'sticky', color: 'default', elevation: 0, sx: { borderBottom: 1, borderColor: 'divider', top: 0, zIndex: 'appBar', bgcolor: 'background.default' } };
 
-export default function Navbar() {
+function NavbarInner() {
   const v = useNavVariant(); const { pathname } = useLocation(); const { product, section } = locate(pathname);
   if (v === 'B') return (<MuiIsland><AppBar {...bar}><Toolbar variant="dense" sx={{ gap: 2 }}>
     <Logo /><Button color="inherit" component={Link} to="/cloud/" sx={{ textTransform: 'none' }}>WSO2 Cloud</Button>
@@ -51,4 +51,10 @@ export default function Navbar() {
       <Box sx={{ flex: 1 }} /><VersionSelect pluginId={section.pluginId} older={product.older} />
     </Toolbar>}
   </AppBar></MuiIsland>);
+}
+
+// Docusaurus's TOC highlight reads document.querySelector('.navbar').clientHeight (theme-common
+// useTOCHighlight.js:74) with no null check, so a replaced navbar must keep a `.navbar` element.
+export default function Navbar() {
+  return <nav className="navbar proto-navbar"><NavbarInner /></nav>;
 }
