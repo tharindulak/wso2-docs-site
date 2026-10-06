@@ -4,7 +4,7 @@ Parent: [map](../map.md)
 Type: grilling
 Status: open
 Assignee:
-Blocked by: 03, 08
+Blocked by: 03, 08, 12
 
 ## Question
 

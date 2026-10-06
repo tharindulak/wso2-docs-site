@@ -16,6 +16,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - Versioning follows the GitLab model: Latest holds WSO2 Cloud plus the newest self-hosted release; older self-hosted releases are frozen snapshots.
 - The hub's IA from [WSO2 Cloud hub documentation plan](../wso2-cloud-docs/map.md) becomes the docs site's home and cross-cutting sections.
 - Skeleton lives in this repo (`Wso2-Cloud`) for now.
+- Hand-off follow-up for the Oxygen UI team: tree-shakeable build or tokens package, fully specified ESM imports. See [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md).
 - Product scope and content sources: [Product catalogue](assets/product-catalogue.md).
 - Starting facts: [Initial facts](research/00-initial-facts.md). Oxygen UI is pre-1.0; Docusaurus advises fewer than 10 versions per docs instance.
 - Treat findings as planning input for human review; flag security, licensing and supply-chain concerns for new dependencies.
@@ -23,6 +24,10 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 ## Decisions so far
 
 <!-- one line per closed ticket -->
+
+- [How the existing WSO2 Docusaurus sites are built](issues/01-existing-docusaurus-sites.md): three single-instance sites with different search and hosting; Agent Manager's hand-forked "cloud" version is already drifting; hosting, theme CSS and CI checks are reusable.
+- [Search options for a multi-product versioned Docusaurus site](issues/03-search-options.md): Algolia DocSearch likely free but discretionary and needs legal review; stock search is global, a swizzled SearchBar adds product scope; Typesense is plan B; local search ruled out.
+- [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md): Oxygen look via Infima CSS variables plus plain MUI islands (193 KB vs 621 KB per page with the package); adopt the real package once it is tree-shakeable or ships tokens.
 
 ## Not yet specified
 
