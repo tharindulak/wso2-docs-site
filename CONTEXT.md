@@ -22,6 +22,10 @@ _Avoid_: Component, service
 A way a customer runs a product: WSO2 Cloud (fully managed SaaS), Hybrid (WSO2-managed control plane with a customer-run data plane) or Self-hosted (customer-run).
 _Avoid_: Offering, edition, on-prem (as the label), SaaS (as the label)
 
+**Self-hosted name**:
+The name a product's self-hosted distribution ships under, such as WSO2 Identity Server for Identity Platform; used only in content that applies to Self-hosted alone.
+_Avoid_: On-prem name, server name
+
 **Former name**:
 A product name no longer used, such as Asgardeo, Bijira, Devant or Moesif, listed only on the Product names page.
 _Avoid_: Legacy name, alias
