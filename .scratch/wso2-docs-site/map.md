@@ -33,6 +33,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - [How the docs site pulls content](issues/07-content-pull-mechanism.md): SHA lock file in the docs-site repo, hourly pull-based bump PRs that auto-merge on a green build; Latest = cloud + newest GA self-hosted; local override for writer preview.
 - [Versioning details](issues/08-versioning-details.md): Latest plus 2 previous releases per self-hosted distribution, older ones linked on current sites; `/identity/7.2.0/…` URLs; Integration Platform gets one versioned section per distribution; new releases detected automatically, promotion PR needs docs-team approval.
 - [Build-time conversion contract](issues/13-conversion-contract.md): written syntax spec, HTML allow-list (no scripts or handlers), failing pages block the bump with a shrinking exclude list for onboarding, check shipped as Action and CLI, numeric version compare; docs-site team owns the converter.
+- [Deployment-option label](issues/09-deployment-option-label.md): GitLab-style "Deployment options" box under the title, labelled callouts for one-option content, both values shown inline; set per page in front matter with section defaults.
 
 ## Not yet specified
 
