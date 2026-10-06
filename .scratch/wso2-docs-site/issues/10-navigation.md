@@ -29,3 +29,5 @@ Decided with the user, 2026-10-06 (provisional on the draft product catalogue).
 - **Home page:** product cards first, then the WSO2 Cloud hub sections.
 - Not chosen: sidebar-first selectors (B; weak on mobile), hub-first top bar (C; gives hub sections more weight than products).
 - Hosting must map directory URLs with dotted version segments to `index.html`.
+- Found after the decision (2026-10-06), fixed on the prototype branch: replacing the whole navbar crashed every page with headings after hydration ("Cannot read properties of null (reading 'clientHeight')"), because Docusaurus `useTOCHighlight` reads `document.querySelector('.navbar').clientHeight` without a null check. The skeleton must keep a `.navbar` element (or swizzle `Navbar/Content` instead of `Navbar`) and keep the mobile sidebar toggle the stock navbar provides. Test pages with headings in a real browser, not only server HTML.
+- Sidebar labels in the prototype are raw folder names; the skeleton must build each product sidebar from the content source's MkDocs `nav:` (titles and order). Older-version banner must use the decided text, not Docusaurus's default "no longer actively maintained".
