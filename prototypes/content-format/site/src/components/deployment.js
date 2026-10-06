@@ -1,5 +1,5 @@
 // PROTOTYPE: shared bits for the deployment-option label variants (A, B, C via ?variant=).
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 export const OPTIONS = {
   'WSO2 Cloud': { key: 'cloud', short: 'Cloud', color: '#2e7dd7' },
   Hybrid: { key: 'hybrid', short: 'Hybrid', color: '#7b4fd6' },
@@ -12,17 +12,7 @@ export function Icon({ option, size = 14 }) {
   return <svg {...p}><rect x="4" y="4" width="16" height="7" rx="1" /><rect x="4" y="13" width="16" height="7" rx="1" /></svg>;
 }
 const KEY = 'proto-label-variant';
-export function useLabelVariant() {
-  const [v, setV] = useState('A'); // SSR renders A; the client switches after hydration (fine for a look-and-feel prototype)
-  useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get('variant');
-    let s = null; try { s = sessionStorage.getItem(KEY); } catch {}
-    const next = q || s || 'A'; setV(next); try { sessionStorage.setItem(KEY, next); } catch {}
-    const on = () => { try { setV(sessionStorage.getItem(KEY) || 'A'); } catch {} };
-    window.addEventListener('proto-variant', on); return () => window.removeEventListener('proto-variant', on);
-  }, []);
-  return v;
-}
+export function useLabelVariant() { return 'A'; } // decided in Deployment-option label
 export function setLabelVariant(v) {
   try { sessionStorage.setItem(KEY, v); } catch {}
   const u = new URL(window.location.href); u.searchParams.set('variant', v); window.history.replaceState(null, '', u);
