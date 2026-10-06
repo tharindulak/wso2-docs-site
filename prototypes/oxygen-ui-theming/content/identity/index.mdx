@@ -1,0 +1,39 @@
+---
+title: Configure single sign-on
+sidebar_position: 1
+---
+
+import DeploymentOptions from '@site/src/components/DeploymentOptions';
+
+<DeploymentOptions options={['WSO2 Cloud', 'Self-hosted']} />
+
+Single sign-on (SSO) lets users sign in once and access every application in your organization. This page applies to Identity Platform on WSO2 Cloud and to self-hosted Identity Server.
+
+:::note
+In WSO2 Cloud, SSO is enabled for new organizations by default.
+:::
+
+## Before you begin
+
+- An organization with administrator access.
+- A registered application. See [Register an application](./register-app).
+
+## Configure SSO
+
+1. Open the console and select **Applications**.
+2. Choose your application and open the **Protocol** tab.
+3. Set the redirect URL:
+
+```yaml
+redirect_uri: https://app.example.com/callback
+grant_types: [authorization_code]
+```
+
+:::warning
+Self-hosted only: restart the server after changing `deployment.toml`.
+:::
+
+| Setting | WSO2 Cloud | Self-hosted |
+|---|---|---|
+| Default session timeout | 15 minutes | 15 minutes, configurable |
+| Custom domain | Paid tiers | Always |

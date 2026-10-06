@@ -1,0 +1,44 @@
+/* PROTOTYPE variants B and C: WSO2Theme values (Oxygen UI 0.15.0, extracted by scripts/extract-tokens.mjs)
+   copied into Infima variables. Link/primary text uses the theme's primary.dark in light mode, because
+   #FF7300 on white fails WCAG AA for body text. */
+@import '@fontsource-variable/inter';
+:root {
+  --ifm-color-primary: #b25000;
+  --ifm-color-primary-dark: #a04800;
+  --ifm-color-primary-darker: #974400;
+  --ifm-color-primary-darkest: #7c3800;
+  --ifm-color-primary-light: #c45800;
+  --ifm-color-primary-lighter: #cd5c00;
+  --ifm-color-primary-lightest: #e86800;
+  --ifm-font-family-base: 'Inter Variable', system-ui, sans-serif;
+  --ifm-background-color: #ffffff;
+  --ifm-font-color-base: #181818;
+  --ifm-toc-border-color: rgba(0, 0, 0, 0.12);
+  --ifm-global-radius: 12px;
+  --ifm-code-border-radius: 8px;
+  --oxy-accent: #ff7300;
+  --oxy-secondary: #5cd1ff;
+}
+[data-theme='dark'] {
+  --ifm-color-primary: #ff7300;
+  --ifm-color-primary-dark: #e66800;
+  --ifm-color-primary-darker: #d96200;
+  --ifm-color-primary-darkest: #b35100;
+  --ifm-color-primary-light: #ff8114;
+  --ifm-color-primary-lighter: #ff8a24;
+  --ifm-color-primary-lightest: #ffa04d;
+  --ifm-background-color: #0f172a;
+  --ifm-background-surface-color: #0f172a;
+  --ifm-font-color-base: #ffffff;
+  --ifm-toc-border-color: rgba(255, 255, 255, 0.12);
+}
+.navbar { border-bottom: 3px solid var(--oxy-accent); }
+.proto-deploy-block {
+  border: 1px solid var(--ifm-toc-border-color); border-radius: var(--ifm-global-radius);
+  padding: 0.75rem 1rem; margin-bottom: 1.5rem;
+}
+.proto-deploy-pill {
+  display: inline-block; margin: 0 0.25rem; padding: 0.1rem 0.6rem; border-radius: 999px;
+  border: 1px solid var(--ifm-color-primary); color: var(--ifm-color-primary); font-size: 0.85rem;
+}
+.proto-product-card { color: inherit; }

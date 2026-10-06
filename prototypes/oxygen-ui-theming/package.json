@@ -1,0 +1,18 @@
+{
+  "name": "prototype-oxygen-ui-theming",
+  "private": true,
+  "description": "PROTOTYPE, throwaway: how Oxygen UI themes a Docusaurus docs site. See .scratch/wso2-docs-site/issues/04-oxygen-ui-in-docusaurus.md",
+  "scripts": {
+    "prototype": "node scripts/run-variants.mjs",
+    "dev": "docusaurus start"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "@mdx-js/react": "3.1.1",
+    "@wso2/oxygen-ui": "0.15.0",
+    "@wso2/oxygen-ui-icons-react": "0.15.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  }
+}
