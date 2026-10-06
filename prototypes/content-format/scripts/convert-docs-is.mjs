@@ -29,7 +29,7 @@ for (const rel of [...new Set([...cs, ...ss])].sort()) {
   const imports = `import Applies from '@site/src/components/Applies';\nimport DeploymentValue from '@site/src/components/DeploymentValue';\n${usesTabs ? "import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\n" : ''}`;
   const out = path.join(outDir, rel.replace(/\.md$/, '.mdx'));
   fs.mkdirSync(path.dirname(out), { recursive: true });
-  fs.writeFileSync(out, `---\ndeployment_options: ${JSON.stringify(deploy)}\n---\n\n${imports}\n${mdx.trim()}\n`);
+  fs.writeFileSync(out, `---\ndeployment_options: ${JSON.stringify(deploy)}\nsidebar_custom_props: { deployment: ${JSON.stringify(deploy)} }\n---\n\n${imports}\n${mdx.trim()}\n`);
 }
 fs.writeFileSync(path.join(outDir, '..', 'convert-stats.json'), JSON.stringify(stats, null, 2));
 const { failed, varsDiffer, ...rest } = stats;
