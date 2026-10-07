@@ -1,0 +1,58 @@
+# Daily: when a product publishes a newer GA release whose docs exist, open a PR moving Latest to it.
+# Never auto-merges: one approval from the product's docs team is required (CODEOWNERS).
+name: docs-site version promotion
+on:
+  schedule:
+    - cron: '41 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: docs-site
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
+      - run: npm ci --ignore-scripts
+      - name: Check releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/bump-sources.mjs --promotions --write --json "$RUNNER_TEMP/promote.json"
+      - name: Open promotion PR, or an issue when the docs are not ready
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          node -e '
+            const r = require(process.argv[1]);
+            for (const p of r.promotions) console.log([p.section, p.from, p.to, p.docsReady].join("\t"));
+          ' "$RUNNER_TEMP/promote.json" > "$RUNNER_TEMP/promotions.tsv"
+          while IFS=$'\t' read -r section from to ready; do
+            [ -z "$section" ] && continue
+            if [ "$ready" != "true" ]; then
+              title="Docs for ${section} ${to} not found"
+              gh issue list --repo "$REPO" --search "$title in:title" --state open --json number --jq 'length' | grep -q '^0$' && \
+                gh issue create --repo "$REPO" --title "$title" --body "Release ${to} is out, but its docs source was not found by convention. Add it, then the next run opens the promotion PR." --label version-promotion
+              continue
+            fi
+            branch="bot/promote-${section}-${to}"
+            git config user.name "docs-site-bot"
+            git config user.email "docs-site-bot@users.noreply.github.com"
+            git switch -C "$branch"
+            git commit -am "Promote ${section} Latest to ${to}" -m "Previous Latest ${from} moves to Older versions."
+            git push --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$branch"
+            gh pr view "$branch" --repo "$REPO" >/dev/null 2>&1 || gh pr create --repo "$REPO" --head "$branch" --title "Promote ${section} Latest to ${to}" --body "Needs approval from the ${section} docs team. Not auto-merged." --label version-promotion
+            git switch -
+          done < "$RUNNER_TEMP/promotions.tsv"

@@ -7,10 +7,11 @@ import yaml from 'js-yaml';
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE = path.join(ROOT, '.cache', 'sources');
 export const GENERATED = path.join(ROOT, 'generated');
-export const LOCK = path.join(ROOT, 'content-sources.yaml');
+export const LOCK = process.env.DOCS_SITE_LOCK ? path.resolve(process.env.DOCS_SITE_LOCK) : path.join(ROOT, 'content-sources.yaml');
 
 const REPO = /^wso2\/[A-Za-z0-9._-]+$/;
 const SHA = /^[0-9a-f]{40}$/;
+const BRANCH = /^[A-Za-z0-9._\/-]+$/;
 const REL = /^(?!\/)(?!.*\.\.)[A-Za-z0-9._\/-]+$/;
 
 /** Load and validate the lock file. Anything unexpected stops the pipeline. */
@@ -21,6 +22,7 @@ export function readLock() {
       for (const ref of refsOf(s)) {
         if (!REPO.test(ref.repo)) throw new Error(`${s.id}: repo must be wso2/<name>, got ${ref.repo}`);
         if (!SHA.test(ref.sha)) throw new Error(`${s.id}: sha must be a full 40-character commit, got ${ref.sha}`);
+        if (!BRANCH.test(ref.track ?? '')) throw new Error(`${s.id}: track must name the branch the bump bot follows`);
       }
       for (const rel of [...(s.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs].filter(Boolean)) {
         if (!REL.test(rel)) throw new Error(`${s.id}: path must be relative and inside the repo: ${rel}`);
@@ -34,7 +36,7 @@ export function readLock() {
 /** The repo@sha references a section reads. */
 export function refsOf(section) {
   if (section.kind === 'mkdocs-merge') return [section.cloud, section.self_hosted];
-  return [{ repo: section.repo, sha: section.sha }];
+  return [{ repo: section.repo, sha: section.sha, track: section.track }];
 }
 
 export const checkoutDir = (repo, sha) => path.join(CACHE, `${repo.replace('/', '__')}@${sha.slice(0, 12)}`);

@@ -21,6 +21,7 @@ products:
         cloud:
           repo: wso2/docs-is
           sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+          track: master
           mkdocs: en/asgardeo/mkdocs.yml
           current_site: https://wso2.com/identity-platform/docs/
         self_hosted:
@@ -28,6 +29,7 @@ products:
           product_repo: wso2/product-is
           repo: wso2/docs-is
           sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+          track: master
           mkdocs: en/identity-server/7.3.0/mkdocs.yml
           current_site: https://is.docs.wso2.com/en/7.3.0/
         sparse: [en/asgardeo, en/identity-server/7.3.0, en/identity-server/is_common.yml, en/includes, en/base.yml, en/theme]
@@ -163,6 +165,7 @@ products:
         kind: docusaurus
         repo: wso2/docs-agent-platform
         sha: 58da5a82a4d1c8eace2aadbafca8d6c2d722de28
+        track: main
         docs: versioned_docs/version-v1.0.0
         sidebar: versioned_sidebars/version-v1.0.0-sidebars.json
         version: v1.0.0
@@ -184,6 +187,7 @@ products:
         kind: mkdocs
         repo: wso2/docs-apk
         sha: 15660917a3ac7190525325a65177d719f80f8c81
+        track: main
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]
         current_site: https://apk.docs.wso2.com/en/latest/
@@ -225,6 +229,7 @@ products:
         kind: mkdocs
         repo: wso2/docs-choreo-dev
         sha: eca033c47c57756e8938d7b3a2e8a26321af9a25
+        track: PE
         mkdocs: en/developer-docs/mkdocs.yml
         deployment_options: [WSO2 Cloud]  # confirm: private data planes may be Hybrid
         current_site: https://wso2.com/engineering-platform/developer-platform/docs/developer/
@@ -242,6 +247,7 @@ products:
         kind: mkdocs
         repo: wso2/docs-choreo-dev
         sha: eca033c47c57756e8938d7b3a2e8a26321af9a25
+        track: PE
         mkdocs: en/pe-docs/mkdocs.yml
         deployment_options: [WSO2 Cloud]  # confirm
         current_site: https://wso2.com/engineering-platform/developer-platform/docs/platform-engineer/
@@ -264,6 +270,7 @@ products:
         kind: docusaurus
         repo: wso2/open-healthcare-docs
         sha: e2512a02549886d283b52541aa3a8046b24f8980
+        track: main
         docs: en/docs
         sidebar: en/sidebars.js
         deployment_options: [Self-hosted]  # confirm
@@ -288,6 +295,7 @@ products:
         kind: mkdocs
         repo: wso2/docs-open-banking
         sha: 81100957b6859b054c58a49e8eb1ee44b96fada5
+        track: master
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]  # confirm
         current_site: https://ob.docs.wso2.com/en/latest/
@@ -314,6 +322,7 @@ products:
         kind: mkdocs
         repo: wso2/docs-updates
         sha: 0e2e93c9030af6abbf5147683aef5bc1c3223c26
+        track: master
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]
         current_site: https://updates.docs.wso2.com/en/latest/
@@ -335,6 +344,7 @@ products:
         kind: mkdocs
         repo: wso2/docs-security
         sha: f2bf5be519765641c668ae6d0afc9279ccc3290c
+        track: main
         mkdocs: en/mkdocs.yml
         deployment_options: [WSO2 Cloud, Self-hosted]  # confirm
         current_site: https://security.docs.wso2.com/en/latest/

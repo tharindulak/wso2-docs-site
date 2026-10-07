@@ -1,0 +1,29 @@
+# Composite action for content repos: run the docs-site conformance check on pull requests.
+# Pin it by commit SHA in the content repo's workflow.
+name: WSO2 docs-site content check
+description: Fails when pages would not convert into the WSO2 docs site.
+inputs:
+  mkdocs:
+    description: Path to mkdocs.yml (newline-separated for several sites).
+    required: true
+  exclude:
+    description: Optional file listing known failing pages (docs-relative paths).
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      working-directory: ${{ github.action_path }}/..
+      run: npm ci --ignore-scripts --omit=optional
+    - shell: bash
+      env:
+        MKDOCS: ${{ inputs.mkdocs }}
+        EXCLUDE: ${{ inputs.exclude }}
+        ROOT: ${{ github.workspace }}
+        TOOL: ${{ github.action_path }}/..
+      run: |
+        args=(--root "$ROOT")
+        while IFS= read -r m; do [ -n "$m" ] && args+=(--mkdocs "$m"); done <<< "$MKDOCS"
+        [ -n "$EXCLUDE" ] && args+=(--exclude "$ROOT/$EXCLUDE")
+        node "$TOOL/scripts/check-source.mjs" "${args[@]}"
