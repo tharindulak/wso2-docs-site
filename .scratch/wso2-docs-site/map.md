@@ -41,7 +41,6 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 
 - Redirects from current docs URLs (wso2.com docs, Asgardeo, Devant) to the docs site.
 - Contribution workflow for product teams: pull-request previews in content repos (needs hosting), reviews, ownership of shared pages.
-- API reference rendering (OpenAPI) inside product sections.
 - Build time and cost once all products and versions are in, including image storage (dedup or CDN instead of copying 250 to 640 MB of images per version).
 - Internationalisation.
 

@@ -26,4 +26,9 @@ Found while building:
 - `npm audit`: advisories in Docusaurus 3.10.2 build-time dependencies (tinypool, serialize-javascript and others). Static output; needs security review and `overrides`.
 - Workflows are untested: this repository has no GitHub remote yet (hosting is out of scope).
 
-Remaining: full build with images, visual review in a browser, Integration Platform (after ticket 15), real search (after ticket 11), hub page content (hub owners).
+Full build (2026-10-07): with images, 2,396 pages across 8 sections build; verified in a browser (home, Identity merged page with version selector and MkDocs-titled sidebar, Agent Manager, an excluded page redirecting to wso2.com with canonical and noindex). Open issues from the build:
+- 138 broken internal links and 203 broken anchors. Of 74 distinct broken Identity targets, 23 are dead in the source itself; the rest are conversion gaps (heading IDs differ between MkDocs and Docusaurus; some relative links). Next: emit MkDocs-style heading IDs, and report source-side dead links to teams.
+- 178 Identity API reference pages render as text: [Render API references](17-api-reference-rendering.md).
+- Build output is 1.9 GB (images copied twice per section); see "Build time and cost" in the map.
+
+Remaining: Integration Platform (after ticket 15), real search (after ticket 11), hub page content (hub owners).
