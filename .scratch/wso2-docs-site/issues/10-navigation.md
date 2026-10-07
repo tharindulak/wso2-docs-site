@@ -34,3 +34,4 @@ Decided with the user, 2026-10-06 (provisional on the draft product catalogue).
 - Sidebar labels in the prototype are raw folder names; the skeleton must build each product sidebar from the content source's MkDocs `nav:` (titles and order). Older-version banner must use the decided text, not Docusaurus's default "no longer actively maintained".
 
 - Prototype updated 2026-10-07 to the revised catalogue (all wso2.com/documentation products, grouped, one entry each; Integration Platform tabs: WSO2 Integrator, Micro Integrator, BI ↗, Streaming Integrator ↗; cloud sample pages inside sections with labels).
+- User decision 2026-10-07: the hub link in the global bar is labelled **Account and billing** (not "WSO2 Cloud"), at `/account/`; the home page section uses the same name. Hub pages keep their own deployment label.

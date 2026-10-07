@@ -34,7 +34,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - [Versioning details](issues/08-versioning-details.md): Latest plus 2 previous releases per self-hosted distribution, older ones linked on current sites; `/identity/7.2.0/…` URLs; Integration Platform gets one versioned section per distribution; new releases detected automatically, promotion PR needs docs-team approval.
 - [Build-time conversion contract](issues/13-conversion-contract.md): written syntax spec, HTML allow-list (no scripts or handlers), failing pages block the bump with a shrinking exclude list for onboarding, check shipped as Action and CLI, numeric version compare; docs-site team owns the converter.
 - [Deployment-option label](issues/09-deployment-option-label.md): GitLab-style "Deployment options" box under the title, labelled callouts for one-option content, both values shown inline; set per page in front matter with section defaults.
-- [Navigation across hub and products](issues/10-navigation.md): HashiCorp model with a Products mega-menu, per-product second bar with section tabs and version selector; product names open an overview page; provisional on the product catalogue.
+- [Navigation across hub and products](issues/10-navigation.md): HashiCorp model with a Products mega-menu, per-product second bar with section tabs and version selector; product names open an overview page; hub appears as "Account and billing"; provisional on the product catalogue.
 
 ## Not yet specified
 
