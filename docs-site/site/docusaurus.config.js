@@ -17,6 +17,8 @@ const docsPlugins = manifest.products.flatMap((product) => product.sections.map(
     routeBasePath: section.route,
     sidebarPath: path.join(generated, 'sidebars', section.sidebar),
     sidebarCollapsed: true,
+    // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
+    ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),
     versions: { current: { label: section.version ? `${section.version} (Latest)` : 'Latest' } },
   },
 ]));

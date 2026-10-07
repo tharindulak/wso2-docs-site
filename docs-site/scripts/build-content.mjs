@@ -60,9 +60,16 @@ async function emit(section, report, rel, outDir, produce, fallback) {
   const excluded = (section.exclude ?? []).includes(rel);
   try {
     const mdx = keepMkdocsUrl(await produce(), rel);
+    // An excluded page stays a redirect until --prune takes it off the list: it may pass conversion
+    // and still fail the Docusaurus build (see Known limits in the README).
+    if (excluded) {
+      report.nowPassing.push(rel);
+      write(out, keepMkdocsUrl(redirectPage(fallback.title, fallback.to, fallback.deploymentOptions), rel));
+      report.redirected++;
+      return;
+    }
     write(out, mdx);
     report.ok++;
-    if (excluded) report.nowPassing.push(rel);
   } catch (e) {
     const kind = e instanceof PageError ? e.kind : 'template';
     report.failures.push({ page: rel, kind, error: e.message.slice(0, 200) });
@@ -147,8 +154,12 @@ async function buildMerge(section, outDir, staticDir, report) {
   return mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav));
 }
 
-// Custom components some Docusaurus sources import; mapped to site stand-ins.
-const SHIMS = ['TabAwareToc', 'ConnectorCatalog'];
+// Custom components some Docusaurus sources import, mapped to site stand-ins (source-repo code never reaches the bundle).
+const SHIMS = {
+  '@site/src/components/TabAwareToc': '@site/src/components/shims/TabAwareToc',
+  '@site/src/components/ConnectorCatalog': '@site/src/components/shims/ConnectorCatalog',
+  '@site/src/utils/eipPatternComponents': '@site/src/components/shims/eipPatternComponents',
+};
 
 async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) {
   const root = checkoutDir(section.repo, section.sha);
@@ -160,7 +171,7 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
     await emit(section, report, rel, outDir, async () => {
       const { data, body } = splitFrontMatter(raw);
       let text = body;
-      for (const name of SHIMS) text = text.replaceAll(`@site/src/components/${name}`, `@site/src/components/shims/${name}`);
+      for (const [from, to] of Object.entries(SHIMS)) text = text.replaceAll(`'${from}'`, `'${to}'`).replaceAll(`"${from}"`, `"${to}"`);
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${section.route}/$2/`);
       text = text.replace(/(\]\((?!https?:)[^)\s]*?)\.mdx(?=[)#])/g, '$1.md'); // pages are written as .md
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');

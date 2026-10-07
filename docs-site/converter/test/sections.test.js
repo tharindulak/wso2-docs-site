@@ -23,3 +23,14 @@ test('companion entries are prefixed, renamed and placed into the matching main 
   assert.equal(placed.at(-1).label, 'Unmapped');
   assert.equal(main[0].items.length, 1, 'input not mutated');
 });
+
+test('Docusaurus shorthand in the main sidebar survives merging a same-label companion category', () => {
+  // docs-integrator's sidebars.ts lists docs as bare ids and may use { Label: [...] } category shorthand.
+  const main = [{ type: 'category', label: 'Get Started', items: ['intro', { Concepts: ['concepts/core'] }] }];
+  const companion = [{ type: 'category', label: 'Devant Concepts', items: [{ type: 'doc', id: 'cloud/concepts/env' }] }];
+  const placed = placeCompanion(main, companion, { placement: { 'Devant Concepts': 'Get Started' }, rename: { 'Devant Concepts': 'Concepts' } });
+  assert.deepEqual(placed[0].items[0], { type: 'doc', id: 'intro' });
+  const concepts = placed[0].items[1];
+  assert.equal(concepts.type, 'category');
+  assert.deepEqual(concepts.items, [{ type: 'doc', id: 'concepts/core' }, { type: 'doc', id: 'cloud/concepts/env' }]);
+});
