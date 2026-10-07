@@ -1,0 +1,351 @@
+# Content lock file: every content source pinned to a commit. Changed only by reviewed pull requests
+# (the bump bot opens them; see .scratch/wso2-docs-site/issues/07-content-pull-mechanism.md).
+#
+# kind:
+#   mkdocs         one MkDocs site, rendered for its deployment_options
+#   mkdocs-merge   cloud and self-hosted MkDocs sites sharing templates, merged page by page
+#   docusaurus     an existing Docusaurus doc set, copied as is
+# exclude: pages that do not convert yet. They redirect to current_site until fixed; the list only shrinks.
+# deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
+
+products:
+  - id: identity
+    name: Identity Platform
+    group: Identity and Access Management
+    blurb: Sign-in, SSO, users and access. Cloud and self-hosted (Identity Server).
+    sections:
+      - id: identity
+        label: Docs
+        route: identity
+        kind: mkdocs-merge
+        cloud:
+          repo: wso2/docs-is
+          sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+          mkdocs: en/asgardeo/mkdocs.yml
+          current_site: https://wso2.com/identity-platform/docs/
+        self_hosted:
+          version: 7.3.0
+          product_repo: wso2/product-is
+          repo: wso2/docs-is
+          sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+          mkdocs: en/identity-server/7.3.0/mkdocs.yml
+          current_site: https://is.docs.wso2.com/en/7.3.0/
+        sparse: [en/asgardeo, en/identity-server/7.3.0, en/identity-server/is_common.yml, en/includes, en/base.yml, en/theme]
+        shared_names:
+          product_name: WSO2 Identity Platform
+        older_versions: https://is.docs.wso2.com/en/7.2.0/
+        exclude:
+          - apis/notification-sender.md
+          - apis/organization-apis/authentication.md
+          - apis/retrieve-tenant-resources-based-on-search-parameters.md
+          - apis/scim2-batch-operations.md
+          - apis/scim2-patch-operations.md
+          - apis/scim2/scim2-batch-operations.md
+          - apis/scim2/scim2-patch-operations.md
+          - deploy/configure/configure-cors.md
+          - deploy/configure/databases/carbon-database/change-datasource-agent-identity.md
+          - deploy/configure/databases/carbon-database/change-datasource-consent-management.md
+          - deploy/configure/databases/carbon-database/change-datasource-registry-data.md
+          - deploy/configure/databases/carbon-database/change-datasource-session.md
+          - deploy/configure/databases/carbon-database/change-to-ibm-db2.md
+          - deploy/configure/databases/carbon-database/change-to-mssql.md
+          - deploy/configure/databases/carbon-database/change-to-mysql.md
+          - deploy/configure/databases/carbon-database/change-to-oracle-rac.md
+          - deploy/configure/databases/carbon-database/change-to-oracle.md
+          - deploy/configure/databases/carbon-database/change-to-postgresql.md
+          - deploy/configure/databases/carbon-database/change-to-remote-h2.md
+          - deploy/configure/databases/remove-references-to-deleted-user-identities.md
+          - deploy/configure/email-sending-module.md
+          - deploy/configure/user-stores/configure-system-administrator.md
+          - deploy/configure/user-stores/secure-userstore-using-pbkdf2.md
+          - deploy/deployment-checklist.md
+          - deploy/deployment-guide.md
+          - deploy/disaster-recovery/disaster-recovery-deployment-patterns.md
+          - deploy/get-started/install.md
+          - deploy/monitor/http-access-logging.md
+          - deploy/monitor/work-with-product-observability.md
+          - deploy/performance/performance-tuning-recommendations.md
+          - deploy/security/enable-java-security-manager.md
+          - get-started/try-it-application.md
+          - get-started/try-samples/qsg-oidc-webapp-java-ee.md
+          - get-started/try-samples/qsg-saml-webapp-java-ee.md
+          - get-started/try-samples/qsg-spa-javascript.md
+          - get-started/try-samples/qsg-spa-react.md
+          - get-started/try-your-own-app/java-ee-oidc.md
+          - get-started/try-your-own-app/java-ee-saml.md
+          - get-started/try-your-own-app/javascript.md
+          - guides/account-configurations/account-recovery/password-recovery.md
+          - guides/account-configurations/login-security/bot-detection.md
+          - guides/account-configurations/login-security/password-validation.md
+          - guides/account-configurations/login-security/session-management.md
+          - guides/account-configurations/user-onboarding/self-registration.md
+          - guides/agentic-ai/mcp/mcp-server-authorization.md
+          - guides/applications/register-oidc-web-app.md
+          - guides/authentication/conditional-auth/concurrent-session-based-template.md
+          - guides/authentication/conditional-auth/elk-risk-based-template.md
+          - guides/authentication/conditional-auth/login-attempt-based-template.md
+          - guides/authentication/conditional-auth/on-demand-silent-password-migration-template.md
+          - guides/authentication/conditional-auth/sign-in-option-based-template.md
+          - guides/authentication/conditional-auth/user-store-based-template.md
+          - guides/authentication/configure-jwt-bearer-grant.md
+          - guides/authentication/eid-login/add-france-connect-login.md
+          - guides/authentication/eid-login/add-franceconnect-login.md
+          - guides/authentication/eid-login/add-signicat-login.md
+          - guides/authentication/eid-login/add-swiss-id-login.md
+          - guides/authentication/eid-login/add-swissid-login.md
+          - guides/authentication/enterprise-login/add-iwa-login.md
+          - guides/authentication/enterprise-login/add-microsoft-365-login.md
+          - guides/authentication/oidc/jarm.md
+          - guides/authentication/oidc/private-key-jwt-client-auth.md
+          - guides/authentication/oidc/validate-jwt-with-jwks.md
+          - guides/authentication/social-login/add-x-login.md
+          - guides/authentication/standard-based-login/add-ws-federation.md
+          - guides/authorization/api-authorization/api-authorization.md
+          - guides/branding/configure-ui-branding.md
+          - guides/branding/customize-email-templates.md
+          - guides/identity-platform-logs/audit-logs/index.md
+          - guides/monitoring/identity-platform-events.md
+          - guides/notification-channels/configure-email-provider.md
+          - guides/notification-channels/configure-sms-provider.md
+          - guides/organization-insights.md
+          - guides/organization-management/manage-organizations.md
+          - guides/organization-management/onboard-org-admins/self-service-approach.md
+          - guides/organization-management/organization-discovery/email-domain-based-organization-discovery.md
+          - guides/organization-management/try-a-b2b-use-case.md
+          - guides/service-extensions/in-flow-extensions/custom-authentication.md
+          - guides/service-extensions/pre-flow-extensions/pre-issue-access-token-action.md
+          - guides/service-extensions/pre-flow-extensions/pre-issue-id-token-action.md
+          - guides/service-extensions/pre-flow-extensions/pre-update-password-action.md
+          - guides/service-extensions/pre-flow-extensions/pre-update-profile-action.md
+          - guides/service-extensions/understanding-service-extensions.md
+          - guides/user-accounts/account-security/password-validation.md
+          - guides/user-accounts/configure-self-registration.md
+          - guides/users/attributes/configure-multi-valued-contact-attributes.md
+          - guides/users/attributes/enable-email-as-username.md
+          - guides/users/attributes/user-attributes/attribute-configurations-reference.md
+          - guides/users/attributes/user-attributes/configure-attributes.md
+          - guides/users/outbound-provisioning/outbound-connectors/salesforce.md
+          - guides/users/outbound-provisioning/outbound-connectors/scim2.md
+          - guides/users/outbound-provisioning/setup-outbound-provisioning.md
+          - guides/users/user-stores/primary-user-store/index.md
+          - guides/users/user-stores/user-store-properties/index.md
+          - guides/users/user-stores/user-store-properties/properties-jdbc-user-store.md
+          - guides/users/user-stores/user-store-properties/properties-read-only-ldap-user-store.md
+          - guides/users/user-stores/user-store-properties/properties-read-write-active-directory-user-store.md
+          - guides/users/user-stores/user-store-properties/properties-read-write-ldap-user-store.md
+          - guides/webhooks/webhook-events-and-payloads.md
+          - includes/db-basic-config.md
+          - includes/db-config-table.md
+          - page-not-found.md
+          - quick-starts/springboot.md
+          - references/app-settings/oidc-settings-for-app.md
+          - references/conditional-auth/api-reference.md
+          - references/email-templates.md
+          - references/extend/authentication/write-a-post-authentication-handler.md
+          - references/extend/user-mgt/provisioning/add-scim2-custom-user-schema-support.md
+          - references/identity-platform-outbound-ip-addresses.md
+          - references/sms-templates.md
+          - references/troubleshoot/api-error-codes.md
+          - references/troubleshoot/app-native-error-codes.md
+          - references/tutorials/send-notification-external-schedular.md
+          - sdks/asgardeo-mcp-server.md
+          - sdks/nextjs/middleware/asgardeo-middleware.md
+          - tutorials/smart-on-fhir.md
+
+  - id: agent-manager
+    name: Agent Manager
+    group: Agent Management
+    blurb: Secure, operate and manage AI agents.
+    sections:
+      - id: agent-manager
+        label: Docs
+        route: agent-manager
+        kind: docusaurus
+        repo: wso2/docs-agent-platform
+        sha: 58da5a82a4d1c8eace2aadbafca8d6c2d722de28
+        docs: versioned_docs/version-v1.0.0
+        sidebar: versioned_sidebars/version-v1.0.0-sidebars.json
+        version: v1.0.0
+        deployment_options: [Self-hosted]
+        current_site: https://wso2.com/agent-platform/docs/v1.0.0/
+        sparse: [versioned_docs/version-v1.0.0, versioned_sidebars, static]
+        note: Cloud pages (versioned_docs/version-cloud) wait on ticket 15.
+        exclude:
+          - guides/on-a-vm.mdx
+
+  - id: kubernetes-gateway
+    name: Kubernetes Gateway
+    group: API Management
+    blurb: Kubernetes-native API gateway.
+    sections:
+      - id: kubernetes-gateway
+        label: Docs
+        route: kubernetes-gateway
+        kind: mkdocs
+        repo: wso2/docs-apk
+        sha: 15660917a3ac7190525325a65177d719f80f8c81
+        mkdocs: en/mkdocs.yml
+        deployment_options: [Self-hosted]
+        current_site: https://apk.docs.wso2.com/en/latest/
+        sparse: [en]
+        exclude:
+          - about-apk/performance-test-results/overview.md
+          - administration/configurations/configure-logs-adapter.md
+          - catalogs/api-reference-config-deployer.md
+          - catalogs/api-reference-config-generator.md
+          - catalogs/config-catalog.md
+          - catalogs/crds/aiprovider_types.md
+          - catalogs/crds/airatelimitpolicy_types.md
+          - catalogs/crds/api_types.md
+          - catalogs/crds/apipolicy_types.md
+          - catalogs/crds/application_mapping_types.md
+          - catalogs/crds/application_types.md
+          - catalogs/crds/authentication_types.md
+          - catalogs/crds/backend_types.md
+          - catalogs/crds/backendjwt_types.md
+          - catalogs/crds/gql_routes_types.md
+          - catalogs/crds/interceptorservice_types.md
+          - catalogs/crds/ratelimitpolicy_types.md
+          - catalogs/crds/resolvedJWTIssuer.md
+          - catalogs/crds/scope_types.md
+          - catalogs/crds/subscription_types.md
+          - catalogs/crds/tokenIssuer_types.md
+          - create-api/rate-limiting/add-new-rate-limiting-policies-via-crs.md
+          - create-api/rate-limiting/add-new-rate-limiting-policies-via-rest-api.md
+          - index.md
+
+  - id: developer-platform
+    name: Developer Platform
+    group: Internal Developer Platform
+    blurb: Design, develop, deploy and govern apps. For developers and platform engineers.
+    sections:
+      - id: developer-platform-developers
+        label: For developers
+        route: developer-platform/developers
+        kind: mkdocs
+        repo: wso2/docs-choreo-dev
+        sha: eca033c47c57756e8938d7b3a2e8a26321af9a25
+        mkdocs: en/developer-docs/mkdocs.yml
+        deployment_options: [WSO2 Cloud]  # confirm: private data planes may be Hybrid
+        current_site: https://wso2.com/engineering-platform/developer-platform/docs/developer/
+        sparse: [en/developer-docs, en/theme, en/includes]
+        exclude:
+          - administer/configure-a-custom-domain-for-your-organization.md
+          - choreo-concepts/data-planes.md
+          - develop-components/develop-integrations/develop-a-manual-task.md
+          - references/faq.md
+          - references/private-data-plane-management-models.md
+          - references/private-data-plane-security-levels.md
+      - id: developer-platform-platform-engineers
+        label: For platform engineers
+        route: developer-platform/platform-engineers
+        kind: mkdocs
+        repo: wso2/docs-choreo-dev
+        sha: eca033c47c57756e8938d7b3a2e8a26321af9a25
+        mkdocs: en/pe-docs/mkdocs.yml
+        deployment_options: [WSO2 Cloud]  # confirm
+        current_site: https://wso2.com/engineering-platform/developer-platform/docs/platform-engineer/
+        sparse: [en/pe-docs, en/theme, en/includes]
+        exclude:
+          - choreo-concepts/data-planes.md
+          - infrastructure/domains/configure-a-custom-domain-for-your-organization.md
+          - references/faq.md
+          - references/private-data-plane-management-models.md
+          - references/private-data-plane-security-levels.md
+
+  - id: healthcare
+    name: Accelerator for Healthcare
+    group: Solutions
+    blurb: Accelerate healthcare app development.
+    sections:
+      - id: healthcare
+        label: Docs
+        route: healthcare
+        kind: docusaurus
+        repo: wso2/open-healthcare-docs
+        sha: e2512a02549886d283b52541aa3a8046b24f8980
+        docs: en/docs
+        sidebar: en/sidebars.js
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://healthcare.docs.wso2.com/
+        sparse: [en/docs, en/sidebars.js, en/static]
+        exclude:
+          - fhir/terminology/codesystem-operations.md
+          - fhir/terminology/valueset-operations.md
+          - install-and-setup/manual.md
+          - old-content/configs/email-notifications.md
+          - old-content/fhir-mapping-templates/fhir-mapping-templates-example.md
+          - page-not-found.md
+
+  - id: financial-services
+    name: Accelerator for Financial Services
+    group: Solutions
+    blurb: Open banking and financial services.
+    sections:
+      - id: financial-services
+        label: Docs
+        route: financial-services
+        kind: mkdocs
+        repo: wso2/docs-open-banking
+        sha: 81100957b6859b054c58a49e8eb1ee44b96fada5
+        mkdocs: en/mkdocs.yml
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://ob.docs.wso2.com/en/latest/
+        sparse: [en]
+        exclude:
+          - index.md
+          - install-and-setup/deployment-patterns.md
+          - install-and-setup/prerequisites.md
+          - references/accelerator-extensions-api.md
+          - references/application-info-api.md
+          - references/config-catalog-apim.md
+          - references/config-catalog-is.md
+          - references/consent-rest-api.md
+          - references/dcr-rest-api.md
+
+  - id: updates
+    name: Updates
+    group: Other
+    blurb: Apply fixes, enhancements and security updates.
+    sections:
+      - id: updates
+        label: Docs
+        route: updates
+        kind: mkdocs
+        repo: wso2/docs-updates
+        sha: 0e2e93c9030af6abbf5147683aef5bc1c3223c26
+        mkdocs: en/mkdocs.yml
+        deployment_options: [Self-hosted]
+        current_site: https://updates.docs.wso2.com/en/latest/
+        sparse: [en]
+        exclude:
+          - index.md
+          - updates/faq.md
+          - updates/troubleshoot.md
+          - updates/update-commands.md
+
+  - id: platform-security
+    name: Platform Security
+    group: Other
+    blurb: How WSO2 tracks and handles vulnerabilities.
+    sections:
+      - id: platform-security
+        label: Docs
+        route: platform-security
+        kind: mkdocs
+        repo: wso2/docs-security
+        sha: f2bf5be519765641c668ae6d0afc9279ccc3290c
+        mkdocs: en/mkdocs.yml
+        deployment_options: [WSO2 Cloud, Self-hosted]  # confirm
+        current_site: https://security.docs.wso2.com/en/latest/
+        sparse: [en]
+        exclude:
+          - security-guidelines/secure-engineering-guidelines/secure-coding-guidlines/general-recommendations-for-react-secure-coding.md
+
+# Listed in navigation, not migrated this cycle.
+link_out:
+  - { id: api-platform, name: API Platform, group: API Management, blurb: "API lifecycle management with governance. Cloud (formerly Bijira) and self-hosted (API Manager).", href: "https://apim.docs.wso2.com/en/latest/", note: next cycle }
+  - { id: api-analytics, name: API Analytics Platform, group: API Management, blurb: Powered by Moesif., href: "https://www.moesif.com/docs/", note: external }
+  - { id: integration, name: Integration Platform, group: Integration, blurb: "Build, deploy and run integrations. Cloud, hybrid and self-hosted.", href: "https://wso2.com/integration-platform/docs/", note: waits on ticket 15 }
+
+groups: [Agent Management, API Management, Integration, Identity and Access Management, Internal Developer Platform, Solutions, Other]

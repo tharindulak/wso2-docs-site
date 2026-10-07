@@ -52,9 +52,9 @@ export function applyHtmlPolicy(text, { iframeHosts = DEFAULT_IFRAME_HOSTS } = {
       }
     });
     for (const tag of FORBIDDEN_TAGS) {
-      if (new RegExp(`<${tag}\\b`, 'i').test(s)) violations.push(`<${tag}> is not allowed`);
+      if (new RegExp(`<${tag}(?=[\\s>/])`, 'i').test(s)) violations.push(`<${tag}> is not allowed`);
     }
-    for (const m of s.matchAll(/<[a-zA-Z][^>]*\son[a-z]+\s*=/gi)) violations.push(`event handler attribute: ${m[0].slice(0, 60)}`);
+    for (const m of s.matchAll(/<[a-zA-Z][\w-]*(?:\s[^>]*)?\son[a-z]+\s*=/gi)) violations.push(`event handler attribute: ${m[0].slice(0, 60)}`);
     for (const m of s.matchAll(/\b(?:href|src|action|formaction|xlink:href)\s*=\s*["']?\s*(?:javascript|vbscript|data:text\/html)/gi)) violations.push(`unsafe URL: ${m[0].slice(0, 60)}`);
     for (const m of s.matchAll(/\]\(\s*(?:javascript|vbscript):/gi)) violations.push(`unsafe Markdown link: ${m[0].slice(0, 40)}`);
     for (const m of s.matchAll(/<iframe\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi)) {

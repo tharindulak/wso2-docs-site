@@ -36,3 +36,9 @@ test('finds include markers that were not expanded', () => {
   assert.deepEqual(unexpandedMarkers('a {!x.md!} b'), ['{!x.md!}']);
   assert.equal(unexpandedMarkers('```\n{!x.md!}\n```').length, 0);
 });
+
+test('placeholders that look like tags are not violations', () => {
+  assert.equal(v('Use <base-url>/x and <link-name> in the <form-id> field.').length, 0);
+  assert.ok(v('<base href="https://x">').length);
+  assert.ok(v('<link rel="stylesheet" href="x.css">').length);
+});
