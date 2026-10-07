@@ -6,12 +6,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
+import { createRequire } from 'node:module';
+import { fileURLToPath } from 'node:url';
 import { readLock, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
 import { mkdocsSite } from '../converter/mkdocs-config.js';
 import { loadPage, renderSingle, readPageData } from '../converter/render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from '../converter/merge.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError } from '../converter/page.js';
 import { navToSidebar, mergeSidebars } from '../converter/nav.js';
+import { optionsFor, prefixIds, placeCompanion } from '../converter/sections.js';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -68,22 +71,42 @@ async function emit(section, report, rel, outDir, produce, fallback) {
   }
 }
 
-async function buildMkdocs(section, outDir, staticDir, report) {
-  const root = checkoutDir(section.repo, section.sha);
-  const site = mkdocsSite(path.join(root, section.mkdocs));
+/**
+ * Convert one MkDocs site. `src` names the repo, commit, mkdocs.yml, current site and deployment options
+ * (the section itself, or its cloud companion); `prefix` places its pages under a sub-path of the section.
+ * Returns sidebar items with ids relative to the section.
+ */
+async function buildMkdocs(section, outDir, staticDir, report, src = section, prefix = '') {
+  const root = checkoutDir(src.repo, src.sha);
+  const site = mkdocsSite(path.join(root, src.mkdocs));
   const source = { root, includeBases: site.includeBases };
+  const route = prefix ? `${section.route}/${prefix}` : section.route;
+  const withPrefix = (rel) => (prefix ? `${prefix}/${rel}` : rel);
   for (const rel of walk(site.docsDir, (r) => r.endsWith('.md'))) {
     const file = path.join(site.docsDir, rel);
     const raw = fs.readFileSync(file, 'utf8');
-    await emit(section, report, rel, outDir, async () => {
+    const deploymentOptions = optionsFor(src, rel);
+    await emit(section, report, withPrefix(rel), outDir, async () => {
       const env = { ...site.extra, config: site.config, base_path: BASE };
-      const rendered = resolveBase(renderSingle(loadPage(file, source), env, file, source), section.route);
-      return (await convertRendered(rendered, { deploymentOptions: section.deployment_options, editUrl: editUrl(section.repo, section.sha, file, root), pageData: readPageData(file, source) })).mdx;
-    }, { title: titleOf(raw, rel), to: section.current_site + mkdocsUrl(rel), deploymentOptions: section.deployment_options });
+      const rendered = resolveBase(renderSingle(loadPage(file, source), env, file, source), route);
+      return (await convertRendered(rendered, { deploymentOptions, editUrl: editUrl(src.repo, src.sha, file, root), pageData: readPageData(file, source) })).mdx;
+    }, { title: titleOf(raw, rel), to: src.current_site + mkdocsUrl(rel), deploymentOptions });
   }
-  copyAssets(site.docsDir, staticDir); // absolute /<route>/assets/... references
-  copyAssets(site.docsDir, outDir); // page-relative ../assets/... references
-  return navToSidebar(site.nav, (id) => fs.existsSync(path.join(outDir, `${id}.md`)), report.droppedNav);
+  copyAssets(site.docsDir, prefix ? path.join(staticDir, prefix) : staticDir); // absolute /<route>/assets/... references
+  copyAssets(site.docsDir, prefix ? path.join(outDir, prefix) : outDir); // page-relative ../assets/... references
+  const items = navToSidebar(site.nav, (id) => fs.existsSync(path.join(outDir, `${withPrefix(id)}.md`)), report.droppedNav);
+  return prefix ? prefixIds(items, prefix) : items;
+}
+
+/** Evaluate a Docusaurus sidebars file (.ts/.js/.json) from its checkout; returns { sidebarId: items }. */
+function loadSidebarFile(file) {
+  if (file.endsWith('.json')) return JSON.parse(fs.readFileSync(file, 'utf8'));
+  // Runs code from the content source (as Docusaurus would): pinned commit, reviewed bump, see the contract.
+  const require = createRequire(fileURLToPath(import.meta.url));
+  const createJiti = require('jiti');
+  const load = createJiti(fileURLToPath(import.meta.url), { interopDefault: true, cache: false });
+  const mod = load(file);
+  return mod.default ?? mod;
 }
 
 async function buildMerge(section, outDir, staticDir, report) {
@@ -133,6 +156,7 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
   for (const rel of walk(docsDir, isPage)) {
     const file = path.join(docsDir, rel);
     const raw = fs.readFileSync(file, 'utf8');
+    const deploymentOptions = optionsFor(section, rel);
     await emit(section, report, rel, outDir, async () => {
       const { data, body } = splitFrontMatter(raw);
       let text = body;
@@ -140,19 +164,25 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${section.route}/$2/`);
       text = text.replace(/(\]\((?!https?:)[^)\s]*?)\.mdx(?=[)#])/g, '$1.md'); // pages are written as .md
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
-      const front = { ...data, deployment_options: data.deployment_options ?? section.deployment_options, custom_edit_url: editUrl(section.repo, section.sha, file, root) };
+      const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, custom_edit_url: editUrl(section.repo, section.sha, file, root) };
       const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       await compileCheck(mdx);
       return mdx;
-    }, { title: titleOf(raw, rel), to: section.current_site + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions: section.deployment_options });
+    }, { title: titleOf(raw, rel), to: section.current_site + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions });
   }
   copyAssets(docsDir, staticDir);
   copyAssets(docsDir, outDir);
   const staticSrc = path.join(root, path.dirname(section.docs) === '.' ? 'static' : path.join(path.dirname(section.docs), 'static'));
   copyAssets(staticSrc, staticDir);
-  const ext = path.extname(section.sidebar);
-  fs.copyFileSync(path.join(root, section.sidebar), path.join(sidebarsDir, `${section.id}${ext}`));
-  return null; // sidebar file copied as is
+  const sidebars = loadSidebarFile(path.join(root, section.sidebar));
+  const [sidebarId, items] = Object.entries(sidebars)[0];
+  let main = items;
+  if (section.cloud_companion) {
+    const companionItems = await buildMkdocs(section, outDir, staticDir, report, section.cloud_companion, section.cloud_companion.path_prefix);
+    main = placeCompanion(main, companionItems, section.cloud_companion);
+  }
+  write(path.join(sidebarsDir, `${section.id}.json`), JSON.stringify({ [sidebarId]: main }, null, 2));
+  return null; // sidebar written here
 }
 
 const lock = readLock();
@@ -176,6 +206,7 @@ for (const product of lock.products) {
       if (section.kind === 'mkdocs') sidebar = await buildMkdocs(section, outDir, staticDir, report);
       else if (section.kind === 'mkdocs-merge') sidebar = await buildMerge(section, outDir, staticDir, report);
       else sidebar = await buildDocusaurus(section, outDir, staticDir, sidebarsDir, report);
+      for (const f of fs.readdirSync(sidebarsDir)) if (f.startsWith(`${section.id}.`) && !f.endsWith('.json')) fs.rmSync(path.join(sidebarsDir, f));
       if (sidebar) write(path.join(sidebarsDir, `${section.id}.json`), JSON.stringify({ docs: sidebar.length ? sidebar : [{ type: 'autogenerated', dirName: '.' }] }, null, 2));
 
       const known = new Set(section.exclude ?? []);

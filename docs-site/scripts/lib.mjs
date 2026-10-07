@@ -24,7 +24,7 @@ export function readLock() {
         if (!SHA.test(ref.sha)) throw new Error(`${s.id}: sha must be a full 40-character commit, got ${ref.sha}`);
         if (!BRANCH.test(ref.track ?? '')) throw new Error(`${s.id}: track must name the branch the bump bot follows`);
       }
-      for (const rel of [...(s.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs].filter(Boolean)) {
+      for (const rel of [...(s.sparse ?? []), ...(s.cloud_companion?.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs, s.cloud_companion?.mkdocs, s.cloud_companion?.path_prefix].filter(Boolean)) {
         if (!REL.test(rel)) throw new Error(`${s.id}: path must be relative and inside the repo: ${rel}`);
       }
       if (!/^[a-z0-9/-]+$/.test(s.route)) throw new Error(`${s.id}: invalid route ${s.route}`);
@@ -36,7 +36,8 @@ export function readLock() {
 /** The repo@sha references a section reads. */
 export function refsOf(section) {
   if (section.kind === 'mkdocs-merge') return [section.cloud, section.self_hosted];
-  return [{ repo: section.repo, sha: section.sha, track: section.track }];
+  const own = { repo: section.repo, sha: section.sha, track: section.track };
+  return section.cloud_companion ? [own, section.cloud_companion] : [own];
 }
 
 export const checkoutDir = (repo, sha) => path.join(CACHE, `${repo.replace('/', '__')}@${sha.slice(0, 12)}`);

@@ -17,7 +17,7 @@ export default function Home() {
             <div className="row">
               {catalogue.products.filter((p) => p.group === group).map((p) => (
                 <div key={p.id} className="col col--4 margin-bottom--md">
-                  <Link className="card padding--md home-card" to={productHref(p)}>
+                  <Link className="card padding--md home-card" to={productHref(p)} target={p.href ? '_self' : undefined}>
                     <h3>{p.name}{p.href ? ' ↗' : ''}</h3>
                     <span>{p.blurb}</span>
                   </Link>

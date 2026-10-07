@@ -9,6 +9,95 @@
 # deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
 
 products:
+  - id: integration
+    name: Integration Platform
+    group: Integration
+    blurb: Build, deploy and run integrations. Cloud, hybrid and self-hosted.
+    sections:
+      - id: integration-integrator
+        label: WSO2 Integrator
+        route: integration/integrator
+        kind: docusaurus
+        repo: wso2/docs-integrator
+        sha: 0420342f8bcd0efb9f458c1317d7c9cad5234368
+        track: main
+        docs: en/docs
+        sidebar: en/sidebars.ts
+        deployment_options: [WSO2 Cloud, Self-hosted]  # confirm with the Integration team
+        deployment_overrides:
+          deploy-operate/deploy/: [Self-hosted]
+        current_site: https://wso2.com/integration-platform/docs/
+        sparse: [en/docs, en/sidebars.ts, en/src/utils, en/static]
+        # Devant is the WSO2 Cloud deployment option of WSO2 Integrator (user decision 2026-10-07).
+        # Its pages join this section, placed into WSO2 Integrator's own sidebar sections.
+        cloud_companion:
+          repo: wso2/docs-devant
+          sha: 2928db6211fda9410514724376da4a0a26106367
+          track: main
+          mkdocs: en/mkdocs.yml
+          path_prefix: cloud
+          deployment_options: [WSO2 Cloud]
+          current_site: https://wso2.com/devant/docs/
+          sparse: [en]
+          placement:  # Devant nav section -> WSO2 Integrator sidebar section (proposal; confirm with the Integration team)
+            Home: Get Started
+            Introduction: Get Started
+            Quick Start Guides: Get Started
+            Devant Concepts: Get Started
+            Share and Reuse Integrations: Develop
+            Testing: Develop
+            AI: AI Integrations
+            Devant Samples: Guides
+            Devant-Managed Databases and Caches: Deploy
+            API Management: Deploy
+            Configure VPN: Deploy
+            Monitoring and Insights: Deploy
+            Administer: Manage
+            References: Reference
+          rename:  # former names stay off navigation labels
+            Devant Concepts: Concepts
+            Devant Samples: Samples
+            Devant-Managed Databases and Caches: Managed databases and caches
+        exclude: []
+      - id: integration-mi
+        label: Micro Integrator
+        route: integration/micro-integrator
+        kind: mkdocs
+        repo: wso2/docs-mi
+        sha: ce68011aab5feb9bf289d1f3d22982c71da06c8f
+        track: main
+        mkdocs: en/mkdocs.yml
+        deployment_options: [Self-hosted]
+        current_site: https://mi.docs.wso2.com/en/latest/
+        older_versions: https://mi.docs.wso2.com/en/4.6.0/
+        sparse: [en]
+        note: Version label and automatic promotion off until the Latest release is confirmed (docs say 4.7.0; newest GitHub release is v4.6.0).
+        exclude: []
+      - id: integration-bi
+        label: BI
+        route: integration/bi
+        kind: mkdocs
+        repo: wso2/docs-bi
+        sha: b5618c07948f8492d3fca24712cd93226db901b5
+        track: main
+        mkdocs: en/mkdocs.yml
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://bi.docs.wso2.com/
+        sparse: [en]
+        exclude: []
+      - id: integration-si
+        label: Streaming Integrator
+        route: integration/streaming-integrator
+        kind: mkdocs
+        repo: wso2/docs-si
+        sha: 9c75a97812621531cc66d63c59aeeb8ad6e9884e
+        track: main
+        mkdocs: en/mkdocs.yml
+        deployment_options: [Self-hosted]
+        current_site: https://si.docs.wso2.com/
+        sparse: [en]
+        exclude: []
+
   - id: identity
     name: Identity Platform
     group: Identity and Access Management
@@ -354,6 +443,5 @@ products:
 link_out:
   - { id: api-platform, name: API Platform, group: API Management, blurb: "API lifecycle management with governance. Cloud (formerly Bijira) and self-hosted (API Manager).", href: "https://apim.docs.wso2.com/en/latest/", note: next cycle }
   - { id: api-analytics, name: API Analytics Platform, group: API Management, blurb: Powered by Moesif., href: "https://www.moesif.com/docs/", note: external }
-  - { id: integration, name: Integration Platform, group: Integration, blurb: "Build, deploy and run integrations. Cloud, hybrid and self-hosted.", href: "https://wso2.com/integration-platform/docs/", note: waits on ticket 15 }
 
 groups: [Agent Management, API Management, Integration, Identity and Access Management, Internal Developer Platform, Solutions, Other]

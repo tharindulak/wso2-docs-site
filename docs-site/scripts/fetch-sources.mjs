@@ -26,7 +26,8 @@ for (const product of readLock().products) {
     for (const ref of refsOf(section)) {
       const key = `${ref.repo}@${ref.sha}`;
       if (!wanted.has(key)) wanted.set(key, { ...ref, sparse: new Set() });
-      for (const p of section.sparse ?? ['/']) wanted.get(key).sparse.add(p);
+      const sparse = ref === section.cloud_companion ? section.cloud_companion.sparse : section.sparse;
+      for (const p of sparse ?? ['/']) wanted.get(key).sparse.add(p);
     }
   }
 }
