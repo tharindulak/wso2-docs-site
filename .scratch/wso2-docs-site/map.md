@@ -17,7 +17,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - The hub's IA from [WSO2 Cloud hub documentation plan](../wso2-cloud-docs/map.md) becomes the docs site's home and cross-cutting sections.
 - Skeleton lives in this repo (`Wso2-Cloud`) for now.
 - Hand-off follow-up for the Oxygen UI team: tree-shakeable build or tokens package, fully specified ESM imports. See [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md).
-- Product scope and content sources: [Product catalogue](assets/product-catalogue.md).
+- Product scope: every doc set on wso2.com/documentation, one entry per product covering all its deployment options (no separate SaaS/open-source entries, no "Cloud" sections). Identity Platform and Integration Platform are migrated in the skeleton; the rest link out to their current sites until migrated. See [Product catalogue](assets/product-catalogue.md) and [Coverage check](assets/documentation-coverage.md) (user decision 2026-10-07).
 - Starting facts: [Initial facts](research/00-initial-facts.md). Oxygen UI is pre-1.0; Docusaurus advises fewer than 10 versions per docs instance.
 - Treat findings as planning input for human review; flag security, licensing and supply-chain concerns for new dependencies.
 
@@ -48,7 +48,6 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 
 - Publishing location and hosting (repo in the wso2 org, domain, approvals): set aside by the user.
 - Writing new content.
-- Migrating API Platform, Agent Manager and API Analytics Platform content beyond the plan.
-- Products marked "later" in the [Product catalogue](assets/product-catalogue.md): APK, API Microgateway, Streaming Integrator.
+- Migrating products other than Identity Platform and Integration Platform (they appear in the catalogue and navigation, linking out).
 - Launching the site.
 - Moving Moesif docs off moesif.com.

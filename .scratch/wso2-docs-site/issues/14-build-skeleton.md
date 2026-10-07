@@ -4,7 +4,7 @@ Parent: [map](../map.md)
 Type: task (AFK)
 Status: open
 Assignee:
-Blocked by: 05, 11
+Blocked by: 05, 11, 15
 
 ## Question
 

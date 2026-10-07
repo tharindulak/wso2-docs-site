@@ -35,7 +35,7 @@ A WSO2 Cloud hub documentation plan, ready to hand to writers: information archi
 
 ## Out of scope
 
-- Choreo / Engineering Platform: not a WSO2 Cloud product for this effort.
+- Choreo / Engineering Platform: not a WSO2 Cloud product for this effort. (The docs site map now lists it as Developer Platform: [WSO2 docs site on Docusaurus](../wso2-docs-site/map.md).)
 - Hub hosting, URL and tooling: deferred by the user; not decided in this map. Tooling (Docusaurus docs site) is now charted in [WSO2 docs site on Docusaurus](../wso2-docs-site/map.md).
 - Internal enablement docs (sales, support).
 - Writing the pages themselves.

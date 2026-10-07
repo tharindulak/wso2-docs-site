@@ -19,4 +19,7 @@ Internal only. Prefer team channels or roles over personal details.
 - [ ] API Platform team confirms: docs-api-platform (cloud) plus docs-apim (self-hosted). Are APK and Microgateway in or later?
 - [ ] Agent Manager team confirms: docs-agent-platform, with no self-hosted docs.
 - [ ] API Analytics Platform: docs stay at moesif.com.
+- [ ] Integration team: is docs-integrator ("WSO2 Integration Platform" on wso2.com) the successor to docs-bi, or are both kept? Which section do Devant pages belong to?
+- [ ] API Platform team: confirm Bijira (cloud) and API Manager (self-hosted) are one product; is Kubernetes Gateway separate?
+- [ ] Developer Platform, Solutions, Updates and Security owners: confirm a link-out entry is fine until migration.
 - [ ] Record who confirmed each row and the date.

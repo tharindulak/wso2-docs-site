@@ -1,15 +1,21 @@
-# Product catalogue (draft, 2026-10-06)
+# Product catalogue (revised 2026-10-07)
 
-Agreed with the user; awaiting product-team confirmation in [Confirm the product catalogue with product teams](../issues/05-confirm-product-catalogue.md).
+Covers every doc set on wso2.com/documentation (user decision 2026-10-07; see [Coverage check](documentation-coverage.md)). **One entry per product**: cloud and self-hosted content live in the same product, distinguished only by the page's deployment-option label; never a separate "SaaS"/"Open source" entry or "Cloud" section. Product-team confirmation pending in [Confirm the product catalogue with product teams](../issues/05-confirm-product-catalogue.md).
 
-| Product | WSO2 Cloud content source | Self-hosted content source | Skeleton |
-|---|---|---|---|
-| Identity Platform | wso2/docs-is (`en/asgardeo`) | wso2/docs-is (`en/identity-server`) | Yes |
-| Integration Platform | wso2/docs-devant | wso2/docs-mi, docs-integrator, docs-icp, docs-bi | Yes |
-| API Platform | wso2/docs-api-platform | wso2/docs-apim | No |
-| Agent Manager | wso2/docs-agent-platform | (none) | No |
-| API Analytics Platform | moesif.com (stays external) | (none) | No |
+Groups follow wso2.com/documentation. "Migrated" = content pulled into the docs site; the rest link out to their current site until migrated.
 
-Later (not in this effort until confirmed): APK (docs-apk), API Microgateway (docs-mg), Streaming Integrator (docs-si).
+| Group | Product | WSO2 Cloud content source | Self-hosted content source | Status |
+|---|---|---|---|---|
+| Agent Management | Agent Manager | docs-agent-platform | docs-agent-platform | Link out |
+| API Management | API Platform | docs-api-platform (published as Bijira) | docs-apim (API Manager) | Link out |
+| API Management | Kubernetes Gateway | | docs-apk | Link out |
+| API Management | API Analytics Platform | moesif.com (stays external) | | Link out |
+| Integration | Integration Platform | docs-devant (Devant) | docs-integrator (WSO2 Integrator), docs-mi (Micro Integrator), docs-bi (BI), docs-si (SI), docs-icp (ICP) | Skeleton |
+| Identity and Access Management | Identity Platform | docs-is `en/asgardeo` | docs-is `en/identity-server` (Identity Server) | Skeleton |
+| Internal Developer Platform | Developer Platform | docs-choreo-dev (for Developers, for Platform Engineers) | | Link out |
+| Solutions | Accelerator for Healthcare | | open-healthcare-docs | Link out |
+| Solutions | Accelerator for Financial Services | | docs-open-banking (+ ob-toolkit repos) | Link out |
+| Other | Updates | | docs-updates | Link out |
+| Other | Platform Security | | docs-security | Link out |
 
-Each self-hosted distribution (Identity Server; Micro Integrator, WSO2 Integrator, ICP, BI; API Manager) is versioned separately with its own version selector. See [Versioning details](../issues/08-versioning-details.md).
+Within a product, sections follow what readers use (for Integration Platform: WSO2 Integrator, Micro Integrator, …), each self-hosted distribution versioned separately; cloud pages sit inside the section they belong to, labelled "WSO2 Cloud". How two separate source trees combine into one section is open: [Combining separate cloud and self-hosted doc sets](../issues/15-combine-separate-doc-sets.md).
