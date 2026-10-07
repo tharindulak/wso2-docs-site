@@ -25,9 +25,17 @@ export class PageError extends Error {
   }
 }
 
+/** First level-1 heading outside code, as plain text. */
+function firstHeading(markdown) {
+  const m = markdown.replace(/^[ \t]*(```|~~~)[\s\S]*?^[ \t]*\1/gm, '').match(/^#\s+(.+?)\s*#*\s*$/m);
+  return m ? m[1].replace(/[*_`]/g, '').trim() : undefined;
+}
+
 /**
  * @param {string} rendered Markdown after templating
- * @param {{ deploymentOptions: string[], editUrl?: string, iframeHosts?: string[] }} opts
+ * @param {{ deploymentOptions: string[], editUrl?: string, iframeHosts?: string[],
+ *           pageData?: { frontMatter?: object, meta?: object } }} opts
+ *   pageData: front matter and quick-start meta read from the page file itself (see render.splitPageData)
  * @returns {Promise<{ mdx: string, stats: object }>}
  */
 export async function convertRendered(rendered, opts) {
@@ -39,10 +47,14 @@ export async function convertRendered(rendered, opts) {
   const { body: mdxBody, usesTabs, stats } = toMdx(policy.text);
 
   const front = {};
-  for (const k of KEEP_FRONT_MATTER) if (data[k] !== undefined) front[k] = data[k];
+  const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
+  for (const k of KEEP_FRONT_MATTER) if (source[k] !== undefined) front[k] = source[k];
+  front.title ??= firstHeading(body);
+  if (source.template) front.mkdocs_template = String(source.template).replace(/^templates\//, '').replace(/\.html$/, '');
   front.deployment_options = opts.deploymentOptions;
   if (opts.editUrl) front.custom_edit_url = opts.editUrl;
-  if (policy.meta) front.quick_start = policy.meta;
+  const meta = opts.pageData?.meta ?? policy.meta;
+  if (meta) front.quick_start = meta;
 
   const imports = [
     /<Applies\b/.test(mdxBody) && "import Applies from '@site/src/components/Applies';",

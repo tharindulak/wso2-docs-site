@@ -41,3 +41,11 @@ test('reports a missing include instead of dropping content', () => {
   const root = tempSource({ 'docs/page.md': '{!missing.md!}' });
   assert.throws(() => loadPage(path.join(root, 'docs/page.md'), src(root)), /Include not found/);
 });
+
+test('front matter and quick-start meta are page data, not content', async () => {
+  const { splitPageData } = await import('../render.js');
+  const r = splitPageData('---\ntemplate: templates/quick-start.html\n---\n\n<script>\n  const meta = { what_you_will_learn: ["A"] };\n</script>\n\n# Title\n');
+  assert.deepEqual(r.frontMatter, { template: 'templates/quick-start.html' });
+  assert.deepEqual(r.meta, { what_you_will_learn: ['A'] });
+  assert.equal(r.body.trim(), '# Title');
+});

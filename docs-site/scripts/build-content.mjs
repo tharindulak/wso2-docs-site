@@ -8,7 +8,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { readLock, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
 import { mkdocsSite } from '../converter/mkdocs-config.js';
-import { loadPage, renderSingle } from '../converter/render.js';
+import { loadPage, renderSingle, readPageData } from '../converter/render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from '../converter/merge.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError } from '../converter/page.js';
 import { navToSidebar, mergeSidebars } from '../converter/nav.js';
@@ -78,7 +78,7 @@ async function buildMkdocs(section, outDir, staticDir, report) {
     await emit(section, report, rel, outDir, async () => {
       const env = { ...site.extra, config: site.config, base_path: BASE };
       const rendered = resolveBase(renderSingle(loadPage(file, source), env, file, source), section.route);
-      return (await convertRendered(rendered, { deploymentOptions: section.deployment_options, editUrl: editUrl(section.repo, section.sha, file, root) })).mdx;
+      return (await convertRendered(rendered, { deploymentOptions: section.deployment_options, editUrl: editUrl(section.repo, section.sha, file, root), pageData: readPageData(file, source) })).mdx;
     }, { title: titleOf(raw, rel), to: section.current_site + mkdocsUrl(rel), deploymentOptions: section.deployment_options });
   }
   copyAssets(site.docsDir, staticDir); // absolute /<route>/assets/... references
@@ -112,7 +112,11 @@ async function buildMerge(section, outDir, staticDir, report) {
       } else {
         text = renderSingle(loadPage(file, primary.source), envOf(primary), file, primary.source);
       }
-      return (await convertRendered(resolveBase(text, section.route), { deploymentOptions, editUrl: editUrl(primary.ref.repo, primary.ref.sha, file, primary.root) })).mdx;
+      // Page data: the cloud wrapper's front matter and quick-start meta win; self-hosted fills gaps.
+      const cData = inC ? readPageData(path.join(c.site.docsDir, rel), c.source) : {};
+      const sData = inS ? readPageData(path.join(s.site.docsDir, rel), s.source) : {};
+      const pageData = { frontMatter: { ...(sData.frontMatter ?? {}), ...(cData.frontMatter ?? {}) }, meta: cData.meta ?? sData.meta };
+      return (await convertRendered(resolveBase(text, section.route), { deploymentOptions, editUrl: editUrl(primary.ref.repo, primary.ref.sha, file, primary.root), pageData })).mdx;
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), rel), to: primary.ref.current_site + mkdocsUrl(rel), deploymentOptions });
   }
   for (const dir of [staticDir, outDir]) { copyAssets(c.site.docsDir, dir); copyAssets(s.site.docsDir, dir); }

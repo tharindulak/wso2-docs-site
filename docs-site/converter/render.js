@@ -2,7 +2,10 @@
 // WSO2 content sources ({% include %}, markdown-include {!file!}, pymdownx.snippets --8<--).
 import fs from 'node:fs';
 import path from 'node:path';
+import yaml from 'js-yaml';
+import { parseExpressionAt } from 'acorn';
 import { parse, evaluate, takenBranch, setValue, TemplateError } from './template.js';
+import { literalValue } from './html-policy.js';
 
 /**
  * A source context: where files may be read from and how includes resolve.
@@ -44,9 +47,42 @@ export function expandMarkers(text, fromFile, source, depth = 0) {
     .replace(/\{\{#([A-Za-z_]\w*)#\}\}/g, '{{ $1 }}');
 }
 
-/** Parse a file after marker expansion. */
+const FRONT_MATTER = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/;
+const QUICK_START_META = /<script>\s*(?:const|let|var)\s+meta\s*=\s*([\s\S]*?);?\s*<\/script>\s*/;
+
+/**
+ * Page data that lives outside the content: YAML front matter (for example `template:`) and the quick-start
+ * `<script>const meta = {...}</script>` literal. Both are removed from the body and returned as data, so they
+ * never render and never make two otherwise identical wrapper pages look different.
+ */
+export function splitPageData(text) {
+  let body = text;
+  let frontMatter = {};
+  let meta;
+  const fm = body.match(FRONT_MATTER);
+  if (fm) {
+    try { frontMatter = yaml.load(fm[1], { schema: yaml.JSON_SCHEMA }) ?? {}; } catch { frontMatter = {}; }
+    body = body.slice(fm[0].length);
+  }
+  const m = body.match(QUICK_START_META);
+  if (m) {
+    try { meta = literalValue(parseExpressionAt(m[1], 0, { ecmaVersion: 2022 })); } catch (e) {
+      throw new TemplateError(`quick-start meta is not a plain literal: ${e.message}`);
+    }
+    body = body.replace(m[0], '');
+  }
+  return { frontMatter: typeof frontMatter === 'object' ? frontMatter : {}, meta, body };
+}
+
+/** Front matter and quick-start metadata of a page file. */
+export function readPageData(file, source) {
+  const { frontMatter, meta } = splitPageData(readInside(source, file));
+  return { frontMatter, meta };
+}
+
+/** Parse a file after marker expansion, without its page data (front matter, quick-start meta). */
 export function loadPage(file, source) {
-  return parse(expandMarkers(readInside(source, file), file, source));
+  return parse(expandMarkers(splitPageData(readInside(source, file)).body, file, source));
 }
 
 /** Render nodes for one deployment option, the way MkDocs does today. env is mutated by {% set %}. */

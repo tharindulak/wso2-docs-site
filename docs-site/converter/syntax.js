@@ -121,6 +121,7 @@ function inline(text, stats) {
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g, (m) => (m.startsWith('{:') || /=|^\{\s*[.#]/.test(m) ? (stats.attrLists++, '') : m));
     s = s.replace(/\]\(([^)\s]*[<>][^)\s]*)\)/g, (_, url) => `](${url.replace(/</g, '%3C').replace(/>/g, '%3E')})`);
     s = s.replace(/<!--[\s\S]*?-->/g, '');
+    s = s.replace(/^[ \t]*\[\/\/\]:?[ \t]*#?[ \t]*\(?STEPS_(START|END)\)?[ \t]*$/gm, ''); // quick-start template step markers
     s = s.replace(/\smarkdown(="1"|=1|="block"|="span")?(?=[\s>])/g, '');
     s = s.replace(new RegExp(`<(${VOID.join('|')})\\b([^>]*?)\\s*/?>`, 'gi'), (_, tag, attrs) => `<${tag.toLowerCase()}${attrs} />`);
     s = s.replace(/<\/(br|hr)\s*>/gi, '');

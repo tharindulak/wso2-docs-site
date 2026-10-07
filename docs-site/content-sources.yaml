@@ -81,7 +81,6 @@ products:
           - guides/account-configurations/login-security/password-validation.md
           - guides/account-configurations/login-security/session-management.md
           - guides/account-configurations/user-onboarding/self-registration.md
-          - guides/agentic-ai/mcp/mcp-server-authorization.md
           - guides/applications/register-oidc-web-app.md
           - guides/authentication/conditional-auth/concurrent-session-based-template.md
           - guides/authentication/conditional-auth/elk-risk-based-template.md
@@ -128,7 +127,6 @@ products:
           - guides/users/attributes/user-attributes/configure-attributes.md
           - guides/users/outbound-provisioning/outbound-connectors/salesforce.md
           - guides/users/outbound-provisioning/outbound-connectors/scim2.md
-          - guides/users/outbound-provisioning/setup-outbound-provisioning.md
           - guides/users/user-stores/primary-user-store/index.md
           - guides/users/user-stores/user-store-properties/index.md
           - guides/users/user-stores/user-store-properties/properties-jdbc-user-store.md
