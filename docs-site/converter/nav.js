@@ -75,3 +75,25 @@ export function sidebarDocIds(items, acc = new Set()) {
   }
   return acc;
 }
+
+/**
+ * Narrow a MkDocs `nav:` for one section: `root` takes a top-level entry's children, `drop` removes
+ * top-level entries, `pick` replaces a versioned entry's children with those of one release.
+ */
+export function selectNav(nav, { root, drop = [], pick = {} } = {}) {
+  const labelOf = (entry) => (entry && typeof entry === 'object' ? Object.keys(entry)[0] : null);
+  let items = nav ?? [];
+  if (root) {
+    const entry = items.find((e) => labelOf(e) === root);
+    if (!entry) throw new Error(`nav has no top-level entry "${root}"`);
+    items = entry[root];
+  }
+  items = items.filter((e) => !drop.includes(labelOf(e)));
+  return items.map((e) => {
+    const label = labelOf(e);
+    if (!(label in pick)) return e;
+    const release = e[label].find((r) => String(labelOf(r)) === String(pick[label]));
+    if (!release) throw new Error(`nav entry "${label}" has no release "${pick[label]}"`);
+    return { [label]: release[labelOf(release)] };
+  });
+}

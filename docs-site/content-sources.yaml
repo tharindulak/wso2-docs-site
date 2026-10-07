@@ -5,6 +5,9 @@
 #   mkdocs         one MkDocs site, rendered for its deployment_options
 #   mkdocs-merge   cloud and self-hosted MkDocs sites sharing templates, merged page by page
 #   docusaurus     an existing Docusaurus doc set, copied as is
+# MkDocs sections sharing one source: only/skip (page path prefixes), nav_root (one top-level nav entry),
+#   nav_drop (top-level entries removed), nav_pick (versioned entry -> the release shown).
+# cloud_companion: a cloud tree placed into this section's sidebar (placement: its nav section -> ours; rename).
 # exclude: pages that do not convert yet. They redirect to current_site until fixed; the list only shrinks.
 # deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
 
@@ -256,8 +259,6 @@ products:
         exclude:
           - developer-guides/protocols-and-connectors/supported-protocols.md
           - get-started/develop-integration-as-api.md
-          - observability-and-monitoring/supported-observability-tools-and-platforms/jaeger.md
-          - observability-and-monitoring/supported-observability-tools-and-platforms/zipkin.md
       - id: integration-si
         label: Streaming Integrator
         route: integration/streaming-integrator
@@ -446,6 +447,183 @@ products:
         exclude:
           - guides/on-a-vm.mdx
 
+  - id: api-platform
+    name: API Platform
+    group: API Management
+    blurb: API lifecycle management with governance. Cloud and self-hosted.
+    sections:
+      # Migrated 2026-10-07 (user decision, changing "next cycle"). Sections, labels and placement are proposals; confirm with the API team.
+      - id: api-platform-platform
+        label: Platform
+        route: api-platform/platform
+        kind: mkdocs
+        repo: wso2/docs-api-platform
+        sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+        track: main
+        mkdocs: en/mkdocs.yml
+        deployment_options: [WSO2 Cloud, Self-hosted]  # confirm
+        deployment_overrides:  # confirm: self-hosted components
+          api-gateway/: [Self-hosted]
+          ai-gateway/: [Self-hosted]
+          api-portal/: [Self-hosted]
+          ai-workspace/: [Self-hosted]
+        current_site: https://wso2.com/bijira/docs/
+        sparse: [en]
+        # Bijira's Cloud tree goes to the API Manager section; each component shows its newest GA release.
+        nav_drop: [Cloud, API Manager]
+        nav_pick: { API Gateway: "1.2.0", AI Gateway: "2026.09.24", API Portal: "1.0.0", AI Workspace: "1.0.0" }
+        skip: [cloud/, api-manager/, next/, api-gateway/next/, api-gateway/1.1.0/, api-gateway/1.0.0/, ai-gateway/next/, ai-gateway/1.2.0/, ai-gateway/1.1.0/, ai-gateway/1.0.0/, api-portal/next/, ai-workspace/next/]
+        exclude:
+          - ai-gateway/2026.09.24/setup-and-deployment/immutable-gateway.md
+          - api-gateway/1.2.0/deployment/deployment-modes/immutable-gateway.md
+      - id: api-platform-apim
+        label: API Manager
+        route: api-platform/api-manager
+        kind: mkdocs
+        repo: wso2/docs-apim
+        sha: e4e26c4c20c1ce6aa40a6c07e31dd01acf6032b1
+        track: master
+        mkdocs: en/mkdocs.yml
+        version: 4.7.0
+        deployment_options: [Self-hosted]
+        current_site: https://apim.docs.wso2.com/en/4.7.0/
+        older_versions: https://apim.docs.wso2.com/en/4.6.0/
+        sparse: [en]
+        # Bijira (docs-api-platform's Cloud tree) is API Manager's WSO2 Cloud deployment option.
+        cloud_companion:
+          repo: wso2/docs-api-platform
+          sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+          track: main
+          mkdocs: en/mkdocs.yml
+          nav_root: Cloud
+          only: cloud/
+          deployment_options: [WSO2 Cloud]
+          current_site: https://wso2.com/bijira/docs/
+          sparse: [en]
+          placement:  # Bijira Cloud nav section -> API Manager sidebar section (proposal; confirm with the API team)
+            Introduction: Get Started
+            Create API Proxy: API Design & Manage
+            Develop API Proxy: API Design & Manage
+            Test API Proxy: API Design & Manage
+            API Governance: API Design & Manage
+            MCP Servers: AI Gateway
+            AI Gateway: AI Gateway
+            AI Workspace: AI Gateway
+            API Gateway: API Gateway
+            Event Gateway: API Gateway
+            Monitor and Insights: API Analytics & Monetization
+            Administer: Administration
+            Workflows: Administration
+            Tutorials: Tutorials
+            API Platform Samples: Tutorials
+            Developer Portal: API Developer Portal
+          rename:
+            API Platform Samples: Samples
+        exclude:
+          - administer/managing-users-and-roles/managing-permissions.md
+          - administer/managing-users-and-roles/managing-user-stores/working-with-properties-of-user-stores.md
+          - administer/managing-users-and-roles/managing-user-stores/writing-a-custom-user-store-manager.md
+          - administer/rate-limiting/implement-custom-policies.md
+          - administer/rate-limiting/manage-advanced-policies.md
+          - administer/rate-limiting/manage-subscription-policies.md
+          - ai-gateway/ai-guardrails/semantic-tool-filtering-guardrail.md
+          - ai-gateway/ai-vendor-management/custom-ai-vendors/custom-connector.md
+          - ai-gateway/ai-vendor-management/custom-ai-vendors/overview.md
+          - ai-gateway/multi-model-routing/overview.md
+          - api-design-manage/deploy-and-publish/deploy-on-gateway/api-gateway/response-caching.md
+          - api-design-manage/design/advanced-topics/block-subscription-to-an-api.md
+          - api-design-manage/design/advanced-topics/enable-publisher-access-control-in-api-publisher-portal.md
+          - api-design-manage/design/api-policies/create-policy.md
+          - api-design-manage/design/api-versioning/enabling-notifications.md
+          - api-design-manage/design/create-api-product/api-product-overview.md
+          - api-design-manage/design/create-api-product/create-api-product.md
+          - api-design-manage/design/create-api/create-a-graphql-api.md
+          - api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition.md
+          - api-design-manage/design/create-api/create-rest-api/create-a-rest-api.md
+          - api-design-manage/design/create-api/create-rest-api/expose-a-soap-service-as-a-rest-api.md
+          - api-design-manage/design/create-api/create-rest-api/generate-rest-api-from-soap-backend.md
+          - api-design-manage/design/create-api/create-rest-api/test-a-rest-api.md
+          - api-design-manage/design/create-api/create-streaming-api/create-a-sse-streaming-api.md
+          - api-design-manage/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition.md
+          - api-design-manage/design/create-api/create-streaming-api/create-a-websub-streaming-api.md
+          - api-design-manage/design/endpoints/certificates.md
+          - api-design-manage/design/endpoints/endpoint-types.md
+          - api-design-manage/design/endpoints/high-availability-for-endpoints.md
+          - api-design-manage/design/endpoints/resiliency/endpoint-suspension.md
+          - api-design-manage/design/endpoints/resiliency/endpoint-timeouts.md
+          - api-developer-portal/discover-apis/search.md
+          - api-gateway/federated-gateways/configure-custom-gateway-agent.md
+          - api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway.md
+          - api-gateway/rate-limiting/implement-custom-throttling.md
+          - api-gateway/response-caching.md
+          - api-security/key-management/authentication/grant-types/jwt-grant.md
+          - api-security/key-management/third-party-key-managers/configure-auth0-connector.md
+          - api-security/key-management/third-party-key-managers/configure-azure-ad-key-manager.md
+          - api-security/key-management/third-party-key-managers/configure-custom-connector.md
+          - api-security/key-management/third-party-key-managers/configure-forgerock-connector.md
+          - api-security/key-management/third-party-key-managers/configure-keycloak-connector.md
+          - api-security/key-management/third-party-key-managers/configure-okta-connector.md
+          - api-security/key-management/third-party-key-managers/configure-pingfederate-connector.md
+          - api-security/key-management/third-party-key-managers/configure-wso2is-connector.md
+          - apiops/cli/building-jenkins-ci-cd-pipeline.md
+          - apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach.md
+          - apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments.md
+          - apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments.md
+          - apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments.md
+          - cloud/administer/settings/configure-a-custom-domain-for-your-organization.md
+          - cloud/create-api-proxy/third-party-apis/semantic-cache.md
+          - get-started/api-manager-quick-start-guide.md
+          - includes/design/create-graphql-api.md
+          - install-and-setup/install-and-setup-overview.md
+          - install-and-setup/install/installation-prerequisites.md
+          - install-and-setup/install/installing-the-product/running-the-api-m.md
+          - install-and-setup/setup/advance-configurations/changing-the-default-transport.md
+          - install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-only-ldap-user-store.md
+          - install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store.md
+          - install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-ldap-user-store.md
+          - install-and-setup/setup/deployment-best-practices/production-deployment-guidelines.md
+          - install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment.md
+          - install-and-setup/setup/deployment-best-practices/tuning-performance.md
+          - install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager.md
+          - install-and-setup/setup/security/general-data-protection-regulation-gdpr-for-wso2-api-manager.md
+          - install-and-setup/setup/security/logins-and-passwords/harshicrop-vault-extension.md
+          - install-and-setup/setup/security/logins-and-passwords/maintaining-logins-and-passwords.md
+          - install-and-setup/setup/sso/okta-as-an-external-idp-using-oidc.md
+          - install-and-setup/setup/sso/okta-as-an-external-idp-using-saml.md
+          - monitoring/api-analytics/choreo-analytics/getting-started-guide.md
+          - monitoring/observability/monitoring-audit-logs.md
+          - monitoring/observability/monitoring-http-access-logs.md
+          - monitoring/observability/monitoring-websocket-logs.md
+          - page-not-found.md
+          - reference/apictl/wso2-api-controller.md
+          - reference/best-practices-endpoints.md
+          - reference/config-catalog.md
+          - reference/customize-product/customizations/adding-internationalization.md
+          - reference/customize-product/extending-api-manager/extending-key-management/extending-key-validation.md
+          - reference/customize-product/extending-api-manager/extending-workflows/configuring-workflows-in-a-cluster.md
+          - reference/customize-product/extending-api-manager/extending-workflows/customizing-a-workflow-extension.md
+          - reference/product-apis/admin-apis/admin-v4/admin-v4.md
+          - reference/product-apis/devops-apis/devops-v0/devops-v0.md
+          - reference/product-apis/devportal-apis/devportal-v3/devportal-v3.md
+          - reference/product-apis/gateway-apis/gateway-v2/gateway-v2.md
+          - reference/product-apis/governance-apis/governance-v1/governance-v1.md
+          - reference/product-apis/overview.md
+          - reference/product-apis/publisher-apis/publisher-v4/publisher-v4.md
+          - reference/product-apis/service-catalog-apis/service-catalog-v1/service-catalog-v1.md
+          - reference/product-compatibility.md
+          - reference/understanding-the-new-configuration-model.md
+          - tutorials/create-and-publish-a-graphql-api.md
+          - tutorials/create-and-publish-websocket-api.md
+          - tutorials/develop-an-integration-with-a-managed-api.md
+          - tutorials/expose-a-soap-service-as-a-rest-api.md
+          - tutorials/scenarios/scenario-overview.md
+          - tutorials/scenarios/scenario10-notifications-webhooks.md
+          - tutorials/streaming-api/create-and-publish-sse-api.md
+          - tutorials/streaming-api/create-and-publish-websocket-api.md
+          - tutorials/streaming-api/create-and-publish-websub-api.md
+          - tutorials/tutorials-overview.md
+          - use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog.md
+
   - id: kubernetes-gateway
     name: Kubernetes Gateway
     group: API Management
@@ -624,7 +802,6 @@ products:
 
 # Listed in navigation, not migrated this cycle.
 link_out:
-  - { id: api-platform, name: API Platform, group: API Management, blurb: "API lifecycle management with governance. Cloud (formerly Bijira) and self-hosted (API Manager).", href: "https://apim.docs.wso2.com/en/latest/", note: next cycle }
   - { id: api-analytics, name: API Analytics Platform, group: API Management, blurb: Powered by Moesif., href: "https://www.moesif.com/docs/", note: external }
 
 groups: [Agent Management, API Management, Integration, Identity and Access Management, Internal Developer Platform, Solutions, Other]

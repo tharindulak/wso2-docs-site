@@ -40,5 +40,6 @@ Allowed: Jinja `if/elif/else`, comparisons, `and/or/not`, `in`, `is defined`, `i
 
 - The converter's compile check uses MDX 3 + GFM + directives. Docusaurus adds link and image processing, so a page can pass the check and still fail the site build; CI runs the full build as the final gate.
 - Search is a placeholder until the search decision (Algolia DocSearch legal review) lands.
-- Integration Platform, API Platform and Agent Manager's cloud pages wait on the design for combining separate cloud and self-hosted doc sets.
+- Agent Manager's cloud pages (a hand-forked Docusaurus version) are not combined yet. Integration Platform (Devant) and API Platform (Bijira) place their cloud trees into the self-hosted sidebar through `cloud_companion` placement maps awaiting product-team confirmation.
+- Pages MkDocs builds from theme templates (section homes, catalogues) get a generated overview of links; `redoc` API reference pages are not rendered yet.
 - `npm audit` reports advisories in Docusaurus 3.10.2's build-time dependencies. The published site is static; mitigate with `overrides` and isolated CI builds after security review.

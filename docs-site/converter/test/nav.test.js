@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { navToSidebar, mergeSidebars } from '../nav.js';
+import { navToSidebar, mergeSidebars, selectNav } from '../nav.js';
 
 test('MkDocs nav becomes a sidebar; section index pages link categories; missing pages are reported', () => {
   const known = (id) => ['index', 'guides/index', 'guides/a', 'guides/b'].includes(id);
@@ -23,4 +23,20 @@ test('merging keeps base order and slots extra items after their nearest shared 
 
 test('an empty MkDocs title keeps the page out of the sidebar', () => {
   assert.deepEqual(navToSidebar([{ '': 'page-not-found.md' }, 'index.md'], () => true), [{ type: 'doc', id: 'index' }]);
+});
+
+test('selectNav takes a subtree, drops entries and keeps one release of a versioned entry', () => {
+  const nav = [
+    { Overview: 'index.md' },
+    { Cloud: [{ Introduction: ['cloud/intro.md'] }] },
+    { 'API Manager': [{ Documentation: 'https://apim.docs.wso2.com/en/latest/' }] },
+    { 'API Gateway': [{ next: ['api-gateway/next/a.md'] }, { '1.2.0': [{ Overview: 'api-gateway/1.2.0/a.md' }] }, { '1.1.0': ['api-gateway/1.1.0/a.md'] }] },
+  ];
+  assert.deepEqual(selectNav(nav, { root: 'Cloud' }), [{ Introduction: ['cloud/intro.md'] }]);
+  assert.deepEqual(selectNav(nav, { drop: ['Cloud', 'API Manager'], pick: { 'API Gateway': '1.2.0' } }), [
+    { Overview: 'index.md' },
+    { 'API Gateway': [{ Overview: 'api-gateway/1.2.0/a.md' }] },
+  ]);
+  assert.deepEqual(selectNav(nav, {}), nav, 'no options: unchanged');
+  assert.throws(() => selectNav(nav, { pick: { 'API Gateway': '9.9.9' } }), /9\.9\.9/);
 });

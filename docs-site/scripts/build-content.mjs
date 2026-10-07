@@ -13,8 +13,8 @@ import { mkdocsSite } from '../converter/mkdocs-config.js';
 import { loadPage, renderSingle, readPageData } from '../converter/render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from '../converter/merge.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError } from '../converter/page.js';
-import { navToSidebar, mergeSidebars } from '../converter/nav.js';
-import { optionsFor, prefixIds, placeCompanion } from '../converter/sections.js';
+import { navToSidebar, mergeSidebars, sidebarDocIds, selectNav } from '../converter/nav.js';
+import { optionsFor, prefixIds, placeCompanion, normalizeSidebar, overviewLinks } from '../converter/sections.js';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -26,8 +26,8 @@ const walk = (dir, filter) => (fs.existsSync(dir) ? fs.readdirSync(dir, { recurs
   .filter((e) => e.isFile()).map((e) => path.relative(dir, path.join(e.parentPath ?? e.path, e.name))).filter(filter).sort() : []);
 const isPage = (rel) => /\.mdx?$/.test(rel);
 const write = (file, text) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
-const copyAssets = (fromDir, toDir) => {
-  for (const rel of walk(fromDir, (r) => !isPage(r) && !r.endsWith('.yml'))) {
+const copyAssets = (fromDir, toDir, skip = []) => {
+  for (const rel of walk(fromDir, (r) => !isPage(r) && !r.endsWith('.yml') && !skip.some((p) => r.startsWith(p)))) {
     const to = path.join(toDir, rel);
     if (fs.existsSync(to)) continue;
     fs.mkdirSync(path.dirname(to), { recursive: true });
@@ -89,7 +89,9 @@ async function buildMkdocs(section, outDir, staticDir, report, src = section, pr
   const source = { root, includeBases: site.includeBases };
   const route = prefix ? `${section.route}/${prefix}` : section.route;
   const withPrefix = (rel) => (prefix ? `${prefix}/${rel}` : rel);
-  for (const rel of walk(site.docsDir, (r) => r.endsWith('.md'))) {
+  // only/skip: path prefixes of the pages this section takes from the source (several sections may share one).
+  const wanted = (r) => r.endsWith('.md') && (!src.only || r.startsWith(src.only)) && !(src.skip ?? []).some((p) => r.startsWith(p));
+  for (const rel of walk(site.docsDir, wanted)) {
     const file = path.join(site.docsDir, rel);
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
@@ -99,9 +101,10 @@ async function buildMkdocs(section, outDir, staticDir, report, src = section, pr
       return (await convertRendered(rendered, { deploymentOptions, editUrl: editUrl(src.repo, src.sha, file, root), pageData: readPageData(file, source) })).mdx;
     }, { title: titleOf(raw, rel), to: src.current_site + mkdocsUrl(rel), deploymentOptions });
   }
-  copyAssets(site.docsDir, prefix ? path.join(staticDir, prefix) : staticDir); // absolute /<route>/assets/... references
-  copyAssets(site.docsDir, prefix ? path.join(outDir, prefix) : outDir); // page-relative ../assets/... references
-  const items = navToSidebar(site.nav, (id) => fs.existsSync(path.join(outDir, `${withPrefix(id)}.md`)), report.droppedNav);
+  copyAssets(site.docsDir, prefix ? path.join(staticDir, prefix) : staticDir, src.skip); // absolute /<route>/assets/... references
+  copyAssets(site.docsDir, prefix ? path.join(outDir, prefix) : outDir, src.skip); // page-relative ../assets/... references
+  const nav = selectNav(site.nav, { root: src.nav_root, drop: src.nav_drop, pick: src.nav_pick });
+  const items = navToSidebar(nav, (id) => fs.existsSync(path.join(outDir, `${withPrefix(id)}.md`)), report.droppedNav);
   return prefix ? prefixIds(items, prefix) : items;
 }
 
@@ -196,6 +199,33 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
   return null; // sidebar written here
 }
 
+/**
+ * MkDocs builds some pages (section homes, catalogues) from theme templates, leaving no Markdown body.
+ * Give each an overview: a heading and links to the pages under it in the sidebar.
+ */
+function fillTemplatePages(product, section, outDir, sidebarFile) {
+  if (!fs.existsSync(sidebarFile)) return;
+  const sidebar = Object.values(JSON.parse(fs.readFileSync(sidebarFile, 'utf8')))[0];
+  const usable = (id) => ['.md', '/index.md'].some((ext) => {
+    const f = path.join(outDir, `${id}${ext}`);
+    return fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
+  });
+  const href = (id) => `/${section.route}/${id.replace(/(^|\/)index$/, '$1')}${/(^|\/)index$/.test(id) && id !== 'index' ? '' : '/'}`.replace(/\/+$/, '/');
+  for (const rel of walk(outDir, (r) => r.endsWith('.md'))) {
+    const file = path.join(outDir, rel);
+    const text = fs.readFileSync(file, 'utf8');
+    const { data, body } = splitFrontMatter(text);
+    if (!data.mkdocs_template || body.replace(/<!--[\s\S]*?-->/g, '').trim()) continue;
+    const id = rel.replace(/\.md$/, '');
+    const home = id === 'index';
+    const own = home ? [] : overviewLinks(sidebar, id, usable);
+    const links = own.length ? own : overviewLinks(sidebar, 'index', usable);
+    const title = data.title ?? (home ? (section.label === 'Docs' ? product.name : section.label) : path.basename(path.dirname(file)).replace(/[-_]/g, ' ').replace(/^./, (c) => c.toUpperCase()));
+    const list = links.map((l) => `- [${l.label.replace(/[[\]]/g, '')}](${href(l.id)})`).join('\n');
+    write(file, `---\n${yaml.dump({ ...data, title })}---\n\n${list}\n`);
+  }
+}
+
 const lock = readLock();
 const manifest = { groups: lock.groups, products: [], linkOut: lock.link_out ?? [] };
 const reports = [];
@@ -214,11 +244,16 @@ for (const product of lock.products) {
       const report = { section: section.id, ok: 0, redirected: 0, failures: [], nowPassing: [], droppedNav: [], merge: { splitBlocks: 0, diverged: 0 } };
       const started = Date.now();
       let sidebar;
-      if (section.kind === 'mkdocs') sidebar = await buildMkdocs(section, outDir, staticDir, report);
+      if (section.kind === 'mkdocs') {
+        sidebar = await buildMkdocs(section, outDir, staticDir, report);
+        const companion = section.cloud_companion;
+        if (companion) sidebar = placeCompanion(sidebar, await buildMkdocs(section, outDir, staticDir, report, companion, companion.path_prefix ?? ''), companion);
+      }
       else if (section.kind === 'mkdocs-merge') sidebar = await buildMerge(section, outDir, staticDir, report);
       else sidebar = await buildDocusaurus(section, outDir, staticDir, sidebarsDir, report);
       for (const f of fs.readdirSync(sidebarsDir)) if (f.startsWith(`${section.id}.`) && !f.endsWith('.json')) fs.rmSync(path.join(sidebarsDir, f));
       if (sidebar) write(path.join(sidebarsDir, `${section.id}.json`), JSON.stringify({ docs: sidebar.length ? sidebar : [{ type: 'autogenerated', dirName: '.' }] }, null, 2));
+      fillTemplatePages(product, section, outDir, path.join(sidebarsDir, `${section.id}.json`));
 
       const known = new Set(section.exclude ?? []);
       const fresh = report.failures.filter((f) => !known.has(f.page));
@@ -237,12 +272,17 @@ for (const product of lock.products) {
       reports.push(report);
       console.log(`${section.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  ${report.seconds}s`);
     }
-    const sidebarFile = fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${section.id}.`));
-    const firstDoc = sidebarFile && (fs.readFileSync(path.join(sidebarsDir, sidebarFile), 'utf8')
-      .match(/"type":\s*"doc",\s*"id":\s*"([^"]+)"|\bid:\s*'([^']+)'|^\s*["']([\w./-]+)["'],?$/m) ?? []).slice(1).find(Boolean);
-    const hasIndex = fs.existsSync(path.join(GENERATED, 'docs', section.id, 'index.md'));
+    // Landing: the section index, else the first sidebar page; never a redirect to the product's current site.
+    const docsDir = path.join(GENERATED, 'docs', section.id);
+    const isPage = (id) => ['.md', '/index.md'].some((ext) => {
+      const f = path.join(docsDir, `${id}${ext}`);
+      return fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
+    });
+    const sidebarFile = path.join(sidebarsDir, `${section.id}.json`);
+    const ids = fs.existsSync(sidebarFile) ? Object.values(JSON.parse(fs.readFileSync(sidebarFile, 'utf8'))).flatMap((items) => [...sidebarDocIds(normalizeSidebar(items))]) : [];
+    const landingId = ['index', ...ids].find(isPage);
     entry.sections.push({
-      landing: hasIndex || !firstDoc ? '' : `${firstDoc.replace(/(^|\/)index$/, '')}/`.replace(/^\/$/, ''),
+      landing: !landingId || landingId === 'index' ? '' : `${landingId.replace(/(^|\/)index$/, '')}/`.replace(/^\/$/, ''),
       id: section.id, label: section.label, route: section.route, kind: section.kind,
       version: section.self_hosted?.version ?? section.version ?? null, olderVersions: section.older_versions ?? null,
       sidebar: fs.existsSync(path.join(sidebarsDir, `${section.id}.json`)) ? `${section.id}.json` : fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${section.id}.`)),

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { optionsFor, prefixIds, placeCompanion } from '../sections.js';
+import { optionsFor, prefixIds, placeCompanion, overviewLinks } from '../sections.js';
 
 test('the longest path-prefix override wins; otherwise the section default', () => {
   const src = { deployment_options: ['WSO2 Cloud', 'Self-hosted'], deployment_overrides: { 'deploy/': ['Self-hosted'], 'deploy/cloud/': ['WSO2 Cloud'] } };
@@ -33,4 +33,31 @@ test('Docusaurus shorthand in the main sidebar survives merging a same-label com
   const concepts = placed[0].items[1];
   assert.equal(concepts.type, 'category');
   assert.deepEqual(concepts.items, [{ type: 'doc', id: 'concepts/core' }, { type: 'doc', id: 'cloud/concepts/env' }]);
+});
+
+test('a companion section placed into a same-named main section joins it instead of nesting', () => {
+  const main = [{ type: 'category', label: 'AI Gateway', items: [{ type: 'doc', id: 'ai/overview' }] }];
+  const companion = [{ type: 'category', label: 'AI Gateway', items: [{ type: 'doc', id: 'cloud/ai-gateway/intro' }] }];
+  const placed = placeCompanion(main, companion, { placement: { 'AI Gateway': 'AI Gateway' } });
+  assert.deepEqual(placed[0].items.map((i) => i.id), ['ai/overview', 'cloud/ai-gateway/intro']);
+});
+
+test('overviewLinks lists the top-level areas for the section home, or a category page\'s own pages', () => {
+  const sidebar = [
+    { type: 'category', label: 'Home', items: [{ type: 'doc', id: 'index', label: 'Home' }] },
+    { type: 'category', label: 'Get started', items: [{ type: 'doc', id: 'get-started/overview' }, { type: 'doc', id: 'get-started/quick' }] },
+    { type: 'category', label: 'SDKs', link: { type: 'doc', id: 'sdks/index' }, items: [{ type: 'doc', id: 'sdks/react', label: 'React' }] },
+    { type: 'link', label: 'External', href: 'https://example.com/' },
+  ];
+  assert.deepEqual(overviewLinks(sidebar, 'index'), [
+    { label: 'Get started', id: 'get-started/overview' },
+    { label: 'SDKs', id: 'sdks/index' },
+  ]);
+  assert.deepEqual(overviewLinks(sidebar, 'sdks/index'), [{ label: 'React', id: 'sdks/react' }]);
+  assert.deepEqual(overviewLinks(sidebar, 'nowhere'), []);
+});
+
+test('overviewLinks skips pages the caller cannot use', () => {
+  const sidebar = [{ type: 'category', label: 'Setup', items: [{ type: 'doc', id: 'setup/redirected' }, { type: 'doc', id: 'setup/real' }] }];
+  assert.deepEqual(overviewLinks(sidebar, 'index', (id) => id !== 'setup/redirected'), [{ label: 'Setup', id: 'setup/real' }]);
 });

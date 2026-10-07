@@ -7,7 +7,7 @@ Groups follow wso2.com/documentation. Status: "WSO2Con" = migrated at Latest for
 | Group | Product | WSO2 Cloud content source | Self-hosted content source | Status |
 |---|---|---|---|---|
 | Agent Management | Agent Manager | docs-agent-platform | docs-agent-platform | WSO2Con |
-| API Management | API Platform | docs-api-platform (published as Bijira) | docs-apim (API Manager) | Next cycle (link out) |
+| API Management | API Platform | docs-api-platform (published as Bijira) | docs-apim (API Manager) | Migrated 2026-10-07: Platform tab (docs-api-platform components, newest GA release each) and API Manager tab with Bijira's Cloud tree placed in; confirm with the API team |
 | API Management | Kubernetes Gateway | | docs-apk | WSO2Con |
 | API Management | API Analytics Platform | moesif.com (stays external) | | External (link out) |
 | Integration | Integration Platform | docs-devant (Devant) | docs-integrator (WSO2 Integrator), docs-mi (Micro Integrator), docs-bi (BI), docs-si (SI), docs-icp (ICP) | WSO2Con |

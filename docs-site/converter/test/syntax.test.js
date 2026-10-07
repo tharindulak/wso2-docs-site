@@ -34,3 +34,9 @@ test('placeholders in link URLs: in the host the link becomes code, in the path 
   assert.equal(toMdx('[Portal](https://<APIM_HOST>:9443/devportal)').body, 'Portal (`https://<APIM_HOST>:9443/devportal`)');
   assert.equal(toMdx('[API](https://api.example.com/<org>/x)').body, '[API](https://api.example.com/%3Corg%3E/x)');
 });
+
+test('Markdown autolinks become links, so the closing > is not read as part of the URL', () => {
+  assert.equal(toMdx('Open <http://localhost:3000> in a browser.').body, 'Open [http://localhost:3000](http://localhost:3000) in a browser.');
+  assert.equal(toMdx('Root context (<https://apis.com:9443>).').body, 'Root context ([https://apis.com:9443](https://apis.com:9443)).');
+  assert.equal(toMdx('`<http://localhost:3000>`').body, '`<http://localhost:3000>`', 'code untouched');
+});

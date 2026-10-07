@@ -29,13 +29,17 @@ export function normalizeSidebar(items) {
 /** Place a cloud companion's top-level sidebar entries into the main sidebar's sections. */
 export function placeCompanion(mainItems, companionItems, companion) {
   const main = normalizeSidebar(mainItems);
+  const sameLabel = (a, b) => a.label?.trim().toLowerCase() === b.label?.trim().toLowerCase();
   const findSection = (label) => main.find((i) => i.type === 'category' && i.label?.trim().toLowerCase() === String(label).trim().toLowerCase());
   for (const item of companionItems) {
     const original = item.label ?? '';
     const renamed = companion.rename?.[original] ?? original;
     const entry = item.type === 'category' ? { ...item, label: renamed } : { ...item, ...(item.label ? { label: renamed } : {}) };
     const target = findSection(companion.placement?.[original] ?? '');
-    if (target) {
+    if (target && entry.type === 'category' && sameLabel(target, entry)) {
+      target.items = [...(target.items ?? []), ...(entry.items ?? [])]; // same-named section: join it
+    }
+    else if (target) {
       // Same-label category: its entries follow the category's own; otherwise add after the section's own entries.
       const same = entry.type === 'category' && (target.items ?? []).find((i) => i.type === 'category' && i.label?.trim().toLowerCase() === entry.label.trim().toLowerCase());
       target.items = same
@@ -45,4 +49,31 @@ export function placeCompanion(mainItems, companionItems, companion) {
     else main.push(entry);
   }
   return main;
+}
+
+/**
+ * Links for a page MkDocs builds from a theme template (no Markdown body): the section home lists the
+ * sidebar's top-level areas; a category's own page lists that category's pages. Each link is { label, id },
+ * to the first page `usable` accepts (for example, not a redirect).
+ */
+export function overviewLinks(sidebar, docId, usable = () => true) {
+  const items = normalizeSidebar(sidebar);
+  const firstDoc = (i) => (i.type === 'doc' ? (usable(i.id) ? i.id : null)
+    : [i.link?.id].filter((id) => id && usable(id))[0] ?? (i.items ?? []).map(firstDoc).find(Boolean));
+  const labelOf = (i) => i.label ?? i.id.split('/').filter((p) => p !== 'index').pop().replace(/[-_]/g, ' ');
+  const linksOf = (list) => list.filter((i) => i.type !== 'link')
+    .map((i) => ({ label: labelOf(i), id: firstDoc(i) }))
+    .filter((l) => l.id && l.id !== docId);
+  if (docId === 'index') return linksOf(items);
+  const find = (list) => {
+    for (const i of list) {
+      if (i.type !== 'category') continue;
+      if (i.link?.id === docId || firstDoc(i) === docId) return i;
+      const inner = find(i.items ?? []);
+      if (inner) return inner;
+    }
+    return null;
+  };
+  const category = find(items);
+  return category ? linksOf(category.items ?? []) : [];
 }

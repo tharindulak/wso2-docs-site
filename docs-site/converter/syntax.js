@@ -120,6 +120,7 @@ function inline(text, stats) {
     let s = t;
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g, (m) => (m.startsWith('{:') || /=|^\{\s*[.#]/.test(m) ? (stats.attrLists++, '') : m));
     s = s.replace(/\]\(([^)\s]*[<>][^)\s]*)\)/g, (_, url) => `](${url.replace(/</g, '%3C').replace(/>/g, '%3E')})`);
+    s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+)>/gi, '[$1]($1)'); // autolinks: MDX has none, and escaping the < leaves the > in the URL
     s = s.replace(/<!--[\s\S]*?-->/g, '');
     s = s.replace(/^[ \t]*\[\/\/\]:?[ \t]*#?[ \t]*\(?STEPS_(START|END)\)?[ \t]*$/gm, ''); // quick-start template step markers
     s = s.replace(/\smarkdown(="1"|=1|="block"|="span")?(?=[\s>])/g, '');
