@@ -35,6 +35,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - [Build-time conversion contract](issues/13-conversion-contract.md): written syntax spec, HTML allow-list (no scripts or handlers), failing pages block the bump with a shrinking exclude list for onboarding, check shipped as Action and CLI, numeric version compare; docs-site team owns the converter.
 - [Deployment-option label](issues/09-deployment-option-label.md): GitLab-style "Deployment options" box under the title, labelled callouts for one-option content, both values shown inline; set per page in front matter with section defaults.
 - [Navigation across hub and products](issues/10-navigation.md): HashiCorp model with a Products mega-menu, per-product second bar with section tabs and version selector; product names open an overview page; hub appears as "Account and billing"; provisional on the product catalogue.
+- [Measure conversion of every product's docs](issues/16-measure-conversion-all-products.md): 92% of 6,617 Latest pages across 16 sources compile clean; failures are mostly invalid HTML in MI, IS and APIM; single-source products are cheap to bring in.
 
 ## Not yet specified
 
