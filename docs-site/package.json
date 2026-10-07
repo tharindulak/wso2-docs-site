@@ -1,0 +1,34 @@
+{
+  "name": "wso2-docs-site",
+  "private": true,
+  "type": "module",
+  "description": "WSO2 docs site: content pipeline (fetch, convert) and Docusaurus site.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test \"converter/test/*.test.js\"",
+    "fetch": "node scripts/fetch-sources.mjs",
+    "content": "node scripts/build-content.mjs",
+    "check-source": "node scripts/check-source.mjs",
+    "start": "docusaurus start site",
+    "build": "docusaurus build site",
+    "serve": "docusaurus serve site"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
+    "@fontsource-variable/inter": "5.2.8",
+    "@mdx-js/react": "3.1.1",
+    "@mui/material": "7.3.4",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@mdx-js/mdx": "3.1.1",
+    "acorn": "8.15.0",
+    "js-yaml": "4.3.2",
+    "remark-directive": "3.0.1",
+    "remark-gfm": "4.0.1"
+  }
+}
