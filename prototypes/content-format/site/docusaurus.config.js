@@ -10,7 +10,7 @@ module.exports = {
     docs: { id: 'identity', path: 'content/identity', routeBasePath: 'identity', exclude: failed, sidebarCollapsed: true,
       lastVersion: 'current', versions: { current: { label: '7.3.0 (Latest)' }, '7.2.0': { path: '7.2.0' }, '7.1.0': { path: '7.1.0' } } } }]],
   plugins: [
-    docs('hub', 'cloud'),
+    docs('hub', 'account'),
     docs('integration-mi', 'integration/micro-integrator', { lastVersion: 'current', versions: { current: { label: '4.7.0 (Latest)' }, '4.6.0': { path: '4.6.0' }, '4.5.0': { path: '4.5.0' } } }),
     docs('integration-integrator', 'integration/integrator', { lastVersion: 'current', versions: { current: { label: '5.1.x (Latest)' }, '5.0.x': { path: '5.0.x' } } }),
     './plugins/color-scheme-sync',

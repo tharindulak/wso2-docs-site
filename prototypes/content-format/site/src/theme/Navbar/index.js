@@ -30,7 +30,7 @@ const bar = { position: 'sticky', color: 'default', elevation: 0, sx: { borderBo
 function NavbarInner() {
   const v = useNavVariant(); const { pathname } = useLocation(); const { product, section } = locate(pathname);
   if (v === 'B') return (<MuiIsland><AppBar {...bar}><Toolbar variant="dense" sx={{ gap: 2 }}>
-    <Logo /><Button color="inherit" component={Link} to="/cloud/" sx={{ textTransform: 'none' }}>WSO2 Cloud</Button>
+    <Logo /><Button color="inherit" component={Link} to="/account/" sx={{ textTransform: 'none' }}>Account and billing</Button>
     <Box sx={{ flex: 1 }} /><Search scope={product?.name} /><Mode /></Toolbar></AppBar></MuiIsland>);
   if (v === 'C') return (<MuiIsland><AppBar {...bar}><Toolbar variant="dense" sx={{ gap: 0.5 }}>
     <Logo />
@@ -41,7 +41,7 @@ function NavbarInner() {
     <Box sx={{ flex: 1 }} /><Search /><Mode /></Toolbar></AppBar></MuiIsland>);
   return (<MuiIsland><AppBar {...bar}>
     <Toolbar variant="dense" sx={{ gap: 2 }}>
-      <Logo /><ProductsMenu /><Button color="inherit" component={Link} to="/cloud/" sx={{ textTransform: 'none' }}>WSO2 Cloud</Button>
+      <Logo /><ProductsMenu /><Button color="inherit" component={Link} to="/account/" sx={{ textTransform: 'none' }}>Account and billing</Button>
       <Box sx={{ flex: 1 }} /><Search scope={product?.name} /><Mode />
     </Toolbar>
     {product && <Toolbar variant="dense" sx={{ gap: 2, minHeight: 44, borderTop: 1, borderColor: 'divider' }}>

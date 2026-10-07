@@ -22,9 +22,9 @@ export const PRODUCTS = [
   { id: 'security', group: 'Other', name: 'Platform Security', blurb: 'How WSO2 tracks and handles vulnerabilities.', href: 'https://security.docs.wso2.com/en/latest/' },
 ];
 export const HUB = [
-  ['Overview', '/cloud/overview/what-is-wso2-cloud'], ['Get started', '/cloud/get-started/wso2-cloud-account-and-sign-up'],
-  ['Account and administration', '/cloud/account-and-administration/billing-and-subscriptions'],
-  ['Trust and support', '/cloud/trust-and-support/sla'], ['Reference', '/cloud/reference/product-names'],
+  ['Overview', '/account/overview/what-is-wso2-cloud'], ['Get started', '/account/get-started/wso2-cloud-account-and-sign-up'],
+  ['Account and administration', '/account/account-and-administration/billing-and-subscriptions'],
+  ['Trust and support', '/account/trust-and-support/sla'], ['Reference', '/account/reference/product-names'],
 ];
 export function locate(pathname) {
   for (const p of PRODUCTS) for (const s of p.sections ?? []) if (s.path && pathname.startsWith(s.path)) return { product: p, section: s };

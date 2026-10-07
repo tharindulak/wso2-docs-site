@@ -12,6 +12,6 @@ export default function Home() {
         <div className="col col--4 margin-bottom--md" key={p.id}>
           <Link className="card padding--md" style={{ height: '100%', color: 'inherit' }} to={p.href ?? p.sections[0].path}>
             <h3>{p.name}{p.href ? ' ↗' : ''}</h3><span>{p.blurb}</span></Link></div>))}</div></section>))}
-    <h2>WSO2 Cloud account</h2><ul>{HUB.map(([l, h]) => <li key={l}><Link to={h}>{l}</Link></li>)}</ul>
+    <h2>Account and billing</h2><ul>{HUB.map(([l, h]) => <li key={l}><Link to={h}>{l}</Link></li>)}</ul>
   </main></Layout>);
 }
