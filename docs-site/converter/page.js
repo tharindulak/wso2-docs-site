@@ -3,7 +3,10 @@ import yaml from 'js-yaml';
 import { compile } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import remarkDirective from 'remark-directive';
-import { applyHtmlPolicy, unexpandedMarkers } from './html-policy.js';
+import rehypeRaw from 'rehype-raw';
+import rehypeValidElements from './rehype-valid-elements.js';
+import { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements } from './html-policy.js';
+import { htmlBlocksToJsx } from './html-blocks.js';
 import { toMdx } from './syntax.js';
 
 const KEEP_FRONT_MATTER = ['title', 'description', 'keywords', 'sidebar_label', 'sidebar_position', 'slug', 'tags', 'image'];
@@ -42,9 +45,41 @@ export async function convertRendered(rendered, opts) {
   const { data, body } = splitFrontMatter(rendered);
   const markers = unexpandedMarkers(body);
   if (markers.length) throw new PageError('include', `Unexpanded include: ${markers[0]}`);
-  const policy = applyHtmlPolicy(body, { iframeHosts: opts.iframeHosts });
-  if (policy.violations.length) throw new PageError('policy', policy.violations[0]);
-  const { body: mdxBody, usesTabs, stats } = toMdx(policy.text);
+  let policy = applyHtmlPolicy(body, { iframeHosts: opts.iframeHosts });
+  let removed = [];
+  if (policy.violations.length) {
+    // Scripts, styles and stylesheet links are dropped rather than losing the page; other violations still reject it.
+    const stripped = removeForbiddenElements(body);
+    const again = applyHtmlPolicy(stripped.text, { iframeHosts: opts.iframeHosts });
+    if (again.violations.length || !stripped.removed.length) throw new PageError('policy', (again.violations[0] ?? policy.violations[0]));
+    policy = { ...again, meta: again.meta ?? policy.meta };
+    removed = stripped.removed;
+  }
+  const withRemoved = (result) => (removed.length ? { ...result, stats: { ...result.stats, removed } } : result);
+  const compileFailure = (e) => { if (!(e instanceof PageError) || e.kind !== 'compile') throw e; };
+  try {
+    return withRemoved(await assemble(policy.text, data, body, policy, opts));
+  } catch (e) { compileFailure(e); }
+  // Retry with multi-line raw HTML blocks rewritten as JSX (see html-blocks.js); the JSX skips the Markdown rewrites.
+  const saved = [];
+  const rewritten = htmlBlocksToJsx(policy.text, { protect: (jsx) => `MDXHTMLBLOCK${saved.push(jsx) - 1}X` });
+  if (rewritten.blocks) {
+    try {
+      const result = await assemble(rewritten.text, data, body, policy, opts, { restore: (mdx) => mdx.replace(/MDXHTMLBLOCK(\d+)X/g, (_, i) => saved[i]) });
+      return withRemoved({ ...result, stats: { ...result.stats, htmlBlocks: rewritten.blocks } });
+    } catch (e) { compileFailure(e); }
+  }
+  // Last resort: CommonMark (Docusaurus `mdx.format: md`), where raw HTML is parsed leniently, as browsers do.
+  // The page stays on the site; JSX components (tabs, deployment blocks) show as plain content.
+  const result = await assemble(policy.text, data, body, policy, opts, { format: 'md' });
+  return withRemoved({ ...result, stats: { ...result.stats, format: 'md' } });
+}
+
+async function assemble(text, data, body, policy, opts, { restore = (mdx) => mdx, format = 'mdx' } = {}) {
+  const { body: converted, usesTabs, stats } = toMdx(text);
+  const md = format === 'md';
+  // CommonMark pages carry raw HTML, not JSX: keep HTML attribute names.
+  const mdxBody = md ? withoutImports(restore(converted)).replace(/(<[a-zA-Z][^>]*?)\bclassName=/g, '$1class=') : restore(converted);
 
   const front = {};
   const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
@@ -55,23 +90,45 @@ export async function convertRendered(rendered, opts) {
   if (opts.editUrl) front.custom_edit_url = opts.editUrl;
   const meta = opts.pageData?.meta ?? policy.meta;
   if (meta) front.quick_start = meta;
+  if (md) front.mdx = { format: 'md' };
 
-  const imports = [
+  const imports = md ? '' : [
     /<Applies\b/.test(mdxBody) && "import Applies from '@site/src/components/Applies';",
     /<DeploymentValue\b/.test(mdxBody) && "import DeploymentValue from '@site/src/components/DeploymentValue';",
     usesTabs && !/import Tabs from/.test(mdxBody) && "import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';",
   ].filter(Boolean).join('\n');
 
   const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n\n${imports ? `${imports}\n\n` : ''}${mdxBody.trim()}\n`;
-  await compileCheck(mdx);
+  await compileCheck(mdx, { format });
   return { mdx, stats };
 }
 
-/** Compile as Docusaurus would (MDX 3, GFM, directives). Throws PageError('compile') on failure. */
-export async function compileCheck(mdx) {
+/** Docusaurus stops the build on an absolute link URL it cannot parse (http://host:port/x); fail the page here instead. */
+function remarkParsableLinks() {
+  return (tree) => {
+    const visit = (node) => {
+      if (node.type === 'link' && /^[a-z][\w+.-]*:\/\//i.test(node.url)) {
+        try { new URL(node.url); } catch { throw new Error(`Link URL cannot be parsed: ${node.url.slice(0, 80)}`); }
+      }
+      for (const child of node.children ?? []) visit(child);
+    };
+    visit(tree);
+  };
+}
+
+// As Docusaurus configures rehype-raw for CommonMark pages.
+const MDX_NODES = ['mdxFlowExpression', 'mdxJsxFlowElement', 'mdxJsxTextElement', 'mdxTextExpression', 'mdxjsEsm'];
+
+/** CommonMark has no ESM: import lines would print as text. */
+export const withoutImports = (text) => text.replace(/^import\s+[\w{},\s*]+\s+from\s+['"][^'"]+['"];?[ \t]*$\n?/gm, '');
+
+/** Compile as Docusaurus would (MDX 3 or CommonMark, GFM, directives). Throws PageError('compile') on failure. */
+export async function compileCheck(mdx, { format = 'mdx' } = {}) {
   const body = mdx.replace(/^---[\s\S]*?\n---\n/, '');
   try {
-    await compile(body, { remarkPlugins: [remarkGfm, remarkDirective] });
+    await compile(body, format === 'md'
+      ? { format: 'md', remarkPlugins: [remarkGfm, remarkDirective, remarkParsableLinks], rehypePlugins: [[rehypeRaw, { passThrough: MDX_NODES }], rehypeValidElements] }
+      : { remarkPlugins: [remarkGfm, remarkDirective, remarkParsableLinks] });
   } catch (e) {
     const where = e.line ? ` (line ${e.line})` : '';
     throw new PageError('compile', `${String(e.reason ?? e.message).slice(0, 160)}${where}`);

@@ -3,3 +3,4 @@ node_modules/
 generated/
 site/build/
 site/.docusaurus/
+site/build-quick/

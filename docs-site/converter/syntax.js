@@ -115,12 +115,15 @@ export function outsideCode(text, fn) {
 // Done before the code/prose split so the new code span is protected from prose escaping.
 const placeholderHostLinks = (text) => outsideCode(text, (t) => t.replace(/\[([^\]]*)\]\(([a-z]+:\/\/[^)\s/]*[<>][^)\s]*)\)/gi, (_, label, url) => `${label} (\`${url}\`)`));
 
+const validUrl = (url) => { try { new URL(url); return true; } catch { return false; } };
+
 function inline(text, stats) {
   return outsideCode(placeholderHostLinks(text), (t) => {
     let s = t;
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g, (m) => (m.startsWith('{:') || /=|^\{\s*[.#]/.test(m) ? (stats.attrLists++, '') : m));
     s = s.replace(/\]\(([^)\s]*[<>][^)\s]*)\)/g, (_, url) => `](${url.replace(/</g, '%3C').replace(/>/g, '%3E')})`);
     s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+)>/gi, '[$1]($1)'); // autolinks: MDX has none, and escaping the < leaves the > in the URL
+    s = s.replace(/(^|[^\w(\["'=/])(https?):\/\/([^\s<>()[\]"'`]+)/g, (m, pre, scheme, rest) => (validUrl(`${scheme}://${rest.replace(/[.,;:!?]+$/, '')}`) ? m : `${pre}${scheme}:&#47;/${rest}`)); // GFM would autolink a placeholder URL (host:port) that Docusaurus cannot parse
     s = s.replace(/<!--[\s\S]*?-->/g, '');
     s = s.replace(/^[ \t]*\[\/\/\]:?[ \t]*#?[ \t]*\(?STEPS_(START|END)\)?[ \t]*$/gm, ''); // quick-start template step markers
     s = s.replace(/\smarkdown(="1"|=1|="block"|="span")?(?=[\s>])/g, '');

@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import rehypeValidElements from '../converter/rehype-valid-elements.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -9,7 +10,15 @@ const manifestFile = path.join(generated, 'manifest.json');
 if (!fs.existsSync(manifestFile)) throw new Error('Run `npm run content` first: generated/manifest.json is missing.');
 const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
 
-const docsPlugins = manifest.products.flatMap((product) => product.sections.map((section) => [
+// Quick builds (scripts/build-sections.mjs): DOCS_SECTIONS=id,id builds only those sections. Navigation still
+// lists every product; links into sections left out are reported as broken links (warnings).
+const selected = (process.env.DOCS_SECTIONS ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+const known = manifest.products.flatMap((p) => p.sections.map((s) => s.id));
+const unknown = selected.filter((id) => !known.includes(id));
+if (unknown.length) throw new Error(`DOCS_SECTIONS: unknown section ${unknown.join(', ')}. Known: ${known.join(', ')}`);
+const built = (section) => !selected.length || selected.includes(section.id);
+
+const docsPlugins = manifest.products.flatMap((product) => product.sections.filter(built).map((section) => [
   '@docusaurus/plugin-content-docs',
   {
     id: section.id,
@@ -17,6 +26,7 @@ const docsPlugins = manifest.products.flatMap((product) => product.sections.map(
     routeBasePath: section.route,
     sidebarPath: path.join(generated, 'sidebars', section.sidebar),
     sidebarCollapsed: true,
+    rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
     ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),
     versions: { current: { label: section.version ? `${section.version} (Latest)` : 'Latest' } },

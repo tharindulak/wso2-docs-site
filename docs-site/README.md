@@ -19,6 +19,16 @@ npm run build && npm run serve
 
 `npm start` runs the dev server after `npm run content`.
 
+The full build takes 15 to 30 minutes. While checking a change, build only the sections it touches (2 to 4 minutes), using product or section ids from `content-sources.yaml`:
+
+```sh
+npm run content -- integration-integrator    # reconvert just that section
+npm run build:quick -- integration           # all Integration Platform sections, into site/build-quick
+npm run start:quick -- identity              # dev server with only Identity Platform
+```
+
+Navigation still lists every product; links into sections left out of a quick build show as broken-link warnings. Quick and full builds share `site/.docusaurus`, so run one at a time. CI always runs the full build.
+
 ## How it works
 
 | Piece | What it does |

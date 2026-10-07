@@ -7,6 +7,7 @@
 #   docusaurus     an existing Docusaurus doc set, copied as is
 # MkDocs sections sharing one source: only/skip (page path prefixes), nav_root (one top-level nav entry),
 #   nav_drop (top-level entries removed), nav_pick (versioned entry -> the release shown).
+# aliases: former URLs of the section's current site; links in content to hosted pages there become internal.
 # cloud_companion: a cloud tree placed into this section's sidebar (placement: its nav section -> ours; rename).
 # exclude: pages that do not convert yet. They redirect to current_site until fixed; the list only shrinks.
 # deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
@@ -62,23 +63,7 @@ products:
             Devant Samples: Samples
             Devant-Managed Databases and Caches: Managed databases and caches
         exclude:
-          - cloud/administer/configure-a-custom-domain-for-your-organization.md
-          - cloud/assets/img/administer/configure-domain/configure-a-custom-domain-for-your-organization.md
-          - cloud/devant-concepts/data-planes.md
           - cloud/devant-concepts/organization.md
-          - deploy-operate/observe/observability-overview.md
-          - develop/integration-artifacts/event/azure-service-bus.md
-          - develop/integration-artifacts/event/rabbitmq.md
-          - develop/integration-artifacts/event/solace.md
-          - develop/integration-artifacts/service/http.md
-          - develop/test/code-coverage-and-reports.md
-          - develop/test/test-explorer.md
-          - develop/tools/other/scan-tool.md
-          - genai/develop/components/model-providers.md
-          - genai/develop/natural-functions/overview.md
-          - manage/cloud/configurations/scaling-resource-limits.md
-          - reference/appendix/faq.md
-          - reference/streaming-capabilities.md
       - id: integration-mi
         label: Micro Integrator
         route: integration/micro-integrator
@@ -92,159 +77,7 @@ products:
         older_versions: https://mi.docs.wso2.com/en/4.6.0/
         sparse: [en]
         note: Version label and automatic promotion off until the Latest release is confirmed (docs say 4.7.0; newest GitHub release is v4.6.0).
-        exclude:
-          - administer/managing-users-and-roles/managing-user-stores/writing-a-custom-user-store-manager.md
-          - develop/advanced-development/applying-security-to-a-proxy-service.md
-          - develop/creating-artifacts/creating-an-api.md
-          - develop/intro-integration-development.md
-          - develop/validating-artifacts.md
-          - get-started/build-first-ai-integration/first-integration-ai-agent.md
-          - get-started/build-first-integration/first-integration-connect-saas.md
-          - get-started/build-first-integration/first-integration-monitor-icp.md
-          - get-started/build-first-integration/first-integration-route-and-transform.md
-          - get-started/event-driven-integrations.md
-          - includes/reference/connectors/exporting-artifacts.md
-          - install-and-setup/install/running-the-mi-in-automation-mode.md
-          - install-and-setup/setup/brokers/configure-with-rabbitmq.md
-          - install-and-setup/setup/databases/setting-up-ibm-db2.md
-          - install-and-setup/setup/databases/setting-up-mssql.md
-          - install-and-setup/setup/databases/setting-up-mysql.md
-          - install-and-setup/setup/databases/setting-up-oracle.md
-          - install-and-setup/setup/databases/setting-up-postgresql.md
-          - install-and-setup/setup/deployment-best-practices/production-deployment-guidelines.md
-          - install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment.md
-          - install-and-setup/setup/performance-tuning/network-os-performance.md
-          - install-and-setup/setup/security/about-forgetme-tool.md
-          - install-and-setup/setup/transport-configurations/configuring-transports.md
-          - install-and-setup/setup/user-stores/setting-up-a-userstore-in-mi.md
-          - learn/enterprise-integration-patterns/message-routing/recipient-list.md
-          - learn/enterprise-integration-patterns/messaging-endpoints/polling-consumer.md
-          - learn/enterprise-integration-patterns/messaging-endpoints/transactional-client.md
-          - learn/examples/jms-examples/dual-channel-http-to-jms.md
-          - learn/examples/jms-examples/shared-topic-subscription.md
-          - learn/examples/proxy-service-examples/securing-proxy-services.md
-          - learn/examples/rest-api-examples/securing-rest-apis-with-jwt-access-tokens.md
-          - learn/integration-tutorials/exposing-several-services-as-a-single-service.md
-          - learn/integration-tutorials/routing-requests-based-on-message-content.md
-          - learn/integration-tutorials/send-email-from-integration-service.md
-          - learn/integration-tutorials/sending-a-simple-message-to-a-datasource.md
-          - learn/integration-tutorials/sending-a-simple-message-to-a-service.md
-          - learn/integration-tutorials/service-catalog-tutorial.md
-          - learn/integration-tutorials/storing-and-forwarding-messages.md
-          - learn/integration-tutorials/transforming-message-content.md
-          - learn/integration-tutorials/using-inbound-endpoints.md
-          - learn/integration-tutorials/using-templates.md
-          - learn/integration-use-case/asynchronous-message-overview.md
-          - learn/learn-overview.md
-          - observe-and-manage/classic-observability-logs/configuring-log4j2-properties.md
-          - observe-and-manage/classic-observability-logs/monitoring-correlation-logs.md
-          - observe-and-manage/cloud-native-observability-overview.md
-          - observe-and-manage/working-with-management-api.md
-          - reference/config-catalog-mi.md
-          - reference/connectors/amazondynamodb-connector/1.x/amazondynamodb-connector-reference.md
-          - reference/connectors/amazondynamodb-connector/2.x/amazondynamodb-connector-reference.md
-          - reference/connectors/amazonlambda-connector/1.x/amazonlambda-connector-1.x-config.md
-          - reference/connectors/amazonlambda-connector/2.x/amazonlambda-connector-config.md
-          - reference/connectors/amazons3-connector/1.x/amazons3-connector-1.x-example.md
-          - reference/connectors/amazons3-connector/1.x/amazons3-connector-1.x-reference.md
-          - reference/connectors/amazons3-connector/2.x/amazons3-connector-reference.md
-          - reference/connectors/amazons3-connector/3.x/amazons3-connector-reference.md
-          - reference/connectors/amazonsqs-connector/amazon-inbound-endpoint-1.0.x/amazonsqs-inbound-endpoint-reference-configuration.md
-          - reference/connectors/amazonsqs-connector/amazonsqs-inbound-endpoint-reference-configuration.md
-          - reference/connectors/as400-pcml-connector/as400-pcml-connector-reference.md
-          - reference/connectors/asb-connector/asb-connector-reference.md
-          - reference/connectors/asb-inbound/asb-inbound-endpoint-reference.md
-          - reference/connectors/cdc-inbound-endpoint/cdc-inbound-endpoint-reference.md
-          - reference/connectors/csv-module/2.x/csv-module-config.md
-          - reference/connectors/csv-module/3.x/csv-module-config.md
-          - reference/connectors/email-connector/email-connector-config.md
-          - reference/connectors/email-connector/email-connector-example.md
-          - reference/connectors/fhir-connector/fhir-connector-config.md
-          - reference/connectors/file-connector/3.x/file-connector-3.x-config.md
-          - reference/connectors/file-connector/3.x/file-connector-3.x-example.md
-          - reference/connectors/file-connector/4.x/file-connector-config.md
-          - reference/connectors/file-connector/5.x/file-connector-config.md
-          - reference/connectors/file-connector/5.x/file-connector-example.md
-          - reference/connectors/file-connector/6.x/file-connector-config.md
-          - reference/connectors/file-connector/6.x/file-connector-example.md
-          - reference/connectors/file-inbound/file-inbound-reference.md
-          - reference/connectors/google-ads-connector/google-ads-configuration.md
-          - reference/connectors/google-pubsub-inbound/google-pubsub-inbound-endpoint-reference.md
-          - reference/connectors/iso8583-connector/iso8583-connector-reference.md
-          - reference/connectors/kafka-connector/kafka-inbound-endpoint-config.md
-          - reference/connectors/ldap-connector/1.x/ldap-server-1.x-configuration.md
-          - reference/connectors/ldap-connector/ldap-server-configuration.md
-          - reference/connectors/microsoft-azure-storage-connector/1.x/microsoft-azure-storage-connector-example.md
-          - reference/connectors/mongodb-connector/2.x/mongodb-connector-config.md
-          - reference/connectors/mongodb-connector/3.x/mongodb-connector-config.md
-          - reference/connectors/pulsar-connector/pulsar-connector-reference.md
-          - reference/connectors/rabbitmq-amqp-1.0-connector/rabbitmq-amqp-1.0-connector-reference.md
-          - reference/connectors/rabbitmq-amqp-1.0-connector/rabbitmq-amqp-1.0-inbound-endpoint-reference.md
-          - reference/connectors/redis-connector/redis-connector-example.md
-          - reference/connectors/salesforce-connectors/2.x/salesforcebulk-v2-reference.md
-          - reference/connectors/salesforce-connectors/2.x/sf-rest-connector-config.md
-          - reference/connectors/salesforce-connectors/3.x/sf-rest-connector-config.md
-          - reference/connectors/salesforce-connectors/sf-inbound-endpoint-overview.md
-          - reference/connectors/servicenow-connector/1.x/servicenow-connector-1.x-config.md
-          - reference/connectors/servicenow-connector/servicenow-connector-config.md
-          - reference/connectors/sf-pubsub-inbound/sf-pubsub-inbound-endpoint-reference.md
-          - reference/connectors/smpp-connector/1.x/smpp-connector-config.md
-          - reference/connectors/smpp-connector/smpp-connector-config.md
-          - reference/connectors/smpp-connector/smpp-inbound-endpoint-config.md
-          - reference/connectors/twilio-connector/twilio-connector-reference.md
-          - reference/mediators/aggregate-mediator.md
-          - reference/mediators/cache-mediator.md
-          - reference/mediators/call-template-mediator.md
-          - reference/mediators/callout-mediator.md
-          - reference/mediators/clone-mediator.md
-          - reference/mediators/data-mapper-mediator.md
-          - reference/mediators/db-report-mediator.md
-          - reference/mediators/dblookup-mediator.md
-          - reference/mediators/dss-mediator.md
-          - reference/mediators/ejb-mediator.md
-          - reference/mediators/enrich-mediator.md
-          - reference/mediators/fastxslt-mediator.md
-          - reference/mediators/fault-mediator.md
-          - reference/mediators/filter-mediator.md
-          - reference/mediators/iterate-mediator.md
-          - reference/mediators/json-transform-mediator.md
-          - reference/mediators/log-mediator.md
-          - reference/mediators/property-mediator.md
-          - reference/mediators/property-reference/axis2-properties.md
-          - reference/mediators/property-reference/generic-properties.md
-          - reference/mediators/property-reference/http-transport-properties.md
-          - reference/mediators/property-reference/message-context-properties.md
-          - reference/mediators/script-mediator.md
-          - reference/mediators/send-mediator.md
-          - reference/mediators/smooks-mediator.md
-          - reference/mediators/switch-mediator.md
-          - reference/mediators/throttle-mediator.md
-          - reference/mediators/urlrewrite-mediator.md
-          - reference/mediators/validate-mediator.md
-          - reference/mediators/variable-mediator.md
-          - reference/mediators/xslt-mediator.md
-          - reference/mi-security-reference/customizing-secure-vault.md
-          - reference/synapse-properties/data-services/query-parameters.md
-          - reference/synapse-properties/endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/event-based-inbound-endpoints/mqtt-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/event-based-inbound-endpoints/rabbitmq-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/listening-inbound-endpoints/cxf-ws-rm-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/listening-inbound-endpoints/hl7-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/listening-inbound-endpoints/http-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/listening-inbound-endpoints/websocket-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/polling-inbound-endpoints/jms-inbound-endpoint-properties.md
-          - reference/synapse-properties/inbound-endpoints/polling-inbound-endpoints/kafka-inbound-endpoint-properties.md
-          - reference/synapse-properties/message-processors/msg-sampling-processor-properties.md
-          - reference/synapse-properties/message-processors/msg-sched-failover-forwarding-processor-properties.md
-          - reference/synapse-properties/message-processors/msg-sched-forwarding-processor-properties.md
-          - reference/synapse-properties/message-stores/resequence-msg-store-properties.md
-          - reference/synapse-properties/rest-api-properties.md
-          - reference/synapse-properties/scheduled-task-properties.md
-          - reference/synapse-properties/synapse-expressions-syntax.md
-          - reference/synapse-properties/template-properties.md
-          - reference/synapse-properties/transport-parameters/jms-transport-parameters.md
-          - reference/synapse-properties/transport-parameters/vfs-transport-parameters.md
-          - reference/troubleshooting/error-handling-mi.md
+        exclude: []
       - id: integration-bi
         label: BI
         route: integration/bi
@@ -256,9 +89,7 @@ products:
         deployment_options: [Self-hosted]  # confirm
         current_site: https://bi.docs.wso2.com/
         sparse: [en]
-        exclude:
-          - developer-guides/protocols-and-connectors/supported-protocols.md
-          - get-started/develop-integration-as-api.md
+        exclude: []
       - id: integration-si
         label: Streaming Integrator
         route: integration/streaming-integrator
@@ -270,17 +101,7 @@ products:
         deployment_options: [Self-hosted]
         current_site: https://si.docs.wso2.com/
         sparse: [en]
-        exclude:
-          - admin/configuring-Database-and-File-System-State-Persistence.md
-          - admin/general-data-protection-regulations.md
-          - admin/user-Management-via-the-IdP-Client-Interface.md
-          - develop/simulating-Events.md
-          - develop/testing-a-Siddhi-Application.md
-          - develop/working-with-the-graphical-view.md
-          - ref/authentication-APIs.md
-          - ref/business-Rules-APIs.md
-          - ref/event-simulation-apis.md
-          - setup/configuring-data-sources.md
+        exclude: []
 
   - id: identity
     name: Identity Platform
@@ -309,121 +130,11 @@ products:
         shared_names:
           product_name: WSO2 Identity Platform
         older_versions: https://is.docs.wso2.com/en/7.2.0/
+        aliases: [https://wso2.com/asgardeo/docs/]  # former URL of the cloud docs; links to it become internal
         exclude:
-          - apis/notification-sender.md
-          - apis/organization-apis/authentication.md
-          - apis/retrieve-tenant-resources-based-on-search-parameters.md
-          - apis/scim2-batch-operations.md
-          - apis/scim2-patch-operations.md
-          - apis/scim2/scim2-batch-operations.md
-          - apis/scim2/scim2-patch-operations.md
-          - deploy/configure/configure-cors.md
-          - deploy/configure/databases/carbon-database/change-datasource-agent-identity.md
-          - deploy/configure/databases/carbon-database/change-datasource-consent-management.md
-          - deploy/configure/databases/carbon-database/change-datasource-registry-data.md
-          - deploy/configure/databases/carbon-database/change-datasource-session.md
-          - deploy/configure/databases/carbon-database/change-to-ibm-db2.md
-          - deploy/configure/databases/carbon-database/change-to-mssql.md
-          - deploy/configure/databases/carbon-database/change-to-mysql.md
-          - deploy/configure/databases/carbon-database/change-to-oracle-rac.md
-          - deploy/configure/databases/carbon-database/change-to-oracle.md
-          - deploy/configure/databases/carbon-database/change-to-postgresql.md
-          - deploy/configure/databases/carbon-database/change-to-remote-h2.md
-          - deploy/configure/databases/remove-references-to-deleted-user-identities.md
-          - deploy/configure/email-sending-module.md
-          - deploy/configure/user-stores/configure-system-administrator.md
-          - deploy/configure/user-stores/secure-userstore-using-pbkdf2.md
-          - deploy/deployment-checklist.md
-          - deploy/deployment-guide.md
-          - deploy/disaster-recovery/disaster-recovery-deployment-patterns.md
-          - deploy/get-started/install.md
-          - deploy/monitor/http-access-logging.md
-          - deploy/monitor/work-with-product-observability.md
-          - deploy/performance/performance-tuning-recommendations.md
-          - deploy/security/enable-java-security-manager.md
-          - get-started/try-it-application.md
-          - get-started/try-samples/qsg-oidc-webapp-java-ee.md
-          - get-started/try-samples/qsg-saml-webapp-java-ee.md
-          - get-started/try-samples/qsg-spa-javascript.md
-          - get-started/try-samples/qsg-spa-react.md
-          - get-started/try-your-own-app/java-ee-oidc.md
-          - get-started/try-your-own-app/java-ee-saml.md
-          - get-started/try-your-own-app/javascript.md
-          - guides/account-configurations/account-recovery/password-recovery.md
-          - guides/account-configurations/login-security/bot-detection.md
-          - guides/account-configurations/login-security/password-validation.md
-          - guides/account-configurations/login-security/session-management.md
-          - guides/account-configurations/user-onboarding/self-registration.md
-          - guides/applications/register-oidc-web-app.md
-          - guides/authentication/conditional-auth/concurrent-session-based-template.md
-          - guides/authentication/conditional-auth/elk-risk-based-template.md
-          - guides/authentication/conditional-auth/login-attempt-based-template.md
-          - guides/authentication/conditional-auth/on-demand-silent-password-migration-template.md
-          - guides/authentication/conditional-auth/sign-in-option-based-template.md
-          - guides/authentication/conditional-auth/user-store-based-template.md
-          - guides/authentication/configure-jwt-bearer-grant.md
-          - guides/authentication/eid-login/add-france-connect-login.md
-          - guides/authentication/eid-login/add-franceconnect-login.md
-          - guides/authentication/eid-login/add-signicat-login.md
-          - guides/authentication/eid-login/add-swiss-id-login.md
-          - guides/authentication/eid-login/add-swissid-login.md
-          - guides/authentication/enterprise-login/add-iwa-login.md
-          - guides/authentication/enterprise-login/add-microsoft-365-login.md
-          - guides/authentication/oidc/jarm.md
-          - guides/authentication/oidc/private-key-jwt-client-auth.md
-          - guides/authentication/oidc/validate-jwt-with-jwks.md
-          - guides/authentication/social-login/add-x-login.md
-          - guides/authentication/standard-based-login/add-ws-federation.md
-          - guides/authorization/api-authorization/api-authorization.md
-          - guides/branding/configure-ui-branding.md
-          - guides/branding/customize-email-templates.md
-          - guides/identity-platform-logs/audit-logs/index.md
-          - guides/monitoring/identity-platform-events.md
-          - guides/notification-channels/configure-email-provider.md
-          - guides/notification-channels/configure-sms-provider.md
-          - guides/organization-insights.md
           - guides/organization-management/manage-organizations.md
-          - guides/organization-management/onboard-org-admins/self-service-approach.md
-          - guides/organization-management/organization-discovery/email-domain-based-organization-discovery.md
-          - guides/organization-management/try-a-b2b-use-case.md
-          - guides/service-extensions/in-flow-extensions/custom-authentication.md
-          - guides/service-extensions/pre-flow-extensions/pre-issue-access-token-action.md
-          - guides/service-extensions/pre-flow-extensions/pre-issue-id-token-action.md
-          - guides/service-extensions/pre-flow-extensions/pre-update-password-action.md
-          - guides/service-extensions/pre-flow-extensions/pre-update-profile-action.md
           - guides/service-extensions/understanding-service-extensions.md
-          - guides/user-accounts/account-security/password-validation.md
-          - guides/user-accounts/configure-self-registration.md
           - guides/users/attributes/configure-multi-valued-contact-attributes.md
-          - guides/users/attributes/enable-email-as-username.md
-          - guides/users/attributes/user-attributes/attribute-configurations-reference.md
-          - guides/users/attributes/user-attributes/configure-attributes.md
-          - guides/users/outbound-provisioning/outbound-connectors/salesforce.md
-          - guides/users/outbound-provisioning/outbound-connectors/scim2.md
-          - guides/users/user-stores/primary-user-store/index.md
-          - guides/users/user-stores/user-store-properties/index.md
-          - guides/users/user-stores/user-store-properties/properties-jdbc-user-store.md
-          - guides/users/user-stores/user-store-properties/properties-read-only-ldap-user-store.md
-          - guides/users/user-stores/user-store-properties/properties-read-write-active-directory-user-store.md
-          - guides/users/user-stores/user-store-properties/properties-read-write-ldap-user-store.md
-          - guides/webhooks/webhook-events-and-payloads.md
-          - includes/db-basic-config.md
-          - includes/db-config-table.md
-          - page-not-found.md
-          - quick-starts/springboot.md
-          - references/app-settings/oidc-settings-for-app.md
-          - references/conditional-auth/api-reference.md
-          - references/email-templates.md
-          - references/extend/authentication/write-a-post-authentication-handler.md
-          - references/extend/user-mgt/provisioning/add-scim2-custom-user-schema-support.md
-          - references/identity-platform-outbound-ip-addresses.md
-          - references/sms-templates.md
-          - references/troubleshoot/api-error-codes.md
-          - references/troubleshoot/app-native-error-codes.md
-          - references/tutorials/send-notification-external-schedular.md
-          - sdks/asgardeo-mcp-server.md
-          - sdks/nextjs/middleware/asgardeo-middleware.md
-          - tutorials/smart-on-fhir.md
 
   - id: agent-manager
     name: Agent Manager
@@ -444,8 +155,7 @@ products:
         current_site: https://wso2.com/agent-platform/docs/v1.0.0/
         sparse: [versioned_docs/version-v1.0.0, versioned_sidebars, static]
         note: Cloud pages (versioned_docs/version-cloud) wait on ticket 15.
-        exclude:
-          - guides/on-a-vm.mdx
+        exclude: []
 
   - id: api-platform
     name: API Platform
@@ -473,9 +183,7 @@ products:
         nav_drop: [Cloud, API Manager]
         nav_pick: { API Gateway: "1.2.0", AI Gateway: "2026.09.24", API Portal: "1.0.0", AI Workspace: "1.0.0" }
         skip: [cloud/, api-manager/, next/, api-gateway/next/, api-gateway/1.1.0/, api-gateway/1.0.0/, ai-gateway/next/, ai-gateway/1.2.0/, ai-gateway/1.1.0/, ai-gateway/1.0.0/, api-portal/next/, ai-workspace/next/]
-        exclude:
-          - ai-gateway/2026.09.24/setup-and-deployment/immutable-gateway.md
-          - api-gateway/1.2.0/deployment/deployment-modes/immutable-gateway.md
+        exclude: []
       - id: api-platform-apim
         label: API Manager
         route: api-platform/api-manager
@@ -520,108 +228,6 @@ products:
           rename:
             API Platform Samples: Samples
         exclude:
-          - administer/managing-users-and-roles/managing-permissions.md
-          - administer/managing-users-and-roles/managing-user-stores/working-with-properties-of-user-stores.md
-          - administer/managing-users-and-roles/managing-user-stores/writing-a-custom-user-store-manager.md
-          - administer/rate-limiting/implement-custom-policies.md
-          - administer/rate-limiting/manage-advanced-policies.md
-          - administer/rate-limiting/manage-subscription-policies.md
-          - ai-gateway/ai-guardrails/semantic-tool-filtering-guardrail.md
-          - ai-gateway/ai-vendor-management/custom-ai-vendors/custom-connector.md
-          - ai-gateway/ai-vendor-management/custom-ai-vendors/overview.md
-          - ai-gateway/multi-model-routing/overview.md
-          - api-design-manage/deploy-and-publish/deploy-on-gateway/api-gateway/response-caching.md
-          - api-design-manage/design/advanced-topics/block-subscription-to-an-api.md
-          - api-design-manage/design/advanced-topics/enable-publisher-access-control-in-api-publisher-portal.md
-          - api-design-manage/design/api-policies/create-policy.md
-          - api-design-manage/design/api-versioning/enabling-notifications.md
-          - api-design-manage/design/create-api-product/api-product-overview.md
-          - api-design-manage/design/create-api-product/create-api-product.md
-          - api-design-manage/design/create-api/create-a-graphql-api.md
-          - api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition.md
-          - api-design-manage/design/create-api/create-rest-api/create-a-rest-api.md
-          - api-design-manage/design/create-api/create-rest-api/expose-a-soap-service-as-a-rest-api.md
-          - api-design-manage/design/create-api/create-rest-api/generate-rest-api-from-soap-backend.md
-          - api-design-manage/design/create-api/create-rest-api/test-a-rest-api.md
-          - api-design-manage/design/create-api/create-streaming-api/create-a-sse-streaming-api.md
-          - api-design-manage/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition.md
-          - api-design-manage/design/create-api/create-streaming-api/create-a-websub-streaming-api.md
-          - api-design-manage/design/endpoints/certificates.md
-          - api-design-manage/design/endpoints/endpoint-types.md
-          - api-design-manage/design/endpoints/high-availability-for-endpoints.md
-          - api-design-manage/design/endpoints/resiliency/endpoint-suspension.md
-          - api-design-manage/design/endpoints/resiliency/endpoint-timeouts.md
-          - api-developer-portal/discover-apis/search.md
-          - api-gateway/federated-gateways/configure-custom-gateway-agent.md
-          - api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway.md
-          - api-gateway/rate-limiting/implement-custom-throttling.md
-          - api-gateway/response-caching.md
-          - api-security/key-management/authentication/grant-types/jwt-grant.md
-          - api-security/key-management/third-party-key-managers/configure-auth0-connector.md
-          - api-security/key-management/third-party-key-managers/configure-azure-ad-key-manager.md
-          - api-security/key-management/third-party-key-managers/configure-custom-connector.md
-          - api-security/key-management/third-party-key-managers/configure-forgerock-connector.md
-          - api-security/key-management/third-party-key-managers/configure-keycloak-connector.md
-          - api-security/key-management/third-party-key-managers/configure-okta-connector.md
-          - api-security/key-management/third-party-key-managers/configure-pingfederate-connector.md
-          - api-security/key-management/third-party-key-managers/configure-wso2is-connector.md
-          - apiops/cli/building-jenkins-ci-cd-pipeline.md
-          - apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach.md
-          - apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments.md
-          - apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments.md
-          - apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments.md
-          - cloud/administer/settings/configure-a-custom-domain-for-your-organization.md
-          - cloud/create-api-proxy/third-party-apis/semantic-cache.md
-          - get-started/api-manager-quick-start-guide.md
-          - includes/design/create-graphql-api.md
-          - install-and-setup/install-and-setup-overview.md
-          - install-and-setup/install/installation-prerequisites.md
-          - install-and-setup/install/installing-the-product/running-the-api-m.md
-          - install-and-setup/setup/advance-configurations/changing-the-default-transport.md
-          - install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-only-ldap-user-store.md
-          - install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store.md
-          - install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-ldap-user-store.md
-          - install-and-setup/setup/deployment-best-practices/production-deployment-guidelines.md
-          - install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment.md
-          - install-and-setup/setup/deployment-best-practices/tuning-performance.md
-          - install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager.md
-          - install-and-setup/setup/security/general-data-protection-regulation-gdpr-for-wso2-api-manager.md
-          - install-and-setup/setup/security/logins-and-passwords/harshicrop-vault-extension.md
-          - install-and-setup/setup/security/logins-and-passwords/maintaining-logins-and-passwords.md
-          - install-and-setup/setup/sso/okta-as-an-external-idp-using-oidc.md
-          - install-and-setup/setup/sso/okta-as-an-external-idp-using-saml.md
-          - monitoring/api-analytics/choreo-analytics/getting-started-guide.md
-          - monitoring/observability/monitoring-audit-logs.md
-          - monitoring/observability/monitoring-http-access-logs.md
-          - monitoring/observability/monitoring-websocket-logs.md
-          - page-not-found.md
-          - reference/apictl/wso2-api-controller.md
-          - reference/best-practices-endpoints.md
-          - reference/config-catalog.md
-          - reference/customize-product/customizations/adding-internationalization.md
-          - reference/customize-product/extending-api-manager/extending-key-management/extending-key-validation.md
-          - reference/customize-product/extending-api-manager/extending-workflows/configuring-workflows-in-a-cluster.md
-          - reference/customize-product/extending-api-manager/extending-workflows/customizing-a-workflow-extension.md
-          - reference/product-apis/admin-apis/admin-v4/admin-v4.md
-          - reference/product-apis/devops-apis/devops-v0/devops-v0.md
-          - reference/product-apis/devportal-apis/devportal-v3/devportal-v3.md
-          - reference/product-apis/gateway-apis/gateway-v2/gateway-v2.md
-          - reference/product-apis/governance-apis/governance-v1/governance-v1.md
-          - reference/product-apis/overview.md
-          - reference/product-apis/publisher-apis/publisher-v4/publisher-v4.md
-          - reference/product-apis/service-catalog-apis/service-catalog-v1/service-catalog-v1.md
-          - reference/product-compatibility.md
-          - reference/understanding-the-new-configuration-model.md
-          - tutorials/create-and-publish-a-graphql-api.md
-          - tutorials/create-and-publish-websocket-api.md
-          - tutorials/develop-an-integration-with-a-managed-api.md
-          - tutorials/expose-a-soap-service-as-a-rest-api.md
-          - tutorials/scenarios/scenario-overview.md
-          - tutorials/scenarios/scenario10-notifications-webhooks.md
-          - tutorials/streaming-api/create-and-publish-sse-api.md
-          - tutorials/streaming-api/create-and-publish-websocket-api.md
-          - tutorials/streaming-api/create-and-publish-websub-api.md
-          - tutorials/tutorials-overview.md
           - use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog.md
 
   - id: kubernetes-gateway
@@ -640,31 +246,7 @@ products:
         deployment_options: [Self-hosted]
         current_site: https://apk.docs.wso2.com/en/latest/
         sparse: [en]
-        exclude:
-          - about-apk/performance-test-results/overview.md
-          - administration/configurations/configure-logs-adapter.md
-          - catalogs/api-reference-config-deployer.md
-          - catalogs/api-reference-config-generator.md
-          - catalogs/config-catalog.md
-          - catalogs/crds/aiprovider_types.md
-          - catalogs/crds/airatelimitpolicy_types.md
-          - catalogs/crds/api_types.md
-          - catalogs/crds/apipolicy_types.md
-          - catalogs/crds/application_mapping_types.md
-          - catalogs/crds/application_types.md
-          - catalogs/crds/authentication_types.md
-          - catalogs/crds/backend_types.md
-          - catalogs/crds/backendjwt_types.md
-          - catalogs/crds/gql_routes_types.md
-          - catalogs/crds/interceptorservice_types.md
-          - catalogs/crds/ratelimitpolicy_types.md
-          - catalogs/crds/resolvedJWTIssuer.md
-          - catalogs/crds/scope_types.md
-          - catalogs/crds/subscription_types.md
-          - catalogs/crds/tokenIssuer_types.md
-          - create-api/rate-limiting/add-new-rate-limiting-policies-via-crs.md
-          - create-api/rate-limiting/add-new-rate-limiting-policies-via-rest-api.md
-          - index.md
+        exclude: []
 
   - id: developer-platform
     name: Developer Platform
@@ -681,14 +263,9 @@ products:
         mkdocs: en/developer-docs/mkdocs.yml
         deployment_options: [WSO2 Cloud]  # confirm: private data planes may be Hybrid
         current_site: https://wso2.com/engineering-platform/developer-platform/docs/developer/
+        aliases: [https://wso2.com/choreo/docs/]  # former URL (Choreo); links to it become internal
         sparse: [en/developer-docs, en/theme, en/includes]
-        exclude:
-          - administer/configure-a-custom-domain-for-your-organization.md
-          - choreo-concepts/data-planes.md
-          - develop-components/develop-integrations/develop-a-manual-task.md
-          - references/faq.md
-          - references/private-data-plane-management-models.md
-          - references/private-data-plane-security-levels.md
+        exclude: []
       - id: developer-platform-platform-engineers
         label: For platform engineers
         route: developer-platform/platform-engineers
@@ -700,12 +277,7 @@ products:
         deployment_options: [WSO2 Cloud]  # confirm
         current_site: https://wso2.com/engineering-platform/developer-platform/docs/platform-engineer/
         sparse: [en/pe-docs, en/theme, en/includes]
-        exclude:
-          - choreo-concepts/data-planes.md
-          - infrastructure/domains/configure-a-custom-domain-for-your-organization.md
-          - references/faq.md
-          - references/private-data-plane-management-models.md
-          - references/private-data-plane-security-levels.md
+        exclude: []
 
   - id: healthcare
     name: Accelerator for Healthcare
@@ -724,13 +296,7 @@ products:
         deployment_options: [Self-hosted]  # confirm
         current_site: https://healthcare.docs.wso2.com/
         sparse: [en/docs, en/sidebars.js, en/static]
-        exclude:
-          - fhir/terminology/codesystem-operations.md
-          - fhir/terminology/valueset-operations.md
-          - install-and-setup/manual.md
-          - old-content/configs/email-notifications.md
-          - old-content/fhir-mapping-templates/fhir-mapping-templates-example.md
-          - page-not-found.md
+        exclude: []
 
   - id: financial-services
     name: Accelerator for Financial Services
@@ -748,16 +314,7 @@ products:
         deployment_options: [Self-hosted]  # confirm
         current_site: https://ob.docs.wso2.com/en/latest/
         sparse: [en]
-        exclude:
-          - index.md
-          - install-and-setup/deployment-patterns.md
-          - install-and-setup/prerequisites.md
-          - references/accelerator-extensions-api.md
-          - references/application-info-api.md
-          - references/config-catalog-apim.md
-          - references/config-catalog-is.md
-          - references/consent-rest-api.md
-          - references/dcr-rest-api.md
+        exclude: []
 
   - id: updates
     name: Updates
@@ -776,9 +333,6 @@ products:
         current_site: https://updates.docs.wso2.com/en/latest/
         sparse: [en]
         exclude:
-          - index.md
-          - updates/faq.md
-          - updates/troubleshoot.md
           - updates/update-commands.md
 
   - id: platform-security

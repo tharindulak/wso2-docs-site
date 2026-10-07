@@ -76,3 +76,18 @@ export function unexpandedMarkers(text) {
   });
   return found;
 }
+
+/**
+ * Remove <script>, <style> and <link> elements (with their content) and event-handler attributes outside
+ * code samples, for pages the
+ * policy would otherwise reject. Removing never adds behaviour; anything left is still checked by the policy.
+ * @returns {{ text: string, removed: string[] }}
+ */
+export function removeForbiddenElements(text) {
+  const removed = [];
+  const cleaned = outsideCode(text, (t) => t
+    .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, (_, tag) => (removed.push(tag.toLowerCase()), ''))
+    .replace(/<link\b[^>]*>/gi, () => (removed.push('link'), ''))
+    .replace(/<[a-zA-Z][\w-]*\b[^>]*>/g, (tag) => tag.replace(/\s(on[a-z]+)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, (_, attr) => (removed.push(attr.toLowerCase()), ''))));
+  return { text: cleaned, removed };
+}

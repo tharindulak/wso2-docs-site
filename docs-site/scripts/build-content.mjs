@@ -12,8 +12,9 @@ import { readLock, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
 import { mkdocsSite } from '../converter/mkdocs-config.js';
 import { loadPage, renderSingle, readPageData } from '../converter/render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from '../converter/merge.js';
-import { convertRendered, compileCheck, splitFrontMatter, PageError } from '../converter/page.js';
+import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports } from '../converter/page.js';
 import { navToSidebar, mergeSidebars, sidebarDocIds, selectNav } from '../converter/nav.js';
+import { rewriteSiteLinks } from '../converter/links.js';
 import { optionsFor, prefixIds, placeCompanion, normalizeSidebar, overviewLinks } from '../converter/sections.js';
 
 const args = process.argv.slice(2);
@@ -180,8 +181,16 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
       const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, custom_edit_url: editUrl(section.repo, section.sha, file, root) };
       const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
-      await compileCheck(mdx);
-      return mdx;
+      try {
+        await compileCheck(mdx);
+        return mdx;
+      } catch (e) {
+        if (!(e instanceof PageError) || e.kind !== 'compile') throw e;
+        // Same last resort as MkDocs pages: CommonMark keeps the page on the site, components show as plain content.
+        const md = `---\n${yaml.dump({ ...front, mdx: { format: 'md' } }, { lineWidth: -1 })}---\n${withoutImports(text)}`;
+        await compileCheck(md, { format: 'md' });
+        return md;
+      }
     }, { title: titleOf(raw, rel), to: section.current_site + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions });
   }
   copyAssets(docsDir, staticDir);
@@ -224,6 +233,43 @@ function fillTemplatePages(product, section, outDir, sidebarFile) {
     const list = links.map((l) => `- [${l.label.replace(/[[\]]/g, '')}](${href(l.id)})`).join('\n');
     write(file, `---\n${yaml.dump({ ...data, title })}---\n\n${list}\n`);
   }
+}
+
+/**
+ * Links to a product's current docs site, for pages hosted here, become internal links (converter/links.js).
+ * Each section answers for its current site, that site's /en/latest/ form and any `aliases` (former URLs).
+ */
+function rewriteLinksToHostedPages(lock) {
+  const sites = [];
+  for (const product of lock.products) for (const section of product.sections) {
+    const docsDir = path.join(GENERATED, 'docs', section.id);
+    const hosts = (sub) => (p) => {
+      const base = path.join(docsDir, sub, p);
+      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')])
+        .some((f) => fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'"));
+    };
+    const add = (url, sub = '') => {
+      if (!url) return;
+      const route = sub ? `${section.route}/${sub}` : section.route;
+      for (const prefix of new Set([url, url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')])) sites.push({ prefix, route, hosts: hosts(sub) });
+    };
+    const refs = section.kind === 'mkdocs-merge' ? [section.cloud, section.self_hosted] : [section];
+    for (const ref of refs) add(ref.current_site);
+    for (const alias of section.aliases ?? []) add(alias);
+    if (section.cloud_companion) add(section.cloud_companion.current_site, section.cloud_companion.path_prefix ?? '');
+  }
+  let total = 0;
+  for (const product of lock.products) for (const section of product.sections) {
+    const docsDir = path.join(GENERATED, 'docs', section.id);
+    for (const rel of walk(docsDir, (r) => r.endsWith('.md'))) {
+      const file = path.join(docsDir, rel);
+      const text = fs.readFileSync(file, 'utf8');
+      if (text.includes("from '@site/src/components/Redirect'")) continue;
+      const { text: out, rewritten } = rewriteSiteLinks(text, sites);
+      if (rewritten) { fs.writeFileSync(file, out); total += rewritten; }
+    }
+  }
+  return total;
 }
 
 const lock = readLock();
@@ -291,6 +337,7 @@ for (const product of lock.products) {
   manifest.products.push(entry);
 }
 
+console.log(`Links to current docs sites made internal: ${rewriteLinksToHostedPages(lock)}`);
 write(path.join(GENERATED, 'manifest.json'), JSON.stringify(manifest, null, 2));
 write(path.join(GENERATED, 'content-report.json'), JSON.stringify(reports, null, 2));
 if (lockChanged) {

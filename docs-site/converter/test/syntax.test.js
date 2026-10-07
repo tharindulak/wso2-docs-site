@@ -40,3 +40,9 @@ test('Markdown autolinks become links, so the closing > is not read as part of t
   assert.equal(toMdx('Root context (<https://apis.com:9443>).').body, 'Root context ([https://apis.com:9443](https://apis.com:9443)).');
   assert.equal(toMdx('`<http://localhost:3000>`').body, '`<http://localhost:3000>`', 'code untouched');
 });
+
+test('bare placeholder URLs stay text, so Docusaurus does not try to parse them as links', () => {
+  const { body } = toMdx('Requests go to http://host:port/healthcare or http://username:password@proxyhost:port/. Real: https://wso2.com/x.');
+  assert.equal(body, 'Requests go to http:&#47;/host:port/healthcare or http:&#47;/username:password@proxyhost:port/. Real: https://wso2.com/x.');
+  assert.equal(toMdx('`http://host:port/x` and [l](https://wso2.com/a)').body, '`http://host:port/x` and [l](https://wso2.com/a)');
+});

@@ -2,7 +2,9 @@
 // {% if/elif/else/endif %}, {% include %}, {% set %}, {% raw %}, {{ variable }}.
 // Conditions are parsed with an allow-listed grammar and never evaluated as code.
 
-const TAG = /\{%-?\s*([\s\S]*?)\s*-?%\}|\{\{\s*([\s\S]*?)\s*\}\}/g;
+// Quoted strings inside a tag may contain }} or %} (Jinja prints '{{code}}' from {{ '{{code}}' }}).
+const QUOTED = String.raw`"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'`;
+const TAG = new RegExp(String.raw`\{%-?\s*((?:${QUOTED}|[^'"])*?)\s*-?%\}|\{\{\s*((?:${QUOTED}|[^'"])*?)\s*\}\}`, 'g');
 const RAW = /\{%-?\s*raw\s*-?%\}([\s\S]*?)\{%-?\s*endraw\s*-?%\}/g;
 
 export class TemplateError extends Error {

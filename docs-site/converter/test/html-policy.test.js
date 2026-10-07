@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { applyHtmlPolicy, unexpandedMarkers } from '../html-policy.js';
+import { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements } from '../html-policy.js';
 
 const v = (t) => applyHtmlPolicy(t).violations;
 
@@ -41,4 +41,24 @@ test('placeholders that look like tags are not violations', () => {
   assert.equal(v('Use <base-url>/x and <link-name> in the <form-id> field.').length, 0);
   assert.ok(v('<base href="https://x">').length);
   assert.ok(v('<link rel="stylesheet" href="x.css">').length);
+});
+
+test('removeForbiddenElements drops scripts, styles and links with their content; code samples stay', () => {
+  const src = 'A <style>.x{}</style>\n<script src="x.js"></script>\n<SCRIPT>\nalert(1)\n</SCRIPT>\n<link rel="stylesheet" href="x.css">\n\n```html\n<script>kept()</script>\n```\nB';
+  const { text, removed } = removeForbiddenElements(src);
+  assert.deepEqual(removed.sort(), ['link', 'script', 'script', 'style']);
+  assert.doesNotMatch(text.replace(/```html[\s\S]*```/, ''), /script|style|link|alert/i);
+  assert.match(text, /<script>kept\(\)<\/script>/);
+  assert.deepEqual(applyHtmlPolicy(text).violations, []);
+});
+
+test('removeForbiddenElements leaves an unclosed script for the policy to reject', () => {
+  const { text } = removeForbiddenElements('<script>never closed');
+  assert.match(applyHtmlPolicy(text).violations[0], /<script>/);
+});
+
+test('removeForbiddenElements removes every event handler on a tag', () => {
+  const { text, removed } = removeForbiddenElements('<img src="a.png" onerror="x()" onload=\'y()\' alt="a">');
+  assert.equal(text, '<img src="a.png" alt="a">');
+  assert.deepEqual(removed, ['onerror', 'onload']);
 });

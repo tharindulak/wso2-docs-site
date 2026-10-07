@@ -40,3 +40,10 @@ test('reports unbalanced and unsupported statements', () => {
   assert.throws(() => parse('{% for x in y %}{% endfor %}'), /Unsupported statement/);
   assert.throws(() => parse('{% macro m() %}{% endmacro %}'), /Unsupported statement/);
 });
+
+test('a string literal may contain }} or %}, as in Jinja: {{ \'{{code}}\' }} prints {{code}}', () => {
+  const nodes = parse("Use {{ '{{confirmation-code}}' }} and {{ \"{%x%}\" }}.");
+  assert.deepEqual(nodes.map((n) => n.t), ['text', 'var', 'text', 'var', 'text']);
+  assert.equal(evaluate(nodes[1].expr, {}), '{{confirmation-code}}');
+  assert.equal(evaluate(nodes[3].expr, {}), '{%x%}');
+});
