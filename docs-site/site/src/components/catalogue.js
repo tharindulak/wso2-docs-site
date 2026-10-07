@@ -14,4 +14,4 @@ export function locate(catalogue, pathname) {
   return {};
 }
 
-export const productHref = (p) => p.href ?? p.sections[0].path;
+export const productHref = (p) => p.href ?? p.sections[0].landing ?? p.sections[0].path;

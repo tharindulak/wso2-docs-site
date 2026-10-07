@@ -25,7 +25,7 @@ const docsPlugins = manifest.products.flatMap((product) => product.sections.map(
 const catalogue = {
   groups: manifest.groups,
   products: [
-    ...manifest.products.map((p) => ({ ...p, sections: p.sections.map(({ id, label, route, version, olderVersions }) => ({ pluginId: id, label, path: `/${route}/`, version, olderVersions })) })),
+    ...manifest.products.map((p) => ({ ...p, sections: p.sections.map(({ id, label, route, version, olderVersions, landing }) => ({ pluginId: id, label, path: `/${route}/`, landing: `/${route}/${landing ?? ''}`, version, olderVersions })) })),
     ...manifest.linkOut.map((p) => ({ ...p, href: p.href })),
   ],
 };

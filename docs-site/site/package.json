@@ -1,0 +1,3 @@
+{
+  "//": "Package boundary with no \"type\": webpack then bundles site sources and generated .docusaurus files in its default auto mode (the parent package is \"type\": \"module\" for its Node scripts)."
+}

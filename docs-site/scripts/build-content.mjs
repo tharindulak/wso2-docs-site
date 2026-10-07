@@ -42,18 +42,28 @@ function redirectPage(title, to, deploymentOptions) {
   return `---\n${yaml.dump({ title, deployment_options: deploymentOptions, pagination_next: null, pagination_prev: null })}---\n\nimport Redirect from '@site/src/components/Redirect';\n\n<Redirect to="${to}" />\n`;
 }
 
+// Docusaurus turns `x/x.md` and `x/README.md` into the folder's index page (URL without the last segment);
+// MkDocs does not. Pin such pages to their MkDocs URL so existing links keep working.
+function keepMkdocsUrl(mdx, rel) {
+  const parts = rel.replace(/\\/g, '/').replace(/\.mdx?$/, '').split('/');
+  const name = parts.at(-1);
+  const collides = /^readme$/i.test(name) || (parts.length > 1 && name.toLowerCase() === parts.at(-2).toLowerCase());
+  if (!collides || /^slug:/m.test(mdx.split('\n---')[0])) return mdx;
+  return mdx.replace(/^---\n/, `---\nslug: /${parts.join('/')}/\n`);
+}
+
 async function emit(section, report, rel, outDir, produce, fallback) {
   const out = path.join(outDir, rel.replace(/\.mdx$/, '.md'));
   const excluded = (section.exclude ?? []).includes(rel);
   try {
-    const mdx = await produce();
+    const mdx = keepMkdocsUrl(await produce(), rel);
     write(out, mdx);
     report.ok++;
     if (excluded) report.nowPassing.push(rel);
   } catch (e) {
     const kind = e instanceof PageError ? e.kind : 'template';
     report.failures.push({ page: rel, kind, error: e.message.slice(0, 200) });
-    write(out, redirectPage(fallback.title, fallback.to, fallback.deploymentOptions));
+    write(out, keepMkdocsUrl(redirectPage(fallback.title, fallback.to, fallback.deploymentOptions), rel));
     report.redirected++;
   }
 }
@@ -71,7 +81,8 @@ async function buildMkdocs(section, outDir, staticDir, report) {
       return (await convertRendered(rendered, { deploymentOptions: section.deployment_options, editUrl: editUrl(section.repo, section.sha, file, root) })).mdx;
     }, { title: titleOf(raw, rel), to: section.current_site + mkdocsUrl(rel), deploymentOptions: section.deployment_options });
   }
-  copyAssets(site.docsDir, staticDir);
+  copyAssets(site.docsDir, staticDir); // absolute /<route>/assets/... references
+  copyAssets(site.docsDir, outDir); // page-relative ../assets/... references
   return navToSidebar(site.nav, (id) => fs.existsSync(path.join(outDir, `${id}.md`)), report.droppedNav);
 }
 
@@ -104,8 +115,7 @@ async function buildMerge(section, outDir, staticDir, report) {
       return (await convertRendered(resolveBase(text, section.route), { deploymentOptions, editUrl: editUrl(primary.ref.repo, primary.ref.sha, file, primary.root) })).mdx;
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), rel), to: primary.ref.current_site + mkdocsUrl(rel), deploymentOptions });
   }
-  copyAssets(c.site.docsDir, staticDir);
-  copyAssets(s.site.docsDir, staticDir);
+  for (const dir of [staticDir, outDir]) { copyAssets(c.site.docsDir, dir); copyAssets(s.site.docsDir, dir); }
   const known = (id) => fs.existsSync(path.join(outDir, `${id}.md`));
   return mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav));
 }
@@ -132,7 +142,8 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
       return mdx;
     }, { title: titleOf(raw, rel), to: section.current_site + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions: section.deployment_options });
   }
-  copyAssets(docsDir, path.join(staticDir));
+  copyAssets(docsDir, staticDir);
+  copyAssets(docsDir, outDir);
   const staticSrc = path.join(root, path.dirname(section.docs) === '.' ? 'static' : path.join(path.dirname(section.docs), 'static'));
   copyAssets(staticSrc, staticDir);
   const ext = path.extname(section.sidebar);
@@ -180,7 +191,12 @@ for (const product of lock.products) {
       reports.push(report);
       console.log(`${section.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  ${report.seconds}s`);
     }
+    const sidebarFile = fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${section.id}.`));
+    const firstDoc = sidebarFile && (fs.readFileSync(path.join(sidebarsDir, sidebarFile), 'utf8')
+      .match(/"type":\s*"doc",\s*"id":\s*"([^"]+)"|\bid:\s*'([^']+)'|^\s*["']([\w./-]+)["'],?$/m) ?? []).slice(1).find(Boolean);
+    const hasIndex = fs.existsSync(path.join(GENERATED, 'docs', section.id, 'index.md'));
     entry.sections.push({
+      landing: hasIndex || !firstDoc ? '' : `${firstDoc.replace(/(^|\/)index$/, '')}/`.replace(/^\/$/, ''),
       id: section.id, label: section.label, route: section.route, kind: section.kind,
       version: section.self_hosted?.version ?? section.version ?? null, olderVersions: section.older_versions ?? null,
       sidebar: fs.existsSync(path.join(sidebarsDir, `${section.id}.json`)) ? `${section.id}.json` : fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${section.id}.`)),
