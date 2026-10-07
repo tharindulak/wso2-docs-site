@@ -124,6 +124,8 @@ async function buildDocusaurus(section, outDir, staticDir, sidebarsDir, report) 
       let text = body;
       for (const name of SHIMS) text = text.replaceAll(`@site/src/components/${name}`, `@site/src/components/shims/${name}`);
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${section.route}/$2/`);
+      text = text.replace(/(\]\((?!https?:)[^)\s]*?)\.mdx(?=[)#])/g, '$1.md'); // pages are written as .md
+      text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
       const front = { ...data, deployment_options: data.deployment_options ?? section.deployment_options, custom_edit_url: editUrl(section.repo, section.sha, file, root) };
       const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       await compileCheck(mdx);

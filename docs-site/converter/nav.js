@@ -20,6 +20,7 @@ export function navToSidebar(nav, known, dropped = []) {
     }
     if (!entry || typeof entry !== 'object') continue;
     for (const [label, value] of Object.entries(entry)) {
+      if (!String(label).trim()) continue; // MkDocs: an empty title keeps a page out of the menu
       if (typeof value === 'string') {
         if (isUrl(value)) { items.push({ type: 'link', label, href: value }); continue; }
         const id = docId(value);

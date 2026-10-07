@@ -20,3 +20,7 @@ test('merging keeps base order and slots extra items after their nearest shared 
   assert.deepEqual(mergeSidebars(base, extra).map((i) => i.id ?? i.label), ['a', 'cloud-only', 'Guides', 'z']);
   assert.deepEqual(mergeSidebars(base, extra)[2].items.map((i) => i.id), ['g1', 'g2']);
 });
+
+test('an empty MkDocs title keeps the page out of the sidebar', () => {
+  assert.deepEqual(navToSidebar([{ '': 'page-not-found.md' }, 'index.md'], () => true), [{ type: 'doc', id: 'index' }]);
+});

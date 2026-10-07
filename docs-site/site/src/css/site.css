@@ -1,0 +1,34 @@
+.navbar { border-bottom: 3px solid var(--oxygen-accent); }
+.navbar__inner { gap: 0.75rem; }
+
+/* Product bar: product name, section tabs, version selector (HashiCorp model). */
+.product-bar {
+  position: sticky; top: var(--ifm-navbar-height); z-index: calc(var(--ifm-z-index-fixed) - 1);
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+  padding: 0.35rem var(--ifm-navbar-padding-horizontal);
+  background: var(--ifm-background-color); border-bottom: 1px solid var(--ifm-toc-border-color);
+}
+.product-bar__name { font-weight: 700; }
+.product-bar__tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.product-bar__tab { padding: 0.3rem 0.65rem; border-radius: 8px; color: var(--ifm-font-color-base); }
+.product-bar__tab:hover { background: var(--ifm-hover-overlay); text-decoration: none; }
+.product-bar__tab--active { color: var(--ifm-color-primary); font-weight: 600; box-shadow: inset 0 -2px 0 var(--ifm-color-primary); }
+.product-bar__spacer { flex: 1; }
+
+/* Deployment options (GitLab style). */
+.deployment-box { border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1.25rem; }
+.applies { border-left: 4px solid var(--c); background: color-mix(in srgb, var(--c) 8%, transparent); padding: 0.45rem 1rem 0.1rem; margin: 1rem 0; border-radius: 6px; }
+.applies__label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--c); margin-bottom: 0.2rem; }
+.applies--cloud { --c: var(--deployment-cloud); }
+.applies--hybrid { --c: var(--deployment-hybrid); }
+.applies--self-hosted { --c: var(--deployment-self-hosted); }
+
+.search-placeholder {
+  display: flex; align-items: center; gap: 0.5rem; min-width: 14rem; padding: 0.3rem 0.75rem;
+  border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; color: var(--ifm-color-emphasis-600); font-size: 0.9rem;
+}
+@media (max-width: 996px) { .search-placeholder, .navbar-products, .navbar-account { display: none; } }
+
+.home-group { margin-bottom: 2rem; }
+.home-card { height: 100%; color: inherit; }
+.home-card:hover { text-decoration: none; border-color: var(--ifm-color-primary); }

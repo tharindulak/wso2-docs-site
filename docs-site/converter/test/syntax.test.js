@@ -29,3 +29,8 @@ test('escapes braces and unknown tags in prose; fixes HTML for JSX', () => {
   assert.match(body, /\[Link\]\(x\.md\)\n/);
   assert.doesNotMatch(body, /hidden/);
 });
+
+test('placeholders in link URLs: in the host the link becomes code, in the path it is encoded', () => {
+  assert.equal(toMdx('[Portal](https://<APIM_HOST>:9443/devportal)').body, 'Portal (`https://<APIM_HOST>:9443/devportal`)');
+  assert.equal(toMdx('[API](https://api.example.com/<org>/x)').body, '[API](https://api.example.com/%3Corg%3E/x)');
+});
