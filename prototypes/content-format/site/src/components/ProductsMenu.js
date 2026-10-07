@@ -1,26 +1,27 @@
-// PROTOTYPE: HashiCorp-style products mega-menu (variant A) / simple list (variant C).
+// PROTOTYPE: HashiCorp-style products mega-menu, grouped like wso2.com/documentation; one entry per product.
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
+import Popover from '@mui/material/Popover';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { useHistory } from '@docusaurus/router';
-import { PRODUCTS } from './catalogue';
-export default function ProductsMenu({ mega = true, label = 'Products' }) {
-  const [a, setA] = useState(null); const history = useHistory();
-  const open = (p) => { setA(null); if (p.href) window.location.href = p.href; else if (!p.soon) history.push(p.sections[0].path); };
+import Link from '@docusaurus/Link';
+import { GROUPS, PRODUCTS } from './catalogue';
+const target = (p) => p.href ?? p.sections[0].path;
+export default function ProductsMenu({ label = 'Products' }) {
+  const [a, setA] = useState(null);
   return (<>
     <Button color="inherit" onClick={(e) => setA(e.currentTarget)} sx={{ textTransform: 'none' }}>{label} ▾</Button>
-    <Menu anchorEl={a} open={!!a} onClose={() => setA(null)} slotProps={{ list: { sx: mega ? { display: 'grid', gridTemplateColumns: 'repeat(2, 260px)', gap: 0.5, p: 1 } : {} } }}>
-      {PRODUCTS.map((p) => (
-        <MenuItem key={p.id} onClick={() => open(p)} disabled={p.soon} sx={{ alignItems: 'flex-start', whiteSpace: 'normal', borderRadius: 1 }}>
-          {mega ? <Box><Typography fontWeight={600}>{p.name}{p.soon ? ' (soon)' : p.href ? ' ↗' : ''}</Typography>
-            <Typography variant="body2" color="text.secondary">{p.blurb}</Typography>
-            {p.sections?.length > 1 && <Typography variant="caption" color="text.secondary">{p.sections.map((s) => s.label).join(' · ')}</Typography>}</Box>
-            : <ListItemText primary={`${p.name}${p.soon ? ' (soon)' : p.href ? ' ↗' : ''}`} />}
-        </MenuItem>))}
-    </Menu>
+    <Popover open={!!a} anchorEl={a} onClose={() => setA(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+      <Box sx={{ p: 2, display: 'grid', gridTemplateColumns: 'repeat(3, 260px)', gap: 2, maxWidth: '95vw' }}>
+        {GROUPS.map((g) => (<Box key={g}>
+          <Typography variant="overline" color="text.secondary">{g}</Typography>
+          {PRODUCTS.filter((p) => p.group === g).map((p) => (
+            <Box key={p.id} component={Link} to={target(p)} onClick={() => setA(null)} sx={{ display: 'block', p: 1, borderRadius: 1, color: 'inherit', textDecoration: 'none', '&:hover': { bgcolor: 'action.hover', textDecoration: 'none' } }}>
+              <Typography fontWeight={600} fontSize={14}>{p.name}{p.href ? ' ↗' : ''}</Typography>
+              <Typography variant="body2" color="text.secondary" fontSize={12.5}>{p.blurb}</Typography>
+            </Box>))}
+        </Box>))}
+      </Box>
+    </Popover>
   </>);
 }

@@ -47,7 +47,7 @@ function NavbarInner() {
     {product && <Toolbar variant="dense" sx={{ gap: 2, minHeight: 44, borderTop: 1, borderColor: 'divider' }}>
       <Typography fontWeight={700}>{product.name}</Typography>
       {product.sections.length > 1 && <Tabs value={section.path} sx={{ minHeight: 40 }}>
-        {product.sections.map((s) => <Tab key={s.path} value={s.path} label={s.label} component={Link} to={s.path} sx={{ textTransform: 'none', minHeight: 40 }} />)}</Tabs>}
+        {product.sections.map((s) => <Tab key={s.label} value={s.path ?? s.href} label={s.label + (s.href ? ' ↗' : '')} component={Link} to={s.path ?? s.href} sx={{ textTransform: 'none', minHeight: 40 }} />)}</Tabs>}
       <Box sx={{ flex: 1 }} /><VersionSelect pluginId={section.pluginId} older={product.older} />
     </Toolbar>}
   </AppBar></MuiIsland>);

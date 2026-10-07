@@ -19,19 +19,31 @@ const hub = {
 Object.entries(hub).forEach(([sec, pages], i) => { const d = path.join(site, 'content/hub', slug(sec)); cat(d, sec, i + 1); pages.forEach((t, j) => write(path.join(d, slug(t) + '.md'), page(t, ['WSO2 Cloud'], undefined, j + 1))); });
 write(path.join(site, 'content/hub/index.md'), page('WSO2 Cloud', ['WSO2 Cloud'], 'Cross-cutting topics for every WSO2 Cloud product.', 0));
 
-// Integration Platform: one section per self-hosted distribution, plus unversioned cloud docs (real section names).
+// Integration Platform: sections by distribution, no separate cloud section. Devant (cloud) sample pages sit
+// inside the WSO2 Integrator section next to self-hosted pages, labelled by deployment option.
+fs.rmSync(path.join(site, 'content/integration-cloud'), { recursive: true, force: true });
 const sections = {
-  'integration-cloud': [['WSO2 Cloud'], ['Introduction', 'Quick Start Guides', 'Samples', 'AI', 'Concepts', 'Share and Reuse Integrations', 'Managed Databases and Caches', 'API Management', 'Monitoring and Insights', 'Administer', 'References']],
   'integration-mi': [['Self-hosted'], ['Get Started', 'Install and Setup', 'Develop', 'Learn', 'References', 'Observe and Manage']],
-  'integration-integrator': [['Self-hosted', 'Hybrid'], ['Get Started', 'Develop', 'Deploy', 'References']],
+  'integration-integrator': [['WSO2 Cloud', 'Hybrid', 'Self-hosted'], ['Get Started', 'Develop', 'Deploy', 'Monitor', 'References']],
 };
 for (const [id, [deploy, secs]] of Object.entries(sections)) {
   const root = path.join(site, 'content', id);
+  fs.rmSync(root, { recursive: true, force: true });
   write(path.join(root, 'index.md'), page('Overview', deploy, undefined, 0));
   secs.forEach((s, i) => { cat(path.join(root, slug(s)), s, i + 1); write(path.join(root, slug(s), 'index.md'), page(s, deploy)); write(path.join(root, slug(s), 'example-task.md'), page(`${s}: example task`, deploy)); });
 }
+const ig = path.join(site, 'content/integration-integrator');
+const cloud = ['WSO2 Cloud'], self = ['Self-hosted'];
+write(path.join(ig, 'get-started/quick-start-cloud.md'), page('Quick start on WSO2 Cloud', cloud, 'From Devant docs: create an integration in the cloud console. Placeholder.'));
+write(path.join(ig, 'get-started/install-integrator.md'), page('Install WSO2 Integrator', self, 'From docs-integrator: install the self-hosted runtime. Placeholder.'));
+write(path.join(ig, 'deploy/deploy-to-cloud.md'), page('Deploy to WSO2 Cloud', cloud, 'From Devant docs: deploy, environments, promotion. Placeholder.'));
+write(path.join(ig, 'deploy/deploy-on-kubernetes.md'), page('Deploy on Kubernetes', self, 'From docs-integrator: self-hosted deployment. Placeholder.'));
+write(path.join(ig, 'deploy/hybrid-data-plane.md'), page('Run a hybrid data plane', ['Hybrid'], 'Cloud control plane, customer data plane. Placeholder.'));
+write(path.join(ig, 'monitor/observability.mdx'), page('Observability', ['WSO2 Cloud', 'Self-hosted'],
+  "import Applies from '@site/src/components/Applies';\n\nShared intro that applies to both.\n\n<Applies to=\"WSO2 Cloud\">\n\nOn WSO2 Cloud, open **Insights** in the console (from Devant docs).\n\n</Applies>\n\n<Applies to=\"Self-hosted\">\n\nSelf-hosted: configure the observability stack (from docs-integrator).\n\n</Applies>"));
 // Older versions: Micro Integrator 4.6.0 and 4.5.0, WSO2 Integrator 5.0.x, Identity 7.2.0 and 7.1.0 (small subsets).
 const version = (id, v, srcRoot, files, deploy) => {
+  fs.rmSync(path.join(site, `${id}_versioned_docs`, `version-${v}`), { recursive: true, force: true });
   const vd = path.join(site, `${id}_versioned_docs`, `version-${v}`);
   for (const f of files) { const src = path.join(srcRoot, f); if (!fs.existsSync(src)) continue;
     write(path.join(vd, f), fs.readFileSync(src, 'utf8').replace(/deployment_options: .*\n/, `deployment_options: ${JSON.stringify(deploy)}\n`).replace(/sidebar_custom_props: .*\n/, '')); }
@@ -39,7 +51,7 @@ const version = (id, v, srcRoot, files, deploy) => {
 };
 const ls = (d) => fs.readdirSync(d, { recursive: true }).filter((f) => /\.(md|mdx|json)$/.test(f));
 ['4.6.0', '4.5.0'].forEach((v) => version('integration-mi', v, path.join(site, 'content/integration-mi'), ls(path.join(site, 'content/integration-mi')), ['Self-hosted']));
-version('integration-integrator', '5.0.x', path.join(site, 'content/integration-integrator'), ls(path.join(site, 'content/integration-integrator')), ['Self-hosted']);
+version('integration-integrator', '5.0.x', path.join(site, 'content/integration-integrator'), ls(path.join(site, 'content/integration-integrator')).filter((f) => !/cloud|hybrid|observability/.test(f)), ['Self-hosted']);
 const idSubset = ['get-started/quick-start-guide.mdx', 'guides/authentication/mfa/add-totp-login.mdx', 'guides/applications/index.mdx', 'index.mdx'];
 ['7.2.0', '7.1.0'].forEach((v) => version('identity', v, path.join(site, 'content/identity'), idSubset, ['Self-hosted']));
 for (const [id, vs] of [['integration-mi', ['4.6.0', '4.5.0']], ['integration-integrator', ['5.0.x']], ['identity', ['7.2.0', '7.1.0']]])
