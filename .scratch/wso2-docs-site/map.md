@@ -4,7 +4,7 @@ Label: wayfinder:map
 
 ## Destination
 
-A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo: Docusaurus themed with Oxygen UI, the hub as its home, Identity Platform and Integration Platform pulled from their real content sources, a deployment-option label on each page (no cloud/self-hosted toggle), GitLab-model versioning, and working search. Plan done by WSO2Con (2026-11-20).
+A build-ready spec for the WSO2 docs site, plus a working site in this repo: Docusaurus themed with Oxygen UI, the hub as its home, every product on wso2.com/documentation except API Platform pulled from its real content sources at Latest (decided 2026-10-07; API Platform next cycle, API Analytics stays on moesif.com), a deployment-option label on each page (no cloud/self-hosted toggle), GitLab-model versioning, and working search. Plan done by WSO2Con (2026-11-20).
 
 ## Notes
 
@@ -17,7 +17,7 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 - The hub's IA from [WSO2 Cloud hub documentation plan](../wso2-cloud-docs/map.md) becomes the docs site's home and cross-cutting sections.
 - Skeleton lives in this repo (`Wso2-Cloud`) for now.
 - Hand-off follow-up for the Oxygen UI team: tree-shakeable build or tokens package, fully specified ESM imports. See [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md).
-- Product scope: every doc set on wso2.com/documentation, one entry per product covering all its deployment options (no separate SaaS/open-source entries, no "Cloud" sections). Identity Platform and Integration Platform are migrated in the skeleton; the rest link out to their current sites until migrated. See [Product catalogue](assets/product-catalogue.md) and [Coverage check](assets/documentation-coverage.md) (user decision 2026-10-07).
+- Product scope: every doc set on wso2.com/documentation, one entry per product covering all its deployment options (no separate SaaS/open-source entries, no "Cloud" sections). For WSO2Con every product except API Platform is migrated at Latest only (user decision 2026-10-07, option (a) after the [Conversion survey](research/16-conversion-survey.md)); API Platform links out until the next cycle; API Analytics Platform stays on moesif.com. See [Product catalogue](assets/product-catalogue.md) and [Coverage check](assets/documentation-coverage.md) (user decision 2026-10-07).
 - Starting facts: [Initial facts](research/00-initial-facts.md). Oxygen UI is pre-1.0; Docusaurus advises fewer than 10 versions per docs instance.
 - Treat findings as planning input for human review; flag security, licensing and supply-chain concerns for new dependencies.
 
@@ -49,6 +49,8 @@ A build-ready spec for the WSO2 docs site, plus a working skeleton in this repo:
 
 - Publishing location and hosting (repo in the wso2 org, domain, approvals): set aside by the user.
 - Writing new content.
-- Migrating products other than Identity Platform and Integration Platform (they appear in the catalogue and navigation, linking out).
+- API Platform migration (Bijira + API Manager): next cycle, after [Combining separate cloud and self-hosted doc sets](issues/15-combine-separate-doc-sets.md) is proven on Integration Platform. Links out until then.
+- Older versions of newly migrated products: next cycle; "Older versions" links to the current sites.
+- Fixing source HTML on exclude lists: owned by product teams; pages appear as lists shrink.
 - Launching the site.
 - Moving Moesif docs off moesif.com.
