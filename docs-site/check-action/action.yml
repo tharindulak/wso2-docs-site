@@ -1,29 +1,22 @@
 # Composite action for content repos: run the docs-site conformance check on pull requests.
-# Pin it by commit SHA in the content repo's workflow.
+# Pin it by commit SHA in the content repo's workflow. The repo needs a wso2-docs.yaml (see
+# docs-site/packages/docs-converter/README.md).
 name: WSO2 docs-site content check
-description: Fails when pages would not convert into the WSO2 docs site.
+description: Fails when pages would not convert into the WSO2 docs site; annotates the failing lines.
 inputs:
-  mkdocs:
-    description: Path to mkdocs.yml (newline-separated for several sites).
-    required: true
-  exclude:
-    description: Optional file listing known failing pages (docs-relative paths).
+  config:
+    description: Path of the converter config in the content repo.
     required: false
-    default: ''
+    default: wso2-docs.yaml
 runs:
   using: composite
   steps:
     - shell: bash
-      working-directory: ${{ github.action_path }}/..
-      run: npm ci --ignore-scripts --omit=optional
+      working-directory: ${{ github.action_path }}/../packages/docs-converter
+      run: npm ci --ignore-scripts --no-audit --no-fund && npm run build
     - shell: bash
       env:
-        MKDOCS: ${{ inputs.mkdocs }}
-        EXCLUDE: ${{ inputs.exclude }}
+        CONFIG: ${{ inputs.config }}
         ROOT: ${{ github.workspace }}
-        TOOL: ${{ github.action_path }}/..
-      run: |
-        args=(--root "$ROOT")
-        while IFS= read -r m; do [ -n "$m" ] && args+=(--mkdocs "$m"); done <<< "$MKDOCS"
-        [ -n "$EXCLUDE" ] && args+=(--exclude "$ROOT/$EXCLUDE")
-        node "$TOOL/scripts/check-source.mjs" "${args[@]}"
+        CLI: ${{ github.action_path }}/../packages/docs-converter/dist/src/cli.js
+      run: node "$CLI" check --root "$ROOT" --config "$CONFIG" --format github

@@ -1,0 +1,35 @@
+{
+  "name": "@wso2/docs-converter",
+  "version": "0.1.0",
+  "description": "Convert WSO2 MkDocs documentation sources (Jinja, includes, MkDocs Material syntax) into Docusaurus MDX, with sidebars and a manifest.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "exports": {
+    ".": { "types": "./dist/src/index.d.ts", "import": "./dist/src/index.js" }
+  },
+  "bin": { "wso2-docs": "dist/src/cli.js" },
+  "files": ["dist/src", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.json && node --test \"dist/test/*.test.js\"",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "3.1.1",
+    "acorn": "8.15.0",
+    "jiti": "1.21.7",
+    "js-yaml": "4.3.2",
+    "parse5": "7.3.0",
+    "rehype-raw": "7.0.0",
+    "remark-directive": "3.0.1",
+    "remark-gfm": "4.0.1"
+  },
+  "devDependencies": {
+    "@types/hast": "3.0.5",
+    "@types/js-yaml": "4.0.9",
+    "@types/mdast": "4.0.4",
+    "@types/node": "22.20.5",
+    "typescript": "7.0.2"
+  }
+}

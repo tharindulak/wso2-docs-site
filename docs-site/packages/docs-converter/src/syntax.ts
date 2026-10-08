@@ -1,0 +1,159 @@
+// Rewrite MkDocs Material Markdown into Docusaurus MDX. Fenced and inline code are never touched.
+
+const ADMONITION: Record<string, string> = {
+  note: 'note', abstract: 'note', summary: 'note', tldr: 'note', quote: 'note', cite: 'note', example: 'note',
+  info: 'info', todo: 'info', question: 'info', help: 'info', faq: 'info',
+  tip: 'tip', hint: 'tip', success: 'tip', check: 'tip', done: 'tip',
+  important: 'warning', warning: 'warning', caution: 'warning', attention: 'warning',
+  danger: 'danger', error: 'danger', failure: 'danger', fail: 'danger', missing: 'danger', bug: 'danger',
+};
+
+/** Tags MDX may keep as JSX. Anything else that looks like a tag is escaped as text. */
+export const JSX_TAGS: readonly string[] = [
+  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect',
+  'a', 'abbr', 'b', 'blockquote', 'br', 'button', 'caption', 'code', 'col', 'colgroup', 'dd', 'del', 'details', 'div',
+  'dl', 'dt', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input',
+  'ins', 'kbd', 'label', 'li', 'mark', 'ol', 'p', 'pre', 's', 'small', 'source', 'span', 'strong', 'sub', 'summary',
+  'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u', 'ul', 'video',
+];
+const VOID = ['br', 'hr', 'img', 'input', 'col', 'source'];
+const NOT_JSX = new RegExp(`<(?!/?(?:${JSX_TAGS.join('|')})(?=[\\s/>]))`, 'g');
+
+export interface SyntaxStats { admonitions: number; collapsibles: number; tabs: number; attrLists: number }
+
+const indentOf = (line: string): number => (line.match(/^\s*/)?.[0] ?? '').length;
+
+/** Lines that belong to an indented MkDocs block starting at `start` under indentation `ind`. */
+function takeBlock(lines: string[], start: number, ind: number): { body: string; next: number } {
+  const body: string[] = [];
+  let j = start;
+  while (j < lines.length && (lines[j]!.trim() === '' || indentOf(lines[j]!) >= ind + 4)) body.push(lines[j++]!);
+  while (body.length && body[body.length - 1]!.trim() === '') { body.pop(); j--; }
+  return { body: body.map((l) => l.slice(Math.min(indentOf(l), ind + 4))).join('\n'), next: j };
+}
+const reindent = (text: string, ws: string): string => text.split('\n').map((l) => (l ? ws + l : l)).join('\n');
+
+function blocks(md: string, stats: SyntaxStats): string {
+  const lines = md.split('\n');
+  const out: string[] = [];
+  let fence: string | null = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!;
+    const f = line.match(/^(\s*)(`{3,}|~{3,})(.*)$/);
+    if (f && (!fence || (f[2]![0] === fence[0] && f[2]!.length >= fence.length && !f[3]!.trim()))) {
+      if (!fence) { fence = f[2]!; out.push(f[1]! + f[2]! + fenceInfo(f[3]!)); } else { fence = null; out.push(line); }
+      continue;
+    }
+    if (fence) { out.push(line); continue; }
+
+    let m = line.match(/^(\s*)(!!!|\?\?\?\+?)\s+([\w-]+)(?:\s+"([^"]*)")?\s*$/);
+    if (m) {
+      const [, ws = '', kind = '', type = '', title] = m;
+      const { body, next } = takeBlock(lines, i + 1, ws.length);
+      const inner = reindent(blocks(body, stats), ws);
+      if (kind === '!!!') {
+        stats.admonitions++;
+        out.push(`${ws}:::${ADMONITION[type.toLowerCase()] ?? 'note'}${title ? `[${title.replace(/[[\]]/g, '')}]` : ''}`, '', inner, '', `${ws}:::`);
+      } else {
+        stats.collapsibles++;
+        out.push(`${ws}<details${kind.endsWith('+') ? ' open' : ''}>`, `${ws}<summary>${title || type}</summary>`, '', inner, '', `${ws}</details>`);
+      }
+      i = next - 1;
+      continue;
+    }
+
+    m = line.match(/^(\s*)===\+?\s+"([^"]*)"\s*$/);
+    if (m) {
+      const ws = m[1]!;
+      const items: Array<[string, string]> = [];
+      let j = i;
+      let t: RegExpMatchArray | null;
+      while (j < lines.length && (t = lines[j]!.match(/^(\s*)===\+?\s+"([^"]*)"\s*$/)) && t[1] === ws) {
+        const label = t[2]!;
+        const { body, next } = takeBlock(lines, j + 1, ws.length);
+        items.push([label, blocks(body, stats)]);
+        j = next;
+        while (j < lines.length && lines[j]!.trim() === '' && /^\s*===\+?\s+"/.test(lines[j + 1] ?? '') && indentOf(lines[j + 1]!) === ws.length) j++;
+      }
+      stats.tabs++;
+      out.push(`${ws}<Tabs>`);
+      items.forEach(([label, body], k) => out.push(
+        `${ws}<TabItem value="tab-${k}" label="${label.replace(/"/g, '&quot;')}">`, '', reindent(body, ws), '', `${ws}</TabItem>`));
+      out.push(`${ws}</Tabs>`);
+      i = j - 1;
+      continue;
+    }
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
+// ```java hl_lines="2" linenums="1" title="x"  ->  ```java title="x" {2}
+function fenceInfo(info: string): string {
+  const t = info.trim();
+  if (!t) return '';
+  const lang = t.match(/^\{?\s*\.?([\w+#-]+)/)?.[1] ?? '';
+  const title = t.match(/title="([^"]*)"/);
+  const hl = t.match(/hl_lines="([^"]*)"/);
+  const lines = hl ? ` {${hl[1]!.trim().split(/\s+/).join(',')}}` : '';
+  return `${lang}${title ? ` title="${title[1]}"` : ''}${lines}`;
+}
+
+/** Apply fn to the parts of text outside fenced and inline code. */
+export function outsideCode(text: string, fn: (prose: string) => string): string {
+  const parts = text.split(/(^[ \t]*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^[ \t]*\2[ \t]*$|(`+)[^`\n]+?\3)/m);
+  let out = '';
+  for (let i = 0; i < parts.length; i++) {
+    const p = parts[i];
+    if (p === undefined) continue;
+    // split() with capture groups interleaves: [text, wholeMatch, fenceGroup, tickGroup, text, ...]
+    const k = i % 4;
+    if (k === 0) out += fn(p);
+    else if (k === 1) out += p;
+  }
+  return out;
+}
+
+// A placeholder in a link's host (https://<HOST>:9443/x) is not a URL; show it as code for the reader to fill in.
+// Done before the code/prose split so the new code span is protected from prose escaping.
+const placeholderHostLinks = (text: string): string =>
+  outsideCode(text, (t) => t.replace(/\[([^\]]*)\]\(([a-z]+:\/\/[^)\s/]*[<>][^)\s]*)\)/gi, (_, label: string, url: string) => `${label} (\`${url}\`)`));
+
+const validUrl = (url: string): boolean => { try { new URL(url); return true; } catch { return false; } };
+
+const JSX_ATTRS: Record<string, string> = {
+  colspan: 'colSpan', rowspan: 'rowSpan', tabindex: 'tabIndex', frameborder: 'frameBorder',
+  allowfullscreen: 'allowFullScreen', cellpadding: 'cellPadding', cellspacing: 'cellSpacing',
+};
+
+function inline(text: string, stats: SyntaxStats): string {
+  return outsideCode(placeholderHostLinks(text), (t) => {
+    let s = t;
+    s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g,
+      (m) => (m.startsWith('{:') || /=|^\{\s*[.#]/.test(m) ? (stats.attrLists++, '') : m));
+    s = s.replace(/\]\(([^)\s]*[<>][^)\s]*)\)/g, (_, url: string) => `](${url.replace(/</g, '%3C').replace(/>/g, '%3E')})`);
+    s = s.replace(/<((?:https?|ftp):\/\/[^\s<>]+)>/gi, '[$1]($1)'); // autolinks: MDX has none, and escaping the < leaves the > in the URL
+    // GFM would autolink a placeholder URL (host:port) that Docusaurus cannot parse.
+    s = s.replace(/(^|[^\w(\["'=/])(https?):\/\/([^\s<>()[\]"'`]+)/g,
+      (m, pre: string, scheme: string, rest: string) => (validUrl(`${scheme}://${rest.replace(/[.,;:!?]+$/, '')}`) ? m : `${pre}${scheme}:&#47;/${rest}`));
+    s = s.replace(/<!--[\s\S]*?-->/g, '');
+    s = s.replace(/^[ \t]*\[\/\/\]:?[ \t]*#?[ \t]*\(?STEPS_(START|END)\)?[ \t]*$/gm, ''); // quick-start template step markers
+    s = s.replace(/\smarkdown(="1"|=1|="block"|="span")?(?=[\s>])/g, '');
+    s = s.replace(new RegExp(`<(${VOID.join('|')})\\b([^>]*?)\\s*/?>`, 'gi'), (_, tag: string, attrs: string) => `<${tag.toLowerCase()}${attrs} />`);
+    s = s.replace(/<\/(br|hr)\s*>/gi, '');
+    s = s.replace(/(<[a-zA-Z][^>]*?)\bclass=/g, '$1className=');
+    s = s.replace(/(<[a-zA-Z][^>]*?)\sstyle=("[^"]*"|'[^']*')/g, '$1');
+    s = s.replace(/(<[a-zA-Z][^>]*?)\s(colspan|rowspan|tabindex|frameborder|allowfullscreen|cellpadding|cellspacing)=/gi,
+      (_, pre: string, a: string) => `${pre} ${JSX_ATTRS[a.toLowerCase()]}=`);
+    s = s.replace(/\{(?!\/\*)/g, '\\{').replace(/(?<!\\)\}/g, '\\}');
+    s = s.replace(NOT_JSX, '&lt;');
+    return s;
+  });
+}
+
+/** Convert MkDocs Markdown to MDX. Returns the body and whether it needs the Tabs imports. */
+export function toMdx(md: string): { body: string; usesTabs: boolean; stats: SyntaxStats } {
+  const stats: SyntaxStats = { admonitions: 0, collapsibles: 0, tabs: 0, attrLists: 0 };
+  const body = inline(blocks(md, stats), stats);
+  return { body, usesTabs: /<Tabs>/.test(body), stats };
+}

@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { readLock, refsOf, LOCK } from './lib.mjs';
-import { compareValues } from '../converter/template.js';
+import { compareValues } from '@wso2/docs-converter';
 
 const args = process.argv.slice(2);
 const write = args.includes('--write');

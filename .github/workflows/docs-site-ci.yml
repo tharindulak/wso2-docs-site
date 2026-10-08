@@ -28,5 +28,5 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
       - run: node scripts/fetch-sources.mjs
-      - run: node scripts/build-content.mjs
+      - run: npm run content
       - run: npx docusaurus build site

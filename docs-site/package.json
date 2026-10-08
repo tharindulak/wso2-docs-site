@@ -7,10 +7,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test \"converter/test/*.test.js\"",
+    "test": "npm test -w @wso2/docs-converter",
+    "build:converter": "npm run build -w @wso2/docs-converter",
     "fetch": "node scripts/fetch-sources.mjs",
-    "content": "node scripts/build-content.mjs",
-    "check-source": "node scripts/check-source.mjs",
+    "content": "npm run build:converter && node scripts/build-content.mjs",
+    "check-source": "npm run build:converter && wso2-docs check",
     "start": "docusaurus start site",
     "start:quick": "node scripts/build-sections.mjs start",
     "build": "docusaurus build site",
@@ -27,16 +28,14 @@
     "@mdx-js/react": "3.1.1",
     "@mermaid-js/layout-elk": "0.1.9",
     "@mui/material": "7.3.4",
+    "@wso2/docs-converter": "0.1.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@mdx-js/mdx": "3.1.1",
-    "acorn": "8.15.0",
-    "js-yaml": "4.3.2",
-    "parse5": "7.3.0",
-    "rehype-raw": "7.0.0",
-    "remark-directive": "3.0.1",
-    "remark-gfm": "4.0.1"
-  }
+    "js-yaml": "4.3.2"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

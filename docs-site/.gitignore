@@ -4,3 +4,4 @@ generated/
 site/build/
 site/.docusaurus/
 site/build-quick/
+packages/*/dist/
