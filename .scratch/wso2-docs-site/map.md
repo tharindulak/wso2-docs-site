@@ -36,6 +36,7 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - [Deployment-option label](issues/09-deployment-option-label.md): GitLab-style "Deployment options" box under the title, labelled callouts for one-option content, both values shown inline; set per page in front matter with section defaults.
 - [Navigation across hub and products](issues/10-navigation.md): HashiCorp model with a Products mega-menu, per-product second bar with section tabs and version selector; product names open an overview page; hub appears as "Account and billing"; provisional on the product catalogue.
 - [Measure conversion of every product's docs](issues/16-measure-conversion-all-products.md): 92% of 6,617 Latest pages across 16 sources compile clean; failures are mostly invalid HTML in MI, IS and APIM; single-source products are cheap to bring in.
+- [Converter as a TypeScript package and CLI](issues/19-converter-package.md): phase 1 done; `@wso2/docs-converter` with the `wso2-docs` CLI converts every product, output identical to before; team pilots and the registry decision are next.
 
 ## Not yet specified
 
