@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { snapshotKey, checkTarEntries } from '../snapshots.mjs';
+import { snapshotKey, checkTarEntries, newBrokenLinks } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
@@ -35,4 +35,13 @@ test('local store keeps files by key and refuses malformed keys', () => {
   const dest = path.join(dir, 'out.tgz'); store.get(key, dest);
   assert.equal(fs.readFileSync(dest, 'utf8'), 'TAR');
   assert.throws(() => store.has('../x'), /invalid snapshot key/);
+});
+
+test('only broken links missing from the baseline fail the build', () => {
+  const a = { page: 'identity/7.1.0/x/index.html', link: '/identity/7.1.0/gone/' };
+  const b = { page: 'identity/7.1.0/y/index.html', link: '/identity/7.1.0/gone/' };
+  const c = { page: 'identity/7.1.0/x/index.html', link: '/assets/files/z.png/' };
+  assert.deepEqual(newBrokenLinks([a, b, c], [a, c]), [b], 'matched by page and link together');
+  assert.deepEqual(newBrokenLinks([a], []), [a], 'no baseline: every broken link is new');
+  assert.deepEqual(newBrokenLinks([], [a]), [], 'fixed links are not an error');
 });

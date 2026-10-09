@@ -1,6 +1,8 @@
 // Frozen versions: each is its own Docusaurus build (DOCS_SNAPSHOT), packed as <key>.tgz and merged into the live
 // output under the same URLs. The key covers source commit, exclude list, converter and site chrome; a change rebuilds.
-// Usage: node scripts/snapshots.mjs list [--json] | build <versionId> | assemble <liveDir> <outDir>
+// Broken links inside a snapshot fail its build only when they are not in link-baselines/<versionId>.json, the
+// version's known breakage (recorded with --record-baseline; source content we do not edit).
+// Usage: node scripts/snapshots.mjs list [--json] | build <versionId> [--record-baseline] | assemble <liveDir> <outDir>
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -15,6 +17,14 @@ import { withHeap } from './docusaurus.mjs';
 
 const CHROME = ['site/src', 'site/plugins', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'package-lock.json'];
 const CONVERTER = ['packages/docs-converter/src'];
+const BASELINES = path.join(ROOT, 'link-baselines');
+const linkKey = (b) => `${b.page}\n${b.link}`;
+
+/** Broken links that are not in the baseline (both are { page, link }[]). */
+export function newBrokenLinks(broken, baseline) {
+  const known = new Set(baseline.map(linkKey));
+  return broken.filter((b) => !known.has(linkKey(b)));
+}
 
 export function snapshotKey(v, { converter, chrome }) {
   const input = { id: v.id, repo: v.repo, sha: v.sha, mkdocs: v.mkdocs ?? null, docs: v.docs ?? null, sidebar: v.sidebar ?? null, exclude: [...(v.exclude ?? [])].sort(), converter, chrome };
@@ -57,23 +67,35 @@ function copyNoOverwrite(from, to) {
   }
 }
 
-function build(id) {
+function build(id, { recordBaseline = false } = {}) {
   const v = snapshotVersions().find((x) => x.id === id);
   if (!v) throw new Error(`${id} is not a snapshot version`);
   const key = snapshotKey(v, inputHashes());
   const store = createStore();
-  if (store.has(key)) { console.log(`cached   ${id} ${key.slice(0, 12)}`); return; }
+  if (!recordBaseline && store.has(key)) { console.log(`cached   ${id} ${key.slice(0, 12)}`); return; }
   const run = (cmd, args, env = process.env) => { const r = spawnSync(cmd, args, { cwd: ROOT, stdio: 'inherit', env }); if (r.status !== 0) throw new Error(`${cmd} ${args.join(' ')} failed`); };
   run(process.execPath, ['scripts/build-content.mjs', id]);
   const out = path.join(ROOT, 'site', 'build-snapshots', id);
   fs.rmSync(out, { recursive: true, force: true });
   run(path.join(ROOT, 'node_modules/.bin/docusaurus'), ['build', 'site', '--out-dir', path.relative(path.join(ROOT, 'site'), out)], { ...withHeap(), DOCS_SNAPSHOT: id });
   const broken = findBrokenLinks(out, { under: `${v.route}/` }).filter((b) => b.link.startsWith(`/${v.route}/`) || b.link.startsWith('/assets/'));
-  if (broken.length) { for (const b of broken.slice(0, 50)) console.error(`${b.page}: ${b.link}`); throw new Error(`${id}: ${broken.length} broken link(s) inside the snapshot`); }
+  const baselineFile = path.join(BASELINES, `${id}.json`);
+  if (recordBaseline) {
+    fs.mkdirSync(BASELINES, { recursive: true });
+    const sorted = broken.map(({ page, link }) => ({ page, link })).sort((x, y) => (linkKey(x) < linkKey(y) ? -1 : linkKey(x) > linkKey(y) ? 1 : 0));
+    fs.writeFileSync(baselineFile, `${JSON.stringify(sorted, null, 1)}\n`);
+    console.log(`baseline ${id} ${sorted.length} known broken link(s)`);
+  }
+  const baseline = fs.existsSync(baselineFile) ? JSON.parse(fs.readFileSync(baselineFile, 'utf8')) : [];
+  const fresh = newBrokenLinks(broken, baseline);
+  if (fresh.length) { for (const b of fresh.slice(0, 50)) console.error(`${b.page}: ${b.link}`); throw new Error(`${id}: ${fresh.length} broken link(s) inside the snapshot not in ${path.relative(ROOT, baselineFile)}`); }
   const file = path.join(os.tmpdir(), `${key}.tgz`);
   tar('-czf', file, '-C', out, v.route, 'assets');
   store.put(key, file);
-  console.log(`built    ${id} ${key.slice(0, 12)} ${(fs.statSync(file).size / 1e6).toFixed(1)} MB`);
+  const mb = (fs.statSync(file).size / 1e6).toFixed(1);
+  fs.rmSync(file, { force: true });
+  fs.rmSync(out, { recursive: true, force: true });
+  console.log(`built    ${id} ${key.slice(0, 12)} ${mb} MB`);
 }
 
 function assemble(liveDir, outDir) {
@@ -102,7 +124,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const hashes = inputHashes();
     const rows = snapshotVersions().map((v) => ({ id: v.id, key: snapshotKey(v, hashes) }));
     console.log(process.argv.includes('--json') ? JSON.stringify(rows) : rows.map((r) => `${r.id}\t${r.key}`).join('\n'));
-  } else if (cmd === 'build' && a) build(a);
+  } else if (cmd === 'build' && a) build(a, { recordBaseline: process.argv.includes('--record-baseline') });
   else if (cmd === 'assemble' && a && b) assemble(path.resolve(a), path.resolve(b));
-  else { console.error('Usage: node scripts/snapshots.mjs list [--json] | build <versionId> | assemble <liveDir> <outDir>'); process.exit(2); }
+  else { console.error('Usage: node scripts/snapshots.mjs list [--json] | build <versionId> [--record-baseline] | assemble <liveDir> <outDir>'); process.exit(2); }
 }
