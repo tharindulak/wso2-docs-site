@@ -45,3 +45,4 @@
    its light syntax colours on a white box. */
 .api-reference pre { background-color: #11171A !important; color: #E8E9EC !important; }
 .api-reference pre code { background: transparent !important; color: inherit !important; border: 0 !important; }
+.older-version-banner { margin: 0 0 1rem; padding: 0.6rem 0.9rem; border-left: 4px solid var(--ifm-color-warning); background: var(--ifm-color-warning-contrast-background); color: var(--ifm-color-warning-contrast-foreground); border-radius: 4px; }

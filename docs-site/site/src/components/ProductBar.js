@@ -19,7 +19,7 @@ export default function ProductBar() {
         </div>
       )}
       <span className="product-bar__spacer" />
-      <VersionSelect pluginId={section.pluginId} olderVersions={section.olderVersions} />
+      <VersionSelect versionsUrl={section.versionsUrl} />
     </div>
   );
 }
