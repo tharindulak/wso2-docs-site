@@ -17,6 +17,7 @@
     "build": "node scripts/docusaurus.mjs build site",
     "build:quick": "node scripts/build-sections.mjs build",
     "serve": "docusaurus serve site",
+    "preview": "node scripts/serve.mjs",
     "snapshots": "node scripts/snapshots.mjs",
     "check-links": "node scripts/check-links.mjs"
   },

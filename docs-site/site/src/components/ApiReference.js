@@ -2,6 +2,7 @@
 // Redoc's standalone bundle is served from this site and loaded only on API pages, in the browser.
 // sanitize: specs come from content repositories, so HTML in their descriptions is sanitised.
 // specLink: a spec on another host is linked, never fetched into the reader's browser.
+// data-spec in the server-rendered fallback lets scripts/check-links.mjs check that the spec file is published.
 import React, { useEffect, useRef, useState } from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -86,7 +87,7 @@ export default function ApiReference({ spec, specLink, schemaExpansionLevel, exp
       : null;
   }
   return (
-    <BrowserOnly fallback={<p className="api-reference__status">Loading the API reference…</p>}>
+    <BrowserOnly fallback={<p className="api-reference__status" data-spec={spec}>Loading the API reference…</p>}>
       {() => <Viewer spec={spec} schemaExpansionLevel={schemaExpansionLevel} expandSingleSchemaField={expandSingleSchemaField} />}
     </BrowserOnly>
   );
