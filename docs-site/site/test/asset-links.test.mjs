@@ -14,3 +14,10 @@ test('page links, external links and already-escaped links are unchanged', () =>
   assert.equal(assetHref({ href: 'pathname:///a.zip', 'data-noBrokenLinkCheck': true }), 'pathname:///a.zip');
   assert.equal(assetHref({}), undefined);
 });
+
+test('an HTML link to a file under an assets directory bypasses trailingSlash too', () => {
+  assert.equal(assetHref({ href: '/integration/micro-integrator/4.3.0/assets/img/x/new.png' }), 'pathname:///integration/micro-integrator/4.3.0/assets/img/x/new.png');
+  assert.equal(assetHref({ href: '/identity/assets/attachments/a.zip?dl=1' }), 'pathname:///identity/assets/attachments/a.zip?dl=1');
+  assert.equal(assetHref({ href: '/identity/assets/guide/' }), '/identity/assets/guide/', 'a page under an assets-like path');
+  assert.equal(assetHref({ href: '/identity/guides/oauth-2.0-grant' }), '/identity/guides/oauth-2.0-grant', 'dotted page outside assets');
+});
