@@ -21,3 +21,11 @@ test('an HTML link to a file under an assets directory bypasses trailingSlash to
   assert.equal(assetHref({ href: '/identity/assets/guide/' }), '/identity/assets/guide/', 'a page under an assets-like path');
   assert.equal(assetHref({ href: '/identity/guides/oauth-2.0-grant' }), '/identity/guides/oauth-2.0-grant', 'dotted page outside assets');
 });
+
+test('a relative HTML link to a file under assets/ bypasses trailingSlash; schemes and anchors are unchanged', () => {
+  assert.equal(assetHref({ href: '../../../assets/img/qsg/build-and-run.png' }), 'pathname://../../../assets/img/qsg/build-and-run.png');
+  assert.equal(assetHref({ href: 'assets/a.zip' }), 'pathname://assets/a.zip');
+  assert.equal(assetHref({ href: '../guide/' }), '../guide/');
+  assert.equal(assetHref({ href: 'mailto:a@b.assets/x.png' }), 'mailto:a@b.assets/x.png');
+  assert.equal(assetHref({ href: '#assets/x.png' }), '#assets/x.png');
+});
