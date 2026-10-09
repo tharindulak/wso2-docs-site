@@ -2,7 +2,8 @@
 // `<mail@address.tld>` into an element React cannot create. Such an element becomes its text again.
 import type { Root, RootContent, Element, Text } from 'hast';
 
-const VALID = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
+/** A tag name React can create as an element; text like `<host.com-home>` or `<a@b.c>` parses as a tag but is not one. */
+export const isValidTagName = (name: string): boolean => /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(name);
 
 export default function rehypeValidElements() {
   return (tree: Root): void => {
@@ -11,7 +12,7 @@ export default function rehypeValidElements() {
       const parent = node as { children: RootContent[] };
       parent.children = parent.children.flatMap((child): RootContent[] => {
         fix(child);
-        if (child.type === 'element' && !VALID.test((child as Element).tagName)) {
+        if (child.type === 'element' && !isValidTagName((child as Element).tagName)) {
           const text: Text = { type: 'text', value: `<${(child as Element).tagName}>` };
           return [text, ...((child as Element).children as RootContent[])];
         }

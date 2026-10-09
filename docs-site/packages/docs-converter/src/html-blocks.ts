@@ -3,6 +3,7 @@
 // nesting) and written back as one line of well-formed JSX whose text is literal, as it is in MkDocs.
 // Input has already passed the HTML policy (no scripts, event handlers or unsafe URLs).
 import { parseFragment } from 'parse5';
+import { isValidTagName } from './rehype-valid-elements.js';
 
 // Minimal parse5 tree shape used here.
 interface P5Node {
@@ -47,6 +48,9 @@ function toJsx(node: P5Node, inPre = false): string {
     return text ? `{${JSON.stringify(text)}}` : '';
   }
   if (!node.tagName) return (node.childNodes ?? []).map((c) => toJsx(c, inPre)).join(''); // fragment; comments dropped
+  if (!isValidTagName(node.tagName)) { // placeholder text such as <host.com-home>: back to text, children follow
+    return `{${JSON.stringify(`<${node.tagName}>`)}}${(node.childNodes ?? []).map((c) => toJsx(c, inPre)).join('')}`;
+  }
   const attrs = (node.attrs ?? [])
     .filter((a) => /^[a-z_:][\w:.-]*$/i.test(a.name) && a.name !== 'style' && a.name !== 'markdown')
     .map((a) => ` ${JSX_ATTR[a.name] ?? a.name}={${JSON.stringify(a.value)}}`).join('');

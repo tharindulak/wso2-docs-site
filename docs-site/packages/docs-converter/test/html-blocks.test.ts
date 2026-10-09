@@ -42,3 +42,12 @@ test('fenced code, one-line HTML and unclosed blocks are left alone', () => {
   const src = '```html\n<table>\n<tr><td>x</td></tr>\n</table>\n```\n\n<div>one line</div>\n\n<table>\n<tr><td>never closed\n';
   assert.deepEqual(htmlBlocksToJsx(src), { text: src, blocks: 0 });
 });
+
+test('a placeholder that parses as a tag with an invalid name (dotted, @) stays text; its children stay', async () => {
+  const src = '<table>\n<tr><td>Edit `<travelocity.com-home>/WEB-INF/x.properties` and <mail@address.tld>.</td></tr>\n</table>\n';
+  const { text, blocks } = htmlBlocksToJsx(src);
+  assert.equal(blocks, 1);
+  assert.doesNotMatch(text, /(^|[>}])<(travelocity|mail@)/, 'no element with an invalid name');
+  assert.match(text, /\{"<travelocity\.com-home>"\}\{"\/WEB-INF\/x\.properties` and "\}\{"<mail@address\.tld>"\}/);
+  await compileCheck(`---\n---\n${text}`);
+});
