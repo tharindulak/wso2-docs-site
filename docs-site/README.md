@@ -19,7 +19,7 @@ npm run build && npm run serve
 
 `npm start` runs the dev server after `npm run content`.
 
-The full build takes 15 to 30 minutes. While checking a change, build only the sections it touches (2 to 4 minutes), using product or section ids from `content-sources.yaml`:
+The full build takes 15 to 50 minutes depending on free memory. While checking a change, build only the sections it touches (about 10 minutes for Integration Platform, the largest product; less for smaller ones), using product or section ids from `content-sources.yaml`. For one page, `start:quick` is fastest: the dev server compiles pages as you open them.
 
 ```sh
 npm run content -- integration-integrator    # reconvert just that section
