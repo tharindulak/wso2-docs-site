@@ -213,7 +213,7 @@ for (const product of lock.products) {
     entry.sections.push({
       ...versionEntries[0], id: section.id, label: section.label, kind: section.kind,
       cloud: section.kind === 'mkdocs-merge' || Boolean(section.cloud_companion),
-      version: versions[0].version, olderVersions: section.older_versions ?? null,
+      version: versions[0].version, olderVersions: null,
       versions: [...versionEntries, ...confluence],
     });
   }
