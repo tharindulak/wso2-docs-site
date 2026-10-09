@@ -16,7 +16,9 @@
     "start:quick": "node scripts/build-sections.mjs start",
     "build": "node scripts/docusaurus.mjs build site",
     "build:quick": "node scripts/build-sections.mjs build",
-    "serve": "docusaurus serve site"
+    "serve": "docusaurus serve site",
+    "snapshots": "node scripts/snapshots.mjs",
+    "check-links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.2",

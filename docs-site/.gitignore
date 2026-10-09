@@ -5,3 +5,5 @@ site/build/
 site/.docusaurus/
 site/build-quick/
 packages/*/dist/
+site/build-snapshots/
+site/build-merged/
