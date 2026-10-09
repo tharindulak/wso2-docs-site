@@ -1,0 +1,458 @@
+[
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/advanced-development/applying-security-to-a-proxy-service/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/importing-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/advanced-development/applying-security-to-a-proxy-service/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/advanced-development/applying-security-to-an-api/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/advanced-development/extend-role-based-filtering-for-ds/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/creating-artifacts/creating-an-inbound-endpoint/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/synapse-properties/inbound-endpoints/polling-inbound-endpoints/file-inbound-endpoint-properties/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/creating-artifacts/data-services/securing-data-services/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/creating-artifacts/data-services/securing-data-services/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/externalized-configuration/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/synapse-properties/inbound-endpoints/polling-inbound-endpoints/file-inbound-endpoint-properties"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/intro-integration-development/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/importing-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/intro-integration-development/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/mi-for-vscode/install-wso2-mi-for-vscode/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/reference/product-compatibility/#tested-jdks"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/using-embedded-micro-integrator/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/develop/using-remote-micro-integrator/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/exporting-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/get-started/build-first-ai-integration/first-integration-ai-agent/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/img/get-started/build-ai-first-integration/rag/create_new_api.png"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/get-started/build-first-ai-integration/first-integration-rag-chat/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/img/get-started/build-ai-first-integration/rag/create_new_api.png"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/installation-prerequisites/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/reference/product-compatibility/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/installing-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/attachments/26838941/27042150.png"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/installing-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/attachments/thumbnails/26838941/27042151"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/installing-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/attachments/thumbnails/26838941/27042154"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/installing-mi/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/attachments/thumbnails/26838941/27042151"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/installing-mi/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/attachments/thumbnails/26838941/27042154"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/install/running-the-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/brokers/configure-with-hornetq/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/img/assets/img/integrate/broker-configs/hornetq/delete-package.jpg"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/databases/setting-up-ibm-db2/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/databases/setting-up-mssql/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/databases/setting-up-mysql/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/databases/setting-up-oracle/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/databases/setting-up-postgresql/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/performance-tuning/jdbc-tuning/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-ldap-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/security/securing-management-api/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-ldap-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/security/securing-management-api/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-rdbms-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/configuring-secondary-user-stores/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-ldap-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/configuring-secondary-user-stores/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-rdbms-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/managing-users/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-ldap-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/managing-users/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-rdbms-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/enterprise-integration-patterns/messaging-channels/message-bus/index.html",
+  "link": "/integration/micro-integrator/4.5.0/learn/enterprise-integration-patterns/messaging-channels/message-bus/&quot;/integration/micro-integrator/4.5.0/develop/deploy-artifacts/#build-and-run%22"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/enterprise-integration-patterns/messaging-systems/message-endpoint/index.html",
+  "link": "/integration/micro-integrator/4.5.0/learn/enterprise-integration-patterns/messaging-systems/message-endpoint/&quot;https://www.soapui.org/getting-started/&quot;/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/examples/proxy-service-examples/securing-proxy-services/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/examples/rest-api-examples/securing-rest-apis/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/integration-tutorials/file-processing/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/integration-tutorials/sending-a-simple-message-to-a-datasource/index.html",
+  "link": "/integration/micro-integrator/4.5.0/assets/img/learn/tutorials/data-service/c.png"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/integration-use-case/connectors/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/kafka-connector/kafka-inbound-endpoint-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/integration-use-case/connectors/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-inbound-endpoint-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/learn/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/learn/examples/protocol-switching/switching-from-fix-to-amqp"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/observe-and-manage/working-with-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/observe-and-manage/working-with-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/observe-and-manage/working-with-integration-control-plane/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-rdbms-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/observe-and-manage/working-with-management-api/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/config-catalog-mi/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/config-catalog-mi/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/#configuring-an-rdbms-user-store"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazondynamodb-connector/amazondynamodb-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/amazondynamodb-connector/2.x/amazondynamodb-connector-configuration/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazonlambda-connector/1.x/amazonlambda-connector-1.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/amazonlambda-connector/amazonlambda-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazonlambda-connector/1.x/amazonlambda-connector-1.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/develop/create-integration-project/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazonlambda-connector/1.x/amazonlambda-connector-1.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/develop/mi-for-vscode/install-wso2-mi-for-vscode/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazonlambda-connector/2.x/amazonlambda-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/amazonlambda-connector/amazonlambda-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazons3-connector/2.x/amazons3-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/amazons3-connector/amazons3-connector-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazons3-connector/2.x/amazons3-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/develop/create-integration-project/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazons3-connector/2.x/amazons3-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/develop/mi-for-vscode/install-wso2-mi-for-vscode/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazonsqs-connector/3.x/amazonsqs-connector-3.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/amazonsqs-connector/amazonsqs-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/amazonsqs-connector/amazonsqs-inbound-endpoint-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/amazonsqs-connector/amazonsqs-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/bigquery-connector/bigquery-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/cdc-inbound-endpoint/cdc-inbound-endpoint-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/cdc-inbound-endpoint/cdc-inbound-endpoint-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/email-connector/1.x/email-connector-1.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/email-connector/email-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/file-connector/4.x/file-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/file-connector/4.x/file-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/file-connector/file-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/file-connector/5.x/file-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/file-connector/5.x/file-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/file-connector/file-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/file-connector/6.x/file-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/file-connector/6.x/file-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/file-connector/file-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/gmail-connector/3.x/gmail-connector-3.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/gmail-connector/gmail-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/packaging-artifacts/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/google-pubsub-inbound/google-pubsub-inbound-endpoint-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/google-pubsub-connector/googlepubsub-connector-example.md/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/idp-connector/idp-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/jira-connector/1.x/jira-connector-1.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/kubernetes-operators/k8s-api-operator/manage-integrations/integration-deployments/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/jira-connector/jira-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/kubernetes-operators/k8s-api-operator/manage-integrations/integration-deployments/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/kafka-connector/kafka-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/kafka-connector/kafka-inbound-endpoint-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/kafka-connector/setting-up-kafka/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/kafka-connector/kafka-inbound-endpoint-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/mongodb-connector/2.x/mongodb-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/mongodb-connector/mongodb-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/mongodb-connector/3.x/mongodb-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/mongodb-connector/mongodb-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/salesforcebulk-v2-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/file-connector/file-connector-config/#operations"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/salesforcebulk-v2-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/salesforcebulk-v2-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/salesforcebulk-v2-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/salesforcebulk-v2-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-inbound-endpoint-configuration/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-inbound-endpoint-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-inbound-endpoint-reference-configuration/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-rest-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-rest-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-rest-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-rest-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-soap-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-soap-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/3.x/sf-bulk-v2-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/file-connector/file-connector-config/#operations"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/3.x/sf-bulk-v2-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/salesforcebulk-v2-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/3.x/sf-rest-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-rest-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/3.x/sf-soap-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-soap-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-inbound-endpoint-example-pushtopic/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-rest-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/2.x/sf-connector-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/3.x/sf-access-token-generation/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/sf-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/salesforce-connectors/3.x/sf-bulk-v2-connector-example.md/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-marketing-cloud-connector/salesforce-marketing-cloud-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/en/reference/connectors/salesforce-marketing-cloud-connector/salesforce-marketing-cloud-configuration.md/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/servicenow-connector/1.x/servicenow-connector-1.x-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/3.x/twitter-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/twitter-connector-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/4.x/twitter-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/twitter-connector-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/twitter-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/twitter-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/twitter-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/connectors/twitter-connector/twitter-connector-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/mediation-sequences/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/mediation-sequences/_Log_Mediator_/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/mediation-sequences/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/mediation-sequences/_Property_Mediator_/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/mediation-sequences/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/mediation-sequences/_Send_Mediator_/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/mi-security-reference/security-implementation/index.html",
+  "link": "/integration/micro-integrator/4.5.0/install-and-setup/setup/user-stores/setting-up-a-userstore/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/synapse-properties/inbound-endpoints/about-inbound-endpoints/index.html",
+  "link": "/integration/micro-integrator/4.5.0/reference/synapse-properties/inbound-endpoints/polling-inbound-endpoints/file-inbound-endpoint-properties"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/synapse-properties/synapse-expressions-syntax/index.html",
+  "link": "/integration/micro-integrator/4.5.0/develop/injecting-parameters/"
+ }
+]
