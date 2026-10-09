@@ -2,7 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import rehypeValidElements from '../converter/rehype-valid-elements.js';
+// Subpath import: the plugin alone, without loading the converter (and its ES-module-only dependencies) into the config.
+import rehypeValidElements from '@wso2/docs-converter/rehype-valid-elements';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');

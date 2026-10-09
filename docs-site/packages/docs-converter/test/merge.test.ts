@@ -71,3 +71,41 @@ test('a differing value inside inline code becomes a placeholder, not a componen
   const { text } = mergePage(path.join(root, 'cloud/p.md'), path.join(root, 'self/p.md'), { cloud: { env: {}, source }, self: { env: {}, source } });
   assert.match(text, /^Name: `<PRODUCT>-react`, then <DeploymentValue cloud="asgardeo" selfHosted="is" \/>\.$/);
 });
+
+test('a variable on its own line that is a list item for one option only becomes a labelled block (Magic Link prerequisites)', () => {
+  const root = tempSource({
+    'cloud/p.md': '{% set note = "" %}{% include "../inc/p.md" %}',
+    'self/p.md': '{% set note = "- You need to [configure the email sending module](../email.md) first." %}{% include "../inc/p.md" %}',
+    'inc/p.md': '## Prerequisites\n\n- Register an application.\n\n{{ note }}\n\n## Next\n',
+  });
+  const source = { root, includeBases: [] };
+  const { text } = mergePage(path.join(root, 'cloud/p.md'), path.join(root, 'self/p.md'), { cloud: { env: {}, source }, self: { env: {}, source } });
+  assert.match(text, /<Applies to="Self-hosted">\n\n- You need to \[configure the email sending module\]\(\.\.\/email\.md\) first\.\n\n<\/Applies>/);
+  assert.doesNotMatch(text, /DeploymentValue|Applies to="WSO2 Cloud"/, 'no code pair, no empty cloud block');
+});
+
+test('Markdown structure on its own line splits even when both options have a value; words and inline values stay a pair', () => {
+  const root = tempSource({
+    'cloud/p.md': '{% set step = "- Open the Console." %}{% set host = "api.example.io" %}{% set extra = "" %}{% include "../inc/p.md" %}',
+    'self/p.md': '{% set step = "- Edit deployment.toml." %}{% set host = "localhost:9443" %}{% set extra = " (restart required)" %}{% include "../inc/p.md" %}',
+    'inc/p.md': '{{ step }}\n\n{{ host }}\n\nSave the file{{ extra }}.\n',
+  });
+  const source = { root, includeBases: [] };
+  const { text } = mergePage(path.join(root, 'cloud/p.md'), path.join(root, 'self/p.md'), { cloud: { env: {}, source }, self: { env: {}, source } });
+  assert.match(text, /<Applies to="WSO2 Cloud">\n\n- Open the Console\.\n\n<\/Applies>/);
+  assert.match(text, /<Applies to="Self-hosted">\n\n- Edit deployment\.toml\.\n\n<\/Applies>/);
+  assert.match(text, /<DeploymentValue cloud="api\.example\.io" selfHosted="localhost:9443" \/>/, 'a plain value on its own line stays a pair');
+  assert.match(text, /Save the file<DeploymentValue cloud="" selfHosted=" \(restart required\)" \/>\./, 'inline, one-sided: a value the component labels "only"');
+});
+
+test('a one-sided value at the start of a sentence stays inline (user roles: "{{ admin_role }} role. An ...")', () => {
+  const root = tempSource({
+    'cloud/p.md': '{% set admin_role = "" %}{% include "../inc/p.md" %}',
+    'self/p.md': '{% set admin_role = "admin" %}{% include "../inc/p.md" %}',
+    'inc/p.md': 'Roles:\n\n{{ admin_role }} role. An admin is privileged.\n',
+  });
+  const source = { root, includeBases: [] };
+  const { text } = mergePage(path.join(root, 'cloud/p.md'), path.join(root, 'self/p.md'), { cloud: { env: {}, source }, self: { env: {}, source } });
+  assert.match(text, /^<DeploymentValue cloud="" selfHosted="admin" \/> role\. An admin is privileged\.$/m);
+  assert.doesNotMatch(text, /<Applies/);
+});

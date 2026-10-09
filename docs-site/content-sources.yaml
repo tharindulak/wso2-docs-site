@@ -28,8 +28,14 @@ products:
         docs: en/docs
         sidebar: en/sidebars.ts
         deployment_options: [WSO2 Cloud, Self-hosted]  # confirm with the Integration team
-        deployment_overrides:
+        deployment_overrides:  # WSO2 Integrator's own cloud / self-hosted folders (checked at the pinned commit)
           deploy-operate/deploy/: [Self-hosted]
+          deploy/cloud/: [WSO2 Cloud]
+          deploy/self-hosted/: [Self-hosted]
+          manage/cloud/: [WSO2 Cloud]
+          manage/icp/: [Self-hosted]  # Integration Control Plane; confirm whether it also runs hybrid
+          get-started/setup/cloud-setup.md: [WSO2 Cloud]
+          get-started/concepts/integration-cloud-concepts.md: [WSO2 Cloud]
         current_site: https://wso2.com/integration-platform/docs/
         sparse: [en/docs, en/sidebars.ts, en/src/utils, en/static]
         # Devant is the WSO2 Cloud deployment option of WSO2 Integrator (user decision 2026-10-07).

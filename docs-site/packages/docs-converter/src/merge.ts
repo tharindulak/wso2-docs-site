@@ -19,6 +19,12 @@ const inInlineCode = (s: string): boolean => ((s.slice(s.lastIndexOf('\n') + 1).
 const attr = (v: unknown): string => String(v ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/[{}]/g, (c) => (c === '{' ? '&#123;' : '&#125;'));
 // Indentation of the line being written (content inside admonitions, lists and tabs is indented).
 const currentIndent = (s: string): string => s.match(/(?:^|\n)([ \t]*)$/)?.[1] ?? '';
+// A value fills its line when only indentation precedes it and a line break (or the end) follows it.
+const atLineStart = (s: string): boolean => /(?:^|\n)[ \t]*$/.test(s);
+const endsLine = (next: TemplateNode | undefined): boolean => !next || (next.t === 'text' && /^[ \t]*(?:\r?\n|$)/.test(next.v));
+// A value that is Markdown structure rather than a word or URL: list item, heading, quote, admonition,
+// tabs, HTML block, or a link.
+const isMarkdownBlock = (v: string): boolean => /^\s*(?:[-*+]\s|\d+\.\s|#{1,6}\s|>\s|!!!|\?\?\?|===|<[A-Za-z])/.test(v) || /\]\(/.test(v);
 
 /** A labelled block at `indent`, keeping the body's own indentation so it stays inside its container. */
 function applies(who: string, body: string, indent = ''): string {
@@ -65,7 +71,7 @@ function splitCodeSamples(text: string): string {
 function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sharedNames: Record<string, string>, stats: MergeStats, out: { s: string }): string {
   const c = sides.cloud;
   const s = sides.self;
-  for (const node of nodes) {
+  for (const [index, node] of nodes.entries()) {
     if (node.t === 'text') { out.s += node.v; continue; }
     if (node.t === 'set') {
       c.env[node.name] = setValue(node.expr, c.env, (n, e) => renderSingle(n, e, file, c.source));
@@ -79,7 +85,13 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
       if (cv === sv) out.s += cv;
       else if (name in sharedNames) { out.s += sharedNames[name]; stats.sharedNames++; }
       else if (inFence(out.s) || inInlineCode(out.s)) { out.s += `<${name.toUpperCase().replace(/[^A-Z0-9_]/g, '_')}>`; stats.placeholders++; }
-      else if (/\n/.test(cv + sv)) { const ind = currentIndent(out.s); out.s += applies(CLOUD, cv, ind) + applies(SELF_HOSTED, sv, ind); stats.splitBlocks++; }
+      else if (/\n/.test(cv + sv) || (atLineStart(out.s) && endsLine(nodes[index + 1]) && (!cv || !sv || isMarkdownBlock(cv) || isMarkdownBlock(sv)))) {
+        // Content, not a value: a value filling its whole line that exists for one option only, or is
+        // Markdown structure (a list item, a link). Labelled blocks; an empty side gets none.
+        const ind = currentIndent(out.s);
+        out.s += applies(CLOUD, cv, ind) + applies(SELF_HOSTED, sv, ind);
+        stats.splitBlocks++;
+      }
       else { out.s += `<DeploymentValue cloud="${attr(cv)}" selfHosted="${attr(sv)}" />`; stats.values++; }
       continue;
     }

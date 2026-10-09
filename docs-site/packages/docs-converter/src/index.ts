@@ -6,6 +6,7 @@ export { insideRoot, findInclude, expandMarkers, splitPageData, readPageData, lo
 export { toMdx, outsideCode, JSX_TAGS, type SyntaxStats } from './syntax.js';
 export { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements, literalValue, parseLiteral, DEFAULT_IFRAME_HOSTS, type PolicyResult } from './html-policy.js';
 export { htmlBlocksToJsx } from './html-blocks.js';
+export { default as rehypeValidElements } from './rehype-valid-elements.js';
 export { mergePage, CLOUD, SELF_HOSTED, type MergeSides, type MergeStats } from './merge.js';
 export { convertRendered, compileCheck, splitFrontMatter, withoutImports, PageError, type ConvertOptions, type PageErrorKind, type PageStats } from './page.js';
 export { navToSidebar, mergeSidebars, sidebarDocIds, selectNav, type NavSelection } from './nav.js';

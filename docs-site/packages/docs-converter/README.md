@@ -64,6 +64,8 @@ const { sidebar, report } = await convertMkdocsSite(
 );
 ```
 
+`@wso2/docs-converter/rehype-valid-elements` exports just the rehype plugin for CommonMark pages, without loading the converter (the docs site's Docusaurus config uses it).
+
 The docs site uses the same functions, passing a `fallback` that writes a redirect page for excluded or failing pages; the CLI writes none.
 
 ## Development
