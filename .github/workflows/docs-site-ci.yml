@@ -12,7 +12,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90 # until the full merged build is measured (docs-site/README.md, Versions)
     defaults:
       run:
         working-directory: docs-site
@@ -30,3 +30,8 @@ jobs:
       - run: node scripts/fetch-sources.mjs
       - run: npm run content
       - run: npx docusaurus build site
+      - run: node scripts/snapshots.mjs assemble site/build site/build-merged
+        env:
+          SNAPSHOT_STORE: github-release:docs-site-snapshots
+          GH_TOKEN: ${{ github.token }}
+      - run: node scripts/check-links.mjs site/build-merged

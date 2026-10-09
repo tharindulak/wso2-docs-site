@@ -1,0 +1,56 @@
+# Build frozen versions (snapshots) whose key is not yet stored, as one matrix job each. Keys cover source commit,
+# exclude list, converter and site chrome, so a theme change rebuilds every snapshot.
+name: docs-site snapshots
+on:
+  push:
+    branches: [main, docs-site-versions]
+    paths: ['docs-site/**', '.github/workflows/docs-site-*.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: docs-site-snapshots
+  cancel-in-progress: false
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+    defaults: { run: { working-directory: docs-site } }
+    env:
+      SNAPSHOT_STORE: github-release:docs-site-snapshots
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with: { node-version: 22, cache: npm, cache-dependency-path: docs-site/package-lock.json }
+      - run: npm ci --ignore-scripts && npm run build:converter
+      - id: list
+        run: echo "matrix=$(node scripts/snapshots.mjs list --json)" >> "$GITHUB_OUTPUT"
+  build:
+    needs: plan
+    if: needs.plan.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write # upload release assets; this job only
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        snapshot: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    defaults: { run: { working-directory: docs-site } }
+    env:
+      SNAPSHOT_STORE: github-release:docs-site-snapshots
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with: { node-version: 22, cache: npm, cache-dependency-path: docs-site/package-lock.json }
+      - run: npm ci --ignore-scripts
+      - run: gh release view docs-site-snapshots --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create docs-site-snapshots --repo "$GITHUB_REPOSITORY" --prerelease --title "docs-site snapshots" --notes "Build output of frozen docs versions, by key. Do not edit."
+      - run: npm run build:converter && node scripts/fetch-sources.mjs "${{ matrix.snapshot.id }}"
+      - run: node scripts/snapshots.mjs build "${{ matrix.snapshot.id }}"

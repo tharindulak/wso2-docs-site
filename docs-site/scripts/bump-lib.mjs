@@ -49,7 +49,7 @@ export async function planDocsReleases(lock, { releasesOf, productReleasesOf, ta
     for (const base of newer) {
       const tag = tags.filter((t) => t.base === base).sort((a, b) => b.fix - a.fix)[0].tag;
       if (productTags.has(base)) proposals.push({ type: 'new', section: section.id, version: base, base, tag, sha: await tagSha(repo, tag) });
-      else proposals.push({ type: 'missing-product-release', section: section.id, version: base, base, tag });
+      else proposals.push({ type: 'missing-product-release', section: section.id, version: base, base, tag, productRepo: productRepo ?? null });
     }
   }
   return proposals;

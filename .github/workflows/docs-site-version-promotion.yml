@@ -37,22 +37,22 @@ jobs:
         run: |
           node -e '
             const r = require(process.argv[1]);
-            for (const p of r.promotions) console.log([p.section, p.from, p.to, p.docsReady].join("\t"));
+            for (const p of r.promotions) console.log([p.section, p.from ?? "the current Latest", p.to, p.docsReady, p.product_repo ?? "the product repository"].join("\t"));
           ' "$RUNNER_TEMP/promote.json" > "$RUNNER_TEMP/promotions.tsv"
-          while IFS=$'\t' read -r section from to ready; do
+          while IFS=$'\t' read -r section from to ready product_repo; do
             [ -z "$section" ] && continue
             if [ "$ready" != "true" ]; then
-              title="Docs for ${section} ${to} not found"
+              title="Docs release ${to} for ${section} has no matching product release"
               gh issue list --repo "$REPO" --search "$title in:title" --state open --json number --jq 'length' | grep -q '^0$' && \
-                gh issue create --repo "$REPO" --title "$title" --body "Release ${to} is out, but its docs source was not found by convention. Add it, then the next run opens the promotion PR." --label version-promotion
+                gh issue create --repo "$REPO" --title "$title" --body "The docs repo published ${to}, but ${product_repo} has no GA release ${to}. Publish docs on or after the product's GA (see docs-site/CONTENT-RELEASES.md)." --label version-promotion
               continue
             fi
             branch="bot/promote-${section}-${to}"
             git config user.name "docs-site-bot"
             git config user.email "docs-site-bot@users.noreply.github.com"
             git switch -C "$branch"
-            git commit -am "Promote ${section} Latest to ${to}" -m "Previous Latest ${from} moves to Older versions."
+            git commit -am "Promote ${section} Latest to ${to}" -m "New version ${to} becomes Latest; ${from} stays live as the previous release; older versions become snapshots."
             git push --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$branch"
-            gh pr view "$branch" --repo "$REPO" >/dev/null 2>&1 || gh pr create --repo "$REPO" --head "$branch" --title "Promote ${section} Latest to ${to}" --body "Needs approval from the ${section} docs team. Not auto-merged." --label version-promotion
+            gh pr view "$branch" --repo "$REPO" >/dev/null 2>&1 || gh pr create --repo "$REPO" --head "$branch" --title "Promote ${section} Latest to ${to}" --body "New version ${to} becomes Latest; ${from} stays live as the previous release; older versions become snapshots. Needs one approval from the ${section} docs team." --label version-promotion
             git switch -
           done < "$RUNNER_TEMP/promotions.tsv"

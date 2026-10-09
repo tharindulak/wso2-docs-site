@@ -1,4 +1,4 @@
-# Hourly: move every content source to the head of its tracked branch. The PR auto-merges once
+# Hourly: move every Latest content source to the head of its tracked branch and every listed version to its newest docs fix release. The PR auto-merges once
 # "docs-site CI" passes (branch protection must require it). No tokens live in content repos.
 name: docs-site content bump
 on:
@@ -43,8 +43,8 @@ jobs:
           git config user.name "docs-site-bot"
           git config user.email "docs-site-bot@users.noreply.github.com"
           git switch -C "$branch"
-          git commit -am "Bump content sources" -m "$(node -e 'const r=require(process.argv[1]);console.log(r.bumps.map(b=>`${b.repo}: ${b.compare}`).join("\n"))' "$RUNNER_TEMP/bump.json")"
+          git commit -am "Bump content sources" -m "$(node -e 'const r=require(process.argv[1]);console.log([...r.bumps.map(b=>`${b.repo}: ${b.compare}`),...r.fixes.map(f=>`${f.section} ${f.version}: docs fix release ${f.tag}`)].join("\n"))' "$RUNNER_TEMP/bump.json")"
           git push --force "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" "$branch"
-          body="Automated content bump. Compare links are in the commit message. Merges automatically when docs-site CI passes."
+          body="Automated content bump: Latest moves to the head of its tracked branch (bumps), and listed versions move to a newer docs fix release such as v4.6.0.1 (fixes). Compare links and fix tags are in the commit message. Merges automatically when docs-site CI passes."
           gh pr view "$branch" --repo "$REPO" >/dev/null 2>&1 || gh pr create --repo "$REPO" --head "$branch" --title "Bump content sources" --body "$body" --label content-bump
           gh pr merge "$branch" --repo "$REPO" --auto --squash

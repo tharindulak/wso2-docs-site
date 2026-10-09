@@ -64,3 +64,22 @@ test('usage errors exit 2; --version prints the package version', () => {
   assert.equal(run(repo(), 'publish').status, 2);
   assert.match(run(repo(), '--version').stdout, /^\d+\.\d+\.\d+\n$/);
 });
+
+test('check --release-tag warns when the release has no version folder, and still exits 0', () => {
+  const root = repo();
+  fs.appendFileSync(path.join(root, 'wso2-docs.yaml'), 'exclude: [broken.md]\n');
+  const r = run(root, 'check', '--release-tag', 'v7.4.0', '--version-folder', 'en/identity-server/{version}');
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stderr, /release v7\.4\.0 has no folder en\/identity-server\/7\.4\.0/);
+});
+
+test('check --release-tag is quiet when the folder exists, reads component tags and fix segments', () => {
+  const root = repo();
+  fs.appendFileSync(path.join(root, 'wso2-docs.yaml'), 'exclude: [broken.md]\n');
+  fs.mkdirSync(path.join(root, 'en/gateway/1.3.0'), { recursive: true });
+  const r = run(root, 'check', '--release-tag', 'api-gateway/v1.3.0.2', '--version-folder', 'en/gateway/{version}');
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.doesNotMatch(r.stderr, /has no folder/);
+  assert.equal(run(root, 'check', '--release-tag', 'release-1', '--version-folder', 'x/{version}').status, 2);
+  assert.equal(run(root, 'check', '--release-tag', 'v1.0.0').status, 2);
+});

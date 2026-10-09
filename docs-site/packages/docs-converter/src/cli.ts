@@ -17,14 +17,16 @@ const HELP = `wso2-docs ${VERSION}: convert WSO2 MkDocs or Docusaurus docs for t
 
 Usage:
   wso2-docs check   [--config wso2-docs.yaml] [--root .] [--format text|github|json]
+                    [--release-tag v7.4.0 --version-folder en/identity-server/{version}]
   wso2-docs convert [--config wso2-docs.yaml] [--root .] [--out dist] [--format text|github|json]
 
-check     converts every page in memory and reports pages that would not reach the site
+check     converts every page in memory and reports pages that would not reach the site;
+          with --release-tag and --version-folder it also warns when the release's version has no folder
 convert   writes dist/docs/ (pages and images), dist/sidebar.json and dist/manifest.json
 
 Exit codes: 0 all pages convert (or are on the exclude list), 1 new failures, 2 usage or config error.`;
 
-interface Args { command?: string; config: string; root: string; out: string; format: 'text' | 'github' | 'json' }
+interface Args { command?: string; config: string; root: string; out: string; format: 'text' | 'github' | 'json'; releaseTag?: string; versionFolder?: string }
 
 function parseArgs(argv: string[]): Args {
   const args: Args = { config: 'wso2-docs.yaml', root: '.', out: 'dist', format: 'text' };
@@ -34,6 +36,8 @@ function parseArgs(argv: string[]): Args {
     if (a === '--config') args.config = value();
     else if (a === '--root') args.root = value();
     else if (a === '--out') args.out = value();
+    else if (a === '--release-tag') args.releaseTag = value();
+    else if (a === '--version-folder') args.versionFolder = value();
     else if (a === '--format') {
       const f = value();
       if (f !== 'text' && f !== 'github' && f !== 'json') throw new ConfigError('--format must be text, github or json');
@@ -81,6 +85,17 @@ function report(r: SiteReport, cfg: SourceConfig, root: string, excluded: string
   return fresh.length ? 1 : 0;
 }
 
+/** Warn (never fail) when a docs release tag names a version whose folder is missing from the source. */
+function checkReleaseFolder(root: string, tag: string, pattern: string): void {
+  const version = tag.match(/^(?:.*\/)?v(\d+\.\d+\.\d+)(?:\.\d+)?$/)?.[1];
+  if (!version) throw new ConfigError(`--release-tag ${tag} is not v<version> or <component>/v<version>`);
+  if (!pattern.includes('{version}')) throw new ConfigError('--version-folder must contain {version}');
+  const folder = pattern.replace(/\{version\}/g, version);
+  const abs = path.resolve(root, folder);
+  if (!abs.startsWith(root + path.sep)) throw new ConfigError('--version-folder must stay inside the repository');
+  if (!fs.existsSync(abs)) process.stderr.write(`warning: release ${tag} has no folder ${folder}\n`);
+}
+
 function gitCommit(root: string): string | null {
   try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { return null; }
 }
@@ -95,6 +110,8 @@ async function main(): Promise<number> {
   const cfg = loadConfig(path.resolve(root, args.config), root);
 
   if (args.command === 'check') {
+    if (!args.releaseTag !== !args.versionFolder) throw new ConfigError('--release-tag and --version-folder go together');
+    if (args.releaseTag && args.versionFolder) checkReleaseFolder(root, args.releaseTag, args.versionFolder);
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wso2-docs-check-'));
     try {
       const { report: r } = await convertSource(cfg, root, { outDir: path.join(tmp, 'docs'), exclude: cfg.excludeList });

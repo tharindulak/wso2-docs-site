@@ -63,7 +63,7 @@ for (const p of doPromotions ? proposals : []) {
     text = applyDocsRelease(text, p);
     promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: true });
   } else if (p.type === 'missing-product-release') {
-    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false });
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false, product_repo: p.productRepo });
   }
 }
 

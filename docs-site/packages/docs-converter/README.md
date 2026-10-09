@@ -20,7 +20,13 @@ npx wso2-docs convert --out dist    # write dist/docs/, dist/sidebar.json, dist/
 | `--config <file>` | `wso2-docs.yaml` | Converter config in the repository |
 | `--root <dir>` | `.` | Repository root; includes and paths never resolve outside it |
 | `--out <dir>` | `dist` | `convert` only; must be inside the repository and either new or written by `wso2-docs` before |
+| `--release-tag <tag>` | | `check` only. A docs release tag (`v7.4.0`, `api-gateway/v1.3.0`, `v4.8.0.1`); warns when its version has no folder. Needs `--version-folder` |
+| `--version-folder <pattern>` | | `check` only. Folder pattern with `{version}`, for example `en/identity-server/{version}`, relative to `--root` |
 | `--format text\|github\|json` | `text` | `github` prints workflow annotations on the failing file and line |
+
+The release check is a warning on stderr (`warning: release v7.4.0 has no folder en/identity-server/7.4.0`) and never changes the exit code. Release conventions: `docs-site/CONTENT-RELEASES.md`.
+
+The release check is a warning on stderr (`warning: release v7.4.0 has no folder en/identity-server/7.4.0`) and never changes the exit code. Release conventions: `docs-site/CONTENT-RELEASES.md`.
 
 Exit codes: `0` every page converts or is on the exclude list, `1` new failures, `2` usage or config error.
 

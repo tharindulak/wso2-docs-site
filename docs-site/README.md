@@ -33,14 +33,33 @@ Navigation still lists every product; links into sections left out of a quick bu
 
 | Piece | What it does |
 |---|---|
-| `content-sources.yaml` | Lock file. Every product section, its content source repo, the commit it is pinned to, the branch the bump bot tracks, default deployment options, its current site and its exclude list. Changed only through reviewed pull requests. |
+| `content-sources.yaml` | Lock file. Every product section, its content source repo, the commit it is pinned to, the branch the bump bot tracks, default deployment options, its current site and its exclude list. A section may list `versions:` (see Versions below) and the top-level `live_window`. Changed only through reviewed pull requests. |
 | `scripts/fetch-sources.mjs` | Shallow, blob-filtered, sparse fetch of exactly the pinned commits. Validates every repo name, commit and path first; never uses a shell. |
 | `packages/docs-converter/` | **`@wso2/docs-converter`**, the TypeScript package (npm workspace) that does all conversion: renders the MkDocs Jinja subset (parsed with an allow-list, never evaluated as code), expands includes (`{% include %}`, `{!file!}`, `--8<--`, `{{#var#}}`) confined to the source repo, applies the HTML allow-list, rewrites MkDocs syntax to MDX, merges cloud and self-hosted pages that share templates (Identity Platform), prepares Docusaurus sources and builds sidebars. Ships the `wso2-docs` CLI. See its README. |
 | `scripts/build-content.mjs` | Converts every section into `generated/` using `@wso2/docs-converter`. A page on the section's exclude list becomes a redirect to the same page on the product's current site (even once it converts, since it may still fail the Docusaurus build); a failing page not on the list stops the build. `--onboard` records the first exclude list; `--prune` removes pages that now pass. Lists only shrink. |
 | `site/` | Docusaurus: Oxygen UI look through Infima variables and MUI islands, Products mega-menu, product bar with section tabs and version selector, the "Deployment options" box, labelled cloud/self-hosted blocks. |
-| `scripts/bump-sources.mjs` | Bump bot: moves pins to the head of each tracked branch (auto-merged PR) and proposes Latest promotions when a product publishes a newer GA release (PR needing docs-team approval). |
+| `scripts/bump-sources.mjs` | Bump bot: moves Latest to the head of its tracked branch and listed versions to docs fix releases (auto-merged PR), and proposes Latest promotions when a docs release matches a product GA release (PR needing docs-team approval). See `CONTENT-RELEASES.md`. |
+| `scripts/snapshots.mjs` | Builds, stores and assembles frozen versions (snapshots): `list`, `build`, `assemble`. |
+| `scripts/check-links.mjs` | Checks internal links in a built site, including the merged live and snapshot output. |
 | `wso2-docs` CLI, `check-action/` | The same conversion for content repos: `wso2-docs check` on pull requests (the Action annotates failing lines), `wso2-docs convert` to produce a converted artifact. |
-| `.github/workflows/docs-site-*.yml` | CI build, hourly content bump, daily version promotion. Actions pinned by commit, least-privilege tokens, no credentials persisted, no tokens in content repos. |
+| `.github/workflows/docs-site-*.yml` | CI build and merged link check, snapshot builds, hourly content bump, daily version promotion. Actions pinned by commit, least-privilege tokens, no credentials persisted, no tokens in content repos. |
+
+## Versions
+
+A section lists its releases under `versions:`, newest first (merged sections put it under `self_hosted:`). Each entry has `version` (three segments), `ref` (branch or tag), `sha` (40 characters) and optionally `mkdocs`, `docs`, `sidebar`, `sparse` and `exclude`. Only the first entry (Latest) may carry `track: true`; older versions stay pinned. `release_tag` sets the docs-release tag prefix (default `v`, or `<component>/v`). `older_versions` lists versions with no source in git as links to Confluence.
+
+`live_window` (top level, now `2`) is how many versions per section the live build contains: Latest and the previous release. Older versions are snapshots, built once and stored by key. It narrows to 1 if the full live build exceeds 60 minutes or 14 GB.
+
+```sh
+npm run snapshots -- list [--json]                    # snapshots whose key is not stored yet
+npm run snapshots -- build <versionId> [--record-baseline]   # fetch-ready version -> stored snapshot
+npm run snapshots -- assemble <live-build> <out>      # merge stored snapshots into the live build
+npm run check-links -- <build-dir>                    # internal link check, e.g. site/build-merged
+```
+
+A snapshot key is a hash of the source commit, exclude list, converter version and site chrome version, so a theme change rebuilds every snapshot. `build` needs the version's sources first (`node scripts/fetch-sources.mjs <versionId>`) and fails when broken internal links exceed the committed baseline `link-baselines/<versionId>.json`. A re-pin that introduces new source breakage needs `build <versionId> --record-baseline` in a reviewed PR.
+
+`SNAPSHOT_STORE` chooses where snapshots live. Unset, it is the local directory `.cache/snapshots`. In CI it is `github-release:docs-site-snapshots` (a GitHub Release holding one tarball per key); that backend needs a GitHub remote and `GH_TOKEN`, and only the snapshot build job has write access.
 
 ## Content source rules (summary)
 
