@@ -36,3 +36,12 @@
 /* API reference pages: Redoc's three panels need the full content width. */
 .api-reference { margin-inline: calc(-1 * var(--ifm-spacing-horizontal)); }
 .api-reference__status { color: var(--ifm-color-emphasis-700); }
+/* Redoc in dark mode: its selected code-sample tab uses the panel's light text colour as background, and its
+   section labels (Authorizations, Query parameters, ...) are near-invisible. Scoped, dark mode only. */
+[data-theme='dark'] .api-reference .react-tabs__tab { color: #C9CCD2 !important; background-color: transparent !important; border-color: #3D424C !important; }
+[data-theme='dark'] .api-reference .react-tabs__tab--selected { background-color: #2A2F3A !important; color: #FFFFFF !important; border-color: #FF7300 !important; }
+[data-theme='dark'] .api-reference h5 { color: var(--ifm-color-emphasis-700) !important; border-bottom-color: var(--ifm-toc-border-color) !important; }
+/* Redoc's code samples sit on its dark right panel in both themes; the site's light code-block style would put
+   its light syntax colours on a white box. */
+.api-reference pre { background-color: #11171A !important; color: #E8E9EC !important; }
+.api-reference pre code { background: transparent !important; color: inherit !important; border: 0 !important; }
