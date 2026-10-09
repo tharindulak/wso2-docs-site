@@ -1,9 +1,11 @@
 // Fetch every pinned content source: shallow, blob-filtered, sparse checkout of exactly the locked commit.
 // Usage: node scripts/fetch-sources.mjs [sectionId ...]     FETCH_ASSETS=0 skips images and other assets.
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { readLock, refsOf, checkoutDir, CACHE } from './lib.mjs';
+import { readLock, liveWindow, refsOf, checkoutDir, CACHE } from './lib.mjs';
+import { sectionVersions } from './versions.mjs';
 
 const only = new Set(process.argv.slice(2));
 
@@ -19,15 +21,18 @@ process.on('SIGTERM', () => process.exit(143));
 const assets = process.env.FETCH_ASSETS !== '0';
 const git = (cwd, ...args) => execFileSync('git', args, { cwd, stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
 
+const lock = readLock();
 const wanted = new Map(); // repo@sha -> { repo, sha, sparse:Set }
-for (const product of readLock().products) {
+for (const product of lock.products) {
   for (const section of product.sections) {
-    if (only.size && !only.has(section.id)) continue;
-    for (const ref of refsOf(section)) {
-      const key = `${ref.repo}@${ref.sha}`;
-      if (!wanted.has(key)) wanted.set(key, { ...ref, sparse: new Set() });
-      const sparse = ref === section.cloud_companion ? section.cloud_companion.sparse : section.sparse;
-      for (const p of sparse ?? ['/']) wanted.get(key).sparse.add(p);
+    for (const v of sectionVersions(section, liveWindow(lock))) {
+      if (only.size && !only.has(section.id) && !only.has(v.id)) continue;
+      for (const ref of refsOf(v)) {
+        const key = `${ref.repo}@${ref.sha}`;
+        if (!wanted.has(key)) wanted.set(key, { ...ref, sparse: new Set() });
+        const sparse = ref === v.cloud_companion ? v.cloud_companion.sparse : v.sparse;
+        for (const p of sparse ?? ['/']) wanted.get(key).sparse.add(p);
+      }
     }
   }
 }
@@ -39,7 +44,8 @@ for (const { repo, sha, sparse } of wanted.values()) {
     if (/\.[a-z]+$/i.test(p)) return [base];
     return assets ? [`${base}/`] : ['md', 'mdx', 'yml', 'yaml', 'json', 'js', 'ts'].map((e) => `${base}/**/*.${e}`);
   });
-  const marker = `${dir}/.fetched-${assets ? 'full' : 'text'}`;
+  // The marker names the sparse patterns too: a checkout fetched for fewer paths is not reused for more.
+  const marker = `${dir}/.fetched-${assets ? 'full' : 'text'}-${crypto.createHash('sha256').update(patterns.sort().join('\n')).digest('hex').slice(0, 8)}`;
   if (fs.existsSync(marker)) { console.log(`cached   ${repo}@${sha.slice(0, 12)}`); continue; }
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });

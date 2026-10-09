@@ -9,8 +9,18 @@
 #   nav_drop (top-level entries removed), nav_pick (versioned entry -> the release shown).
 # aliases: former URLs of the section's current site; links in content to hosted pages there become internal.
 # cloud_companion: a cloud tree placed into this section's sidebar (placement: its nav section -> ours; rename).
+# versions: (newest first) every release a section lists. Each entry has version (3 segments), ref (branch or tag), sha (40
+#   characters), and optionally mkdocs/docs/sidebar/sparse overrides and exclude. Only the first (Latest) may carry track: true;
+#   older versions stay pinned. Merged sections put versions: under self_hosted:.
+# release_tag: prefix of a version's docs-release tag; default v (v4.6.0), or <component>/v for a component's tags.
+# former_site: URL pattern of a version's former site, with {version}.
+# older_versions: versions with no source in git, listed as "Older versions" links to Confluence ({ version, href }).
+# live_window (top level): versions per section in the live build; older ones are snapshots.
 # exclude: pages that do not convert yet. They redirect to current_site until fixed; the list only shrinks.
 # deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
+
+# versions per section in the live build (Latest plus previous); older ones are snapshots
+live_window: 2
 
 products:
   - id: integration
@@ -75,15 +85,36 @@ products:
         route: integration/micro-integrator
         kind: mkdocs
         repo: wso2/docs-mi
-        sha: ce68011aab5feb9bf289d1f3d22982c71da06c8f
-        track: main
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]
         current_site: https://mi.docs.wso2.com/en/latest/
-        older_versions: https://mi.docs.wso2.com/en/4.6.0/
+        former_site: https://mi.docs.wso2.com/en/{version}/
+        release_tag: v
+        product_repo: wso2/micro-integrator
         sparse: [en]
-        note: Version label and automatic promotion off until the Latest release is confirmed (docs say 4.7.0; newest GitHub release is v4.6.0).
-        exclude: []
+        # Latest is the newest GA release's branch, not main (main describes unreleased 4.7.0); see ticket 01.
+        versions:
+          - version: 4.6.0
+            ref: 4.6.0
+            sha: 16f84ae6e39bc37d8d23bbb0aa6c4d37d4bd6de8
+            track: true
+            exclude: []
+          - version: 4.5.0
+            ref: 4.5.0
+            sha: f62217f74a43f1f5a315c3a9d84209bed41be9bb
+            exclude: []
+          - version: 4.4.0
+            ref: 4.4.0
+            sha: 4ab09a6fce74d3cb32dd819d7818812c5895f32a
+            exclude: []
+          - version: 4.3.0
+            ref: 4.3.0
+            sha: 5b4f5a8f5e9b685813c2381c1dd9c72065ba3e19
+            exclude: []
+          - version: 4.2.0
+            ref: 4.2.0
+            sha: 840cd49e849489ff4f0e0774c9f6f7e13188460b
+            exclude: []
       - id: integration-bi
         label: BI
         route: integration/bi
@@ -125,22 +156,74 @@ products:
           mkdocs: en/asgardeo/mkdocs.yml
           current_site: https://wso2.com/identity-platform/docs/
         self_hosted:
-          version: 7.3.0
           product_repo: wso2/product-is
           repo: wso2/docs-is
-          sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
-          track: master
-          mkdocs: en/identity-server/7.3.0/mkdocs.yml
-          current_site: https://is.docs.wso2.com/en/7.3.0/
-        sparse: [en/asgardeo, en/identity-server/7.3.0, en/identity-server/is_common.yml, en/includes, en/base.yml, en/theme]
+          versions:
+            - version: 7.3.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/7.3.0/mkdocs.yml
+              track: true
+              exclude:
+                - guides/organization-management/manage-organizations.md
+                - guides/service-extensions/understanding-service-extensions.md
+                - guides/users/attributes/configure-multi-valued-contact-attributes.md
+            - version: 7.2.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/7.2.0/mkdocs.yml
+              exclude: []
+            - version: 7.1.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/7.1.0/mkdocs.yml
+              exclude: []
+            - version: 7.0.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/7.0.0/mkdocs.yml
+              exclude: []
+            - version: 6.1.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/6.1.0/mkdocs.yml
+              exclude: []
+            - version: 6.0.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/6.0.0/mkdocs.yml
+              exclude: []
+            - version: 5.11.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/5.11.0/mkdocs.yml
+              exclude: []
+            - version: 5.10.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/5.10.0/mkdocs.yml
+              exclude: []
+            - version: 5.9.0
+              ref: master
+              sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
+              mkdocs: en/identity-server/5.9.0/mkdocs.yml
+              exclude: []
+        sparse: [en/asgardeo, en/identity-server, en/includes, en/base.yml, en/theme]
+        former_site: https://is.docs.wso2.com/en/{version}/
         shared_names:
           product_name: WSO2 Identity Platform
-        older_versions: https://is.docs.wso2.com/en/7.2.0/
+        older_versions:
+          - { version: 5.8.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS580 }
+          - { version: 5.7.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS570 }
+          - { version: 5.6.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS560 }
+          - { version: 5.5.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS550 }
+          - { version: 5.4.1, href: https://wso2docs.atlassian.net/wiki/spaces/IS541 }
+          - { version: 5.4.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS540 }
+          - { version: 5.3.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS530 }
+          - { version: 5.2.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS520 }
+          - { version: 5.1.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS510 }
+          - { version: 5.0.0, href: https://wso2docs.atlassian.net/wiki/spaces/IS500 }
         aliases: [https://wso2.com/asgardeo/docs/]  # former URL of the cloud docs; links to it become internal
-        exclude:
-          - guides/organization-management/manage-organizations.md
-          - guides/service-extensions/understanding-service-extensions.md
-          - guides/users/attributes/configure-multi-valued-contact-attributes.md
 
   - id: agent-manager
     name: Agent Manager
