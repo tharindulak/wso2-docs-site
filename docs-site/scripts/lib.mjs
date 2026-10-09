@@ -12,7 +12,7 @@ export const LOCK = process.env.DOCS_SITE_LOCK ? path.resolve(process.env.DOCS_S
 
 // A fork owner is honoured for local dry runs only; CI never reads DOCS_SITE_TEST_OWNER.
 const OWNERS = ['wso2', ...(process.env.CI ? [] : (process.env.DOCS_SITE_TEST_OWNER ?? '').split(',').filter((o) => /^[A-Za-z0-9-]+$/.test(o)))];
-export const repoOk = (repo) => { const [owner, name] = String(repo).split('/'); return OWNERS.includes(owner) && /^[A-Za-z0-9._-]+$/.test(name ?? ''); };
+export const repoOk = (repo) => { const [owner, name, extra] = String(repo).split('/'); return extra === undefined && OWNERS.includes(owner) && /^(?!\.{1,2}$)[A-Za-z0-9._-]+$/.test(name ?? ''); };
 const SHA = /^[0-9a-f]{40}$/;
 const BRANCH = /^[A-Za-z0-9._\/-]+$/;
 const REL = /^(?!\/)(?!.*\.\.)[A-Za-z0-9._\/-]+$/;

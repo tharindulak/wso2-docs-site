@@ -18,7 +18,7 @@ const doBumps = !args.includes('--promotions');
 const doPromotions = !args.includes('--bumps');
 
 function headOf(repo, branch) {
-  const out = execFileSync('git', ['ls-remote', `https://github.com/${repo}.git`, `refs/heads/${branch}`], { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
+  const out = execFileSync('git', ['ls-remote', `https://github.com/${repo}.git`, `refs/heads/${branch}`], { stdio: ['ignore', 'pipe', 'pipe'], timeout: 60_000 }).toString().trim();
   const sha = out.split(/\s+/)[0];
   if (!SHA.test(sha ?? '')) throw new Error(`${repo}: no commit for branch ${branch}`);
   return sha;
@@ -38,7 +38,7 @@ const TAG = /^[A-Za-z0-9._\/-]+$/;
 /** Commit a tag points at, preferring the peeled commit of an annotated tag. */
 async function tagSha(repo, tag) {
   if (!TAG.test(tag)) throw new Error(`${repo}: unsafe tag ${tag}`);
-  const out = execFileSync('git', ['ls-remote', `https://github.com/${repo}.git`, `refs/tags/${tag}`, `refs/tags/${tag}^{}`], { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim().split('\n');
+  const out = execFileSync('git', ['ls-remote', `https://github.com/${repo}.git`, `refs/tags/${tag}`, `refs/tags/${tag}^{}`], { stdio: ['ignore', 'pipe', 'pipe'], timeout: 60_000 }).toString().trim().split('\n');
   const line = out.find((l) => l.endsWith('^{}')) ?? out[0];
   const sha = line?.split(/\s+/)[0];
   if (!SHA.test(sha ?? '')) throw new Error(`${repo}: no commit for tag ${tag}`);

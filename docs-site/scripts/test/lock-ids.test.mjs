@@ -25,3 +25,10 @@ test('readLock rejects a section id that is not lowercase letters, digits and hy
 test('readLock accepts the id shape the lock file uses (fails later, on other fields)', () => {
   assert.doesNotMatch(readWith('integration-mi').stderr, /Section id must be/);
 });
+
+test('repoOk accepts wso2/<name> only, never . or .. or extra segments', async () => {
+  const { repoOk } = await import('../lib.mjs');
+  assert.equal(repoOk('wso2/docs-is'), true);
+  assert.equal(repoOk('wso2/docs.mi'), true);
+  for (const bad of ['wso2/.', 'wso2/..', 'wso2/a/b', 'other/docs-is', 'wso2/', 'wso2/a b']) assert.equal(repoOk(bad), false, bad);
+});
