@@ -67,7 +67,8 @@ export default {
   markdown: { format: 'mdx', mermaid: true, hooks: { onBrokenMarkdownLinks: 'warn', onBrokenMarkdownImages: 'warn' } },
   future: { v4: false }, // Faster bundler broke on near-identical versioned MDX in docs-agent-platform; re-test before enabling.
   // The last entry serves redoc.standalone.js for API pages (src/components/ApiReference.js).
-  staticDirectories: ['static', path.join(generated, 'static'), ...versionStatics, path.resolve(here, '../node_modules/redoc/bundles')],
+  // A snapshot build serves only its own version's files: generated/static (every live product) stays with the live build.
+  staticDirectories: ['static', ...(snapshot ? [] : [path.join(generated, 'static')]), ...versionStatics, path.resolve(here, '../node_modules/redoc/bundles')],
   themes: ['@docusaurus/theme-mermaid'],
   presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css'] } }]],
   plugins: [
