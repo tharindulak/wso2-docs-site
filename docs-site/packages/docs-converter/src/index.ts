@@ -1,8 +1,8 @@
 // @wso2/docs-converter: convert WSO2 MkDocs documentation sources into Docusaurus MDX.
 export * from './types.js';
 export { parse, evaluate, compareValues, takenBranch, setValue, TemplateError } from './template.js';
-export { readMkdocsYml, mkdocsSite, type MkdocsConfig, type MkdocsSite } from './mkdocs-config.js';
-export { insideRoot, findInclude, expandMarkers, splitPageData, readPageData, loadPage, renderSingle, type PageData } from './render.js';
+export { readMkdocsYml, mkdocsSite, usesTemplating, type MkdocsConfig, type MkdocsSite } from './mkdocs-config.js';
+export { insideRoot, findInclude, expandMarkers, splitPageData, readPageData, loadPage, loadPlain, renderSingle, type PageData } from './render.js';
 export { toMdx, outsideCode, JSX_TAGS, type SyntaxStats } from './syntax.js';
 export { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements, literalValue, parseLiteral, DEFAULT_IFRAME_HOSTS, type PolicyResult } from './html-policy.js';
 export { htmlBlocksToJsx } from './html-blocks.js';

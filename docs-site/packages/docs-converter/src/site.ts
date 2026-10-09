@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
-import { loadPage, renderSingle, readPageData } from './render.js';
+import { loadPage, loadPlain, renderSingle, readPageData } from './render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from './merge.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type PageErrorKind } from './page.js';
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
@@ -185,7 +185,7 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     const deploymentOptions = optionsFor(src, rel);
     await emit(out, report, withPrefix(rel), async () => {
       const env = { ...site.extra, config: site.config, base_path: BASE };
-      const rendered = resolveBase(renderSingle(loadPage(file, source), env, file, source), route);
+      const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route);
       return (await convertRendered(rendered, {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
         specInfo: specInfoFor([site.docsDir], route, rel),

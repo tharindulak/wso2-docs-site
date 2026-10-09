@@ -7,7 +7,7 @@ import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
 const mkdocsRepo = () => tempSource({
-  'en/mkdocs.yml': 'site_name: Demo\nnav:\n  - Home: index.md\n  - Guides:\n      - guides/index.md\n      - Setup: guides/setup.md\n      - Broken: guides/broken.md\nextra:\n  product_name: Demo Server\n',
+  'en/mkdocs.yml': 'site_name: Demo\nplugins:\n  - markdownextradata\nnav:\n  - Home: index.md\n  - Guides:\n      - guides/index.md\n      - Setup: guides/setup.md\n      - Broken: guides/broken.md\nextra:\n  product_name: Demo Server\n',
   'en/docs/index.md': '# Demo\n\nWelcome to {{ product_name }}.\n',
   'en/docs/guides/index.md': '# Guides\n',
   'en/docs/guides/setup.md': '# Setup\n\n!!! note\n    See [home]({{ base_path }}/index.md).\n\n![Shot]({{ base_path }}/assets/shot.png)\n',
@@ -95,7 +95,7 @@ test('config: paths must stay inside the repository; kinds and routes are valida
 
 test('API reference pages resolve their spec like a browser would and read its title, never outside the docs folder', async () => {
   const root = tempSource({
-    'en/mkdocs.yml': 'site_name: Demo\nnav:\n  - apis/publisher.md\n  - apis/abs.md\n  - apis/escape.md\n',
+    'en/mkdocs.yml': 'site_name: Demo\nplugins:\n  - markdownextradata\nnav:\n  - apis/publisher.md\n  - apis/abs.md\n  - apis/escape.md\n',
     'en/docs/apis/publisher.md': `<redoc spec-url='../publisher-v4.yaml'></redoc>`,
     'en/docs/apis/abs.md': '<redoc spec-url="{{ base_path }}/apis/restapis/admin.yaml"></redoc>',
     'en/docs/apis/escape.md': `<redoc spec-url='../../../../secret.yaml'></redoc>`,
@@ -112,4 +112,32 @@ test('API reference pages resolve their spec like a browser would and read its t
   assert.match(read('apis/abs.md'), /^title: Admin API$/m);
   assert.match(read('apis/abs.md'), /<ApiReference spec="\/demo\/apis\/restapis\/admin\.yaml" \/>/);
   assert.doesNotMatch(read('apis/escape.md'), /Should not be read/);
+});
+
+test('without markdownextradata or macros, {{ }} and {% %} are text, and include markers still expand', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: Old\nplugins:\n  - search\nnav:\n  - Home: index.md\n',
+    'en/docs/index.md': '# Old\n\nSend {{token}} and keep {% raw %} as written.\n\n{!includes/note.md!}\n',
+    'en/docs/includes/note.md': 'Included.',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  const { report } = await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'old' });
+  assert.equal(report.failures.length, 0);
+  const page = fs.readFileSync(path.join(out, 'index.md'), 'utf8');
+  assert.match(page, /token/);
+  assert.match(page, /raw/);
+  assert.match(page, /Included\./);
+});
+
+test('with markdownextradata (string or mapping form, also through INHERIT), Jinja renders as before', async () => {
+  for (const plugins of ['  - markdownextradata\n', '  - markdownextradata: {}\n', '  - macros\n']) {
+    const root = tempSource({
+      'en/base.yml': `plugins:\n${plugins}`,
+      'en/mkdocs.yml': 'INHERIT: base.yml\nsite_name: New\nnav:\n  - Home: index.md\nextra:\n  product_name: Demo\n',
+      'en/docs/index.md': '# New\n\nWelcome to {{ product_name }}.\n',
+    });
+    const out = fs.mkdtempSync(path.join(root, 'out-'));
+    await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'new' });
+    assert.match(fs.readFileSync(path.join(out, 'index.md'), 'utf8'), /Welcome to Demo\./, plugins);
+  }
 });

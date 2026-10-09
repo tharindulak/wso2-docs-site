@@ -20,6 +20,8 @@ export interface MkdocsSite {
   extra: Record<string, unknown>;
   nav: MkdocsNav | undefined;
   includeBases: string[];
+  /** Whether MkDocs renders Jinja in pages (markdownextradata or macros plugin). */
+  templating: boolean;
 }
 
 function sanitize(raw: string): string {
@@ -49,6 +51,15 @@ function extensionOptions(config: MkdocsConfig, name: string): Record<string, un
   return undefined;
 }
 
+const TEMPLATING_PLUGINS = ['markdownextradata', 'macros'];
+
+/** MkDocs renders {{ }} and {% %} in pages only through a templating plugin; without one they are text. */
+export function usesTemplating(config: MkdocsConfig): boolean {
+  const plugins = Array.isArray(config.plugins) ? config.plugins : [];
+  return plugins.some((p) => (typeof p === 'string' ? TEMPLATING_PLUGINS.includes(p)
+    : p !== null && typeof p === 'object' && Object.keys(p).some((k) => TEMPLATING_PLUGINS.includes(k))));
+}
+
 /** Everything the converter needs from one MkDocs site. */
 export function mkdocsSite(ymlFile: string): MkdocsSite {
   const config = readMkdocsYml(ymlFile);
@@ -56,5 +67,5 @@ export function mkdocsSite(ymlFile: string): MkdocsSite {
   const docsDir = path.resolve(dir, config.docs_dir ?? 'docs');
   const bases = [extensionOptions(config, 'markdown_include.include')?.base_path, extensionOptions(config, 'pymdownx.snippets')?.base_path]
     .flat().filter((b): b is string => typeof b === 'string' && Boolean(b)).map((b) => path.resolve(dir, b));
-  return { config, docsDir, extra: config.extra ?? {}, nav: config.nav, includeBases: [...bases, docsDir, dir] };
+  return { config, docsDir, extra: config.extra ?? {}, nav: config.nav, includeBases: [...bases, docsDir, dir], templating: usesTemplating(config) };
 }

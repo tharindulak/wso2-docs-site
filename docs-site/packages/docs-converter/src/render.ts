@@ -82,6 +82,11 @@ export function loadPage(file: string, source: Source): TemplateNode[] {
   return parse(expandMarkers(splitPageData(readInside(source, file)).body, file, source));
 }
 
+/** A page MkDocs does not template: include markers expand, everything else is text. */
+export function loadPlain(file: string, source: Source): TemplateNode[] {
+  return [{ t: 'text', v: expandMarkers(splitPageData(readInside(source, file)).body, file, source) }];
+}
+
 /** Render nodes for one deployment option, the way MkDocs does today. env is mutated by {% set %}. */
 export function renderSingle(nodes: TemplateNode[], env: Env, file: string, source: Source): string {
   let out = '';
