@@ -10,7 +10,9 @@ export const CACHE = path.join(ROOT, '.cache', 'sources');
 export const GENERATED = path.join(ROOT, 'generated');
 export const LOCK = process.env.DOCS_SITE_LOCK ? path.resolve(process.env.DOCS_SITE_LOCK) : path.join(ROOT, 'content-sources.yaml');
 
-const REPO = /^wso2\/[A-Za-z0-9._-]+$/;
+// A fork owner is honoured for local dry runs only; CI never reads DOCS_SITE_TEST_OWNER.
+const OWNERS = ['wso2', ...(process.env.CI ? [] : (process.env.DOCS_SITE_TEST_OWNER ?? '').split(',').filter((o) => /^[A-Za-z0-9-]+$/.test(o)))];
+export const repoOk = (repo) => { const [owner, name] = String(repo).split('/'); return OWNERS.includes(owner) && /^[A-Za-z0-9._-]+$/.test(name ?? ''); };
 const SHA = /^[0-9a-f]{40}$/;
 const BRANCH = /^[A-Za-z0-9._\/-]+$/;
 const REL = /^(?!\/)(?!.*\.\.)[A-Za-z0-9._\/-]+$/;
@@ -22,7 +24,7 @@ export function readLock() {
     for (const s of p.sections) {
       validateVersions(s, lock.live_window ?? LIVE_WINDOW_DEFAULT);
       for (const v of sectionVersions(s, lock.live_window ?? LIVE_WINDOW_DEFAULT)) for (const ref of refsOf(v)) {
-        if (!REPO.test(ref.repo)) throw new Error(`${s.id}: repo must be wso2/<name>, got ${ref.repo}`);
+        if (!repoOk(ref.repo)) throw new Error(`${s.id}: repo must be wso2/<name>, got ${ref.repo}`);
         if (!SHA.test(ref.sha)) throw new Error(`${s.id}: sha must be a full 40-character commit, got ${ref.sha}`);
         if (ref.track !== null && !BRANCH.test(ref.track ?? '')) throw new Error(`${s.id}: track must name the branch the bump bot follows`);
       }

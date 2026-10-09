@@ -1,12 +1,14 @@
-// Bump bot: move each content source's pinned commit to the head of its tracked branch, and propose version
-// promotions when a product publishes a newer GA release. Run hourly by .github/workflows/content-bump.yml.
+// Bump bot: move Latest's pinned commit to the head of its tracked branch (older versions stay pinned), apply docs
+// fix releases, and propose version promotions when a docs repo releases a version the product has released. Run hourly by .github/workflows/content-bump.yml.
 // Usage: node scripts/bump-sources.mjs [--write] [--bumps | --promotions] [--json out.json]
-//   --bumps / --promotions limit the run to one kind, so each lands in its own pull request.
+//   --bumps (content bumps + docs fix releases) / --promotions (new versions + legacy product-repo promotion) limit
+//   the run to one kind, so each lands in its own pull request.
 //   Without --write it only reports. Content bumps auto-merge once the build passes; promotions need approval.
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { readLock, refsOf, LOCK } from './lib.mjs';
+import { readLock, LOCK } from './lib.mjs';
 import { compareValues } from '@wso2/docs-converter';
+import { planBumps, applyBumps, planDocsReleases, applyDocsRelease } from './bump-lib.mjs';
 
 const args = process.argv.slice(2);
 const write = args.includes('--write');
@@ -31,30 +33,44 @@ async function github(pathname) {
   return res.json();
 }
 
+const TAG = /^[A-Za-z0-9._\/-]+$/;
+
+/** Commit a tag points at, preferring the peeled commit of an annotated tag. */
+async function tagSha(repo, tag) {
+  if (!TAG.test(tag)) throw new Error(`${repo}: unsafe tag ${tag}`);
+  const out = execFileSync('git', ['ls-remote', `https://github.com/${repo}.git`, `refs/tags/${tag}`, `refs/tags/${tag}^{}`], { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim().split('\n');
+  const line = out.find((l) => l.endsWith('^{}')) ?? out[0];
+  const sha = line?.split(/\s+/)[0];
+  if (!SHA.test(sha ?? '')) throw new Error(`${repo}: no commit for tag ${tag}`);
+  return sha;
+}
+
 const lock = readLock();
 let text = fs.readFileSync(LOCK, 'utf8');
-const bumps = [];
-const promotions = [];
+const releases = (repo) => github(`repos/${repo}/releases?per_page=50`).then((r) => r ?? []);
+const proposals = await planDocsReleases(lock, { releasesOf: releases, productReleasesOf: releases, tagSha });
 
-// 1. Content bumps: one head lookup per repo and branch.
-const heads = new Map();
-for (const product of doBumps ? lock.products : []) {
-  for (const section of product.sections) {
-    for (const ref of refsOf(section)) {
-      const key = `${ref.repo}#${ref.track}`;
-      if (!heads.has(key)) heads.set(key, headOf(ref.repo, ref.track));
-      const head = heads.get(key);
-      if (head !== ref.sha && !bumps.some((b) => b.repo === ref.repo && b.from === ref.sha)) {
-        bumps.push({ repo: ref.repo, track: ref.track, from: ref.sha, to: head, compare: `https://github.com/${ref.repo}/compare/${ref.sha}...${head}` });
-      }
-    }
+// 1. Content bumps (Latest only) and docs fix releases.
+const bumps = doBumps ? planBumps(lock, headOf) : [];
+const fixes = doBumps ? proposals.filter((p) => p.type === 'fix') : [];
+text = applyBumps(text, bumps);
+for (const f of fixes) text = applyDocsRelease(text, f);
+
+// 2. Promotions: a docs release the product has also released, then the legacy product-repo check.
+const promotions = [];
+for (const p of doPromotions ? proposals : []) {
+  if (p.type === 'new') {
+    text = applyDocsRelease(text, p);
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: true });
+  } else if (p.type === 'missing-product-release') {
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false });
   }
 }
-for (const b of bumps) text = text.replaceAll(`sha: ${b.from}`, `sha: ${b.to}`);
 
-// 2. Promotions: a newer GA release of a self-hosted distribution whose docs follow the version-in-path convention.
+// Legacy: a newer GA release of a self-hosted distribution whose docs follow the version-in-path convention.
 for (const product of doPromotions ? lock.products : []) {
   for (const section of product.sections) {
+    if (section.versions || section.self_hosted?.versions) continue; // versioned sections promote through docs releases
     const sh = section.self_hosted;
     if (!sh?.product_repo || !sh.version) continue;
     const releases = (await github(`repos/${sh.product_repo}/releases?per_page=20`)) ?? [];
@@ -80,7 +96,7 @@ for (const product of doPromotions ? lock.products : []) {
   }
 }
 
-const report = { bumps, promotions };
+const report = { bumps, fixes, promotions };
 console.log(JSON.stringify(report, null, 2));
 if (jsonOut) fs.writeFileSync(jsonOut, JSON.stringify(report, null, 2));
-if (write && (bumps.length || promotions.some((p) => p.docsReady))) fs.writeFileSync(LOCK, text);
+if (write && (bumps.length || fixes.length || promotions.some((p) => p.docsReady))) fs.writeFileSync(LOCK, text);
