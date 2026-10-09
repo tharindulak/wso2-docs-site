@@ -76,6 +76,7 @@ export default {
     './plugins/color-scheme-sync.js',
     './plugins/module-resolution.js',
   ],
+  clientModules: [path.join(here, 'src/client/full-load-links.js')],
   customFields: { catalogue, versionInfo, snapshot },
   themeConfig: {
     colorMode: { respectPrefersColorScheme: true },
