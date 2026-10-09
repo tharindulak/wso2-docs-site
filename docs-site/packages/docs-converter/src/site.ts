@@ -90,17 +90,41 @@ export function relativeImages(mdx: string, pageRel: string, route: string, exis
   }));
 }
 
-/** Copy to the static folder only the files pages still reference as /<route>/<file> (HTML, links, attachments). */
+const safeDecode = (s: string): string | undefined => { try { return decodeURI(s); } catch { return undefined; } };
+
+/** Relative HTML file references (src, href) and <ApiReference spec>, as `attr="x"` or `attr={"x"}`. */
+const RELATIVE_REF = /\b(?:src|href|spec)=\{?"((?![a-z][a-z0-9+.-]*:|\/|#)[^"\s<>{}]+)"/gi;
+
+/**
+ * Files a page references, as paths relative to the section route: absolute `/<route>/<file>` references, and
+ * relative HTML `src`/`href` and `<ApiReference spec>` resolved against the page's directory URL (as a browser
+ * does, and as specInfoFor does). References that resolve outside the route are left out.
+ */
+export function referencedFiles(text: string, pageRel: string, route: string): string[] {
+  const found: string[] = [];
+  const add = (p: string | undefined): void => { if (p && /\.[A-Za-z0-9]+$/.test(p)) found.push(p); };
+  const re = new RegExp(`/${route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^\\s"'()<>{}#?]+\\.[A-Za-z0-9]+)`, 'g');
+  for (const m of text.matchAll(re)) add(safeDecode(m[1]!));
+  const pageDir = `/${route}/${mkdocsUrl(pageRel.replace(/\.mdx$/, '.md'))}`.replace(/\/?$/, '/');
+  for (const m of text.matchAll(RELATIVE_REF)) {
+    const ref = safeDecode(m[1]!.replace(/[?#].*$/, ''));
+    if (!ref) continue;
+    const resolved = path.posix.resolve(pageDir, ref);
+    if (resolved.startsWith(`/${route}/`)) add(resolved.slice(route.length + 2));
+  }
+  return found;
+}
+
+/** Copy to the static folder only the files pages reference (absolute /<route>/<file>, or relative from HTML and API specs). */
 export function copyReferencedAssets(fromDir: string, pagesDir: string, toDir: string, route: string): number {
   const wanted = new Set<string>();
-  const re = new RegExp(`/${route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^\\s"'()<>{}#?]+\\.[A-Za-z0-9]+)`, 'g');
-  for (const rel of walk(pagesDir, isPage)) for (const m of fs.readFileSync(path.join(pagesDir, rel), 'utf8').matchAll(re)) wanted.add(decodeURI(m[1]!));
+  for (const rel of walk(pagesDir, isPage)) for (const f of referencedFiles(fs.readFileSync(path.join(pagesDir, rel), 'utf8'), rel, route)) wanted.add(f);
   let copied = 0;
   for (const rel of wanted) {
     const from = path.join(fromDir, rel);
     if (!path.resolve(from).startsWith(path.resolve(fromDir) + path.sep) || !fs.statSync(from, { throwIfNoEntry: false })?.isFile() || isPage(rel)) continue;
     const to = path.join(toDir, rel);
-    if (fs.existsSync(to)) continue;
+    if (!path.resolve(to).startsWith(path.resolve(toDir) + path.sep) || fs.existsSync(to)) continue;
     fs.mkdirSync(path.dirname(to), { recursive: true });
     fs.copyFileSync(from, to);
     copied++;

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles } from '../src/site.js';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -158,4 +158,30 @@ test('only assets still referenced by absolute path are copied to static', () =>
   assert.ok(fs.existsSync(path.join(to, 'assets/a.png')));
   assert.ok(fs.existsSync(path.join(to, 'files/c.zip')));
   assert.ok(!fs.existsSync(path.join(to, 'assets/b.png')));
+});
+
+test('relative HTML images, file links and API specs are copied to static, resolved against the page URL', () => {
+  const root = tempSource({
+    'docs/assets/img/learn/a.png': 'A', 'docs/apis/restapis/actions.yaml': 'openapi: 3.0.0', 'docs/files/guide.pdf': 'P', 'docs/assets/unused.png': 'U',
+    'docs/learn/b.png': 'B', 'secret.txt': 'S',
+    'pages/learn/configuring-reset.md': '<img src="../../assets/img/learn/a.png" />\n<a href={"../../files/guide.pdf"}>pdf</a>\n<img src="b.png" />',
+    'pages/apis/actions-rest-api.md': '<ApiReference spec="../../apis/restapis/actions.yaml" />',
+    'pages/learn/escape.md': '<img src="../../../../secret.txt" /> <img src="https://x.example/a.png" /> <a href="#x.png">x</a> <img src="%E0%A4%A.png" />',
+  });
+  const to = path.join(root, 'static');
+  assert.equal(copyReferencedAssets(path.join(root, 'docs'), path.join(root, 'pages'), to, 'demo'), 3);
+  for (const f of ['assets/img/learn/a.png', 'apis/restapis/actions.yaml', 'files/guide.pdf']) assert.ok(fs.existsSync(path.join(to, f)), f);
+  assert.ok(!fs.existsSync(path.join(to, 'learn/b.png')), 'b.png resolves to learn/configuring-reset/b.png, as in a browser');
+  assert.ok(!fs.existsSync(path.join(to, 'assets/unused.png')));
+  assert.ok(!fs.existsSync(path.join(to, 'secret.txt')));
+});
+
+test('referencedFiles resolves like a browser and never leaves the section route', () => {
+  assert.deepEqual(referencedFiles('<img src="img/a.png" />', 'guides/setup.md', 'demo'), ['guides/setup/img/a.png'], 'directory URLs');
+  assert.deepEqual(referencedFiles('<img src="img/a.png" />', 'guides/index.md', 'demo'), ['guides/img/a.png']);
+  assert.deepEqual(referencedFiles('<ApiReference spec="../../apis/x.yaml" />', 'apis/x-api.md', 'identity/7.1.0'), ['apis/x.yaml'], 'route with segments');
+  assert.deepEqual(referencedFiles('<img src="../../../x.png" />', 'a.md', 'demo'), [], 'outside the route');
+  assert.deepEqual(referencedFiles('<a href="../other/">x</a> <img src="data:image/png;base64,x" /> <a href="mailto:a@b.c">m</a>', 'a.md', 'demo'), [], 'pages, schemes');
+  assert.deepEqual(referencedFiles('<img src="bad%E0.png" /> /demo/bad%E0.png', 'a.md', 'demo'), [], 'malformed escapes are skipped, not thrown');
+  assert.deepEqual(referencedFiles('<img src="my%20shot.png?v=1" />', 'index.md', 'demo'), ['my shot.png']);
 });
