@@ -4,6 +4,7 @@
 //   npm run start:quick -- identity api-platform-apim
 // Run `npm run content -- <section ids>` first if the content changed. The full build stays `npm run build`.
 import { spawnSync } from 'node:child_process';
+import { withHeap } from './docusaurus.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -32,5 +33,5 @@ console.log(`${command === 'build' ? 'Building' : 'Serving'} ${[...new Set(secti
 
 const bin = path.join(root, 'node_modules/.bin/docusaurus');
 const args = command === 'build' ? ['build', 'site', '--out-dir', 'build-quick'] : ['start', 'site'];
-const result = spawnSync(bin, args, { cwd: root, stdio: 'inherit', env: { ...process.env, DOCS_SECTIONS: [...new Set(sections)].join(',') } });
+const result = spawnSync(bin, args, { cwd: root, stdio: 'inherit', env: { ...withHeap(), DOCS_SECTIONS: [...new Set(sections)].join(',') } });
 process.exit(result.status ?? 1);

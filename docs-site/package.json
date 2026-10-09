@@ -12,9 +12,9 @@
     "fetch": "node scripts/fetch-sources.mjs",
     "content": "npm run build:converter && node scripts/build-content.mjs",
     "check-source": "npm run build:converter && wso2-docs check",
-    "start": "docusaurus start site",
+    "start": "node scripts/docusaurus.mjs start site",
     "start:quick": "node scripts/build-sections.mjs start",
-    "build": "docusaurus build site",
+    "build": "node scripts/docusaurus.mjs build site",
     "build:quick": "node scripts/build-sections.mjs build",
     "serve": "docusaurus serve site"
   },
