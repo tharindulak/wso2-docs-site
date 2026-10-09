@@ -51,15 +51,20 @@ A section lists its releases under `versions:`, newest first (merged sections pu
 `live_window` (top level, now `1`) is how many versions per section the live build contains. Older versions are snapshots, built once and stored by key. It was 2 (Latest and the previous release) until the pilot showed a full live build at that window exceeds the 14 GB threshold; see the pilot measurements.
 
 ```sh
-npm run snapshots -- list [--json]                    # snapshots whose key is not stored yet
-npm run snapshots -- build <versionId> [--record-baseline]   # fetch-ready version -> stored snapshot
-npm run snapshots -- assemble <live-build> <out>      # merge stored snapshots into the live build
-npm run check-links -- <build-dir>                    # internal link check, e.g. site/build-merged
+npm run snapshots -- list [--json] [--missing]         # snapshot ids and keys; --missing: only keys not stored yet
+npm run snapshots -- build <versionId> [--record-baseline]   # fetch, convert, build, gate and store one snapshot
+npm run snapshots -- assemble <live-build> <out> [--allow-missing]   # merge stored snapshots (out may equal live-build)
+npm run check-links -- <build-dir> [--baselines link-baselines]      # internal link check; with baselines, only new breakage fails
+npm run preview -- [site/build-merged]                 # local static server (docusaurus serve 404s dotted paths like /identity/7.1.0/)
 ```
 
-A snapshot key is a hash of the source commit, exclude list, converter version and site chrome version, so a theme change rebuilds every snapshot. `build` needs the version's sources first (`node scripts/fetch-sources.mjs <versionId>`) and fails when broken internal links exceed the committed baseline `link-baselines/<versionId>.json`. A re-pin that introduces new source breakage needs `build <versionId> --record-baseline` in a reviewed PR.
+A snapshot key hashes the version's whole lock entry (source commit, paths, exclude list and the section settings it inherits), the converter, the site chrome and the navigation catalogue (groups, product names and blurbs, section labels and routes), so a theme change rebuilds every snapshot. A snapshot's output depends on nothing else: its pages map links only to their own version's former site, and its Products menu and product bar link to each section's root (`/<route>/`), which the live build always serves (a redirect to the landing page when a section has no index page). `build` checks the store first, then fetches the version's sources itself, and fails when broken internal links exceed the committed baseline `link-baselines/<versionId>.json`. A re-pin that introduces new source breakage needs `build <versionId> --record-baseline` in a reviewed PR.
 
-The PR check assembles stored snapshots, so it fails for a new or changed snapshot key until the snapshot workflow has stored it (or `node scripts/snapshots.mjs build <versionId>` ran locally against the same store). Run the snapshot workflow first.
+`npm run content` and `fetch-sources.mjs` skip snapshot versions unless they are named by version id (`build` does that).
+
+The PR check assembles the snapshots whose key is stored and reports the others as pending (a warning, not a failure): a PR that changes a key (a docs fix release, a promotion, a converter or theme change) can merge, and the snapshot workflow builds the new keys after merge. A deploy must assemble without `--allow-missing`, so it waits until every key is stored. The check fails on a Latest build error and on broken links that no committed baseline lists: the per-version files and `link-baselines/live.json` (live pages and links from snapshots into other sections). Re-record `live.json` with `node scripts/check-links.mjs site/build-merged --baselines link-baselines --record-live` in a reviewed PR when breakage is accepted.
+
+The live build needs a 12 GB heap (`DOCS_HEAP_MB`, default 12288; 8 GB fails at `live_window: 1`) and about 11 GB of disk for the merged output. The CI runner must have at least 16 GB of RAM: `ubuntu-latest` does on public repositories, but has 7 GB on private ones, which need a larger runner.
 
 `SNAPSHOT_STORE` chooses where snapshots live. Unset, it is the local directory `.cache/snapshots`. In CI it is `github-release:docs-site-snapshots` (a GitHub Release holding one tarball per key); that backend needs a GitHub remote and `GH_TOKEN`, and only the snapshot build job has write access.
 

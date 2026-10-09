@@ -11,8 +11,13 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
+    # The Latest-only live build needs about 12 GB of heap and about 11 GB of disk for the merged output (pilot
+    # measurements). ubuntu-latest has 16 GB RAM on public repositories but 7 GB on private ones: a private
+    # repository needs a larger runner here (docs-site/README.md, Versions).
     runs-on: ubuntu-latest
-    timeout-minutes: 90 # until the full merged build is measured (docs-site/README.md, Versions)
+    timeout-minutes: 120 # the pilot's live build took 47 min on a 16 GB laptop
+    env:
+      DOCS_HEAP_MB: 12288
     defaults:
       run:
         working-directory: docs-site
@@ -27,11 +32,14 @@ jobs:
           cache-dependency-path: docs-site/package-lock.json
       - run: npm ci --ignore-scripts
       - run: npm test
-      - run: node scripts/fetch-sources.mjs
+      - run: node scripts/fetch-sources.mjs # Latest only; snapshots come from the store
       - run: npm run content
-      - run: npx docusaurus build site
-      - run: node scripts/snapshots.mjs assemble site/build site/build-merged
+      - run: npm run build # scripts/docusaurus.mjs: the DOCS_HEAP_MB heap
+      # Merge stored snapshots in place (saves a copy of the live build). A snapshot whose key is not stored yet
+      # (changed by this PR) is a pending warning: the snapshot workflow builds it after merge.
+      - run: node scripts/snapshots.mjs assemble site/build site/build --allow-missing
         env:
           SNAPSHOT_STORE: github-release:docs-site-snapshots
           GH_TOKEN: ${{ github.token }}
-      - run: node scripts/check-links.mjs site/build-merged
+      # Fails on broken links that no committed baseline lists (link-baselines/: per-version files and live.json).
+      - run: node scripts/check-links.mjs site/build --baselines link-baselines

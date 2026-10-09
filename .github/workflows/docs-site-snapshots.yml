@@ -1,5 +1,6 @@
-# Build frozen versions (snapshots) whose key is not yet stored, as one matrix job each. Keys cover source commit,
-# exclude list, converter and site chrome, so a theme change rebuilds every snapshot.
+# Build frozen versions (snapshots) whose key is not yet stored, as one matrix job each. Keys cover the version's
+# lock entry, the converter, the site chrome and the navigation catalogue, so a theme change rebuilds every snapshot.
+# Pull-request CI reports keys not stored yet as pending; this workflow stores them after merge.
 name: docs-site snapshots
 on:
   push:
@@ -27,8 +28,11 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with: { node-version: 22, cache: npm, cache-dependency-path: docs-site/package-lock.json }
       - run: npm ci --ignore-scripts && npm run build:converter
+      # Only keys not stored yet; a failure fails this step (not hidden inside $(...)).
       - id: list
-        run: echo "matrix=$(node scripts/snapshots.mjs list --json)" >> "$GITHUB_OUTPUT"
+        run: |
+          m=$(node scripts/snapshots.mjs list --json --missing)
+          echo "matrix=$m" >> "$GITHUB_OUTPUT"
   build:
     needs: plan
     if: needs.plan.outputs.matrix != '[]'
@@ -47,15 +51,19 @@ jobs:
         with: { persist-credentials: false }
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with: { node-version: 22, cache: npm, cache-dependency-path: docs-site/package-lock.json }
-      - run: npm ci --ignore-scripts
-      - env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release view docs-site-snapshots --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create docs-site-snapshots --repo "$GITHUB_REPOSITORY" --prerelease --title "docs-site snapshots" --notes "Build output of frozen docs versions, by key. Do not edit."
+      - run: npm ci --ignore-scripts && npm run build:converter
+      # Fetch, convert and render run content code: no token in this step. The tarball goes to a local store.
       - env:
           SNAPSHOT_ID: ${{ matrix.snapshot.id }}
-        run: npm run build:converter && node scripts/fetch-sources.mjs "$SNAPSHOT_ID"
-      - env:
-          SNAPSHOT_ID: ${{ matrix.snapshot.id }}
-          SNAPSHOT_STORE: github-release:docs-site-snapshots
-          GH_TOKEN: ${{ github.token }}
+          SNAPSHOT_STORE: local:${{ runner.temp }}/snapshots
         run: node scripts/snapshots.mjs build "$SNAPSHOT_ID"
+      # Upload only: no content code runs with the write token. "already exists" from a parallel job is success.
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          SNAPSHOT_STORE: github-release:docs-site-snapshots
+          PACKED: ${{ runner.temp }}/snapshots
+        run: |
+          gh release view docs-site-snapshots --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            || gh release create docs-site-snapshots --repo "$GITHUB_REPOSITORY" --prerelease --title "docs-site snapshots" --notes "Build output of frozen docs versions, by key. Do not edit." \
+            || gh release view docs-site-snapshots --repo "$GITHUB_REPOSITORY" >/dev/null
+          node scripts/snapshots.mjs upload "$PACKED"

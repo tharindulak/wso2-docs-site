@@ -1,5 +1,6 @@
 // Convert every locked content source into generated/ for the Docusaurus site.
-// Usage: node scripts/build-content.mjs [--onboard] [sectionId ...]
+// Usage: node scripts/build-content.mjs [--onboard] [sectionId | versionId ...]
+//   Snapshot versions (older than live_window) convert only when named by version id (scripts/snapshots.mjs does).
 //   --onboard  for a section whose exclude list is empty, record today's failing pages as its exclude list
 //              (first onboarding only; afterwards the list may only shrink).
 //   --prune    remove pages that now convert from their exclude list.
@@ -19,6 +20,11 @@ const prune = args.includes('--prune');
 const only = new Set(args.filter((a) => !a.startsWith('--')));
 
 const write = (file, text) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
+
+const REDIRECT_MARK = '<!-- wso2-docs: section root redirect -->';
+/** A static page sending /<route>/ to the section's landing page (same site; the target is a generated path). */
+const escapeHtml = (t) => t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const redirectHtml = (target) => { const to = escapeHtml(target); return `<!doctype html>\n${REDIRECT_MARK}\n<html lang="en"><head><meta charset="utf-8"><title>Redirecting</title><meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${to}"><meta name="robots" content="noindex"></head>\n<body><p><a href="${to}">Continue to the documentation</a></p></body></html>\n`; };
 
 /** Excluded and failing pages send readers to the same page on the product's current site. */
 function redirectPage({ title, to, deploymentOptions }) {
@@ -94,7 +100,9 @@ function fillTemplatePages(product, section, outDir, sidebarFile) {
 
 /**
  * Links to a product's current docs site, for pages hosted here, become internal links (rewriteSiteLinks in @wso2/docs-converter).
- * Each version answers for its current site, that site's /en/latest/ form and (Latest) any `aliases` (former URLs).
+ * Each version answers for its current site; Latest also for the site's /en/latest/ form and any `aliases` (former URLs).
+ * A snapshot's pages map only to the snapshot itself, so its output depends on nothing else in generated/ (its key
+ * covers it); live pages map only to live versions.
  */
 function rewriteLinksToHostedPages(lock) {
   const sites = [];
@@ -112,7 +120,8 @@ function rewriteLinksToHostedPages(lock) {
     const add = (url, sub = '') => {
       if (!url) return;
       const route = sub ? `${v.route}/${sub}` : v.route;
-      for (const prefix of new Set([url, url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')])) sites.push({ prefix, route, hosts: hosts(sub) });
+      const prefixes = new Set([url, ...(latest ? [url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')] : [])]);
+      for (const prefix of prefixes) sites.push({ prefix, route, hosts: hosts(sub), owner: v.id, snapshot: v.status === 'snapshot' });
     };
     const refs = latest && v.kind === 'mkdocs-merge' ? [v.cloud, v.self_hosted] : [v];
     for (const ref of refs) add(ref.current_site);
@@ -123,13 +132,15 @@ function rewriteLinksToHostedPages(lock) {
     }
   }
   let total = 0;
+  const liveSites = sites.filter((x) => !x.snapshot);
   for (const { v } of all) {
     const docsDir = path.join(GENERATED, 'docs', v.id);
+    const own = v.status === 'snapshot' ? sites.filter((x) => x.owner === v.id) : liveSites;
     for (const rel of walk(docsDir, (r) => r.endsWith('.md'))) {
       const file = path.join(docsDir, rel);
       const text = fs.readFileSync(file, 'utf8');
       if (text.includes("from '@site/src/components/Redirect'")) continue;
-      const { text: out, rewritten } = rewriteSiteLinks(text, sites);
+      const { text: out, rewritten } = rewriteSiteLinks(text, own);
       if (rewritten) { fs.writeFileSync(file, out); total += rewritten; }
     }
   }
@@ -168,7 +179,8 @@ for (const product of lock.products) {
     for (const v of versions) {
       const outDir = path.join(GENERATED, 'docs', v.id);
       const staticDir = v.status === 'latest' ? path.join(GENERATED, 'static', v.route) : path.join(GENERATED, 'static-versions', v.id, v.route);
-      if (!only.size || only.has(section.id) || only.has(v.id)) {
+      // Snapshots are built by scripts/snapshots.mjs, which names them; a content run for the live build skips them.
+      if (v.status === 'snapshot' ? only.has(v.id) : !only.size || only.has(section.id) || only.has(v.id)) {
         fs.rmSync(outDir, { recursive: true, force: true });
         if (v.status !== 'latest') fs.rmSync(path.join(GENERATED, 'static-versions', v.id), { recursive: true, force: true });
         const report = { section: v.id, ...emptyReport() };
@@ -229,8 +241,16 @@ for (const product of manifest.products) for (const s of product.sections) {
   };
   write(path.join(GENERATED, 'static', s.route, 'versions.json'), JSON.stringify(doc));
   for (const v of s.versions.filter((x) => x.status !== 'confluence')) {
+    const docsDir = path.join(GENERATED, 'docs', v.id);
+    if (!fs.existsSync(docsDir)) continue;
     const dir = v.status === 'latest' ? path.join(GENERATED, 'static', v.route) : path.join(GENERATED, 'static-versions', v.id, v.route);
-    write(path.join(dir, 'pages.json'), JSON.stringify(pagePaths(path.join(GENERATED, 'docs', v.id))));
+    // home: where the version selector lands when this version lacks the reader's page (the index may be excluded).
+    const pages = pagePaths(docsDir);
+    write(path.join(dir, 'pages.json'), JSON.stringify({ pages, home: v.landing }));
+    // Latest without an index page: /<route>/ redirects to the landing, so snapshots can link every section's root.
+    const rootRedirect = path.join(dir, 'index.html');
+    if (v.status === 'latest' && !pages.includes('') && v.landing) write(rootRedirect, redirectHtml(`/${v.route}/${v.landing}`));
+    else if (fs.existsSync(rootRedirect) && fs.readFileSync(rootRedirect, 'utf8').includes(REDIRECT_MARK)) fs.rmSync(rootRedirect);
   }
 }
 write(path.join(GENERATED, 'manifest.json'), JSON.stringify(manifest, null, 2));

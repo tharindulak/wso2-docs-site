@@ -1,5 +1,6 @@
 // Run Docusaurus with enough memory for the docs site. Node's default heap (about 4 GB) runs out building
-// a few thousand pages ("JavaScript heap out of memory"). Default 8 GB; set DOCS_HEAP_MB to change it.
+// a few thousand pages ("JavaScript heap out of memory"). Default 12 GB (the pilot's Latest-only live build failed
+// at 8 GB); set DOCS_HEAP_MB to change it.
 // An explicit --max-old-space-size in NODE_OPTIONS wins.
 // Usage: node scripts/docusaurus.mjs <docusaurus arguments>   (for example: build site)
 import path from 'node:path';
@@ -8,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 export function withHeap(env = process.env) {
   if (/--max-old-space-size=/.test(env.NODE_OPTIONS ?? '')) return env;
-  const mb = Number(env.DOCS_HEAP_MB ?? 8192);
+  const mb = Number(env.DOCS_HEAP_MB ?? 12288);
   if (!Number.isInteger(mb) || mb < 1024) throw new Error(`DOCS_HEAP_MB must be a whole number of megabytes (1024 or more), got ${env.DOCS_HEAP_MB}`);
   return { ...env, NODE_OPTIONS: `${env.NODE_OPTIONS ?? ''} --max-old-space-size=${mb}`.trim() };
 }

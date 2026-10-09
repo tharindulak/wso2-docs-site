@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { navHash, snapshotKey, checkTarEntries, newBrokenLinks } from '../snapshots.mjs';
+import { navHash, snapshotKey, checkTarEntries, checkTarTypes, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
@@ -53,4 +53,33 @@ test('navigation hash ignores versions but follows names, groups, section labels
   assert.equal(hash({ ...base, sections: [{ ...base.sections[0], versions: [{ version: '2' }] }] }), h0);
   for (const h of [hash({ ...base, name: 'B' }), hash({ ...base, group: 'H' }), hash({ ...base, sections: [{ ...base.sections[0], label: 'T' }] }),
     hash(base, [{ id: 'x', name: 'X', group: 'G', href: 'https://x' }])]) assert.notEqual(h, h0);
+});
+
+test('snapshot key covers every inherited lock field but not the other versions', () => {
+  const k = snapshotKey(v, h);
+  for (const extra of [{ sparse: ['en'] }, { nav_root: 'Docs' }, { nav_drop: ['X'] }, { nav_pick: { a: 'b' } }, { only: 'a/' }, { skip: ['b/'] },
+    { former_site: 'https://x/en/{version}/' }, { current_site: 'https://x/en/4.4.0/' }]) assert.notEqual(snapshotKey({ ...v, ...extra }, h), k, Object.keys(extra)[0]);
+  assert.equal(snapshotKey({ ...v, versions: [{ version: '4.6.0', sha: 'f'.repeat(40) }], older_versions: 'https://x' }, h), k, 'other versions and Confluence links are not inputs');
+  assert.equal(snapshotKey({ ...v, exclude: ['b.md', 'a.md'] }, h), snapshotKey({ ...v, exclude: ['a.md', 'b.md'] }, h), 'exclude order');
+  const { id, ...rest } = v;
+  assert.equal(snapshotKey({ ...rest, id }, h), k, 'field order');
+});
+
+test('navigation hash follows blurbs and the group list', () => {
+  const base = { id: 'a', name: 'A', group: 'G', blurb: 'One', sections: [] };
+  const h0 = navHash({ groups: ['G'], products: [base] });
+  assert.notEqual(navHash({ groups: ['G'], products: [{ ...base, blurb: 'Two' }] }), h0);
+  assert.notEqual(navHash({ groups: ['G', 'H'], products: [base] }), h0);
+});
+
+test('tar entries must be regular files or directories', () => {
+  assert.doesNotThrow(() => checkTarTypes(['-rw-r--r--  0 u g 3 Oct 10 12:00 a/index.html', 'drwxr-xr-x  0 u g 0 Oct 10 12:00 a/']));
+  for (const bad of ['lrwxr-xr-x  0 u g 0 Oct 10 12:00 a/x -> /etc/passwd', 'hrw-r--r--  0 u g 0 Oct 10 12:00 a/y link to a/x', 'crw-r--r-- 0 u g 0 a/dev'])
+    assert.throws(() => checkTarTypes([bad]), /unsafe snapshot entry type/);
+  assert.doesNotThrow(() => checkTarEntries(['.snapshot-key', './.snapshot-key'], 'identity/7.1.0'));
+});
+
+test('content steps run without repository tokens', () => {
+  const env = withoutTokens({ PATH: '/bin', GH_TOKEN: 'x', GITHUB_TOKEN: 'y', ACTIONS_RUNTIME_TOKEN: 'z', DOCS_HEAP_MB: '1' });
+  assert.deepEqual(env, { PATH: '/bin', DOCS_HEAP_MB: '1' });
 });

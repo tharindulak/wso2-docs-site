@@ -1,5 +1,5 @@
 // Fetch every pinned content source: shallow, blob-filtered, sparse checkout of exactly the locked commit.
-// Usage: node scripts/fetch-sources.mjs [sectionId ...]     FETCH_ASSETS=0 skips images and other assets.
+// Usage: node scripts/fetch-sources.mjs [sectionId | versionId ...]     FETCH_ASSETS=0 skips images and other assets.
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -26,7 +26,8 @@ const wanted = new Map(); // repo@sha -> { repo, sha, sparse:Set }
 for (const product of lock.products) {
   for (const section of product.sections) {
     for (const v of sectionVersions(section, liveWindow(lock))) {
-      if (only.size && !only.has(section.id) && !only.has(v.id)) continue;
+      // Snapshot versions are fetched only when named (scripts/snapshots.mjs build does); the live build never reads them.
+      if (v.status === 'snapshot' ? !only.has(v.id) : only.size && !only.has(section.id) && !only.has(v.id)) continue;
       for (const ref of refsOf(v)) {
         const key = `${ref.repo}@${ref.sha}`;
         if (!wanted.has(key)) wanted.set(key, { ...ref, sparse: new Set() });

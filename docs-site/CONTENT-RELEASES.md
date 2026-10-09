@@ -23,10 +23,12 @@ A fix to a released version adds a fourth segment: `v4.8.0.1`, then `v4.8.0.2`. 
 | Release | What the bot opens | Approval |
 |---|---|---|
 | Fix (`v4.8.0.1`) | Bump PR | Auto-merges when the docs-site build passes |
-| New version (`v4.9.0`) | Promotion PR: it becomes Latest, the old Latest stays live as the previous release, older versions become snapshots | One approval from your product's docs team |
+| New version (`v4.9.0`) | Promotion PR: it becomes Latest; the old Latest and older versions are snapshots (the live build holds Latest only) | One approval from your product's docs team |
 | New version with no matching product GA release | An issue, no PR | Publish the product release, then the next daily run opens the PR |
 
-Only Latest tracks a branch (hourly bumps). Older versions stay pinned to a tag or commit.
+Only Latest tracks a branch (hourly bumps). Older versions stay pinned to a tag or commit, even when they pin the same commit as Latest (folders on one branch): a bump changes only the tracking entry.
+
+A fix or promotion changes snapshot keys. The PR's build passes with those snapshots reported as pending; the snapshot workflow builds and stores them after merge, and a deploy waits until every key is stored.
 
 ## Publish on or after the product's GA
 

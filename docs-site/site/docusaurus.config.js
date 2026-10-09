@@ -43,7 +43,10 @@ const docsPlugins = included.map(({ section, v }) => [
 ]);
 // Older versions ship their own static files (images, downloads) from generated/static-versions/<versionId>/.
 const versionStatics = included.filter(({ v }) => v.status !== 'latest').map(({ v }) => path.join(generated, 'static-versions', v.id));
-const versionInfo = Object.fromEntries(entries.map(({ section, v }) => [v.id, {
+// A snapshot bundle is a function of its key (scripts/snapshots.mjs): it carries only its own version's info, and a
+// catalogue from lock-file fields the key's navigation hash covers (groups, product names and blurbs, section labels
+// and routes, link-outs). Section links then go to /<route>/, which the live build serves for every section.
+const versionInfo = Object.fromEntries(entries.filter(({ v }) => !snapshot || v.id === snapshot).map(({ section, v }) => [v.id, {
   sectionId: section.id, version: v.version, label: v.label, status: v.status, latestPath: `/${section.route}/`, cloud: section.cloud,
 }]));
 
@@ -51,7 +54,9 @@ const versionInfo = Object.fromEntries(entries.map(({ section, v }) => [v.id, {
 const catalogue = {
   groups: manifest.groups,
   products: [
-    ...manifest.products.map((p) => ({ ...p, sections: p.sections.map(({ id, label, route, version, landing }) => ({ pluginId: id, label, path: `/${route}/`, landing: `/${route}/${landing ?? ''}`, version, versionsUrl: `/${route}/versions.json` })) })),
+    ...manifest.products.map(({ id, name, group, blurb, sections }) => ({ id, name, group, blurb, sections: sections.map(({ id: sid, label, route, landing }) => ({
+      pluginId: sid, label, path: `/${route}/`, landing: `/${route}/${snapshot ? '' : landing ?? ''}`, versionsUrl: `/${route}/versions.json`,
+    })) })),
     ...manifest.linkOut.map((p) => ({ ...p, href: p.href })),
   ],
 };

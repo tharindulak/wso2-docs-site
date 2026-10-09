@@ -25,7 +25,11 @@ export function createStore(spec = process.env.SNAPSHOT_STORE ?? 'local:.cache/s
     if (!/^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo ?? '')) throw new Error('GITHUB_REPOSITORY must be owner/name');
     const gh = (...a) => execFileSync('gh', [...a, '--repo', repo], { stdio: ['ignore', 'pipe', 'pipe'] }).toString();
     let names = null;
-    const list = () => (names ??= new Set(JSON.parse(gh('release', 'view', arg, '--json', 'assets')).assets.map((a) => a.name)));
+    const view = () => {
+      try { return JSON.parse(gh('release', 'view', arg, '--json', 'assets')).assets.map((a) => a.name); }
+      catch (e) { if (/release not found/i.test(String(e.stderr ?? e.message))) return []; throw e; } // nothing stored yet
+    };
+    const list = () => (names ??= new Set(view()));
     return {
       has: (key) => list().has(`${checkKey(key)}.tgz`),
       get: (key, dest) => gh('release', 'download', arg, '--pattern', `${checkKey(key)}.tgz`, '--output', dest, '--clobber'),
