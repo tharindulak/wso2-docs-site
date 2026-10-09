@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { snapshotKey, checkTarEntries, newBrokenLinks } from '../snapshots.mjs';
+import { navHash, snapshotKey, checkTarEntries, newBrokenLinks } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
@@ -14,7 +14,7 @@ test('snapshot key changes with source, exclude list, converter and chrome', () 
   assert.match(k, /^[0-9a-f]{64}$/);
   assert.equal(snapshotKey({ ...v }, { ...h }), k, 'deterministic');
   for (const changed of [snapshotKey({ ...v, sha: 'd'.repeat(40) }, h), snapshotKey({ ...v, exclude: ['a.md'] }, h),
-    snapshotKey(v, { ...h, converter: 'x' }), snapshotKey(v, { ...h, chrome: 'x' })]) assert.notEqual(changed, k);
+    snapshotKey(v, { ...h, converter: 'x' }), snapshotKey(v, { ...h, chrome: 'x' }), snapshotKey(v, { ...h, nav: 'n1' })]) assert.notEqual(changed, k);
 });
 
 test('unsafe tar entries are refused', () => {
@@ -44,4 +44,18 @@ test('only broken links missing from the baseline fail the build', () => {
   assert.deepEqual(newBrokenLinks([a, b, c], [a, c]), [b], 'matched by page and link together');
   assert.deepEqual(newBrokenLinks([a], []), [a], 'no baseline: every broken link is new');
   assert.deepEqual(newBrokenLinks([], [a]), [], 'fixed links are not an error');
+});
+
+test('navigation hash ignores versions but follows names, groups and section labels', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nav-'));
+  const file = path.join(dir, 'manifest.json');
+  const write = (p) => fs.writeFileSync(file, JSON.stringify({ products: [p] }));
+  const base = { id: 'a', name: 'A', group: 'G', sections: [{ id: 's', label: 'S', route: 'a/s', versions: [{ version: '1' }] }] };
+  assert.equal(navHash(path.join(dir, 'missing.json')), '');
+  write(base);
+  const h0 = navHash(file);
+  write({ ...base, sections: [{ ...base.sections[0], versions: [{ version: '2' }] }] });
+  assert.equal(navHash(file), h0);
+  for (const p of [{ ...base, name: 'B' }, { ...base, group: 'H' }, { ...base, sections: [{ ...base.sections[0], label: 'T' }] }]) { write(p); assert.notEqual(navHash(file), h0); }
+  fs.rmSync(dir, { recursive: true });
 });

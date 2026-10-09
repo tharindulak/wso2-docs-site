@@ -9,13 +9,13 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { readLock, liveWindow, ROOT } from './lib.mjs';
+import { readLock, liveWindow, ROOT, GENERATED } from './lib.mjs';
 import { sectionVersions } from './versions.mjs';
 import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
 
-const CHROME = ['site/src', 'site/plugins', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'package-lock.json'];
+const CHROME = ['site/src', 'site/plugins', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
 const CONVERTER = ['packages/docs-converter/src'];
 const BASELINES = path.join(ROOT, 'link-baselines');
 const linkKey = (b) => `${b.page}\n${b.link}`;
@@ -26,9 +26,17 @@ export function newBrokenLinks(broken, baseline) {
   return broken.filter((b) => !known.has(linkKey(b)));
 }
 
-export function snapshotKey(v, { converter, chrome }) {
-  const input = { id: v.id, repo: v.repo, sha: v.sha, mkdocs: v.mkdocs ?? null, docs: v.docs ?? null, sidebar: v.sidebar ?? null, exclude: [...(v.exclude ?? [])].sort(), converter, chrome };
+export function snapshotKey(v, { converter, chrome, nav = '' }) {
+  const input = { id: v.id, repo: v.repo, sha: v.sha, mkdocs: v.mkdocs ?? null, docs: v.docs ?? null, sidebar: v.sidebar ?? null, exclude: [...(v.exclude ?? [])].sort(), converter, chrome, nav };
   return crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex');
+}
+
+/** Hash of the navigation catalogue (products and section labels/routes, not versions) from the generated manifest. */
+export function navHash(manifestPath = path.join(GENERATED, 'manifest.json')) {
+  if (!fs.existsSync(manifestPath)) return '';
+  const m = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  const nav = (m.products ?? []).map((p) => [p.id, p.name, p.group, (p.sections ?? []).map((s) => [s.id, s.label, s.route])]);
+  return crypto.createHash('sha256').update(JSON.stringify(nav)).digest('hex');
 }
 
 export function inputHashes(root = ROOT) {
@@ -38,7 +46,7 @@ export function inputHashes(root = ROOT) {
     const dirty = git('status', '--porcelain', '--', ...paths);
     return dirty ? `${trees}-dirty-${Date.now()}` : trees;
   };
-  return { converter: hash(CONVERTER), chrome: hash(CHROME) };
+  return { converter: hash(CONVERTER), chrome: hash(CHROME), nav: navHash() };
 }
 
 export function checkTarEntries(names, route) {
