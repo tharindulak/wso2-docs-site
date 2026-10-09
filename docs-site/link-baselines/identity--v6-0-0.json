@@ -1,0 +1,814 @@
+[
+ {
+  "page": "identity/6.0.0/apis/approvals-rest-api/index.html",
+  "link": "/identity/6.0.0/guides/workflows/adding-a-new-workflow-definition/"
+ },
+ {
+  "page": "identity/6.0.0/apis/approvals-rest-api/index.html",
+  "link": "/identity/6.0.0/guides/workflows/engaging-a-workflow-in-an-operation/"
+ },
+ {
+  "page": "identity/6.0.0/apis/scim-1.1-apis/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/configure-cors/index.html",
+  "link": "/identity/6.0.0/develop/application-rest-api/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/configure-cors/index.html",
+  "link": "/identity/6.0.0/develop/configs-rest-api/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/configure-cors/index.html",
+  "link": "/identity/6.0.0/develop/cors-rest-api/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/configure-hazelcast/index.html",
+  "link": "/identity/6.0.0/performance/configure-cache-layers/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/data-purging/index.html",
+  "link": "/identity/6.0.0/guides/login/authentication-session-persistence/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/deployment-options/docker-desktop/index.html",
+  "link": "/identity/6.0.0/quick-starts/overview/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/deployment-options/eks/index.html",
+  "link": "/identity/6.0.0/quick-starts/overview/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/deployment-options/minikube/index.html",
+  "link": "/identity/6.0.0/quick-starts/overview/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/elk-analytics-installation-guide/index.html",
+  "link": "/identity/6.0.0/setup/installing-the-product/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/ext-pep-endpoint-notifications/index.html",
+  "link": "/identity/6.0.0/learn/configuring-local-and-outbound-authentication-for-a-service-provider/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/ext-pep-endpoint-notifications/index.html",
+  "link": "/identity/6.0.0/setup/configuring-email-sending/"
+ },
+ {
+  "page": "identity/6.0.0/deploy/performance/improve-pdp-performance/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/pdp-caching-techniques.jpg"
+ },
+ {
+  "page": "identity/6.0.0/deploy/security/blue-green-data-encryption-keyrotation/index.html",
+  "link": "/identity/6.0.0/administer/blue-green-data-encryption-keyrotation/#tables-that-support-syncing"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/applications/new-application/index.html",
+  "link": "/identity/6.0.0/guides/applications/add/oidc"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/applications/new-application/index.html",
+  "link": "/identity/6.0.0/guides/applications/add/saml"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/applications/new-application/index.html",
+  "link": "/identity/6.0.0/guides/applications/add/spa"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/applications/sdks/javascript-oidc/index.html",
+  "link": "/identity/6.0.0/developer-portal/applications/sdks/javascript-oidc/LICENSE/"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/assets/img/icons/identity-providers/facebook.png"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/assets/img/icons/identity-providers/google.png"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/assets/img/icons/identity-providers/manual.png"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/assets/img/icons/identity-providers/oidc.png"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/identity-providers/add/facebook"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/identity-providers/add/google"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/identity-providers/add/manual-setup"
+ },
+ {
+  "page": "identity/6.0.0/developer-portal/identity-providers/new-identity-provider/index.html",
+  "link": "/identity/6.0.0/identity-providers/add/oidc"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/client-credentials/index.html",
+  "link": "/identity/6.0.0/quick-starts/client-credentials-playground/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/configure-refresh-token/index.html",
+  "link": "/identity/6.0.0/guides/references/concepts/authorization/access-token/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/get-user-claims-as-a-jwt/index.html",
+  "link": "/identity/6.0.0/guides/access-delegation/get-user-claims-as-a-jwt/insertlink/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/get-user-claims-as-a-jwt/index.html",
+  "link": "/identity/6.0.0/oauth-token-validation/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/implicit/index.html",
+  "link": "/identity/6.0.0/quick-starts/implicit-playground/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/issue-new-tokens-per-request/index.html",
+  "link": "/identity/6.0.0/guides/access-delegation/issue-new-tokens-per-request/insertlink/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/microprofile-jwt/index.html",
+  "link": "/identity/6.0.0/quick-starts/microprofile-jwt-sample"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/microprofile-jwt/index.html",
+  "link": "/identity/6.0.0/quick-starts/microprofile-jwt-sample/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/mutual-tls-for-oauth-clients/index.html",
+  "link": "/identity/6.0.0/guides/access-delegation/mutual-tls-for-oauth-clients/learn/invoke-the-oauth-introspection-endpoint/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/oauth-grant-types/index.html",
+  "link": "/identity/6.0.0/guides/references/concepts/authorization/access-token/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/oauth-grant-types/index.html",
+  "link": "/identity/6.0.0/quick-starts/client-credentials-playground/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/oauth-grant-types/index.html",
+  "link": "/identity/6.0.0/quick-starts/password-playground/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/oauth-token-validation/index.html",
+  "link": "/identity/6.0.0/get-user-claims-as-a-jwt/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/oauth-token-validation/index.html",
+  "link": "/identity/6.0.0/guides/access-delegation/oauth-token-validation/insertlink/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/oauth-token-validation/index.html",
+  "link": "/identity/6.0.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/6.0.0/guides/access-delegation/password-grant/index.html",
+  "link": "/identity/6.0.0/quick-starts/password-playground/"
+ },
+ {
+  "page": "identity/6.0.0/guides/adaptive-auth/adaptive-auth-with-function-lib/index.html",
+  "link": "/identity/6.0.0/quick-starts/adaptive-auth-overview/"
+ },
+ {
+  "page": "identity/6.0.0/guides/adaptive-auth/adaptive-auth-with-function-lib/index.html",
+  "link": "/identity/6.0.0/quick-starts/adaptive-auth-with-function-lib-sample"
+ },
+ {
+  "page": "identity/6.0.0/guides/adaptive-auth/work-with-acr-amr/index.html",
+  "link": "/identity/6.0.0/adaptive-auth-with-function-lib/"
+ },
+ {
+  "page": "identity/6.0.0/guides/adaptive-auth/work-with-acr-amr/index.html",
+  "link": "/identity/6.0.0/configure-adaptive-auth/"
+ },
+ {
+  "page": "identity/6.0.0/guides/adaptive-auth/work-with-acr-amr/index.html",
+  "link": "/identity/6.0.0/quick-starts/acr-based-adaptive-auth"
+ },
+ {
+  "page": "identity/6.0.0/guides/adaptive-auth/work-with-acr-amr/index.html",
+  "link": "/identity/6.0.0/quick-starts/adaptive-auth-overview/"
+ },
+ {
+  "page": "identity/6.0.0/guides/applications/outbound-provisioning-for-sp/index.html",
+  "link": "/identity/6.0.0/learn/outbound-provisioning/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/clear-cache/index.html",
+  "link": "/identity/6.0.0/learn/improving-xacml-pdp-performance-with-caching-techniques/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/clear-cache/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/enable-disable-policy/index.html",
+  "link": "/identity/6.0.0/learn/publishing-a-xacml-policy/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/enable-disable-policy/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/evaluate-a-xacml-policy/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/fine-grained-auth-json/index.html",
+  "link": "/identity/6.0.0/setup/installing-the-product/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/fine-grained-auth-xacml/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/fine-grained-auth-xacml/index.html",
+  "link": "/identity/6.0.0/setup/running-the-product/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/mdp-authorize-resources/index.html",
+  "link": "/identity/6.0.0/setup/installing-the-product/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/mdp-repeating-attr/index.html",
+  "link": "/identity/6.0.0/setup/installing-the-product/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/mdp-requests/index.html",
+  "link": "/identity/6.0.0/learn/working-with-mdp-requests-by-repeating-attribute-categories/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/mdp-requests/index.html",
+  "link": "/identity/6.0.0/learn/working-with-mdp-requests-in-json-format/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/mdp-requests/index.html",
+  "link": "/identity/6.0.0/learn/working-with-mdp-requests-to-authorize-hierarchical-resources/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/mdp-requests/index.html",
+  "link": "/identity/6.0.0/references/access-control-and-entitlement-management/#mdp"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/publish-a-policy/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/disable-policy.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/publish-a-policy/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/enable-policy.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/publish-a-policy/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/view-status/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/xacml-engine/index.html",
+  "link": "/identity/6.0.0/get-started/access-control-and-entitlement-management/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/xacml-engine/index.html",
+  "link": "/identity/6.0.0/learn/configuring-the-policy-administration-point/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/xacml-engine/index.html",
+  "link": "/identity/6.0.0/learn/creating-a-xacml-policy/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/xacml-engine/index.html",
+  "link": "/identity/6.0.0/learn/publishing-a-xacml-policy/"
+ },
+ {
+  "page": "identity/6.0.0/guides/authorization/xacml-engine/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/consent-mgt/manage-consent-purposes/index.html",
+  "link": "/identity/6.0.0/learn/self-registration-and-account-confirmation/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-federation/iwa-kerberos/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/adding-wso2-is-url.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-federation/iwa-kerberos/index.html",
+  "link": "/identity/6.0.0/learn/configuring-iwa-single-sign-on/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-federation/iwa-kerberos/index.html",
+  "link": "/identity/6.0.0/learn/integrated-windows-authentication-overview/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-federation/iwa-kerberos/index.html",
+  "link": "/identity/6.0.0/setup/configuring-a-read-write-active-directory-user-store/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-federation/microsoft-azure/index.html",
+  "link": "/identity/6.0.0/quick-starts/ms-azure-as-federated-authenticator-sample"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-federation/microsoft-login/index.html",
+  "link": "/identity/6.0.0/assets/img/guides/idp/microsoft-idp/register-an-application.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-active-directory-user-stores-for-scim-1.1-based-inbound-provisioning/index.html",
+  "link": "/identity/6.0.0/develop/scim-1.1-apis/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-recaptcha-for-self-registration/index.html",
+  "link": "/identity/6.0.0/deploy/configure-recaptcha.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-user-stores-for-scim1.1-based-inbound-provisioning/index.html",
+  "link": "/identity/6.0.0/develop/scim-1.1-apis/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-user-stores-for-scim1.1-based-inbound-provisioning/index.html",
+  "link": "/identity/6.0.0/learn/adding-claim-mapping/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-user-stores-for-scim1.1-based-inbound-provisioning/index.html",
+  "link": "/identity/6.0.0/learn/claim-management/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-user-stores-for-scim1.1-based-inbound-provisioning/index.html",
+  "link": "/identity/6.0.0/learn/configuring-active-directory-user-stores-for-scim-1.1-based-inbound-provisioning/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/configure-user-stores-for-scim1.1-based-inbound-provisioning/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/hubspot-provisioning/index.html",
+  "link": "/identity/6.0.0/assets/attachments/MarketingSoftwareIntegrationCompositeApplication_1.0.0.car"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/manage-user-attributes/index.html",
+  "link": "/identity/6.0.0/deploy/write-a-custom-user-store-manager/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/managing-roles/index.html",
+  "link": "/identity/6.0.0/guides/identity-lifecycles/managing-roles/insert-scim2-concept/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/recaptcha-username-recovery/index.html",
+  "link": "/identity/6.0.0/deploy/configure-recaptcha.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/recover-username/index.html",
+  "link": "/identity/6.0.0/assets/img/using-wso2-identity-server/username-recovery.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/identity-lifecycles/recover-username/index.html",
+  "link": "/identity/6.0.0/develop/writing-a-custom-event-handler/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/configure-iwa-on-linux/index.html",
+  "link": "/identity/6.0.0/deploy/configuring-a-read-write-active-directory-user-store/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/configure-iwa-on-linux/index.html",
+  "link": "/identity/6.0.0/references/concepts/authentication/integrated-windows-authentication-overview/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/configure-iwa-single-sign-on/index.html",
+  "link": "/identity/6.0.0/references/concepts/authentication/integrated-windows-authentication-overview/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/configure-single-sign-on-for-native-ios-applications-with-wso2-identity-server/index.html",
+  "link": "/identity/6.0.0/assets/img/guides/pickup-logout-signin-error.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/configure-ws-federation-single-sign-on/index.html",
+  "link": "/identity/6.0.0/guides/login/webapp-ws-federation.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-dynamic-crm-with-wsfederation/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-is/index.html",
+  "link": "/identity/6.0.0/learn/configuring-office365-saml2-with-wso2-identity-server/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-is/index.html",
+  "link": "/identity/6.0.0/learn/configuring-office365-ws-federation-with-wso2-is/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/claim-configuration-azure-id.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/claim-immutable-id.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/claim-user-principle.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/idp-entity-id.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/login-error.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/skype-server-value.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/sts-configuration.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/user-name-token.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/usernametoken-authentication.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/learn/adding-claim-mapping/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/learn/configuring-azure-active-directory-to-trust-wso2-identity-server/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/learn/configuring-ws-trust-security-token-service/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/learn/using-email-address-as-the-username/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-ws-trust/index.html",
+  "link": "/identity/6.0.0/setup/configuring-a-read-write-active-directory-user-store/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/learn/adding-claim-mapping/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/learn/configuring-azure-active-directory-to-trust-wso2-identity-server/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/learn/configuring-office-365-ws-federation-with-identity-server/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/learn/configuring-ws-federation-single-sign-on/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/learn/using-email-address-as-the-username"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/learn/using-email-address-as-the-username/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365-using-wsfed/index.html",
+  "link": "/identity/6.0.0/setup/configuring-a-read-write-active-directory-user-store/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365saml-multiple-domains/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/configure-azure-to-trust-wso2is.jpg"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365saml-using-is/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/azure-ad-admin-credentials.jpg"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365saml-using-is/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/verify-domain-availability.jpg"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-office365saml-using-is/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/verify-federation-settings.jpg"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-opencart-using-is/index.html",
+  "link": "/identity/6.0.0/learn/configuring-inbound-authentication-for-a-service-provider/#configuring-inbound-authentication-with-saml2-web-sso"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-opencart-using-is/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/app-id-of-fb-app.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/login-url-for-salesforce.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/saml-sso-setting.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/sso-setting-name.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/learn/claim-management/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/learn/logging-in-to-salesforce-with-facebook/#salesforce-step8"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-iwa/index.html",
+  "link": "/identity/6.0.0/assets/img/tutorials/super-admin-config.png"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-iwa/index.html",
+  "link": "/identity/6.0.0/learn/configuring-iwa-single-sign-on/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-iwa/index.html",
+  "link": "/identity/6.0.0/learn/integrated-windows-authentication-overview/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-iwa/index.html",
+  "link": "/identity/6.0.0/setup/configuring-user-stores/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-salesforce-using-iwa/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-wordpress-using-is/index.html",
+  "link": "/identity/6.0.0/learn/configuring-inbound-authentication-for-a-service-provider/#configuring-inbound-authentication-with-saml2-web-sso"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/log-into-wordpress-using-is/index.html",
+  "link": "/identity/6.0.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/multi-attribute-login/index.html",
+  "link": "/identity/6.0.0/learn/configuring-uniqueness-of-claims/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/oidc-auth-code-pkce/index.html",
+  "link": "/identity/6.0.0/guides/login/oidc-auth-code-pkce-public-clients.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/oidc-request-object/index.html",
+  "link": "/identity/6.0.0/oidc-parameters-in-auth-request/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/oidc-request-object/index.html",
+  "link": "/identity/6.0.0/quick-starts/request-object/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/request-attributes/index.html",
+  "link": "/identity/6.0.0/quick-starts/attribute-config-sample"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/request-attributes/index.html",
+  "link": "/identity/6.0.0/sp-attributes-config/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/use-certificates-with-applications/index.html",
+  "link": "/identity/6.0.0/oidc-token-encryption/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/webapp-sts/index.html",
+  "link": "/identity/6.0.0/guides/login/webapp-sts/insertlink/"
+ },
+ {
+  "page": "identity/6.0.0/guides/login/webapp-sts/index.html",
+  "link": "/identity/6.0.0/quick-starts/webapp-sts-sample"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/inherence-factor/index.html",
+  "link": "/identity/6.0.0/3fa-basic-fido-biometrics/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/inherence-factor/index.html",
+  "link": "/identity/6.0.0/mepin/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/knowledge-factor/index.html",
+  "link": "/identity/6.0.0/iwa/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/knowledge-factor/index.html",
+  "link": "/identity/6.0.0/password/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/possession-factor/index.html",
+  "link": "/identity/6.0.0/2fa-email-otp/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/possession-factor/index.html",
+  "link": "/identity/6.0.0/2fa-fido/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/possession-factor/index.html",
+  "link": "/identity/6.0.0/2fa-sms-otp/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/possession-factor/index.html",
+  "link": "/identity/6.0.0/2fa-totp/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/possession-factor/index.html",
+  "link": "/identity/6.0.0/x509/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/username-and-password/index.html",
+  "link": "/identity/6.0.0/learn/configuring-local-and-outbound-authentication-for-a-service-provider/"
+ },
+ {
+  "page": "identity/6.0.0/guides/mfa/x509/index.html",
+  "link": "/identity/6.0.0/learn/configuring-users-roles-and-permissions/"
+ },
+ {
+  "page": "identity/6.0.0/guides/password-mgt/password-policies/index.html",
+  "link": "/identity/6.0.0/get-started/provisioning-architecture/#jit-provisioning"
+ },
+ {
+  "page": "identity/6.0.0/guides/password-mgt/recaptcha-challenge-question-attempts/index.html",
+  "link": "/identity/6.0.0/deploy/configure-recaptcha.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/password-mgt/recaptcha-password-recovery/index.html",
+  "link": "/identity/6.0.0/deploy/configure-recaptcha.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/passwordless/fido/index.html",
+  "link": "/identity/6.0.0/guides/mfa/2fa-fido.md/"
+ },
+ {
+  "page": "identity/6.0.0/guides/user-mgt/associating-user-accounts/index.html",
+  "link": "/identity/6.0.0/guides/user-mgt/associating-user-accounts/insert-link-api/"
+ },
+ {
+  "page": "identity/6.0.0/guides/workflows/add-a-new-workflow-definition/index.html",
+  "link": "/identity/6.0.0/develop/extend/workflows/write-a-custom-workflow-template/"
+ },
+ {
+  "page": "identity/6.0.0/includes/oidc-session-management/index.html",
+  "link": "/identity/6.0.0/learn/openid-connect-discovery/"
+ },
+ {
+  "page": "identity/6.0.0/includes/oidc-session-management/index.html",
+  "link": "/identity/6.0.0/learn/openid-connect-dynamic-client-registration/"
+ },
+ {
+  "page": "identity/6.0.0/includes/register-application-portal/index.html",
+  "link": "/identity/6.0.0/includes/register-application-portal/insertlink/"
+ },
+ {
+  "page": "identity/6.0.0/references/api-permissions/index.html",
+  "link": "/identity/6.0.0/develop/apis/soap-apis/"
+ },
+ {
+  "page": "identity/6.0.0/references/architecture/architecture/index.html",
+  "link": "/identity/6.0.0/get-started/user-management-architecture/"
+ },
+ {
+  "page": "identity/6.0.0/references/community/index.html",
+  "link": "/identity/6.0.0/develop/extend/work-with-the-source-code/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/intro-saml/index.html",
+  "link": "/identity/6.0.0/quick-starts/sso-for-saml-apps/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/intro-saml/index.html",
+  "link": "/identity/6.0.0/quick-starts/webapp-saml-sample/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/overview/index.html",
+  "link": "/identity/6.0.0/authorization/access-token.md/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/overview/index.html",
+  "link": "/identity/6.0.0/authorization/refresh-token.md/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-back-channel/index.html",
+  "link": "/identity/6.0.0/intro-saml/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-back-channel/index.html",
+  "link": "/identity/6.0.0/quick-starts/saml-back-channel-logout/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-back-channel/index.html",
+  "link": "/identity/6.0.0/saml-front-channel/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-front-channel/index.html",
+  "link": "/identity/6.0.0/intro-saml/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-front-channel/index.html",
+  "link": "/identity/6.0.0/quick-starts/saml-front-channel-logout/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-front-channel/index.html",
+  "link": "/identity/6.0.0/quick-starts/use-artifact-binding-sample/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml-front-channel/index.html",
+  "link": "/identity/6.0.0/saml-back-channel/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authentication/saml2-artifact-binding/index.html",
+  "link": "/identity/6.0.0/quick-starts/use-artifact-binding-sample/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authorization/access-control/index.html",
+  "link": "/identity/6.0.0/learn/fine-grained-authorization-using-xacml-requests-in-json-format/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authorization/access-control/index.html",
+  "link": "/identity/6.0.0/learn/working-with-mdp-requests-in-json-format/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authorization/access-control/index.html",
+  "link": "/identity/6.0.0/learn/working-with-xacml-multiple-decision-profile-requests/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authorization/access-control/index.html",
+  "link": "/identity/6.0.0/setup/configuring-the-realm/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authorization/device-flow-grant/index.html",
+  "link": "/identity/6.0.0/learn/refresh-token-grant/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/compliance/ccpa/index.html",
+  "link": "/identity/6.0.0/apis/use-the-personal-information-export-rest-apis/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/identity-bus/index.html",
+  "link": "/identity/6.0.0/get-started/identity-anti-patterns-and-the-identity-bus/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml-structure-and-syntax/index.html",
+  "link": "/identity/6.0.0/learn/fine-grained-authorization-using-xacml-requests-in-json-format/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml-structure-and-syntax/index.html",
+  "link": "/identity/6.0.0/learn/working-with-mdp-requests-in-json-format/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml-structure-and-syntax/index.html",
+  "link": "/identity/6.0.0/learn/working-with-xacml-multiple-decision-profile-requests/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml2-policy-writing/index.html",
+  "link": "/identity/6.0.0/get-started/access-control-and-entitlement-management/#why-xacml"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml2-policy-writing/index.html",
+  "link": "/identity/6.0.0/get-started/access-control-and-entitlement-management/#xacml-policy-language-structure-and-syntax"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml2-policy-writing/index.html",
+  "link": "/identity/6.0.0/learn/creating-a-xacml-policy/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/access-control/xacml3-policy-using-xpath/index.html",
+  "link": "/identity/6.0.0/administer/evaluating-a-xacml-policy/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/customize-the-authentication-endpoint/index.html",
+  "link": "/identity/6.0.0/host-authentication-endpoint-on-a-different-server/"
+ },
+ {
+  "page": "identity/6.0.0/references/extend/oauth2/write-a-custom-oauth-2.0-grant-type/index.html",
+  "link": "/identity/6.0.0/assets/attachments/custom-grant.zip"
+ }
+]

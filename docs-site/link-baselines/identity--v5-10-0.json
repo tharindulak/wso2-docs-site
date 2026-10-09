@@ -1,0 +1,198 @@
+[
+ {
+  "page": "identity/5.10.0/compliance/electronic-identification-authentication-and-trust-services-regulation/index.html",
+  "link": "/identity/5.10.0/eidas-saml-attribute-profile-support-via-wso2-identity-server/"
+ },
+ {
+  "page": "identity/5.10.0/develop/customizing-login-pages-for-service-providers/index.html",
+  "link": "/identity/5.10.0/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.10.0/develop/enable-mobile-verification-for-an-updated-mobile-number/index.html",
+  "link": "/identity/5.10.0/develop/using-the-scim-2.0-rest-apis/"
+ },
+ {
+  "page": "identity/5.10.0/develop/instagram-authenticator/index.html",
+  "link": "/identity/5.10.0/develop/instagram-authenticator/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.10.0/develop/instagram-authenticator/index.html",
+  "link": "/identity/5.10.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.10.0/develop/keystore-rest-api/index.html",
+  "link": "/identity/5.10.0/develop/administer/adding-new-tenant.md/"
+ },
+ {
+  "page": "identity/5.10.0/develop/managing-users-and-roles-with-apis/index.html",
+  "link": "/identity/5.10.0/develop/using-the-scim-2.0-rest-apis/"
+ },
+ {
+  "page": "identity/5.10.0/develop/oauth2-scope-management-rest-apis/index.html",
+  "link": "/identity/5.10.0/develop/administer/adding-new-tenant.md/"
+ },
+ {
+  "page": "identity/5.10.0/develop/oidc-scope-management-rest-apis/index.html",
+  "link": "/identity/5.10.0/develop/administer/adding-new-tenant.md/"
+ },
+ {
+  "page": "identity/5.10.0/develop/oidc-scope-management-rest-apis/index.html",
+  "link": "/identity/5.10.0/develop/oauth2-scope-management-rest-apis.md/"
+ },
+ {
+  "page": "identity/5.10.0/develop/supporting-email-account-verification-for-an-updated-email-address/index.html",
+  "link": "/identity/5.10.0/develop/using-the-scim-2.0-rest-apis/"
+ },
+ {
+  "page": "identity/5.10.0/develop/twitter-authenticator/index.html",
+  "link": "/identity/5.10.0/develop/twitter-authenticator/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.10.0/develop/twitter-authenticator/index.html",
+  "link": "/identity/5.10.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.10.0/develop/wordpress-authenticator/index.html",
+  "link": "/identity/5.10.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.10.0/develop/wordpress-authenticator/index.html",
+  "link": "/identity/5.10.0/develop/wordpress-authenticator/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.10.0/get-started/provisioning-architecture/index.html",
+  "link": "/identity/5.10.0/learn/configuring-active-directory-user-stores-for-inbound-provisioning/"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-access-control-policy-for-a-service-provider/index.html",
+  "link": "/identity/5.10.0/configuring-single-sign-on-saml/#configuring-claims"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-access-control-policy-for-a-service-provider/index.html",
+  "link": "/identity/5.10.0/learn/configuring-access-control-policy-for-a-service-provider/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-federated-authentication/index.html",
+  "link": "/identity/5.10.0/develop/authenticators-and-connectors/"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-oauth2-openid-connect-single-sign-on/index.html",
+  "link": "/identity/5.10.0/develop/jwt-grant-type-for-oauth2/"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-on-demand-provisioning-with-azure-ad/index.html",
+  "link": "/identity/5.10.0/develop/microsoft-azure-ad-outbound-provisioning-connector/"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-openid-connect-back-channel-logout/index.html",
+  "link": "/identity/5.10.0/learn/configuring-openid-connect-back-channel-logout/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.10.0/learn/configuring-ws-trust-security-token-service/index.html",
+  "link": "/identity/5.10.0/learn/configuring-ws-trust-security-token-service/_Broker_Trust_Relationships_with_WSO2_Identity_Server_/"
+ },
+ {
+  "page": "identity/5.10.0/learn/deploying-the-sample-app/index.html",
+  "link": "/identity/5.10.0/develop/jwt-grant-type-for-oauth2/"
+ },
+ {
+  "page": "identity/5.10.0/learn/exporting-user-info-to-hubspot/index.html",
+  "link": "/identity/5.10.0/learn/learn/exporting-user-data-from-wso2-is/"
+ },
+ {
+  "page": "identity/5.10.0/learn/exporting-user-info-to-mailChimp/index.html",
+  "link": "/identity/5.10.0/learn/learn/exporting-user-data-from-wso2-is/"
+ },
+ {
+  "page": "identity/5.10.0/learn/forced-password-reset/index.html",
+  "link": "/identity/5.10.0/develop/password-policy-authenticator/"
+ },
+ {
+  "page": "identity/5.10.0/learn/handling-saml-single-logout-requests-from-federated-identity-providers/index.html",
+  "link": "/identity/5.10.0/learn/handling-saml-single-logout-requests-from-federated-identity-providers/configuring-pickup-dispatch-application-in-the-primary-is/"
+ },
+ {
+  "page": "identity/5.10.0/learn/identity-server-as-an-xacml-engine/index.html",
+  "link": "/identity/5.10.0/learn/evaluating-a-xacml-policy/"
+ },
+ {
+  "page": "identity/5.10.0/learn/logging-in-to-your-application-via-identity-server-using-facebook-credentials/index.html",
+  "link": "/identity/5.10.0/learn/logging-in-to-your-application-via-identity-server-using-facebook-credentials/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.10.0/learn/managing-user-attributes/index.html",
+  "link": "/identity/5.10.0/develop/using-the-scim-2.0-rest-apis/"
+ },
+ {
+  "page": "identity/5.10.0/learn/multi-channel-self-registration-and-account-confirmation/index.html",
+  "link": "/identity/5.10.0/learn/learn/extended-self-registration-api-and-account-confirmation-api/#api-requests-and-responses"
+ },
+ {
+  "page": "identity/5.10.0/learn/requesting-and-renewing-received-saml2-bearer-type-tokens/index.html",
+  "link": "/identity/5.10.0/learn/soap-tracer/"
+ },
+ {
+  "page": "identity/5.10.0/learn/self-registration/index.html",
+  "link": "/identity/5.10.0/learn/self-registration/setup/running-the-product/)/"
+ },
+ {
+  "page": "identity/5.10.0/learn/session-management-with-playground/index.html",
+  "link": "/identity/5.10.0/learn/session-management-with-playground/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.10.0/learn/try-request-path-authentication/index.html",
+  "link": "/identity/5.10.0/learn/try-request-path-authentication/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.10.0/learn/user-portal/index.html",
+  "link": "/identity/5.10.0/learn/learn/passowrdless-authentication-using-fido2.md/"
+ },
+ {
+  "page": "identity/5.10.0/learn/user-registration-with-email-verification/index.html",
+  "link": "/identity/5.10.0/learn/user-registraion/"
+ },
+ {
+  "page": "identity/5.10.0/learn/user-registration-with-email-verification/index.html",
+  "link": "/identity/5.10.0/learn/user-registration-with-email-verification/setup/running-the-product/)/"
+ },
+ {
+  "page": "identity/5.10.0/learn/user-registration-with-password-entry/index.html",
+  "link": "/identity/5.10.0/learn/user-registraion/"
+ },
+ {
+  "page": "identity/5.10.0/learn/user-registration-with-password-entry/index.html",
+  "link": "/identity/5.10.0/learn/user-registration-with-password-entry/setup/running-the-product/)/"
+ },
+ {
+  "page": "identity/5.10.0/references/adaptive-authentication-js-api-reference/index.html",
+  "link": "/identity/5.10.0/administer/dminister/getting-wso2-updates/"
+ },
+ {
+  "page": "identity/5.10.0/setup/changing-the-hostname/index.html",
+  "link": "/identity/5.10.0/setup/changing-the-hostname/{{base_path}}/deploy/security/configure-keystores-in-wso2-products/"
+ },
+ {
+  "page": "identity/5.10.0/setup/changing-the-hostname/index.html",
+  "link": "/identity/5.10.0/setup/changing-the-hostname/{{base_path}}/deploy/security/create-new-keystores/#step-2-import-certificates-to-the-keystore"
+ },
+ {
+  "page": "identity/5.10.0/setup/introduction-to-user-management/index.html",
+  "link": "/identity/5.10.0/administer/configuring-the-user-realm/"
+ },
+ {
+  "page": "identity/5.10.0/setup/jmx-based-monitoring/index.html",
+  "link": "/identity/5.10.0/administer/configuring-roles/"
+ },
+ {
+  "page": "identity/5.10.0/setup/message-monitoring-with-tcpmon/index.html",
+  "link": "/identity/5.10.0/administer/starting-tcpmon/"
+ },
+ {
+  "page": "identity/5.10.0/setup/other-usages-of-tcpmon/index.html",
+  "link": "/identity/5.10.0/administer/starting-tcpmon/"
+ },
+ {
+  "page": "identity/5.10.0/setup/working-with-users-roles-and-permissions/index.html",
+  "link": "/identity/5.10.0/administer/configuring-the-user-realm/"
+ }
+]

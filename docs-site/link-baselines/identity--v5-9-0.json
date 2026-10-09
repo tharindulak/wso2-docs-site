@@ -1,0 +1,186 @@
+[
+ {
+  "page": "identity/5.9.0/administer/adding-new-tenants/index.html",
+  "link": "/identity/5.9.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/5.9.0/administer/product-level-security-guidelines/index.html",
+  "link": "/identity/5.9.0/administer/encrypting-passwords-with-cipher-tool/"
+ },
+ {
+  "page": "identity/5.9.0/compliance/electronic-identification-authentication-and-trust-services-regulation/index.html",
+  "link": "/identity/5.9.0/eidas-saml-attribute-profile-support-via-wso2-identity-server/"
+ },
+ {
+  "page": "identity/5.9.0/develop/customizing-login-pages-for-service-providers/index.html",
+  "link": "/identity/5.9.0/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.9.0/develop/entitlement-with-apis/index.html",
+  "link": "/identity/5.9.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/5.9.0/develop/instagram-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/instagram-authenticator/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.9.0/develop/instagram-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.9.0/develop/password-policy-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.9.0/develop/twitter-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/twitter-authenticator/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.9.0/develop/twitter-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.9.0/develop/wordpress-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.9.0/develop/wordpress-authenticator/index.html",
+  "link": "/identity/5.9.0/develop/wordpress-authenticator/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.9.0/get-started/provisioning-architecture/index.html",
+  "link": "/identity/5.9.0/learn/configuring-active-directory-user-stores-for-inbound-provisioning/"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-access-control-policy-for-a-service-provider/index.html",
+  "link": "/identity/5.9.0/configuring-single-sign-on-saml/#configuring-claims"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-access-control-policy-for-a-service-provider/index.html",
+  "link": "/identity/5.9.0/learn/configuring-access-control-policy-for-a-service-provider/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-acr-based-adaptive-authentication/index.html",
+  "link": "/identity/5.9.0/learn/configuring-acr-based-adaptive-authentication/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-federated-authentication/index.html",
+  "link": "/identity/5.9.0/develop/authenticators-and-connectors/"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-oauth2-openid-connect-single-sign-on/index.html",
+  "link": "/identity/5.9.0/develop/jwt-grant-type-for-oauth2/"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-on-demand-provisioning-with-azure-ad/index.html",
+  "link": "/identity/5.9.0/develop/microsoft-azure-ad-outbound-provisioning-connector/"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-openid-connect-back-channel-logout/index.html",
+  "link": "/identity/5.9.0/learn/configuring-openid-connect-back-channel-logout/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-roles-and-permissions/index.html",
+  "link": "/identity/5.9.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-users/index.html",
+  "link": "/identity/5.9.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/5.9.0/learn/configuring-ws-trust-security-token-service/index.html",
+  "link": "/identity/5.9.0/learn/configuring-ws-trust-security-token-service/_Broker_Trust_Relationships_with_WSO2_Identity_Server_/"
+ },
+ {
+  "page": "identity/5.9.0/learn/creating-users-using-the-ask-password-option/index.html",
+  "link": "/identity/5.9.0/learn/email-templates/"
+ },
+ {
+  "page": "identity/5.9.0/learn/deploying-the-sample-app/index.html",
+  "link": "/identity/5.9.0/develop/jwt-grant-type-for-oauth2/"
+ },
+ {
+  "page": "identity/5.9.0/learn/identity-server-as-an-xacml-engine/index.html",
+  "link": "/identity/5.9.0/learn/evaluating-a-xacml-policy/"
+ },
+ {
+  "page": "identity/5.9.0/learn/inbound-provisioning/index.html",
+  "link": "/identity/5.9.0/learn/configuring-active-directory-user-stores-for-inbound-provisioning/"
+ },
+ {
+  "page": "identity/5.9.0/learn/logging-in-to-your-application-via-identity-server-using-facebook-credentials/index.html",
+  "link": "/identity/5.9.0/learn/logging-in-to-your-application-via-identity-server-using-facebook-credentials/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.9.0/learn/oauth-token-validation-using-soap-service/index.html",
+  "link": "/identity/5.9.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/5.9.0/learn/requesting-and-renewing-received-saml2-bearer-type-tokens/index.html",
+  "link": "/identity/5.9.0/learn/soap-tracer/"
+ },
+ {
+  "page": "identity/5.9.0/learn/self-registration/index.html",
+  "link": "/identity/5.9.0/learn/self-registration/setup/running-the-product/)/"
+ },
+ {
+  "page": "identity/5.9.0/learn/session-management-with-playground/index.html",
+  "link": "/identity/5.9.0/learn/session-management-with-playground/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.9.0/learn/try-request-path-authentication/index.html",
+  "link": "/identity/5.9.0/learn/try-request-path-authentication/learn/deploying-the-sample-app/#configuring-the-service-provider"
+ },
+ {
+  "page": "identity/5.9.0/learn/user-registration-with-email-verification/index.html",
+  "link": "/identity/5.9.0/learn/user-registraion/"
+ },
+ {
+  "page": "identity/5.9.0/learn/user-registration-with-email-verification/index.html",
+  "link": "/identity/5.9.0/learn/user-registration-with-email-verification/setup/running-the-product/)/"
+ },
+ {
+  "page": "identity/5.9.0/learn/user-registration-with-password-entry/index.html",
+  "link": "/identity/5.9.0/learn/user-registraion/"
+ },
+ {
+  "page": "identity/5.9.0/learn/user-registration-with-password-entry/index.html",
+  "link": "/identity/5.9.0/learn/user-registration-with-password-entry/setup/running-the-product/)/"
+ },
+ {
+  "page": "identity/5.9.0/learn/using-the-end-user-dashboard/index.html",
+  "link": "/identity/5.9.0/learn/using-the-end-user-dashboard/develop/using-the-personal-information-export-rest-apis/"
+ },
+ {
+  "page": "identity/5.9.0/learn/working-with-mdp-requests-by-repeating-attribute-categories/index.html",
+  "link": "/identity/5.9.0/https://www.soapui.org/downloads/latest-release.html/"
+ },
+ {
+  "page": "identity/5.9.0/setup/changing-the-hostname/index.html",
+  "link": "/identity/5.9.0/setup/changing-the-hostname/{{base_path}}/deploy/security/configure-keystores-in-wso2-products/"
+ },
+ {
+  "page": "identity/5.9.0/setup/changing-the-hostname/index.html",
+  "link": "/identity/5.9.0/setup/changing-the-hostname/{{base_path}}/deploy/security/create-new-keystores/#step-2-import-certificates-to-the-keystore"
+ },
+ {
+  "page": "identity/5.9.0/setup/introduction-to-user-management/index.html",
+  "link": "/identity/5.9.0/administer/configuring-the-user-realm/"
+ },
+ {
+  "page": "identity/5.9.0/setup/jmx-based-monitoring/index.html",
+  "link": "/identity/5.9.0/administer/configuring-roles/"
+ },
+ {
+  "page": "identity/5.9.0/setup/message-monitoring-with-tcpmon/index.html",
+  "link": "/identity/5.9.0/administer/starting-tcpmon/"
+ },
+ {
+  "page": "identity/5.9.0/setup/other-usages-of-tcpmon/index.html",
+  "link": "/identity/5.9.0/administer/starting-tcpmon/"
+ },
+ {
+  "page": "identity/5.9.0/setup/working-with-users-roles-and-permissions/index.html",
+  "link": "/identity/5.9.0/administer/configuring-the-user-realm/"
+ }
+]

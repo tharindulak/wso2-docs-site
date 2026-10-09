@@ -1,0 +1,362 @@
+[
+ {
+  "page": "identity/7.0.0/apis/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/"
+ },
+ {
+  "page": "identity/7.0.0/apis/organization-apis/authentication/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/"
+ },
+ {
+  "page": "identity/7.0.0/apis/scim2/scim2-batch-operations/index.html",
+  "link": "/identity/7.0.0/apis/scim2-bulk-rest-apis/#tag/Bulk-Endpoint"
+ },
+ {
+  "page": "identity/7.0.0/apis/scim2/scim2-patch-operations/index.html",
+  "link": "/identity/7.0.0/apis/scim2-groups-rest-apis/#tag/Groups-Endpoint/operation/patchGroup"
+ },
+ {
+  "page": "identity/7.0.0/apis/scim2/scim2-patch-operations/index.html",
+  "link": "/identity/7.0.0/apis/scim2-users-rest-apis/#tag/Users-Endpoint/operation/patchUser"
+ },
+ {
+  "page": "identity/7.0.0/complete-guides/react/next-steps/index.html",
+  "link": "/identity/7.0.0/guides/user-accounts/configure-self-registration/"
+ },
+ {
+  "page": "identity/7.0.0/connectors/sift/reference/index.html",
+  "link": "/identity/7.0.0/guides/connectors/sift/how-to-use/"
+ },
+ {
+  "page": "identity/7.0.0/connectors/sift/reference/index.html",
+  "link": "/identity/7.0.0/guides/connectors/sift/set-up/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/change-the-hostname/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/configure-keystores-in-wso2-products/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/change-the-hostname/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/create-new-keystores/#step-2-import-certificates-to-the-keystore"
+ },
+ {
+  "page": "identity/7.0.0/deploy/compliance/index.html",
+  "link": "/identity/7.0.0/deploy/compliance/eidas/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/configure/email-sending-module/index.html",
+  "link": "/identity/7.0.0/guides/tenants/configure-the-tenant-loading-policy/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/configure/user-stores/secure-userstore-using-pbkdf2/index.html",
+  "link": "/identity/7.0.0/guides/user-self-service/customer-self-service-portal/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/monitor/jmx-based-monitoring/index.html",
+  "link": "/identity/7.0.0/guides/identity-lifecycles/manage-roles-overview/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/security/enable-java-security-manager/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/#about-keystores-and-truststores"
+ },
+ {
+  "page": "identity/7.0.0/deploy/security/keystores/create-new-keystores/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/security/keystores/create-new-keystores/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/#recommendations-for-setting-up-keystores"
+ },
+ {
+  "page": "identity/7.0.0/deploy/security/keystores/index.html",
+  "link": "/identity/7.0.0/deploy/security/keystores/configure-custom-keystores/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/security/symmetric-encryption/index.html",
+  "link": "/identity/7.0.0/deploy/security/symmetric-encryption/use-symmetric-encryption/"
+ },
+ {
+  "page": "identity/7.0.0/deploy/set-up-separate-databases-for-clustering/index.html",
+  "link": "/identity/7.0.0/deploy/work-with-databases/"
+ },
+ {
+  "page": "identity/7.0.0/get-started/about-this-release/index.html",
+  "link": "/identity/7.0.0/deploy/enable-fips-for-is/"
+ },
+ {
+  "page": "identity/7.0.0/get-started/about-this-release/index.html",
+  "link": "/identity/7.0.0/guides/authentication/add-application-native-login/"
+ },
+ {
+  "page": "identity/7.0.0/guides/account-configurations/user-onboarding/self-registration/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/"
+ },
+ {
+  "page": "identity/7.0.0/guides/analytics/elk-analytics/accessing-the-analytics-dashboard/index.html",
+  "link": "/identity/7.0.0/guides/analytics/analyzing-active-sessions/"
+ },
+ {
+  "page": "identity/7.0.0/guides/analytics/elk-analytics/accessing-the-analytics-dashboard/index.html",
+  "link": "/identity/7.0.0/guides/analytics/analyzing-login-attempts/"
+ },
+ {
+  "page": "identity/7.0.0/guides/applications/register-machine-to-machine-app/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/"
+ },
+ {
+  "page": "identity/7.0.0/guides/authentication/mfa/add-x509-login/index.html",
+  "link": "/identity/7.0.0/guides/authentication/users/manage-users.md/#onboard-single-user"
+ },
+ {
+  "page": "identity/7.0.0/guides/authentication/mfa/index.html",
+  "link": "/identity/7.0.0/guides/authentication/mfa/add-push-auth-login/"
+ },
+ {
+  "page": "identity/7.0.0/guides/authentication/oidc/oidc-token-decryption/index.html",
+  "link": "/identity/7.0.0/references/concepts/authentication/id-token/"
+ },
+ {
+  "page": "identity/7.0.0/guides/authentication/oidc/oidc-token-encryption/index.html",
+  "link": "/identity/7.0.0/references/concepts/authentication/id-token/"
+ },
+ {
+  "page": "identity/7.0.0/guides/authentication/passwordless-login/index.html",
+  "link": "/identity/7.0.0/guides/authentication/passwordless-login/add-passwordless-login-with-push-notification/"
+ },
+ {
+  "page": "identity/7.0.0/guides/authorization/user-impersonation/index.html",
+  "link": "/identity/7.0.0/guides/organization-management/invite-parent-organization-users/"
+ },
+ {
+  "page": "identity/7.0.0/guides/branding/customize-email-templates/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/index.html",
+  "link": "/identity/7.0.0/guides/analytics/"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/api-authorization-overview/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/api-authorization-overview/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/#associate-roles-to-the-application"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/api-authorization-overview/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/#authorize-the-api-resources-for-an-app"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/api-authorization-overview/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/#register-an-api-resource"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/manage-b2b-administration/index.html",
+  "link": "/identity/7.0.0/apis/organization-apis/org-application-management/"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/manage-b2b-administration/index.html",
+  "link": "/identity/7.0.0/apis/organization-apis/org-group-mgt/#/"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/manage-b2b-administration/index.html",
+  "link": "/identity/7.0.0/apis/organization-apis/org-idp/"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/manage-b2b-administration/index.html",
+  "link": "/identity/7.0.0/apis/organization-apis/org-user-mgt/#/"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/organization-roles/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/applications/organization-applications/role-management-organization.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/organization-roles/index.html",
+  "link": "/identity/7.0.0/guides/organization-management/manage-conflicts-in-organizations/#manage-role-conflicts-in-organization"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/share-applications/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/manage-organizations/share-a-subset-of-roles-with-all-organizations.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/share-applications/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/manage-organizations/share-console-application-roles-selectively.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/share-applications/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/manage-organizations/share-console-application.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/share-applications/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/manage-organizations/share-with-all-organizations.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/share-applications/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/manage-organizations/share-with-selected-and-all-organizations.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/organization-management/share-applications/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/manage-organizations/share-with-selected-organizations.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/user-self-service/overview/index.html",
+  "link": "/identity/7.0.0/guides/user-self-service/manage-approvals/"
+ },
+ {
+  "page": "identity/7.0.0/guides/user-self-service/self-register/index.html",
+  "link": "/identity/7.0.0/guides/flows/self-registration/"
+ },
+ {
+  "page": "identity/7.0.0/guides/user-self-service/self-register/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/user-self-service/update-profile-info/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/user-self-service/user-password-recovery/index.html",
+  "link": "/identity/7.0.0/guides/flows/password-recovery/"
+ },
+ {
+  "page": "identity/7.0.0/guides/user-self-service/user-password-recovery/index.html",
+  "link": "/identity/7.0.0/guides/user-self-service/customer-self-service-portal/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/attributes/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/attributes/manage-scopes/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/attributes/user-attributes/attribute-configurations-reference/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/attributes/configure-attribute-input-format-user-add-view.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/attributes/user-attributes/attribute-configurations-reference/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/attributes/configure-attribute-input-format.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/attributes/user-attributes/attribute-configurations-reference/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/attributes/edit-addtribute-sub-attributes.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/attributes/user-attributes/attribute-configurations-reference/index.html",
+  "link": "/identity/7.0.0/assets/img/guides/organization/attributes/edit-attribute-options.png"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/manage-roles/index.html",
+  "link": "/identity/7.0.0/guides/api-authorization/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/manage-users/index.html",
+  "link": "/identity/7.0.0/apis/scim2-users-rest-apis/#tag/Users-Endpoint/operation/patchUser"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/manage-users/index.html",
+  "link": "/identity/7.0.0/guides/user-self-service/customer-self-service-portal/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/manage-users/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/outbound-provisioning/setup-outbound-provisioning/index.html",
+  "link": "/identity/7.0.0/apis/organization-apis/org-user-mgt/#tag/Users-Endpoint/operation/createUser"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/configure-active-directory-user-stores-for-scim2/index.html",
+  "link": "/identity/7.0.0/apis/scim2-users-rest-apis/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/configure-active-directory-user-stores-for-scim2/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/configure-user-stores-for-scim2/index.html",
+  "link": "/identity/7.0.0/apis/scim2-groups-rest-apis/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/configure-user-stores-for-scim2/index.html",
+  "link": "/identity/7.0.0/apis/scim2-users-rest-apis/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/primary-user-store/configure-a-read-only-ldap-user-store/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/primary-user-store/configure-a-read-only-ldap-user-store/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/primary-user-store/configure-a-read-write-active-directory-user-store/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/primary-user-store/configure-a-read-write-ldap-user-store/index.html",
+  "link": "/identity/7.0.0/guides/users/attributes/manage-attributes/#update-attributes"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/user-store-properties/properties-read-only-ldap-user-store/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/user-store-properties/properties-read-write-active-directory-user-store/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption"
+ },
+ {
+  "page": "identity/7.0.0/guides/users/user-stores/user-store-properties/properties-read-write-ldap-user-store/index.html",
+  "link": "/identity/7.0.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
+ },
+ {
+  "page": "identity/7.0.0/page-not-found/index.html",
+  "link": "/identity/7.0.0/assets/images/page-not-found.svg"
+ },
+ {
+  "page": "identity/7.0.0/references/about-this-release/index.html",
+  "link": "/identity/7.0.0/deploy/enable-fips-for-is/"
+ },
+ {
+  "page": "identity/7.0.0/references/about-this-release/index.html",
+  "link": "/identity/7.0.0/guides/authentication/add-application-native-login/"
+ },
+ {
+  "page": "identity/7.0.0/references/app-settings/saml-settings-for-app/index.html",
+  "link": "/identity/7.0.0/guides/authentication/saml/artifact-binding/"
+ },
+ {
+  "page": "identity/7.0.0/references/extend/authentication/customize-the-authentication-endpoint/index.html",
+  "link": "/identity/7.0.0/assets/img/references/%60add-access-url-to-app%60.png"
+ },
+ {
+  "page": "identity/7.0.0/references/extend/user-mgt/provisioning/extend-scim2-user-schemas/index.html",
+  "link": "/identity/7.0.0/apis/scim2-groups-rest-apis/"
+ },
+ {
+  "page": "identity/7.0.0/references/extend/user-mgt/provisioning/extend-scim2-user-schemas/index.html",
+  "link": "/identity/7.0.0/apis/scim2-sp-config-rest-apis/"
+ },
+ {
+  "page": "identity/7.0.0/references/extend/user-mgt/provisioning/extend-scim2-user-schemas/index.html",
+  "link": "/identity/7.0.0/apis/scim2-users-rest-apis/"
+ },
+ {
+  "page": "identity/7.0.0/references/grant-types/index.html",
+  "link": "/identity/7.0.0/assets/img/references/grants/ciba-grant.png"
+ },
+ {
+  "page": "identity/7.0.0/references/grant-types/index.html",
+  "link": "/identity/7.0.0/guides/agentic-ai/ai-agents/agent-authentication/#using-ciba-for-on-behalf-of-delegation"
+ },
+ {
+  "page": "identity/7.0.0/references/grant-types/index.html",
+  "link": "/identity/7.0.0/guides/authorization/user-impersonation/via-business-application/"
+ },
+ {
+  "page": "identity/7.0.0/sdks/nextjs/overview/index.html",
+  "link": "/identity/7.0.0/complete-guides/nextjs/introduction/"
+ }
+]
