@@ -20,8 +20,8 @@ export default function VersionSelect({ versionsUrl }) {
   const active = currentVersion(doc, pathname);
   const go = async (target) => {
     setAnchor(null);
-    const pages = target.status === 'confluence' ? null : await getJson(`${target.path}pages.json`);
-    window.location.assign(versionHref(doc, pathname, target, pages)); // versions may be separate builds
+    const info = target.status === 'confluence' ? null : await getJson(`${target.path}pages.json`);
+    window.location.assign(versionHref(doc, pathname, target, info)); // versions may be separate builds
   };
   const g = groups(doc);
   const item = (v) => <MenuItem key={v.version} selected={v === active} onClick={() => go(v)}>{v.label}{v.status === 'confluence' ? ' ↗' : ''}</MenuItem>;

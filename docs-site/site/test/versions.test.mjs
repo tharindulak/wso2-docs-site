@@ -29,6 +29,14 @@ test('versionHref falls back to the version home', () => {
   assert.equal(versionHref(doc, '/identity/guides/new', doc.versions[1], ['guides/new/']), '/identity/7.2.0/guides/new/', 'missing trailing slash');
 });
 
+test('versionHref falls back to the version landing when its index is excluded (pages.json home)', () => {
+  const info = { pages: ['get-started/introduction/', 'guides/x/'], home: 'get-started/introduction/' };
+  assert.equal(versionHref(doc, '/identity/guides/new/', doc.versions[2], info), '/identity/5.9.0/get-started/introduction/');
+  assert.equal(versionHref(doc, '/identity/guides/x/', doc.versions[2], info), '/identity/5.9.0/guides/x/');
+  assert.equal(versionHref(doc, '/identity/guides/new/', doc.versions[2], { pages: [], home: 'https://evil.example/' }), '/identity/5.9.0/', 'home must be a relative page path');
+  assert.equal(versionHref(doc, '/identity/guides/new/', doc.versions[2], { pages: [], home: '../x/' }), '/identity/5.9.0/');
+});
+
 test('Confluence versions open their own link', () => {
   assert.equal(versionHref(doc, '/identity/guides/x/', doc.versions[3], null), 'https://wso2docs.atlassian.net/wiki/spaces/IS580');
 });
