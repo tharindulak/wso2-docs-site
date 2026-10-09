@@ -31,6 +31,12 @@ const releaseBase = (section, ref) => {
   return m ? m[1] : null;
 };
 
+/** mkdocs.yml of a version from the section's version_folder pattern (en/identity-server/{version}/mkdocs.yml), if any. */
+export const folderOf = (section, version) => {
+  const pattern = section.version_folder ?? section.self_hosted?.version_folder;
+  return pattern ? pattern.replaceAll('{version}', version) : undefined;
+};
+
 export function sectionVersions(section, liveWindow = LIVE_WINDOW_DEFAULT) {
   const list = listOf(section);
   if (!list) {
@@ -46,14 +52,16 @@ export function sectionVersions(section, liveWindow = LIVE_WINDOW_DEFAULT) {
       route: latest ? section.route : `${section.route}/${v.version}`, former_site: section.former_site,
     };
     const pick = { sha: v.sha, track: v.track ? v.ref : null, ref: v.ref };
+    const folder = folderOf(section, v.version);
     const overrides = Object.fromEntries(['mkdocs', 'docs', 'sidebar', 'sparse', 'nav_pick', 'skip', 'deployment_overrides']
       .filter((k) => v[k] !== undefined).map((k) => [k, v[k]]));
+    if (folder && overrides.mkdocs === undefined) overrides.mkdocs = folder;
     const exclude = v.exclude ?? [];
     if (section.kind === 'mkdocs-merge') {
       const sh = section.self_hosted;
       if (latest) return { ...section, ...base, exclude, self_hosted: { ...sh, ...overrides, ...pick, version: v.version } };
       return {
-        ...base, kind: 'mkdocs', label: section.label, repo: sh.repo, mkdocs: v.mkdocs, sparse: v.sparse ?? section.sparse, ...pick,
+        ...base, kind: 'mkdocs', label: section.label, repo: sh.repo, mkdocs: overrides.mkdocs, sparse: v.sparse ?? section.sparse, ...pick,
         exclude, deployment_options: ['Self-hosted'], current_site: (section.former_site ?? '').replace('{version}', v.version),
       };
     }
@@ -79,6 +87,13 @@ export function validateVersions(section, liveWindow) {
     if (!REF.test(v.ref ?? '')) throw new Error(`${id} ${v.version}: ref must name a branch or tag`);
     for (const rel of [v.mkdocs, v.docs, v.sidebar, ...(v.sparse ?? [])].filter(Boolean)) {
       if (!REL.test(rel)) throw new Error(`${id} ${v.version}: path must be relative and inside the repo: ${rel}`);
+    }
+    const folder = folderOf(section, String(v.version));
+    if (folder !== undefined && (!REL.test(folder) || !(section.version_folder ?? section.self_hosted.version_folder).includes('{version}'))) {
+      throw new Error(`${id}: version_folder must be a relative path inside the repo with {version}`);
+    }
+    if (section.kind === 'mkdocs-merge' && !v.mkdocs && !folder && !(v === list[0] && section.self_hosted.mkdocs)) {
+      throw new Error(`${id} ${v.version}: mkdocs is required (or set self_hosted.version_folder)`);
     }
     const base = releaseBase(section, v.ref);
     if (base && base !== v.version) throw new Error(`${id}: ref ${v.ref} is a release of another version than ${v.version}`);

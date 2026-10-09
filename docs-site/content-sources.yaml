@@ -12,6 +12,7 @@
 # versions: (newest first) every release a section lists. Each entry has version (3 segments), ref (branch or tag), sha (40
 #   characters), and optionally mkdocs/docs/sidebar/sparse overrides and exclude. Only the first (Latest) may carry track: true;
 #   older versions stay pinned. Merged sections put versions: under self_hosted:.
+# version_folder: for versions kept as folders on one branch, the mkdocs.yml path with {version}; a promotion writes it.
 # release_tag: prefix of a version's docs-release tag; default v (v4.6.0), or <component>/v for a component's tags.
 # former_site: URL pattern of a version's former site, with {version}.
 # older_versions: versions with no source in git, listed as "Older versions" links to Confluence ({ version, href }).
@@ -161,6 +162,7 @@ products:
         self_hosted:
           product_repo: wso2/product-is
           repo: wso2/docs-is
+          version_folder: en/identity-server/{version}/mkdocs.yml  # a promoted version reads its own folder
           versions:
             - version: 7.3.0
               ref: master

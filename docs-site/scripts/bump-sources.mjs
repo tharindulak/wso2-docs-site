@@ -47,8 +47,25 @@ async function tagSha(repo, tag) {
 
 const lock = readLock();
 let text = fs.readFileSync(LOCK, 'utf8');
-const releases = (repo) => github(`repos/${repo}/releases?per_page=50`).then((r) => r ?? []);
-const proposals = await planDocsReleases(lock, { releasesOf: releases, productReleasesOf: releases, tagSha });
+/** All releases of a repo, newest first (paged; capped at 1,000). */
+async function releases(repo) {
+  const all = [];
+  for (let page = 1; page <= 10; page++) {
+    const r = (await github(`repos/${repo}/releases?per_page=100&page=${page}`)) ?? [];
+    all.push(...r);
+    if (r.length < 100) break;
+  }
+  return all;
+}
+
+/** Whether a file exists in a repo at a tag (a version folder's mkdocs.yml). */
+async function fileAt(repo, tag, file) {
+  if (!TAG.test(tag) || !/^(?!\/)(?!.*\.\.)[A-Za-z0-9._\/-]+$/.test(file)) throw new Error(`${repo}: unsafe tag or path ${tag} ${file}`);
+  return Boolean(await github(`repos/${repo}/contents/${file}?ref=${encodeURIComponent(tag)}`));
+}
+
+const kinds = [...(doBumps ? ['fix'] : []), ...(doPromotions ? ['new'] : [])];
+const proposals = await planDocsReleases(lock, { releasesOf: releases, productReleasesOf: releases, tagSha, fileAt }, kinds);
 
 // 1. Content bumps (Latest only) and docs fix releases.
 const bumps = doBumps ? planBumps(lock, headOf) : [];
@@ -63,7 +80,8 @@ for (const p of doPromotions ? proposals : []) {
     text = applyDocsRelease(text, p);
     promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: true, reason: null });
   } else if (p.type === 'missing-product-release') {
-    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false, reason: 'missing-product-release', product_repo: p.productRepo });
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false, reason: 'missing-product-release', product_repo: p.productRepo });  } else if (p.type === 'missing-version-folder') {
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false, reason: 'missing-version-folder', mkdocs: p.mkdocs });
   }
 }
 

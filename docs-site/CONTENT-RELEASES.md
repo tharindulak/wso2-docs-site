@@ -16,7 +16,7 @@ The docs version equals the product release it documents.
 
 ## Fixing released docs
 
-A fix to a released version adds a fourth segment: `v4.8.0.1`, then `v4.8.0.2`. The site still shows "4.8.0". The bot moves that version's pin to the newest fix tag.
+A fix to a released version adds a fourth segment: `v4.8.0.1`, then `v4.8.0.2`. The site still shows "4.8.0". The bot moves that version's pin to the newest fix tag. Latest, while it tracks a branch, takes no fix tags: it already follows the branch, and a tag at an older commit would move it backwards.
 
 ## What merges by itself
 
@@ -34,7 +34,7 @@ The bot promotes a docs release only when the product repository has a GA releas
 
 ## Version folders
 
-Repos that keep several versions as folders on one branch (docs-is, docs-api-platform) keep that layout. The site reads the version's folder at the release commit: `v7.4.0` reads `en/identity-server/7.4.0/`. The folder name must equal the version.
+Repos that keep several versions as folders on one branch (docs-is, docs-api-platform) keep that layout. The site reads the version's folder at the release commit: `v7.4.0` reads `en/identity-server/7.4.0/`. The folder name must equal the version. The section's `version_folder` in the lock file (for Identity, `en/identity-server/{version}/mkdocs.yml`) names the folder; a promotion writes it into the new entry, and planning reports `missing-version-folder` instead of promoting when the folder is absent at the tag.
 
 ## Existing versions
 
