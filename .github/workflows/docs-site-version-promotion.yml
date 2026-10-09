@@ -37,14 +37,20 @@ jobs:
         run: |
           node -e '
             const r = require(process.argv[1]);
-            for (const p of r.promotions) console.log([p.section, p.from ?? "the current Latest", p.to, p.docsReady, p.product_repo ?? "the product repository"].join("\t"));
+            for (const p of r.promotions) console.log([p.section, p.from ?? "the current Latest", p.to, p.docsReady, p.product_repo ?? "the product repository", p.reason ?? "missing-docs"].join("\t"));
           ' "$RUNNER_TEMP/promote.json" > "$RUNNER_TEMP/promotions.tsv"
-          while IFS=$'\t' read -r section from to ready product_repo; do
+          while IFS=$'\t' read -r section from to ready product_repo reason; do
             [ -z "$section" ] && continue
             if [ "$ready" != "true" ]; then
-              title="Docs release ${to} for ${section} has no matching product release"
+              if [ "$reason" = "missing-product-release" ]; then
+                title="Docs release ${to} for ${section} has no matching product release"
+                body="The docs repo published ${to}, but ${product_repo} has no GA release ${to}. Publish docs on or after the product's GA (see docs-site/CONTENT-RELEASES.md)."
+              else
+                title="Docs for ${section} ${to} not found"
+                body="Release ${to} is out, but its docs source was not found by convention. Add it, then the next run opens the promotion PR."
+              fi
               gh issue list --repo "$REPO" --search "$title in:title" --state open --json number --jq 'length' | grep -q '^0$' && \
-                gh issue create --repo "$REPO" --title "$title" --body "The docs repo published ${to}, but ${product_repo} has no GA release ${to}. Publish docs on or after the product's GA (see docs-site/CONTENT-RELEASES.md)." --label version-promotion
+                gh issue create --repo "$REPO" --title "$title" --body "$body" --label version-promotion
               continue
             fi
             branch="bot/promote-${section}-${to}"

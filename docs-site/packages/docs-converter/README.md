@@ -26,8 +26,6 @@ npx wso2-docs convert --out dist    # write dist/docs/, dist/sidebar.json, dist/
 
 The release check is a warning on stderr (`warning: release v7.4.0 has no folder en/identity-server/7.4.0`) and never changes the exit code. Release conventions: `docs-site/CONTENT-RELEASES.md`.
 
-The release check is a warning on stderr (`warning: release v7.4.0 has no folder en/identity-server/7.4.0`) and never changes the exit code. Release conventions: `docs-site/CONTENT-RELEASES.md`.
-
 Exit codes: `0` every page converts or is on the exclude list, `1` new failures, `2` usage or config error.
 
 ### `wso2-docs.yaml`

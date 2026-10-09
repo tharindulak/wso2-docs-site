@@ -61,9 +61,9 @@ const promotions = [];
 for (const p of doPromotions ? proposals : []) {
   if (p.type === 'new') {
     text = applyDocsRelease(text, p);
-    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: true });
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: true, reason: null });
   } else if (p.type === 'missing-product-release') {
-    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false, product_repo: p.productRepo });
+    promotions.push({ section: p.section, from: null, to: p.version, tag: p.tag, docsReady: false, reason: 'missing-product-release', product_repo: p.productRepo });
   }
 }
 
@@ -79,7 +79,7 @@ for (const product of doPromotions ? lock.products : []) {
     if (!latest || compareValues(latest, sh.version) <= 0) continue;
     const mkdocs = sh.mkdocs.replace(sh.version, latest);
     const docsReady = mkdocs !== sh.mkdocs && Boolean(await github(`repos/${sh.repo}/contents/${mkdocs}?ref=${sh.track}`));
-    promotions.push({ section: section.id, from: sh.version, to: latest, mkdocs, docsReady });
+    promotions.push({ section: section.id, from: sh.version, to: latest, mkdocs, docsReady, reason: docsReady ? null : 'missing-docs' });
     if (docsReady && write) {
       const start = text.indexOf(`\n      - id: ${section.id}\n`); // section entries are indented 6 spaces
       if (start < 0) throw new Error(`Section ${section.id} not found in the lock file`);

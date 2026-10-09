@@ -59,6 +59,8 @@ npm run check-links -- <build-dir>                    # internal link check, e.g
 
 A snapshot key is a hash of the source commit, exclude list, converter version and site chrome version, so a theme change rebuilds every snapshot. `build` needs the version's sources first (`node scripts/fetch-sources.mjs <versionId>`) and fails when broken internal links exceed the committed baseline `link-baselines/<versionId>.json`. A re-pin that introduces new source breakage needs `build <versionId> --record-baseline` in a reviewed PR.
 
+The PR check assembles stored snapshots, so it fails for a new or changed snapshot key until the snapshot workflow has stored it (or `node scripts/snapshots.mjs build <versionId>` ran locally against the same store). Run the snapshot workflow first.
+
 `SNAPSHOT_STORE` chooses where snapshots live. Unset, it is the local directory `.cache/snapshots`. In CI it is `github-release:docs-site-snapshots` (a GitHub Release holding one tarball per key); that backend needs a GitHub remote and `GH_TOKEN`, and only the snapshot build job has write access.
 
 ## Content source rules (summary)

@@ -22,6 +22,7 @@ export function readLock() {
   const lock = yaml.load(fs.readFileSync(LOCK, 'utf8'), { schema: yaml.JSON_SCHEMA });
   for (const p of lock.products) {
     for (const s of p.sections) {
+      if (!/^[a-z0-9][a-z0-9-]*$/.test(s.id)) throw new Error(`Section id must be lowercase letters, digits and hyphens, got ${s.id}`);
       validateVersions(s, lock.live_window ?? LIVE_WINDOW_DEFAULT);
       for (const v of sectionVersions(s, lock.live_window ?? LIVE_WINDOW_DEFAULT)) for (const ref of refsOf(v)) {
         if (!repoOk(ref.repo)) throw new Error(`${s.id}: repo must be wso2/<name>, got ${ref.repo}`);
