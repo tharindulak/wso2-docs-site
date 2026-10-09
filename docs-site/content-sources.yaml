@@ -19,8 +19,9 @@
 # exclude: pages that do not convert yet. They redirect to current_site until fixed; the list only shrinks.
 # deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
 
-# versions per section in the live build (Latest plus previous); older ones are snapshots
-live_window: 2
+# versions per section in the live build: Latest only. Latest plus previous ran out of memory in the pilot
+# (.scratch/wso2-docs-site-versions/research/10-pilot-measurements.md); older versions are snapshots
+live_window: 1
 
 products:
   - id: integration

@@ -48,7 +48,7 @@ Navigation still lists every product; links into sections left out of a quick bu
 
 A section lists its releases under `versions:`, newest first (merged sections put it under `self_hosted:`). Each entry has `version` (three segments), `ref` (branch or tag), `sha` (40 characters) and optionally `mkdocs`, `docs`, `sidebar`, `sparse` and `exclude`. Only the first entry (Latest) may carry `track: true`; older versions stay pinned. `release_tag` sets the docs-release tag prefix (default `v`, or `<component>/v`). `older_versions` lists versions with no source in git as links to Confluence.
 
-`live_window` (top level, now `2`) is how many versions per section the live build contains: Latest and the previous release. Older versions are snapshots, built once and stored by key. It narrows to 1 if the full live build exceeds 60 minutes or 14 GB.
+`live_window` (top level, now `1`) is how many versions per section the live build contains. Older versions are snapshots, built once and stored by key. It was 2 (Latest and the previous release) until the pilot showed a full live build at that window exceeds the 14 GB threshold; see the pilot measurements.
 
 ```sh
 npm run snapshots -- list [--json]                    # snapshots whose key is not stored yet
