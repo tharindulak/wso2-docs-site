@@ -1,7 +1,7 @@
 // docs-site/scripts/bump-lib.mjs
 // Bump planning, kept free of network calls so it can be tested: callers pass headOf, releasesOf, productReleasesOf, tagSha.
 import { compareValues } from '@wso2/docs-converter';
-import { refsOf } from './lib.mjs';
+import { refsOf, repoOk } from './lib.mjs';
 import { sectionVersions } from './versions.mjs';
 
 export function planBumps(lock, headOf) {
@@ -43,6 +43,7 @@ export async function planDocsReleases(lock, { releasesOf, productReleasesOf, ta
       const best = tags.filter((t) => t.base === v.version && t.fix > current).sort((a, b) => b.fix - a.fix)[0];
       if (best && (current >= 0 || best.fix > 0)) proposals.push({ type: 'fix', section: section.id, version: v.version, base: v.version, tag: best.tag, sha: await tagSha(repo, best.tag) });
     }
+    if (productRepo && !repoOk(productRepo)) throw new Error(`${section.id}: product_repo must be wso2/<name>, got ${productRepo}`);
     const productTags = productRepo ? new Set(ga(await productReleasesOf(productRepo)).map((t) => t.replace(/^v/, ''))) : new Set();
     const newer = [...new Set(tags.filter((t) => compareValues(t.base, latest) > 0).map((t) => t.base))].sort(compareValues);
     for (const base of newer) {
@@ -63,7 +64,8 @@ export function applyDocsRelease(text, p) {
   if (p.type === 'fix') {
     const re = new RegExp(`(\\n( *)- version: ${p.version.replace(/\./g, '\\.')}\\n\\2  ref: )\\S+(\\n\\2  sha: )[0-9a-f]{40}`);
     if (!re.test(body)) throw new Error(`${p.section}: version ${p.version} not found`);
-    return head + body.replace(re, `$1${p.tag}$3${p.sha}`);
+    // A release ref is pinned, never followed: drop track from the fixed version.
+    return head + body.replace(re, `$1${p.tag}$3${p.sha}`).replace(new RegExp(`(ref: ${p.tag.replace(/[.]/g, '\\.')}\\n *sha: [0-9a-f]{40})\\n *track: \\S+`), '$1');
   }
   if (p.type === 'new') {
     const m = /\n( *)versions:\n( *)- version: /.exec(body);

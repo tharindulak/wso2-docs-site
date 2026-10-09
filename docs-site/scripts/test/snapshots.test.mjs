@@ -46,16 +46,11 @@ test('only broken links missing from the baseline fail the build', () => {
   assert.deepEqual(newBrokenLinks([], [a]), [], 'fixed links are not an error');
 });
 
-test('navigation hash ignores versions but follows names, groups and section labels', () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nav-'));
-  const file = path.join(dir, 'manifest.json');
-  const write = (p) => fs.writeFileSync(file, JSON.stringify({ products: [p] }));
+test('navigation hash ignores versions but follows names, groups, section labels and link-outs', () => {
   const base = { id: 'a', name: 'A', group: 'G', sections: [{ id: 's', label: 'S', route: 'a/s', versions: [{ version: '1' }] }] };
-  assert.equal(navHash(path.join(dir, 'missing.json')), '');
-  write(base);
-  const h0 = navHash(file);
-  write({ ...base, sections: [{ ...base.sections[0], versions: [{ version: '2' }] }] });
-  assert.equal(navHash(file), h0);
-  for (const p of [{ ...base, name: 'B' }, { ...base, group: 'H' }, { ...base, sections: [{ ...base.sections[0], label: 'T' }] }]) { write(p); assert.notEqual(navHash(file), h0); }
-  fs.rmSync(dir, { recursive: true });
+  const hash = (p, link_out = []) => navHash({ products: [p], link_out });
+  const h0 = hash(base);
+  assert.equal(hash({ ...base, sections: [{ ...base.sections[0], versions: [{ version: '2' }] }] }), h0);
+  for (const h of [hash({ ...base, name: 'B' }), hash({ ...base, group: 'H' }), hash({ ...base, sections: [{ ...base.sections[0], label: 'T' }] }),
+    hash(base, [{ id: 'x', name: 'X', group: 'G', href: 'https://x' }])]) assert.notEqual(h, h0);
 });

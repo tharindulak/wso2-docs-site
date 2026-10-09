@@ -64,3 +64,11 @@ test('prereleases and drafts are ignored; tags of other components are ignored',
   d.releasesOf = async () => [{ tag_name: 'v4.7.0', draft: true, prerelease: false }, { tag_name: 'v4.9.0', draft: false, prerelease: true }, { tag_name: 'api-gateway/v9.0.0', draft: false, prerelease: false }];
   assert.deepEqual(await planDocsReleases(lock(), d), []);
 });
+
+test('a fix release un-tracks the version it pins', () => {
+  const t2 = text.replace(`            ref: 4.5.0\n            sha: ${S('b')}\n`, `            ref: 4.5.0\n            sha: ${S('b')}\n            track: 4.5.0\n`);
+  assert.match(t2, /track: 4\.5\.0/);
+  const out = applyDocsRelease(t2, { type: 'fix', section: 'integration-mi', version: '4.5.0', base: '4.5.0', tag: 'v4.5.0.1', sha: S('e') });
+  assert.doesNotMatch(out, /track: 4\.5\.0/);
+  assert.match(out, /ref: v4\.5\.0\.1\n {12}sha: e{40}\n {12}exclude/);
+});

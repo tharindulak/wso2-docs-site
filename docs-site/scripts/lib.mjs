@@ -28,6 +28,8 @@ export function readLock() {
         if (!SHA.test(ref.sha)) throw new Error(`${s.id}: sha must be a full 40-character commit, got ${ref.sha}`);
         if (ref.track !== null && !BRANCH.test(ref.track ?? '')) throw new Error(`${s.id}: track must name the branch the bump bot follows`);
       }
+      const pr = s.product_repo ?? s.self_hosted?.product_repo;
+      if (pr && !repoOk(pr)) throw new Error(`${s.id}: product_repo must be wso2/<name>, got ${pr}`);
       for (const rel of [...(s.sparse ?? []), ...(s.cloud_companion?.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs, s.cloud_companion?.mkdocs, s.cloud_companion?.path_prefix].filter(Boolean)) {
         if (!REL.test(rel)) throw new Error(`${s.id}: path must be relative and inside the repo: ${rel}`);
       }

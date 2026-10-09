@@ -9,7 +9,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { readLock, liveWindow, ROOT, GENERATED } from './lib.mjs';
+import { readLock, liveWindow, ROOT } from './lib.mjs';
 import { sectionVersions } from './versions.mjs';
 import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks } from './check-links.mjs';
@@ -31,11 +31,12 @@ export function snapshotKey(v, { converter, chrome, nav = '' }) {
   return crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex');
 }
 
-/** Hash of the navigation catalogue (products and section labels/routes, not versions) from the generated manifest. */
-export function navHash(manifestPath = path.join(GENERATED, 'manifest.json')) {
-  if (!fs.existsSync(manifestPath)) return '';
-  const m = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-  const nav = (m.products ?? []).map((p) => [p.id, p.name, p.group, (p.sections ?? []).map((s) => [s.id, s.label, s.route])]);
+/** Hash of the navigation catalogue (products, section labels/routes, link-outs; not versions), taken from the lock file. */
+export function navHash(lock = readLock()) {
+  const nav = {
+    products: (lock.products ?? []).map((p) => [p.id, p.name, p.group, (p.sections ?? []).map((s) => [s.id, s.label, s.route])]),
+    linkOut: (lock.link_out ?? []).map((l) => [l.id, l.name, l.group, l.href]),
+  };
   return crypto.createHash('sha256').update(JSON.stringify(nav)).digest('hex');
 }
 
