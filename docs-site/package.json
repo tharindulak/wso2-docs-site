@@ -9,7 +9,7 @@
   "scripts": {
     "test": "npm test -w @wso2/docs-converter && node --test \"scripts/test/*.test.mjs\" \"site/test/*.test.mjs\"",
     "build:converter": "npm run build -w @wso2/docs-converter",
-    "fetch": "node scripts/fetch-sources.mjs",
+    "fetch": "npm run build:converter && node scripts/fetch-sources.mjs",
     "content": "npm run build:converter && node scripts/build-content.mjs",
     "check-source": "npm run build:converter && wso2-docs check",
     "start": "node scripts/docusaurus.mjs start site",

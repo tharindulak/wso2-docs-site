@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
+import { sectionVersions, validateVersions, LIVE_WINDOW_DEFAULT } from './versions.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const CACHE = path.join(ROOT, '.cache', 'sources');
@@ -19,10 +20,11 @@ export function readLock() {
   const lock = yaml.load(fs.readFileSync(LOCK, 'utf8'), { schema: yaml.JSON_SCHEMA });
   for (const p of lock.products) {
     for (const s of p.sections) {
-      for (const ref of refsOf(s)) {
+      validateVersions(s, lock.live_window ?? LIVE_WINDOW_DEFAULT);
+      for (const v of sectionVersions(s, lock.live_window ?? LIVE_WINDOW_DEFAULT)) for (const ref of refsOf(v)) {
         if (!REPO.test(ref.repo)) throw new Error(`${s.id}: repo must be wso2/<name>, got ${ref.repo}`);
         if (!SHA.test(ref.sha)) throw new Error(`${s.id}: sha must be a full 40-character commit, got ${ref.sha}`);
-        if (!BRANCH.test(ref.track ?? '')) throw new Error(`${s.id}: track must name the branch the bump bot follows`);
+        if (ref.track !== null && !BRANCH.test(ref.track ?? '')) throw new Error(`${s.id}: track must name the branch the bump bot follows`);
       }
       for (const rel of [...(s.sparse ?? []), ...(s.cloud_companion?.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs, s.cloud_companion?.mkdocs, s.cloud_companion?.path_prefix].filter(Boolean)) {
         if (!REL.test(rel)) throw new Error(`${s.id}: path must be relative and inside the repo: ${rel}`);
@@ -32,6 +34,9 @@ export function readLock() {
   }
   return lock;
 }
+
+/** Versions kept live (built from source on every build). */
+export const liveWindow = (lock) => lock.live_window ?? LIVE_WINDOW_DEFAULT;
 
 /** The repo@sha references a section reads. */
 export function refsOf(section) {
