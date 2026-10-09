@@ -10,7 +10,7 @@ const ADMONITION: Record<string, string> = {
 
 /** Tags MDX may keep as JSX. Anything else that looks like a tag is escaped as text. */
 export const JSX_TAGS: readonly string[] = [
-  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect',
+  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect', 'ApiReference',
   'a', 'abbr', 'b', 'blockquote', 'br', 'button', 'caption', 'code', 'col', 'colgroup', 'dd', 'del', 'details', 'div',
   'dl', 'dt', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input',
   'ins', 'kbd', 'label', 'li', 'mark', 'ol', 'p', 'pre', 's', 'small', 'source', 'span', 'strong', 'sub', 'summary',
@@ -126,9 +126,36 @@ const JSX_ATTRS: Record<string, string> = {
   allowfullscreen: 'allowFullScreen', cellpadding: 'cellPadding', cellspacing: 'cellSpacing',
 };
 
+const attrValue = (attrs: string, name: string): string | undefined =>
+  attrs.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, 'i'))?.slice(1).find((v) => v !== undefined);
+
+/**
+ * An MkDocs Redoc embed (`<redoc spec-url="...">`, rendered by the source site's theme script) becomes the
+ * docs site's <ApiReference> component. Specs on the site load in the viewer; a spec on another host is only
+ * linked, never fetched into the reader's browser (it would be unpinned third-party content).
+ */
+export function redocToApiReference(text: string): { text: string; count: number } {
+  let count = 0;
+  const out = text.replace(/<redoc\b([^>]*)>(?:\s*<\/redoc\s*>)?/gi, (whole, attrs: string) => {
+    const spec = attrValue(attrs, 'spec-url');
+    if (!spec || /[\s"'<>{}]/.test(spec)) return whole;
+    count++;
+    if (/^[a-z][\w+.-]*:/i.test(spec)) {
+      if (!/^https:\/\/[^/]/i.test(spec)) { count--; return whole; } // only https links; anything else stays text
+      return `<ApiReference specLink="${spec}" />`;
+    }
+    const props = [`spec="${spec}"`];
+    const level = attrValue(attrs, 'schema-expansion-level');
+    if (level && /^(\d+|all)$/.test(level)) props.push(`schemaExpansionLevel="${level}"`);
+    if (attrValue(attrs, 'expand-single-schema-field') === 'true') props.push('expandSingleSchemaField');
+    return `<ApiReference ${props.join(' ')} />`;
+  });
+  return { text: out, count };
+}
+
 function inline(text: string, stats: SyntaxStats): string {
   return outsideCode(placeholderHostLinks(text), (t) => {
-    let s = t;
+    let s = redocToApiReference(t).text;
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g,
       (m) => (m.startsWith('{:') || /=|^\{\s*[.#]/.test(m) ? (stats.attrLists++, '') : m));
     s = s.replace(/\]\(([^)\s]*[<>][^)\s]*)\)/g, (_, url: string) => `](${url.replace(/</g, '%3C').replace(/>/g, '%3E')})`);

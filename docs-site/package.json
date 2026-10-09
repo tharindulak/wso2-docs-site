@@ -30,7 +30,8 @@
     "@mui/material": "7.3.4",
     "@wso2/docs-converter": "0.1.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "redoc": "2.5.4"
   },
   "devDependencies": {
     "js-yaml": "4.3.2"

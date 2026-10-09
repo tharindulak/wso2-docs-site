@@ -46,3 +46,17 @@ test('bare placeholder URLs stay text, so Docusaurus does not try to parse them 
   assert.equal(body, 'Requests go to http:&#47;/host:port/healthcare or http:&#47;/username:password@proxyhost:port/. Real: https://wso2.com/x.');
   assert.equal(toMdx('`http://host:port/x` and [l](https://wso2.com/a)').body, '`http://host:port/x` and [l](https://wso2.com/a)');
 });
+
+test('Redoc embeds become <ApiReference>; options kept; external https specs only linked; anything else stays text', async () => {
+  const { redocToApiReference } = await import('../src/syntax.js');
+  const r = (s: string) => redocToApiReference(s).text;
+  assert.equal(r(`<redoc spec-url="/identity/apis/restapis/scim2.yaml" theme='{ "colors": { "primary": { "main": "#ff7300" } } }'></redoc>`), '<ApiReference spec="/identity/apis/restapis/scim2.yaml" />');
+  assert.equal(r(`<redoc spec-url='../publisher-v4.yaml'></redoc>`), '<ApiReference spec="../publisher-v4.yaml" />');
+  assert.equal(r('<redoc expand-single-schema-field="true" schema-expansion-level="3" spec-url="x.yaml">'), '<ApiReference spec="x.yaml" schemaExpansionLevel="3" expandSingleSchemaField />');
+  assert.equal(r(`<redoc spec-url='https://raw.githubusercontent.com/wso2/docs-apk/refs/heads/1.2.0/a.yaml'></redoc>`), '<ApiReference specLink="https://raw.githubusercontent.com/wso2/docs-apk/refs/heads/1.2.0/a.yaml" />');
+  assert.equal(r(`<redoc spec-url="javascript:alert(1)"></redoc>`), `<redoc spec-url="javascript:alert(1)"></redoc>`);
+  assert.equal(r('<redoc spec-url=../../apis/restapis/account-recovery.yaml></redoc>'), '<ApiReference spec="../../apis/restapis/account-recovery.yaml" />', 'unquoted attribute');
+  assert.equal(r('<redoc></redoc>'), '<redoc></redoc>');
+  assert.match(toMdx('<redoc spec-url="/a/b.yaml"></redoc>').body, /^<ApiReference spec="\/a\/b\.yaml" \/>$/);
+  assert.match(toMdx('<redoc spec-url="javascript:x"></redoc>').body, /^&lt;redoc/, 'unconverted embeds are escaped as before');
+});

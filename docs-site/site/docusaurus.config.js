@@ -53,7 +53,8 @@ export default {
   onBrokenAnchors: 'warn',
   markdown: { format: 'mdx', mermaid: true, hooks: { onBrokenMarkdownLinks: 'warn', onBrokenMarkdownImages: 'warn' } },
   future: { v4: false }, // Faster bundler broke on near-identical versioned MDX in docs-agent-platform; re-test before enabling.
-  staticDirectories: ['static', path.join(generated, 'static')],
+  // The last entry serves redoc.standalone.js for API pages (src/components/ApiReference.js).
+  staticDirectories: ['static', path.join(generated, 'static'), path.resolve(here, '../node_modules/redoc/bundles')],
   themes: ['@docusaurus/theme-mermaid'],
   presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css'] } }]],
   plugins: [

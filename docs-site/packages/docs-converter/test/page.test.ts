@@ -62,3 +62,14 @@ test('CommonMark fallback pages keep HTML class attributes', async () => {
   if (stats.format === 'md') assert.match(mdx, /<tr class="odd">/);
   assert.doesNotMatch(mdx, /format: md[\s\S]*className=/);
 });
+
+test('an API reference page takes its title and summary from the spec and gets the full width', async () => {
+  const { mdx } = await convertRendered('<redoc spec-url="/identity/apis/restapis/scim2.yaml"></redoc>\n', {
+    deploymentOptions: ['WSO2 Cloud'],
+    specInfo: (spec) => (spec === '/identity/apis/restapis/scim2.yaml' ? { title: 'SCIM 2.0 Agents API', description: 'Manage agents.' } : undefined),
+  });
+  assert.match(mdx, /^title: SCIM 2\.0 Agents API$/m);
+  assert.match(mdx, /^description: Manage agents\.$/m);
+  assert.match(mdx, /^hide_table_of_contents: true$/m);
+  assert.match(mdx, /import ApiReference from '@site\/src\/components\/ApiReference';\n\n<ApiReference spec="\/identity\/apis\/restapis\/scim2\.yaml" \/>/);
+});

@@ -92,3 +92,24 @@ test('config: paths must stay inside the repository; kinds and routes are valida
   assert.throws(() => loadConfig(path.join(root, 'kind.yaml'), root), /kind must be/);
   assert.throws(() => loadConfig(path.join(root, 'route.yaml'), root), /route must be/);
 });
+
+test('API reference pages resolve their spec like a browser would and read its title, never outside the docs folder', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: Demo\nnav:\n  - apis/publisher.md\n  - apis/abs.md\n  - apis/escape.md\n',
+    'en/docs/apis/publisher.md': `<redoc spec-url='../publisher-v4.yaml'></redoc>`,
+    'en/docs/apis/abs.md': '<redoc spec-url="{{ base_path }}/apis/restapis/admin.yaml"></redoc>',
+    'en/docs/apis/escape.md': `<redoc spec-url='../../../../secret.yaml'></redoc>`,
+    'en/docs/apis/publisher-v4.yaml': 'openapi: 3.0.1\ninfo:\n  title: Publisher API v4\n  description: |\n    Manage APIs in the **Publisher**.\n\n    Second paragraph.\n',
+    'en/docs/apis/restapis/admin.yaml': '{"openapi":"3.0.1","info":{"title":"Admin API"}}',
+    'secret.yaml': 'info:\n  title: Should not be read\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  const { report } = await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'] }, { outDir: out, route: 'demo' });
+  assert.equal(report.ok, 3);
+  const read = (p: string) => fs.readFileSync(path.join(out, p), 'utf8');
+  assert.match(read('apis/publisher.md'), /^title: Publisher API v4$/m);
+  assert.match(read('apis/publisher.md'), /^description: Manage APIs in the Publisher\.$/m, 'first paragraph, Markdown removed');
+  assert.match(read('apis/abs.md'), /^title: Admin API$/m);
+  assert.match(read('apis/abs.md'), /<ApiReference spec="\/demo\/apis\/restapis\/admin\.yaml" \/>/);
+  assert.doesNotMatch(read('apis/escape.md'), /Should not be read/);
+});

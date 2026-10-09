@@ -45,6 +45,8 @@ export interface ConvertOptions {
   iframeHosts?: readonly string[];
   /** Front matter and quick-start meta read from the page file itself (see render.splitPageData). */
   pageData?: Partial<PageData>;
+  /** Title and summary of an OpenAPI spec referenced by <ApiReference spec>, for pages that have no heading. */
+  specInfo?: (spec: string) => { title?: string; description?: string } | undefined;
 }
 
 export type PageStats = SyntaxStats & { removed?: string[]; htmlBlocks?: number; format?: 'md' };
@@ -97,6 +99,14 @@ async function assemble(
   const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
   for (const k of KEEP_FRONT_MATTER) if (source[k] !== undefined) front[k] = source[k];
   front.title ??= firstHeading(body);
+  const spec = mdxBody.match(/<ApiReference spec="([^"]+)"/)?.[1];
+  if (spec) {
+    // An API reference page: the viewer needs the full width, and the spec names the page.
+    front.hide_table_of_contents = true;
+    const info = opts.specInfo?.(spec);
+    front.title ??= info?.title;
+    if (info?.description && front.description === undefined) front.description = info.description;
+  }
   if (source.template) front.mkdocs_template = String(source.template).replace(/^templates\//, '').replace(/\.html$/, '');
   front.deployment_options = opts.deploymentOptions;
   if (opts.editUrl) front.custom_edit_url = opts.editUrl;
@@ -107,6 +117,7 @@ async function assemble(
   const imports = md ? '' : [
     /<Applies\b/.test(mdxBody) && "import Applies from '@site/src/components/Applies';",
     /<DeploymentValue\b/.test(mdxBody) && "import DeploymentValue from '@site/src/components/DeploymentValue';",
+    /<ApiReference\b/.test(mdxBody) && "import ApiReference from '@site/src/components/ApiReference';",
     usesTabs && !/import Tabs from/.test(mdxBody) && "import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';",
   ].filter(Boolean).join('\n');
 

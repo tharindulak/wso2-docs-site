@@ -32,3 +32,7 @@
 .home-group { margin-bottom: 2rem; }
 .home-card { height: 100%; color: inherit; }
 .home-card:hover { text-decoration: none; border-color: var(--ifm-color-primary); }
+
+/* API reference pages: Redoc's three panels need the full content width. */
+.api-reference { margin-inline: calc(-1 * var(--ifm-spacing-horizontal)); }
+.api-reference__status { color: var(--ifm-color-emphasis-700); }

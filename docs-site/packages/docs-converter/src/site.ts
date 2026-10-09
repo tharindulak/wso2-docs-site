@@ -95,6 +95,43 @@ export function keepMkdocsUrl(mdx: string, rel: string): string {
   return mdx.replace(/^---\n/, `---\nslug: /${parts.join('/')}/\n`);
 }
 
+// ---- OpenAPI specs behind <ApiReference> ----
+
+const specCache = new Map<string, { title?: string; description?: string } | undefined>();
+
+function readSpecInfo(file: string): { title?: string; description?: string } | undefined {
+  if (specCache.has(file)) return specCache.get(file);
+  let info: { title?: string; description?: string } | undefined;
+  try {
+    const doc = yaml.load(fs.readFileSync(file, 'utf8')) as { info?: { title?: unknown; description?: unknown } } | null;
+    const title = typeof doc?.info?.title === 'string' ? doc.info.title.trim() : undefined;
+    const raw = typeof doc?.info?.description === 'string' ? doc.info.description : '';
+    // First paragraph as plain text: no Markdown, HTML or line breaks.
+    const first = raw.split(/\n\s*\n/)[0]!.replace(/<[^>]+>/g, '').replace(/[*_`#>]|\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\s+/g, ' ').trim();
+    info = { title, description: first ? (first.length > 200 ? `${first.slice(0, 197)}...` : first) : undefined };
+  } catch { info = undefined; }
+  specCache.set(file, info);
+  return info;
+}
+
+/**
+ * Resolve <ApiReference spec> to the spec file in the docs folder(s), the way the page's URL resolves it:
+ * absolute site paths under the section route, or relative to the page's directory URL (MkDocs and the docs
+ * site both use directory URLs). Never outside a docs folder.
+ */
+function specInfoFor(docsDirs: string[], route: string, rel: string): (spec: string) => { title?: string; description?: string } | undefined {
+  return (spec) => {
+    const pageDir = `/${mkdocsUrl(rel)}`.replace(/\/?$/, '/');
+    const sitePath = spec.startsWith('/') ? (spec.startsWith(`/${route}/`) ? spec.slice(route.length + 1) : spec) : path.posix.resolve(pageDir, spec);
+    for (const dir of docsDirs) {
+      const file = path.join(dir, sitePath);
+      if (!path.resolve(file).startsWith(path.resolve(dir) + path.sep) || !fs.existsSync(file)) continue;
+      return readSpecInfo(file);
+    }
+    return undefined;
+  };
+}
+
 async function emit(out: SiteOutput, report: SiteReport, rel: string, produce: () => Promise<string>, fallback: Omit<FallbackInfo, 'rel'>): Promise<void> {
   const file = path.join(out.outDir, rel.replace(/\.mdx$/, '.md'));
   const excluded = (out.exclude ?? []).includes(rel);
@@ -149,7 +186,10 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     await emit(out, report, withPrefix(rel), async () => {
       const env = { ...site.extra, config: site.config, base_path: BASE };
       const rendered = resolveBase(renderSingle(loadPage(file, source), env, file, source), route);
-      return (await convertRendered(rendered, { deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts })).mdx;
+      return (await convertRendered(rendered, {
+        deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
+        specInfo: specInfoFor([site.docsDir], route, rel),
+      })).mdx;
     }, { title: titleOf(raw, rel), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
   }
   if (out.staticDir) copyAssets(site.docsDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, src.skip);
@@ -202,7 +242,10 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
       const cData = inC ? readPageData(path.join(c.site.docsDir, rel), c.source) : undefined;
       const sData = inS ? readPageData(path.join(s.site.docsDir, rel), s.source) : undefined;
       const pageData = { frontMatter: { ...(sData?.frontMatter ?? {}), ...(cData?.frontMatter ?? {}) }, meta: cData?.meta ?? sData?.meta };
-      return (await convertRendered(resolveBase(text, out.route), { deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts })).mdx;
+      return (await convertRendered(resolveBase(text, out.route), {
+        deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts,
+        specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel),
+      })).mdx;
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), rel), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
   }
   for (const dir of [out.staticDir, out.outDir]) {
