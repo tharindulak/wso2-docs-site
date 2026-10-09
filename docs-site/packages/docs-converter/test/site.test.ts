@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets } from '../src/site.js';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -140,4 +140,22 @@ test('with markdownextradata (string or mapping form, also through INHERIT), Jin
     await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'new' });
     assert.match(fs.readFileSync(path.join(out, 'index.md'), 'utf8'), /Welcome to Demo\./, plugins);
   }
+});
+
+test('markdown images under the section route become page-relative when the file exists', () => {
+  const exists = (rel: string) => rel === 'assets/img/a.png';
+  assert.equal(relativeImages('![A](/demo/assets/img/a.png)', 'guides/setup.md', 'demo', exists), '![A](../assets/img/a.png)');
+  assert.equal(relativeImages('![A](/demo/assets/img/a.png "t")', 'index.md', 'demo', exists), '![A](assets/img/a.png "t")');
+  assert.equal(relativeImages('![B](/demo/assets/img/b.png)', 'index.md', 'demo', exists), '![B](/demo/assets/img/b.png)', 'missing file left alone');
+  assert.equal(relativeImages('<img src="/demo/assets/img/a.png" />', 'index.md', 'demo', exists), '<img src="/demo/assets/img/a.png" />', 'HTML stays absolute');
+  assert.equal(relativeImages('```\n![A](/demo/assets/img/a.png)\n```', 'index.md', 'demo', exists), '```\n![A](/demo/assets/img/a.png)\n```', 'code untouched');
+});
+
+test('only assets still referenced by absolute path are copied to static', () => {
+  const root = tempSource({ 'docs/assets/a.png': 'A', 'docs/assets/b.png': 'B', 'docs/files/c.zip': 'C', 'pages/index.md': '<img src="/demo/assets/a.png" /> [zip](/demo/files/c.zip)' });
+  const to = path.join(root, 'static');
+  assert.equal(copyReferencedAssets(path.join(root, 'docs'), path.join(root, 'pages'), to, 'demo'), 2);
+  assert.ok(fs.existsSync(path.join(to, 'assets/a.png')));
+  assert.ok(fs.existsSync(path.join(to, 'files/c.zip')));
+  assert.ok(!fs.existsSync(path.join(to, 'assets/b.png')));
 });

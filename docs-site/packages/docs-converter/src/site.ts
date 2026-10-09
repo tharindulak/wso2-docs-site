@@ -7,6 +7,7 @@ import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
 import { loadPage, loadPlain, renderSingle, readPageData } from './render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from './merge.js';
+import { outsideCode } from './syntax.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type PageErrorKind } from './page.js';
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
@@ -73,6 +74,38 @@ export function copyAssets(fromDir: string, toDir: string, skip: string[] = []):
     fs.mkdirSync(path.dirname(to), { recursive: true });
     fs.copyFileSync(path.join(fromDir, rel), to);
   }
+}
+
+const IMAGE = /\.(png|jpe?g|gif|svg|webp|avif)$/i;
+
+/** Markdown images at /<route>/<file> become page-relative, so Docusaurus emits them content-hashed (shared across versions). */
+export function relativeImages(mdx: string, pageRel: string, route: string, exists: (assetRel: string) => boolean): string {
+  const prefix = `/${route}/`;
+  return outsideCode(mdx, (t) => t.replace(/(!\[[^\]]*\]\()([^)\s]+)((?:\s+"[^"]*")?\))/g, (m, pre: string, url: string, post: string) => {
+    if (!url.startsWith(prefix) || !IMAGE.test(url)) return m;
+    const asset = decodeURI(url.slice(prefix.length));
+    if (!exists(asset)) return m;
+    const rel = path.posix.relative(path.posix.dirname(pageRel.replace(/\\/g, '/')), asset);
+    return `${pre}${rel}${post}`;
+  }));
+}
+
+/** Copy to the static folder only the files pages still reference as /<route>/<file> (HTML, links, attachments). */
+export function copyReferencedAssets(fromDir: string, pagesDir: string, toDir: string, route: string): number {
+  const wanted = new Set<string>();
+  const re = new RegExp(`/${route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/([^\\s"'()<>{}#?]+\\.[A-Za-z0-9]+)`, 'g');
+  for (const rel of walk(pagesDir, isPage)) for (const m of fs.readFileSync(path.join(pagesDir, rel), 'utf8').matchAll(re)) wanted.add(decodeURI(m[1]!));
+  let copied = 0;
+  for (const rel of wanted) {
+    const from = path.join(fromDir, rel);
+    if (!path.resolve(from).startsWith(path.resolve(fromDir) + path.sep) || !fs.statSync(from, { throwIfNoEntry: false })?.isFile() || isPage(rel)) continue;
+    const to = path.join(toDir, rel);
+    if (fs.existsSync(to)) continue;
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(from, to);
+    copied++;
+  }
+  return copied;
 }
 
 /** URL of a page on an MkDocs site, relative to the site root. */
@@ -186,13 +219,14 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     await emit(out, report, withPrefix(rel), async () => {
       const env = { ...site.extra, config: site.config, base_path: BASE };
       const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route);
-      return (await convertRendered(rendered, {
+      const result = await convertRendered(rendered, {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
         specInfo: specInfoFor([site.docsDir], route, rel),
-      })).mdx;
+      });
+      return relativeImages(result.mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(site.docsDir, prefix ? a.slice(prefix.length + 1) : a)));
     }, { title: titleOf(raw, rel), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
   }
-  if (out.staticDir) copyAssets(site.docsDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, src.skip);
+  if (out.staticDir) copyReferencedAssets(site.docsDir, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
   copyAssets(site.docsDir, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
   const nav = selectNav(site.nav, src.nav);
   const items = navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav);
@@ -242,17 +276,19 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
       const cData = inC ? readPageData(path.join(c.site.docsDir, rel), c.source) : undefined;
       const sData = inS ? readPageData(path.join(s.site.docsDir, rel), s.source) : undefined;
       const pageData = { frontMatter: { ...(sData?.frontMatter ?? {}), ...(cData?.frontMatter ?? {}) }, meta: cData?.meta ?? sData?.meta };
-      return (await convertRendered(resolveBase(text, out.route), {
+      const result = await convertRendered(resolveBase(text, out.route), {
         deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts,
         specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel),
-      })).mdx;
+      });
+      return relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), rel), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
   }
-  for (const dir of [out.staticDir, out.outDir]) {
-    if (!dir) continue;
-    copyAssets(c.site.docsDir, dir);
-    copyAssets(s.site.docsDir, dir);
+  if (out.staticDir) {
+    copyReferencedAssets(c.site.docsDir, out.outDir, out.staticDir, out.route);
+    copyReferencedAssets(s.site.docsDir, out.outDir, out.staticDir, out.route);
   }
+  copyAssets(c.site.docsDir, out.outDir);
+  copyAssets(s.site.docsDir, out.outDir);
   const known = (id: string): boolean => fs.existsSync(path.join(out.outDir, `${id}.md`));
   return { sidebar: mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav)), report };
 }
