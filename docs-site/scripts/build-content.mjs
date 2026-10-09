@@ -10,7 +10,8 @@ import {
   convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, githubEditUrl, emptyReport, walk,
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks,
 } from '@wso2/docs-converter';
-import { readLock, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
+import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
+import { sectionVersions, confluenceVersions, replaceExclude, pagePaths } from './versions.mjs';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -93,12 +94,16 @@ function fillTemplatePages(product, section, outDir, sidebarFile) {
 
 /**
  * Links to a product's current docs site, for pages hosted here, become internal links (rewriteSiteLinks in @wso2/docs-converter).
- * Each section answers for its current site, that site's /en/latest/ form and any `aliases` (former URLs).
+ * Each version answers for its current site, that site's /en/latest/ form and (Latest) any `aliases` (former URLs).
  */
 function rewriteLinksToHostedPages(lock) {
   const sites = [];
-  for (const product of lock.products) for (const section of product.sections) {
-    const docsDir = path.join(GENERATED, 'docs', section.id);
+  const win = liveWindow(lock);
+  const all = [];
+  for (const product of lock.products) for (const section of product.sections) for (const v of sectionVersions(section, win)) all.push({ section, v });
+  for (const { section, v } of all) {
+    const latest = v.status === 'latest';
+    const docsDir = path.join(GENERATED, 'docs', v.id);
     const hosts = (sub) => (p) => {
       const base = path.join(docsDir, sub, p);
       return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')])
@@ -106,17 +111,20 @@ function rewriteLinksToHostedPages(lock) {
     };
     const add = (url, sub = '') => {
       if (!url) return;
-      const route = sub ? `${section.route}/${sub}` : section.route;
+      const route = sub ? `${v.route}/${sub}` : v.route;
       for (const prefix of new Set([url, url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')])) sites.push({ prefix, route, hosts: hosts(sub) });
     };
-    const refs = section.kind === 'mkdocs-merge' ? [section.cloud, section.self_hosted] : [section];
+    const refs = latest && v.kind === 'mkdocs-merge' ? [v.cloud, v.self_hosted] : [v];
     for (const ref of refs) add(ref.current_site);
-    for (const alias of section.aliases ?? []) add(alias);
-    if (section.cloud_companion) add(section.cloud_companion.current_site, section.cloud_companion.path_prefix ?? '');
+    if (latest) {
+      for (const alias of section.aliases ?? []) add(alias);
+      if (section.former_site && v.version) add(section.former_site.replace('{version}', v.version));
+      if (section.cloud_companion) add(section.cloud_companion.current_site, section.cloud_companion.path_prefix ?? '');
+    }
   }
   let total = 0;
-  for (const product of lock.products) for (const section of product.sections) {
-    const docsDir = path.join(GENERATED, 'docs', section.id);
+  for (const { v } of all) {
+    const docsDir = path.join(GENERATED, 'docs', v.id);
     for (const rel of walk(docsDir, (r) => r.endsWith('.md'))) {
       const file = path.join(docsDir, rel);
       const text = fs.readFileSync(file, 'utf8');
@@ -136,63 +144,103 @@ let lockChanged = false;
 const sidebarsDir = path.join(GENERATED, 'sidebars');
 fs.mkdirSync(sidebarsDir, { recursive: true });
 
+const excludeChanges = [];
+const sidebarsOf = (id) => path.join(sidebarsDir, `${id}.json`);
+
+/** The section index, else the first sidebar page; never a redirect to the product's current site. */
+function landingOf(v) {
+  const docsDir = path.join(GENERATED, 'docs', v.id);
+  const isPage = (id) => ['.md', '/index.md'].some((ext) => {
+    const f = path.join(docsDir, `${id}${ext}`);
+    return fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
+  });
+  const sidebarFile = sidebarsOf(v.id);
+  const ids = fs.existsSync(sidebarFile) ? Object.values(JSON.parse(fs.readFileSync(sidebarFile, 'utf8'))).flatMap((items) => [...sidebarDocIds(normalizeSidebar(items))]) : [];
+  const landingId = ['index', ...ids].find(isPage);
+  return !landingId || landingId === 'index' ? '' : `${landingId.replace(/(^|\/)index$/, '')}/`.replace(/^\/$/, '');
+}
+
 for (const product of lock.products) {
   const entry = { id: product.id, name: product.name, group: product.group, blurb: product.blurb, sections: [] };
   for (const section of product.sections) {
-    const outDir = path.join(GENERATED, 'docs', section.id);
-    const staticDir = path.join(GENERATED, 'static', section.route);
-    if (!only.size || only.has(section.id)) {
-      fs.rmSync(outDir, { recursive: true, force: true });
-      const report = { section: section.id, ...emptyReport() };
-      const started = Date.now();
-      const sidebar = await buildSection(section, outDir, staticDir, sidebarsDir, report);
-      for (const f of fs.readdirSync(sidebarsDir)) if (f.startsWith(`${section.id}.`) && !f.endsWith('.json')) fs.rmSync(path.join(sidebarsDir, f));
-      if (sidebar) write(path.join(sidebarsDir, `${section.id}.json`), JSON.stringify({ docs: sidebar.length ? sidebar : [{ type: 'autogenerated', dirName: '.' }] }, null, 2));
-      fillTemplatePages(product, section, outDir, path.join(sidebarsDir, `${section.id}.json`));
+    const versions = sectionVersions(section, liveWindow(lock));
+    const listed = Boolean(section.versions ?? section.self_hosted?.versions);
+    for (const v of versions) {
+      const outDir = path.join(GENERATED, 'docs', v.id);
+      const staticDir = v.status === 'latest' ? path.join(GENERATED, 'static', v.route) : path.join(GENERATED, 'static-versions', v.id, v.route);
+      if (!only.size || only.has(section.id) || only.has(v.id)) {
+        fs.rmSync(outDir, { recursive: true, force: true });
+        if (v.status !== 'latest') fs.rmSync(path.join(GENERATED, 'static-versions', v.id), { recursive: true, force: true });
+        const report = { section: v.id, ...emptyReport() };
+        const started = Date.now();
+        const sidebar = await buildSection(v, outDir, staticDir, sidebarsDir, report);
+        for (const f of fs.readdirSync(sidebarsDir)) if (f.startsWith(`${v.id}.`) && !f.endsWith('.json')) fs.rmSync(path.join(sidebarsDir, f));
+        if (sidebar) write(sidebarsOf(v.id), JSON.stringify({ docs: sidebar.length ? sidebar : [{ type: 'autogenerated', dirName: '.' }] }, null, 2));
+        fillTemplatePages(product, v, outDir, sidebarsOf(v.id));
 
-      const known = new Set(section.exclude ?? []);
-      const fresh = report.failures.filter((f) => !known.has(f.page));
-      if (fresh.length && onboard && !known.size) {
-        section.exclude = report.failures.map((f) => f.page).sort();
-        lockChanged = true;
-      } else if (fresh.length) {
-        blocking = true;
+        let list = v.exclude ?? [];
+        const known = new Set(list);
+        const fresh = report.failures.filter((f) => !known.has(f.page));
+        let changed = false;
+        if (fresh.length && onboard && !known.size) {
+          list = report.failures.map((f) => f.page).sort();
+          changed = true;
+        } else if (fresh.length) {
+          blocking = true;
+        }
+        if (prune && report.nowPassing.length) {
+          list = list.filter((p) => !report.nowPassing.includes(p));
+          changed = true;
+        }
+        if (changed) {
+          lockChanged = true;
+          if (listed) excludeChanges.push({ section, v, list });
+          else section.exclude = list;
+        }
+        report.fresh = fresh.length;
+        report.seconds = Math.round((Date.now() - started) / 1000);
+        reports.push(report);
+        console.log(`${v.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  ${report.seconds}s`);
       }
-      if (prune && report.nowPassing.length) {
-        section.exclude = (section.exclude ?? []).filter((p) => !report.nowPassing.includes(p));
-        lockChanged = true;
-      }
-      report.fresh = fresh.length;
-      report.seconds = Math.round((Date.now() - started) / 1000);
-      reports.push(report);
-      console.log(`${section.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  ${report.seconds}s`);
     }
-    // Landing: the section index, else the first sidebar page; never a redirect to the product's current site.
-    const docsDir = path.join(GENERATED, 'docs', section.id);
-    const isPage = (id) => ['.md', '/index.md'].some((ext) => {
-      const f = path.join(docsDir, `${id}${ext}`);
-      return fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
-    });
-    const sidebarFile = path.join(sidebarsDir, `${section.id}.json`);
-    const ids = fs.existsSync(sidebarFile) ? Object.values(JSON.parse(fs.readFileSync(sidebarFile, 'utf8'))).flatMap((items) => [...sidebarDocIds(normalizeSidebar(items))]) : [];
-    const landingId = ['index', ...ids].find(isPage);
+    const versionEntries = versions.map((v) => ({
+      id: v.id, version: v.version, label: v.versionLabel, status: v.status, route: v.route,
+      sidebar: fs.existsSync(sidebarsOf(v.id)) ? `${v.id}.json` : fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${v.id}.`)),
+      landing: landingOf(v),
+    }));
+    const confluence = confluenceVersions(section).map((o) => ({ version: o.version, label: o.version, status: 'confluence', href: o.href }));
+    if (!listed && typeof section.older_versions === 'string') confluence.push({ version: 'older', label: 'Older versions', status: 'confluence', href: section.older_versions });
     entry.sections.push({
-      landing: !landingId || landingId === 'index' ? '' : `${landingId.replace(/(^|\/)index$/, '')}/`.replace(/^\/$/, ''),
-      id: section.id, label: section.label, route: section.route, kind: section.kind,
-      version: section.self_hosted?.version ?? section.version ?? null, olderVersions: section.older_versions ?? null,
-      sidebar: fs.existsSync(path.join(sidebarsDir, `${section.id}.json`)) ? `${section.id}.json` : fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${section.id}.`)),
+      ...versionEntries[0], id: section.id, label: section.label, kind: section.kind,
+      cloud: section.kind === 'mkdocs-merge' || Boolean(section.cloud_companion),
+      version: versions[0].version, olderVersions: section.older_versions ?? null,
+      versions: [...versionEntries, ...confluence],
     });
   }
   manifest.products.push(entry);
 }
 
 console.log(`Links to current docs sites made internal: ${rewriteLinksToHostedPages(lock)}`);
+for (const product of manifest.products) for (const s of product.sections) {
+  const doc = {
+    section: s.id, latest: s.version,
+    versions: s.versions.map((v) => (v.status === 'confluence' ? { version: v.version, label: v.label, status: v.status, href: v.href }
+      : { version: v.version, label: v.label, status: v.status, path: v.status === 'latest' ? `/${s.route}/` : `/${v.route}/` })),
+  };
+  write(path.join(GENERATED, 'static', s.route, 'versions.json'), JSON.stringify(doc));
+  for (const v of s.versions.filter((x) => x.status !== 'confluence')) {
+    const dir = v.status === 'latest' ? path.join(GENERATED, 'static', v.route) : path.join(GENERATED, 'static-versions', v.id, v.route);
+    write(path.join(dir, 'pages.json'), JSON.stringify(pagePaths(path.join(GENERATED, 'docs', v.id))));
+  }
+}
 write(path.join(GENERATED, 'manifest.json'), JSON.stringify(manifest, null, 2));
 write(path.join(GENERATED, 'content-report.json'), JSON.stringify(reports, null, 2));
 if (lockChanged) {
   // Rewrite only the exclude lists, keeping the hand-written file otherwise intact.
   let text = fs.readFileSync(LOCK, 'utf8');
+  for (const { section, v, list } of excludeChanges) text = replaceExclude(text, section.id, v.version, list);
   for (const product of lock.products) for (const section of product.sections) {
+    if (section.versions ?? section.self_hosted?.versions) continue;
     const re = new RegExp(`(\\n {6}- id: ${section.id}\\n[\\s\\S]*?\\n {8}exclude:)[ \\t]*(?:\\[\\]|(?:\\n {10}- .*)+)`);
     const list = section.exclude ?? [];
     text = text.replace(re, `$1${list.length ? `\n${list.map((p) => `          - ${p}`).join('\n')}` : ' []'}`);

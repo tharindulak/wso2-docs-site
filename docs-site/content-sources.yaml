@@ -106,7 +106,8 @@ products:
           - version: 4.4.0
             ref: 4.4.0
             sha: 4ab09a6fce74d3cb32dd819d7818812c5895f32a
-            exclude: []
+            exclude:
+              - index.md
           - version: 4.3.0
             ref: 4.3.0
             sha: 5b4f5a8f5e9b685813c2381c1dd9c72065ba3e19
@@ -114,7 +115,8 @@ products:
           - version: 4.2.0
             ref: 4.2.0
             sha: 840cd49e849489ff4f0e0774c9f6f7e13188460b
-            exclude: []
+            exclude:
+              - learn/examples/data-integration/excel-data-service.md
       - id: integration-bi
         label: BI
         route: integration/bi
@@ -172,12 +174,16 @@ products:
               ref: master
               sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
               mkdocs: en/identity-server/7.2.0/mkdocs.yml
-              exclude: []
+              exclude:
+                - guides/organization-management/manage-organizations.md
+                - guides/users/attributes/configure-multi-valued-contact-attributes.md
             - version: 7.1.0
               ref: master
               sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
               mkdocs: en/identity-server/7.1.0/mkdocs.yml
-              exclude: []
+              exclude:
+                - guides/organization-management/manage-organizations.md
+                - guides/users/attributes/configure-multi-valued-contact-attributes.md
             - version: 7.0.0
               ref: master
               sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
@@ -187,12 +193,20 @@ products:
               ref: master
               sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
               mkdocs: en/identity-server/6.1.0/mkdocs.yml
-              exclude: []
+              exclude:
+                - developer-portal/applications/edit-mobile.md
+                - developer-portal/applications/edit-windows.md
+                - guides/identity-federation/configure-shibboleth-idp-as-a-trusted-identity-provider.md
+                - guides/password-mgt/recovery-confirmation.md
             - version: 6.0.0
               ref: master
               sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
               mkdocs: en/identity-server/6.0.0/mkdocs.yml
-              exclude: []
+              exclude:
+                - developer-portal/applications/edit-mobile.md
+                - developer-portal/applications/edit-windows.md
+                - guides/identity-federation/configure-shibboleth-idp-as-a-trusted-identity-provider.md
+                - guides/password-mgt/recovery-confirmation.md
             - version: 5.11.0
               ref: master
               sha: c2176fcd1b501d78b6261b04f276f8a9902aabbd
