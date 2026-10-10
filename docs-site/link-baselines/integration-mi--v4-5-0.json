@@ -264,6 +264,14 @@
   "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
  },
  {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/email-connector/email-connector-config/index.html",
+  "link": "\\&quot;cid:image1\\&quot;"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/email-connector/email-connector-config/index.html",
+  "link": "\\&quot;cid:image2\\&quot;"
+ },
+ {
   "page": "integration/micro-integrator/4.5.0/reference/connectors/email-connector/email-connector-example/index.html",
   "link": "/integration/micro-integrator/4.5.0/observe-and-manage/managing-integrations-with-apictl/"
  },
@@ -410,6 +418,10 @@
  {
   "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforce-marketing-cloud-connector/salesforce-marketing-cloud-overview/index.html",
   "link": "/integration/micro-integrator/4.5.0/en/reference/connectors/salesforce-marketing-cloud-connector/salesforce-marketing-cloud-configuration.md/"
+ },
+ {
+  "page": "integration/micro-integrator/4.5.0/reference/connectors/salesforcebulk-connector/salesforcebulk-connector-example/index.html",
+  "link": "../../../assets/img/develop/mi-for-vscode/qsg/build-and-run.png"
  },
  {
   "page": "integration/micro-integrator/4.5.0/reference/connectors/servicenow-connector/1.x/servicenow-connector-1.x-example/index.html",

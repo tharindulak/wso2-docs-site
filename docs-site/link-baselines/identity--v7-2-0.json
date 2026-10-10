@@ -12,6 +12,10 @@
   "link": "/identity/7.2.0/apis/organization-apis/org-application-mgt/"
  },
  {
+  "page": "identity/7.2.0/apis/organization-apis/org-role-v3-mgt/index.html",
+  "link": "../../../apis/organization-apis/restapis/role-v3-management.yaml"
+ },
+ {
   "page": "identity/7.2.0/apis/scim2-patch-operations/index.html",
   "link": "/identity/7.2.0/apis/roles-v2-rest-api/#tag/Roles-Endpoint/operation/patchRole"
  },

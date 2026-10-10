@@ -1,5 +1,13 @@
 [
  {
+  "page": "identity/5.11.0/administer/product-level-security-guidelines/index.html",
+  "link": "../../administer/enabling-hsts"
+ },
+ {
+  "page": "identity/5.11.0/administer/product-level-security-guidelines/index.html",
+  "link": "../../administer/wso2-patch-application-process"
+ },
+ {
   "page": "identity/5.11.0/compliance/electronic-identification-authentication-and-trust-services-regulation/index.html",
   "link": "/identity/5.11.0/eidas-saml-attribute-profile-support-via-wso2-identity-server/"
  },
@@ -18,6 +26,10 @@
  {
   "page": "identity/5.11.0/develop/instagram-authenticator/index.html",
   "link": "/identity/5.11.0/develop/upgrading-an-authenticator/"
+ },
+ {
+  "page": "identity/5.11.0/develop/inwebo-authenticator-and-provisioning-connector/index.html",
+  "link": "attachments/48276415/76746223.png?effects=border-simple,blur-border"
  },
  {
   "page": "identity/5.11.0/develop/keystore-rest-api/index.html",
@@ -76,6 +88,10 @@
   "link": "/identity/5.11.0/learn/configuring-access-control-policy-for-a-service-provider/learn/deploying-the-sample-app/#configuring-the-service-provider"
  },
  {
+  "page": "identity/5.11.0/learn/configuring-microsoft-login/index.html",
+  "link": "%7B%7Bbase_path%7D%7D/assets/img/guides/idp/microsoft-idp/register-an-application.png"
+ },
+ {
   "page": "identity/5.11.0/learn/configuring-oauth2-openid-connect-single-sign-on/index.html",
   "link": "/identity/5.11.0/develop/jwt-grant-type-for-oauth2/"
  },
@@ -86,6 +102,10 @@
  {
   "page": "identity/5.11.0/learn/configuring-openid-connect-back-channel-logout/index.html",
   "link": "/identity/5.11.0/learn/configuring-openid-connect-back-channel-logout/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
+ },
+ {
+  "page": "identity/5.11.0/learn/configuring-outbound-provisioning-connectors-for-an-identity-provider/index.html",
+  "link": "(../../administer/using-asymmetric-encryption)"
  },
  {
   "page": "identity/5.11.0/learn/configuring-user-stores-for-scim-2.0-based-inbound-provisioning/index.html",
@@ -120,8 +140,16 @@
   "link": "/identity/5.11.0/learn/logging-in-to-your-application-via-identity-server-using-facebook-credentials/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
  },
  {
+  "page": "identity/5.11.0/learn/managing-challenge-questions/index.html",
+  "link": "../assets/img/using-wso2-identity-server/validating-challenge-question-answers.png"
+ },
+ {
   "page": "identity/5.11.0/learn/managing-user-attributes/index.html",
   "link": "/identity/5.11.0/develop/using-the-scim-2.0-rest-apis/"
+ },
+ {
+  "page": "identity/5.11.0/learn/multi-channel-self-registration-and-account-confirmation/index.html",
+  "link": "../../learn/configuring_google_recaptcha_for_security_question_based_password_recovery"
  },
  {
   "page": "identity/5.11.0/learn/multi-channel-self-registration-and-account-confirmation/index.html",
@@ -148,6 +176,22 @@
   "link": "/identity/5.11.0/learn/soap-tracer/"
  },
  {
+  "page": "identity/5.11.0/learn/role-based-permissions/index.html",
+  "link": "../../learn/configuring-user-stores"
+ },
+ {
+  "page": "identity/5.11.0/learn/self-registration-and-account-confirmation/index.html",
+  "link": "../../learn/configuring_google_recaptcha_for_security_question_based_password_recovery"
+ },
+ {
+  "page": "identity/5.11.0/learn/sending-custom-error-codes/index.html",
+  "link": "../../assets/attachments/custom-grant-1.0.0.jar"
+ },
+ {
+  "page": "identity/5.11.0/learn/sending-custom-error-codes/index.html",
+  "link": "../../assets/attachments/custom-grant.zip"
+ },
+ {
   "page": "identity/5.11.0/learn/session-management-with-playground/index.html",
   "link": "/identity/5.11.0/learn/session-management-with-playground/learn/deploying-the-sample-app/#configuring-the-service-provider_1"
  },
@@ -158,6 +202,18 @@
  {
   "page": "identity/5.11.0/learn/using-wso2-is-analytics-for-adaptive-authentication/index.html",
   "link": "/identity/5.11.0/learn/using-wso2-is-analytics-for-adaptive-authentication/TODO/"
+ },
+ {
+  "page": "identity/5.11.0/learn/writing-a-custom-oauth-2.0-grant-type/index.html",
+  "link": "../../assets/attachments/custom-grant-1.0.0.jar"
+ },
+ {
+  "page": "identity/5.11.0/learn/writing-a-custom-oauth-2.0-grant-type/index.html",
+  "link": "../../assets/attachments/custom-grant.zip"
+ },
+ {
+  "page": "identity/5.11.0/references/concepts/authentication/intro-ws-trust/index.html",
+  "link": "%7B%7Bbase_path%7D%7D/assets/img/concepts/sts-work-flow.png"
  },
  {
   "page": "identity/5.11.0/setup/changing-the-hostname/index.html",
@@ -186,6 +242,10 @@
  {
   "page": "identity/5.11.0/setup/other-usages-of-tcpmon/index.html",
   "link": "/identity/5.11.0/administer/starting-tcpmon/"
+ },
+ {
+  "page": "identity/5.11.0/setup/working-with-properties-of-user-stores/index.html",
+  "link": "(../../learn/using-email-address-as-the-username)"
  },
  {
   "page": "identity/5.11.0/setup/working-with-users-roles-and-permissions/index.html",

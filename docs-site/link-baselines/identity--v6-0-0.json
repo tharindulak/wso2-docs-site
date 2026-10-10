@@ -676,6 +676,70 @@
   "link": "/identity/6.0.0/develop/extend/workflows/write-a-custom-workflow-template/"
  },
  {
+  "page": "identity/6.0.0/includes/add-function-library-lvl3/index.html",
+  "link": "../../../../assets/img/guides/add-function-library.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/add-function-library-lvl3/index.html",
+  "link": "../../../../assets/img/guides/add-new-function-library.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/add-new-user/index.html",
+  "link": "../../../../assets/img/fragments/add-a-new-user.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/attribute-dialects-oidc/index.html",
+  "link": "../../../../assets/img/fragments/claim-mapping-oidc.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/attribute-mapping/index.html",
+  "link": "../../../../assets/img/fragments/mapped-attributes.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/attributes-with-multiple-values/index.html",
+  "link": "../../../../assets/img/fragments/is-user-interface.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/attributes-with-multiple-values/index.html",
+  "link": "../../../../assets/img/fragments/ldap-interface.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/configure-recaptcha-for-sso/index.html",
+  "link": "../../../../assets/img/guides/captcha-login-failed.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/configure-recaptcha-for-sso/index.html",
+  "link": "../../../../assets/img/guides/configure-account-locking.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/configure-recaptcha-for-sso/index.html",
+  "link": "../../../../assets/img/guides/recaptcha-sso.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/deploy-travelocity-sp/index.html",
+  "link": "../../../../assets/img/fragments/edit-service-provider-configs.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/enable-email-as-username/index.html",
+  "link": "../../../../assets/img/guides/email-as-username-attribute-mapping.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/enable-email-as-username/index.html",
+  "link": "../../../../assets/img/guides/super-admin.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/encrypt-id-tokens/index.html",
+  "link": "../../../../assets/img/guides/jwks-uri.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/encrypt-id-tokens/index.html",
+  "link": "../../../../assets/img/guides/upload-sp-cert.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/oidc-session-management/index.html",
+  "link": "../../learn/openid-connect-single-logout#configurations"
+ },
+ {
   "page": "identity/6.0.0/includes/oidc-session-management/index.html",
   "link": "/identity/6.0.0/learn/openid-connect-discovery/"
  },
@@ -684,8 +748,228 @@
   "link": "/identity/6.0.0/learn/openid-connect-dynamic-client-registration/"
  },
  {
+  "page": "identity/6.0.0/includes/pickup-dispatch-oidc/index.html",
+  "link": "../../../../assets/img/fragments/pickup-key-secret.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/pickup-manager-oidc/index.html",
+  "link": "../../../../assets/img/fragments/pickup-key-secret-2.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/recover-username/index.html",
+  "link": "../../../../assets/img/fragments/resident-menu-item.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/recover-username/index.html",
+  "link": "../../../../assets/img/fragments/user-name-recovery-options.png"
+ },
+ {
   "page": "identity/6.0.0/includes/register-application-portal/index.html",
   "link": "/identity/6.0.0/includes/register-application-portal/insertlink/"
+ },
+ {
+  "page": "identity/6.0.0/includes/register-mobile-application/index.html",
+  "link": "../../../../assets/img/fragments/android-client-id.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/register-mobile-application/index.html",
+  "link": "../../../../assets/img/fragments/android-sp.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/resident-saml-sample/index.html",
+  "link": "../../../../assets/img/fragments/simplesamlphp-resident.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/saas-application/index.html",
+  "link": "../../../../assets/img/guides/saas-enable.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/set-role-attribute/index.html",
+  "link": "../../../../assets/img/fragments/role-map-saml.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/skip-user-consent/index.html",
+  "link": "../../../../assets/img/guides/skip-login-consent.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/fragments/add-claim.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/fragments/add-local-claim.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/fragments/claim-mapped-attribute.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/browse-registry-location.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/crlvalidator-enable-property.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/crlvalidator-properties.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/registry.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/save-crlvalidator-disable.png"
+ },
+ {
+  "page": "identity/6.0.0/includes/ws-fed-app-config/index.html",
+  "link": "../../../../assets/img/guides/ws-federation-passive.png"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/admin.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/announce.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/customer.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/outline.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/padlock.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/setting.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/swap.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/tick.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "assets/img/icons/landing-page/user.svg"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "deploy/deployment-checklist/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "deploy/environment-compatibility/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "deploy/get-started/run-the-product/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "deploy/migrate/migrate-to-5110/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "get-started/about-this-release/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "get-started/architecture/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "get-started/community/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "get-started/overview/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/access-delegation/oauth-grant-types/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/access-delegation/uma"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/adaptive-auth/configure-adaptive-auth/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/identity-federation/enterprise-identity-federation/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/identity-federation/social-login/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/identity-lifecycles/inbound-provisioning/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/identity-lifecycles/manage-user-overview/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/identity-lifecycles/onboard-overview/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/identity-lifecycles/outbound-provisioning/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/login/configure-ws-federation-single-sign-on/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/login/sso-for-oidc/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/login/sso-for-saml/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "guides/mfa/configure-authentication-journey/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "quick-starts/access-delegation/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "quick-starts/adaptive-auth-overview/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "quick-starts/federated-authenticators"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "quick-starts/single-sign-on/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "references/concepts/compliance/compliance/"
+ },
+ {
+  "page": "identity/6.0.0/index-backup/index.html",
+  "link": "references/concepts/consent-management/"
  },
  {
   "page": "identity/6.0.0/references/api-permissions/index.html",
@@ -766,6 +1050,10 @@
  {
   "page": "identity/6.0.0/references/concepts/authorization/device-flow-grant/index.html",
   "link": "/identity/6.0.0/learn/refresh-token-grant/"
+ },
+ {
+  "page": "identity/6.0.0/references/concepts/authorization/jarm/index.html",
+  "link": "../openid-connect-hybrid-flow"
  },
  {
   "page": "identity/6.0.0/references/concepts/compliance/ccpa/index.html",

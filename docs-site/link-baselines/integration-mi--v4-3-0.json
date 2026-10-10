@@ -248,6 +248,14 @@
   "link": "/integration/micro-integrator/4.3.0/en/reference/connectors/salesforce-marketing-cloud-connector/salesforce-marketing-cloud-configuration.md/"
  },
  {
+  "page": "integration/micro-integrator/4.3.0/reference/connectors/salesforcebulk-connector/salesforcebulk-connector-example/index.html",
+  "link": "../../../assets/img/develop/mi-for-vscode/qsg/build-and-run.png"
+ },
+ {
+  "page": "integration/micro-integrator/4.3.0/reference/connectors/salesforcebulk-connector/salesforcebulk-connector-example/index.html",
+  "link": "../../../assets/img/develop/mi-for-vscode/qsg/current-server-path.png"
+ },
+ {
   "page": "integration/micro-integrator/4.3.0/reference/connectors/servicenow-connector/servicenow-connector-example/index.html",
   "link": "/integration/micro-integrator/4.3.0/observe-and-manage/managing-integrations-with-apictl/"
  },

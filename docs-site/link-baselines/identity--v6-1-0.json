@@ -672,6 +672,70 @@
   "link": "/identity/6.1.0/develop/extend/workflows/write-a-custom-workflow-template/"
  },
  {
+  "page": "identity/6.1.0/includes/add-function-library-lvl3/index.html",
+  "link": "../../../../assets/img/guides/add-function-library.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/add-function-library-lvl3/index.html",
+  "link": "../../../../assets/img/guides/add-new-function-library.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/add-new-user/index.html",
+  "link": "../../../../assets/img/fragments/add-a-new-user.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/attribute-dialects-oidc/index.html",
+  "link": "../../../../assets/img/fragments/claim-mapping-oidc.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/attribute-mapping/index.html",
+  "link": "../../../../assets/img/fragments/mapped-attributes.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/attributes-with-multiple-values/index.html",
+  "link": "../../../../assets/img/fragments/is-user-interface.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/attributes-with-multiple-values/index.html",
+  "link": "../../../../assets/img/fragments/ldap-interface.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/configure-recaptcha-for-sso/index.html",
+  "link": "../../../../assets/img/guides/captcha-login-failed.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/configure-recaptcha-for-sso/index.html",
+  "link": "../../../../assets/img/guides/configure-account-locking.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/configure-recaptcha-for-sso/index.html",
+  "link": "../../../../assets/img/guides/recaptcha-sso.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/deploy-travelocity-sp/index.html",
+  "link": "../../../../assets/img/fragments/edit-service-provider-configs.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/enable-email-as-username/index.html",
+  "link": "../../../../assets/img/guides/email-as-username-attribute-mapping.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/enable-email-as-username/index.html",
+  "link": "../../../../assets/img/guides/super-admin.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/encrypt-id-tokens/index.html",
+  "link": "../../../../assets/img/guides/jwks-uri.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/encrypt-id-tokens/index.html",
+  "link": "../../../../assets/img/guides/upload-sp-cert.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/oidc-session-management/index.html",
+  "link": "../../learn/openid-connect-single-logout#configurations"
+ },
+ {
   "page": "identity/6.1.0/includes/oidc-session-management/index.html",
   "link": "/identity/6.1.0/learn/openid-connect-discovery/"
  },
@@ -680,12 +744,88 @@
   "link": "/identity/6.1.0/learn/openid-connect-dynamic-client-registration/"
  },
  {
+  "page": "identity/6.1.0/includes/pickup-dispatch-oidc/index.html",
+  "link": "../../../../assets/img/fragments/pickup-key-secret.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/pickup-manager-oidc/index.html",
+  "link": "../../../../assets/img/fragments/pickup-key-secret-2.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/recover-username/index.html",
+  "link": "../../../../assets/img/fragments/resident-menu-item.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/recover-username/index.html",
+  "link": "../../../../assets/img/fragments/user-name-recovery-options.png"
+ },
+ {
   "page": "identity/6.1.0/includes/register-application-portal/index.html",
   "link": "/identity/6.1.0/includes/register-application-portal/insertlink/"
  },
  {
+  "page": "identity/6.1.0/includes/register-mobile-application/index.html",
+  "link": "../../../../assets/img/fragments/android-client-id.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/register-mobile-application/index.html",
+  "link": "../../../../assets/img/fragments/android-sp.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/resident-saml-sample/index.html",
+  "link": "../../../../assets/img/fragments/simplesamlphp-resident.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/saas-application/index.html",
+  "link": "../../../../assets/img/guides/saas-enable.png"
+ },
+ {
   "page": "identity/6.1.0/includes/self-contained-access-tokens/index.html",
   "link": "/identity/6.1.0/includes/references/concepts/authorization/access-token/"
+ },
+ {
+  "page": "identity/6.1.0/includes/set-role-attribute/index.html",
+  "link": "../../../../assets/img/fragments/role-map-saml.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/skip-user-consent/index.html",
+  "link": "../../../../assets/img/guides/skip-login-consent.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/fragments/add-claim.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/fragments/add-local-claim.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/fragments/claim-mapped-attribute.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/browse-registry-location.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/crlvalidator-enable-property.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/crlvalidator-properties.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/registry.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/work-with-certificates/index.html",
+  "link": "../../../../assets/img/guides/save-crlvalidator-disable.png"
+ },
+ {
+  "page": "identity/6.1.0/includes/ws-fed-app-config/index.html",
+  "link": "../../../../assets/img/guides/ws-federation-passive.png"
  },
  {
   "page": "identity/6.1.0/references/api-permissions/index.html",
