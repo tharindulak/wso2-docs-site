@@ -184,4 +184,6 @@ test('referencedFiles resolves like a browser and never leaves the section route
   assert.deepEqual(referencedFiles('<a href="../other/">x</a> <img src="data:image/png;base64,x" /> <a href="mailto:a@b.c">m</a>', 'a.md', 'demo'), [], 'pages, schemes');
   assert.deepEqual(referencedFiles('<img src="bad%E0.png" /> /demo/bad%E0.png', 'a.md', 'demo'), [], 'malformed escapes are skipped, not thrown');
   assert.deepEqual(referencedFiles('<img src="my%20shot.png?v=1" />', 'index.md', 'demo'), ['my shot.png']);
+  assert.deepEqual(referencedFiles('[WSDL](../../assets/attachments/a.wsdl) ![shot](img/b.png "t") [page](../other/) [ext](https://x/a.png)', 'develop/x.md', 'demo/5.9.0'),
+    ['assets/attachments/a.wsdl', 'develop/x/img/b.png'], 'Markdown links and images, resolved against the page URL');
 });

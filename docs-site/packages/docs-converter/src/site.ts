@@ -92,8 +92,12 @@ export function relativeImages(mdx: string, pageRel: string, route: string, exis
 
 const safeDecode = (s: string): string | undefined => { try { return decodeURI(s); } catch { return undefined; } };
 
-/** Relative HTML file references (src, href) and <ApiReference spec>, as `attr="x"` or `attr={"x"}`. */
-const RELATIVE_REF = /\b(?:src|href|spec)=\{?"((?![a-z][a-z0-9+.-]*:|\/|#)[^"\s<>{}]+)"/gi;
+/**
+ * Relative file references: HTML src/href and <ApiReference spec> (`attr="x"` or `attr={"x"}`), and Markdown links and
+ * images. Docusaurus bundles a Markdown target only when it exists relative to the page file; otherwise the link stays
+ * as written and the browser resolves it against the page URL, as on MkDocs.
+ */
+const RELATIVE_REF = /\b(?:src|href|spec)=\{?"((?![a-z][a-z0-9+.-]*:|\/|#)[^"\s<>{}]+)"|\]\(\s*<?((?![a-z][a-z0-9+.-]*:|\/|#)[^)\s<>]+)>?(?:\s+"[^"]*")?\)/gi;
 
 /**
  * Files a page references, as paths relative to the section route: absolute `/<route>/<file>` references, and
@@ -107,7 +111,7 @@ export function referencedFiles(text: string, pageRel: string, route: string): s
   for (const m of text.matchAll(re)) add(safeDecode(m[1]!));
   const pageDir = `/${route}/${mkdocsUrl(pageRel.replace(/\.mdx$/, '.md'))}`.replace(/\/?$/, '/');
   for (const m of text.matchAll(RELATIVE_REF)) {
-    const ref = safeDecode(m[1]!.replace(/[?#].*$/, ''));
+    const ref = safeDecode((m[1] ?? m[2])!.replace(/[?#].*$/, ''));
     if (!ref) continue;
     const resolved = path.posix.resolve(pageDir, ref);
     if (resolved.startsWith(`/${route}/`)) add(resolved.slice(route.length + 2));
