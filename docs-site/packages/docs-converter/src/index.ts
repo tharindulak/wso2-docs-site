@@ -13,7 +13,7 @@ export { navToSidebar, mergeSidebars, sidebarDocIds, selectNav, type NavSelectio
 export { optionsFor, prefixIds, normalizeSidebar, placeCompanion, overviewLinks, type DeploymentDefaults, type CompanionPlacement } from './sections.js';
 export { rewriteSiteLinks, type HostedSite, type RewriteOptions, type RewrittenFile } from './links.js';
 export {
-  convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, loadSidebarFile, githubEditUrl, copyAssets, relativeImages, copyReferencedAssets, keepMkdocsUrl, mkdocsUrl, mkdocsTitle, navLabels, hostOnly, walk, emptyReport, pagesDir, rewriteOutsideRefs,
+  convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, loadSidebarFile, githubEditUrl, copyAssets, relativeImages, copyReferencedAssets, containedFile, keepMkdocsUrl, mkdocsUrl, mkdocsTitle, navLabels, hostOnly, walk, emptyReport, pagesDir, rewriteOutsideRefs,
   type SiteOutput, type SiteReport, type PageFailure, type FallbackPage, type FallbackInfo, type EditUrl, type MkdocsSiteOptions, type MergedSitesOptions, type DocusaurusDocsOptions,
 } from './site.js';
 export { loadConfig, ConfigError, type SourceConfig } from './config.js';

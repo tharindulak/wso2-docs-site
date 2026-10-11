@@ -76,6 +76,21 @@ export function copyAssets(fromDir: string, toDir: string, skip: string[] = []):
   }
 }
 
+/**
+ * The real path of a regular file at `rel` under `root`, or null when it is missing, not a file, or resolves
+ * (through `..` or a symbolic link) outside the real `root`.
+ */
+export function containedFile(root: string, rel: string): string | null {
+  try {
+    const realRoot = fs.realpathSync(root);
+    const lexical = path.resolve(root, rel);
+    if (!lexical.startsWith(path.resolve(root) + path.sep)) return null;
+    const real = fs.realpathSync(lexical);
+    if (!real.startsWith(realRoot + path.sep)) return null;
+    return fs.statSync(real).isFile() ? real : null;
+  } catch { return null; }
+}
+
 const IMAGE = /\.(png|jpe?g|gif|svg|webp|avif)$/i;
 
 /** Markdown images at /<route>/<file> become page-relative, so Docusaurus emits them content-hashed (shared across versions). */
@@ -125,8 +140,8 @@ export function copyReferencedAssets(fromDir: string, pagesDir: string, toDir: s
   for (const rel of walk(pagesDir, isPage)) for (const f of referencedFiles(fs.readFileSync(path.join(pagesDir, rel), 'utf8'), rel, route)) wanted.add(f);
   let copied = 0;
   for (const rel of wanted) {
-    const from = path.join(fromDir, rel);
-    if (!path.resolve(from).startsWith(path.resolve(fromDir) + path.sep) || !fs.statSync(from, { throwIfNoEntry: false })?.isFile() || isPage(rel)) continue;
+    const from = containedFile(fromDir, rel);
+    if (!from || isPage(rel)) continue;
     const to = path.join(toDir, rel);
     if (!path.resolve(to).startsWith(path.resolve(toDir) + path.sep) || fs.existsSync(to)) continue;
     fs.mkdirSync(path.dirname(to), { recursive: true });
@@ -150,7 +165,9 @@ export function mkdocsTitle(rel: string, navLabel?: string): string {
   if (/^(?:index|README)$/.test(parts.at(-1)!)) parts.pop();
   const name = parts.at(-1);
   if (!name) return 'Home';
-  return name.replace(/[-_]/g, ' ').trim().replace(/^./, (c) => c.toUpperCase());
+  // As MkDocs get_title: capitalise only a name that is all lowercase (Python str.capitalize), else keep it as written.
+  const title = name.replace(/[-_]/g, ' ').trim();
+  return title.toLowerCase() === title ? title.charAt(0).toUpperCase() + title.slice(1) : title;
 }
 
 const docPath = (p: string): string => p.replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/^\.?\//, '').replace(/\.mdx?$/, '');

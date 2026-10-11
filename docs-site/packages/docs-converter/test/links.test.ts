@@ -45,14 +45,25 @@ test('root-relative former-site paths not hosted here go to the former site, as 
   const src = '[old](/en/4.5.0/administer/users/) [missing](/en/4.6.0/not/here/) ![gone](/en/4.6.0/assets/none.png) [bare](/install-and-setup/x/) `[c](/en/4.6.0/administer/users/)`';
   const { text, rewritten, files: copied } = rewriteSiteLinks(src, apim, { origin: 'https://apim.docs.wso2.com' });
   assert.equal(text, '[old](https://apim.docs.wso2.com/en/4.5.0/administer/users/) [missing](https://apim.docs.wso2.com/en/4.6.0/not/here/) ![gone](https://apim.docs.wso2.com/en/4.6.0/assets/none.png) [bare](/install-and-setup/x/) `[c](/en/4.6.0/administer/users/)`');
-  assert.equal(rewritten, 0);
+  assert.equal(rewritten, 3, 'each link sent to the former site is a change the caller must write');
   assert.deepEqual(copied, []);
+});
+
+test('a page whose only root-relative link is not hosted is still reported as changed', () => {
+  const src = 'See [old](/en/4.5.0/administer/users/).';
+  const { text, rewritten } = rewriteSiteLinks(src, apim, { origin: 'https://apim.docs.wso2.com' });
+  assert.equal(text, 'See [old](https://apim.docs.wso2.com/en/4.5.0/administer/users/).');
+  assert.equal(rewritten, 1);
 });
 
 test('without an origin, root-relative paths stay; full URLs to files stay external; no path escapes the section', () => {
   const src = '[a](/en/4.6.0/administer/users/) [f](https://apim.docs.wso2.com/en/4.6.0/assets/img/learn/operations.png)';
   assert.equal(rewriteSiteLinks(src, apim).text, src);
-  const escape = '![x](/en/4.6.0/assets/../../../../etc/passwd) ![y](/en/4.6.0/assets/%2e%2e/%2e%2e/secret.png)';
+  const escape = [
+    '![x](/en/4.6.0/assets/../../../../etc/passwd) ![y](/en/4.6.0/assets/%2e%2e/%2e%2e/secret.png)',
+    '![b](/en/4.6.0/assets\\..\\..\\secret.png) ![c](/en/4.6.0/assets/..%5c..%5csecret.png) ![d](/en/4.6.0/assets/..%2f..%2fsecret.png)',
+    '![e](/en/4.6.0/assets/%5C..%5Csecret.png) ![f](/en/4.6.0/assets/x%2Fy.png)',
+  ].join(' ');
   const seen: string[] = [];
   const probing = [{ ...apim[0]!, hasFile: (p: string) => { seen.push(p); return true; } }];
   const out = rewriteSiteLinks(escape, probing, { origin: 'https://apim.docs.wso2.com' });

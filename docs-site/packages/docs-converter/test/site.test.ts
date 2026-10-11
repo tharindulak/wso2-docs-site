@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, mkdocsTitle, rewriteOutsideRefs } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, containedFile, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, mkdocsTitle, rewriteOutsideRefs } from '../src/site.js';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -298,6 +298,8 @@ test('a page with no title and no H1 is titled like MkDocs: nav label, else the 
 test('mkdocsTitle: nav label first, then the file or folder name', () => {
   assert.equal(mkdocsTitle('a/introduction-to-user-management.md'), 'Introduction to user management');
   assert.equal(mkdocsTitle('a/FAQs.md'), 'FAQs');
+  assert.equal(mkdocsTitle('a/configure-myAPI_keys.md'), 'configure myAPI keys', 'mixed case is kept as written, as MkDocs does');
+  assert.equal(mkdocsTitle('a/OAuth2-grant.md'), 'OAuth2 grant');
   assert.equal(mkdocsTitle('index.md'), 'Home');
   assert.equal(mkdocsTitle('my_section/index.md'), 'My section');
   assert.equal(mkdocsTitle('my_section/README.md'), 'My section');
@@ -357,4 +359,28 @@ test('a README.md is its folder index (no index.md beside it); otherwise it stay
   assert.equal(mkdocsUrl('low/readme.md'), 'low/readme/');
   assert.equal(keepMkdocsUrl('---\ntitle: a\n---\nx', 'gw/README.md', { readmeIndex: true }), '---\ntitle: a\n---\nx');
   assert.equal(keepMkdocsUrl('---\ntitle: a\n---\nx', 'gw/README.md'), '---\nslug: /gw/README/\ntitle: a\n---\nx');
+});
+
+test('containedFile resolves symbolic links and refuses files outside the root', () => {
+  const root = tempSource({ 'docs/assets/a.png': 'A', 'outside/secret.png': 'S', 'docs/sub/b.png': 'B' });
+  const docs = path.join(root, 'docs');
+  fs.symlinkSync(path.join(root, 'outside/secret.png'), path.join(docs, 'assets/link.png'));
+  fs.symlinkSync(path.join(root, 'outside'), path.join(docs, 'assets/dir'));
+  fs.symlinkSync(path.join(docs, 'sub/b.png'), path.join(docs, 'assets/inside.png'));
+  assert.equal(containedFile(docs, 'assets/a.png'), fs.realpathSync(path.join(docs, 'assets/a.png')));
+  assert.equal(containedFile(docs, 'assets/inside.png'), fs.realpathSync(path.join(docs, 'sub/b.png')), 'a link inside the root is fine');
+  assert.equal(containedFile(docs, 'assets/link.png'), null, 'file link pointing outside');
+  assert.equal(containedFile(docs, 'assets/dir/secret.png'), null, 'folder link pointing outside');
+  assert.equal(containedFile(docs, '../outside/secret.png'), null);
+  assert.equal(containedFile(docs, 'assets'), null, 'not a file');
+  assert.equal(containedFile(docs, 'assets/none.png'), null);
+});
+
+test('copyReferencedAssets never copies a symbolic link that points outside the source', () => {
+  const root = tempSource({ 'docs/assets/a.png': 'A', 'outside/secret.png': 'S', 'pages/index.md': '<img src="/demo/assets/a.png" /> <img src="/demo/assets/link.png" />' });
+  fs.symlinkSync(path.join(root, 'outside/secret.png'), path.join(root, 'docs/assets/link.png'));
+  const to = path.join(root, 'static');
+  assert.equal(copyReferencedAssets(path.join(root, 'docs'), path.join(root, 'pages'), to, 'demo'), 1);
+  assert.ok(fs.existsSync(path.join(to, 'assets/a.png')));
+  assert.ok(!fs.existsSync(path.join(to, 'assets/link.png')));
 });

@@ -69,7 +69,10 @@ export function rewriteSiteLinks(text: string, sites: HostedSite[], { origin }: 
   const rootRelative = (p: string): string | null => {
     if (!origin || !FORMER_PATH.test(p)) return null;
     const url = `${origin}${p}`;
-    return local(url, true) ?? url;
+    const to = local(url, true);
+    if (to) return to;
+    rewritten++; // to the former site: still a change the caller must write
+    return url;
   };
   const target = (url: string): string | null => (/^https?:\/\//.test(url) ? full(url) : rootRelative(url));
   const out = outsideCode(text, (t) => t

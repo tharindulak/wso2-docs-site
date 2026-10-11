@@ -9,7 +9,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import {
   convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, githubEditUrl, emptyReport, walk,
-  splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks,
+  splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
 import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, pagePath, outsideLinks, formerRouteRedirects } from './versions.mjs';
@@ -139,11 +139,8 @@ function rewriteLinksToHostedPages(lock) {
       return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')]).some(page) || readmeIndex(path.join(base, 'README.md'));
     };
     // Files (images, downloads) the version's pages are served with; the caller copies a linked one to static.
-    const hasFile = (sub) => (p) => {
-      const root = path.resolve(docsDir, sub);
-      const f = path.resolve(root, p);
-      return f.startsWith(root + path.sep) && !/\.mdx?$/.test(f) && Boolean(fs.statSync(f, { throwIfNoEntry: false })?.isFile());
-    };
+    // The real path must stay inside the version's folder: a symbolic link never pulls in a file from elsewhere.
+    const hasFile = (sub) => (p) => !/\.mdx?$/.test(p) && containedFile(path.join(docsDir, sub), p) !== null;
     const add = (url, sub = '') => {
       if (!url) return;
       const route = sub ? `${v.route}/${sub}` : v.route;
@@ -169,13 +166,15 @@ function rewriteLinksToHostedPages(lock) {
       const text = fs.readFileSync(file, 'utf8');
       if (text.includes("from '@site/src/components/Redirect'")) continue;
       const { text: out, rewritten, files } = rewriteSiteLinks(text, own, { origin: formerOrigin(v) });
-      if (rewritten) { fs.writeFileSync(file, out); total += rewritten; }
+      // Written whenever the text changed: a link sent to the former site counts too, even with no hosted rewrite.
+      if (out !== text) { fs.writeFileSync(file, out); total += rewritten; }
       // A root-relative former-site link to a file now points at /<route>/<file>: serve the file there.
       for (const { site, path: p } of files) {
+        const from = containedFile(site.files.from, p);
         const to = path.join(site.files.to, p);
-        if (fs.existsSync(to)) continue;
+        if (!from || !path.resolve(to).startsWith(path.resolve(site.files.to) + path.sep) || fs.existsSync(to)) continue;
         fs.mkdirSync(path.dirname(to), { recursive: true });
-        fs.copyFileSync(path.join(site.files.from, p), to);
+        fs.copyFileSync(from, to);
       }
     }
   }
