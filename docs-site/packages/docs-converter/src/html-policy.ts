@@ -1,7 +1,7 @@
 // HTML allow-list for converted content (conversion contract: the safety boundary for auto-merged bumps).
 // Violations fail the page. Applied outside fenced and inline code only.
 import { parseExpressionAt } from 'acorn';
-import { outsideCode } from './syntax.js';
+import { outsideCode, targetEnd, unsafeUrl } from './syntax.js';
 
 export const DEFAULT_IFRAME_HOSTS: readonly string[] = ['www.youtube.com', 'youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com'];
 const FORBIDDEN_TAGS = ['script', 'style', 'form', 'object', 'embed', 'base', 'meta', 'link', 'frame', 'frameset', 'applet'];
@@ -66,8 +66,16 @@ export function applyHtmlPolicy(text: string, { iframeHosts = DEFAULT_IFRAME_HOS
       if (new RegExp(`<${tag}(?=[\\s>/])`, 'i').test(s)) violations.push(`<${tag}> is not allowed`);
     }
     for (const m of s.matchAll(/<[a-zA-Z][\w-]*(?:\s[^>]*)?\son[a-z]+\s*=/gi)) violations.push(`event handler attribute: ${m[0].slice(0, 60)}`);
-    for (const m of s.matchAll(/\b(?:href|src|action|formaction|xlink:href)\s*=\s*["']?\s*(?:javascript|vbscript|data:text\/html)/gi)) violations.push(`unsafe URL: ${m[0].slice(0, 60)}`);
-    for (const m of s.matchAll(/\]\(\s*(?:javascript|vbscript):/gi)) violations.push(`unsafe Markdown link: ${m[0].slice(0, 40)}`);
+    // URLs are checked as a browser reads them (unsafeUrl): references decoded, whitespace and control characters dropped.
+    for (const m of s.matchAll(/\b(?:href|src|action|formaction|xlink:href)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi)) {
+      if (unsafeUrl(m[1]!.replace(/^["']|["']$/g, ''))) violations.push(`unsafe URL: ${m[0].slice(0, 60)}`);
+    }
+    for (const m of s.matchAll(/\]\(/g)) {
+      const start = m.index! + 2;
+      const end = targetEnd(s, start);
+      const target = s.slice(start, end < 0 ? Math.min(s.length, start + 200) : end).replace(/^\s*<|>\s*$/g, '');
+      if (unsafeUrl(target)) violations.push(`unsafe Markdown link: ${s.slice(m.index!, m.index! + 40)}`);
+    }
     for (const m of s.matchAll(/<iframe\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi)) {
       let host = '';
       try { host = new URL(m[1]!).host; } catch { /* relative or malformed */ }

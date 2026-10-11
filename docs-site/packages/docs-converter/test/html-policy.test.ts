@@ -13,6 +13,29 @@ test('rejects scripts, styles, forms, handlers and javascript: URLs', () => {
   assert.ok(v('[x](javascript:alert(1))').length);
 });
 
+// Line breaks and tabs in a target are joined (syntax.ts linkTargets, as a browser does) and nested HTML text is
+// entity-decoded, so the check reads the URL as a browser would.
+test('rejects script URLs split by whitespace or control characters, or written with character references', () => {
+  for (const t of [
+    '[x](java\nscript:alert(1))', '[x](java\tscript:alert(1))', '[x]( java\n  script:alert(1) "t")', '[x](<javascript:alert(1)>)',
+    '    <table><tr><td>[x](&#106;avascript:alert(1))</td></tr></table>', '[x](&#x6A;ava&#x73;cript&colon;alert(1))',
+    '[x](JaVaScRiPt:alert(1))', '[x](java\u0000script:x)', '[x](vb\nscript:x)', '[x](data:text/html,<b>x</b>)',
+    '<a href="java\nscript:alert(1)">x</a>', '<a href="java&#10;script:alert(1)">x</a>', "<a href='&#106;avascript:x'>x</a>",
+    '<a href=java&#9;script:x>x</a>', '<img src=" javascript:x">',
+  ]) assert.ok(v(t).length, JSON.stringify(t));
+  for (const t of ['[x](https://a.com/java script)', '[x](#javascript-sdk)', '[java](script.md)', '<a href="/docs/javascript/">x</a>', '[x](../javascript:y)']) {
+    assert.deepEqual(v(t), [], JSON.stringify(t));
+  }
+});
+
+test('a script URL is never joined into a link, whatever the policy says', async () => {
+  const { toMdx } = await import('../src/syntax.js');
+  const { inlineMarkdown } = await import('../src/html-blocks.js');
+  assert.equal(toMdx('[x](java\nscript:alert(1))').body, '[x](java\nscript:alert(1))');
+  assert.equal(inlineMarkdown('[x](java\nscript:alert\\(1\\))'), '{"[x](java script:alert(1))"}');
+  assert.equal(inlineMarkdown('[x](javascript:y)', { html: true, markdown: true }), '[x](javascript:y)');
+});
+
 test('allows iframes only from allow-listed hosts', () => {
   assert.equal(v('<iframe src="https://www.youtube.com/embed/abc"></iframe>').length, 0);
   assert.ok(v('<iframe src="https://evil.example/x"></iframe>').length);

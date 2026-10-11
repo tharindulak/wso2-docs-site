@@ -7,7 +7,7 @@
 // Input has already passed the HTML policy (no scripts, event handlers or unsafe URLs).
 import { parseFragment } from 'parse5';
 import { isValidTagName } from './rehype-valid-elements.js';
-import { joinTarget, splitTarget, targetEnd } from './syntax.js';
+import { joinTarget, splitTarget, targetEnd, unsafeUrl } from './syntax.js';
 
 // Minimal parse5 tree shape used here.
 interface P5Node {
@@ -92,6 +92,7 @@ function linkAt(s: string, at: number): ParsedLink | null {
  * do, from Markdown).
  */
 function linkOut(link: ParsedLink, image: boolean, out: Out): string | null {
+  if (unsafeUrl(link.dest)) return null; // a script URL stays text
   if (!out.html) {
     const target = `(${mdxTarget(link.dest)}${link.title ? ` "${escaped(unquote(link.title))}"` : ''})`;
     return image ? `![${escaped(link.label)}]${target}` : `[${inlineMarkdown(link.label, out)}]${target}`;

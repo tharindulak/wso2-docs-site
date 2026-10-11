@@ -180,6 +180,27 @@ export function splitTarget(inner: string): { dest: string; title?: string } {
   return { dest: /^<[^<>]*>$/.test(dest) ? dest.slice(1, -1) : dest, title: m?.[2] };
 }
 
+const NAMED: Record<string, string> = { colon: ':', tab: '\t', newline: '\n', amp: '&', sol: '/', lpar: '(', rpar: ')', quot: '"', apos: "'" };
+
+/**
+ * Whether a URL, as a browser would read it, has a script scheme (javascript:, vbscript:, data:text/html). Character
+ * references are decoded, and whitespace and control characters dropped first, so `java\nscript:`, `java\tscript:`
+ * and `&#106;avascript:` are caught (a browser strips tabs and newlines from a URL; HTML decodes the references).
+ */
+export function unsafeUrl(url: string): boolean {
+  let s = url;
+  for (let i = 0; i < 3; i++) { // &amp;#106; decodes twice in some paths
+    const next = s.replace(/&#(x[0-9a-f]+|\d+);?/gi, (_, n: string) => {
+      const code = n[0] === 'x' || n[0] === 'X' ? parseInt(n.slice(1), 16) : parseInt(n, 10);
+      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : '';
+    }).replace(/&([a-z]+);/gi, (m, name: string) => NAMED[name.toLowerCase()] ?? m);
+    if (next === s) break;
+    s = next;
+  }
+  s = s.replace(/[\u0000-\u0020\u007f-\u009f]/g, '').toLowerCase();
+  return /^(?:javascript|vbscript):|^data:text\/html/.test(s);
+}
+
 /**
  * A destination with its line breaks joined (with the indentation around them) and its tabs dropped, as a browser
  * drops them from a URL, and its remaining whitespace percent-encoded.
@@ -205,6 +226,7 @@ export function linkTargets(text: string): string {
     const inner = text.slice(start, end);
     const { dest, title } = splitTarget(inner);
     if (!/\s/.test(dest) && !/^\s*</.test(inner)) continue; // already a CommonMark target
+    if (unsafeUrl(dest)) continue; // never join a script URL into a link (the HTML policy rejects the page anyway)
     out += `${text.slice(last, start)}${joinTarget(dest)}${title ? ` ${title}` : ''}`;
     last = end;
   }
