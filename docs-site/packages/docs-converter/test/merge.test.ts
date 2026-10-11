@@ -109,3 +109,33 @@ test('a one-sided value at the start of a sentence stays inline (user roles: "{{
   assert.match(text, /^<DeploymentValue cloud="" selfHosted="admin" \/> role\. An admin is privileged\.$/m);
   assert.doesNotMatch(text, /<Applies/);
 });
+
+// docs-is@c2176fcd1b50 en/includes/guides/verifiable-credentials/index.md:42: the path differs by deployment, inside a
+// link target. A component there broke the link (the built page showed "/identity/<span>...</span>/"); the link is
+// written once per option instead, labelled as <DeploymentValue> labels a value.
+test('a differing value inside a link target writes the link once per deployment option', () => {
+  const root = tempSource({
+    'cloud/p.md': '{% include "../inc/p.md" %}',
+    'self/p.md': '{% include "../inc/p.md" %}',
+    'inc/p.md': '- [OpenID for verifiable credential issuance (OID4VCI)]({{base_path}}/{{content.oid4vci_reference_path}}/) — Understand how OID4VCI works.\n- [One side]({{base_path}}/{{content.only}}x/) and {{content.only}}.\n',
+  });
+  const source = { root, includeBases: [] };
+  const env = (p: string, only: string) => ({ base_path: '/identity', content: { oid4vci_reference_path: p, only } });
+  const { text } = mergePage(path.join(root, 'cloud/p.md'), path.join(root, 'self/p.md'),
+    { cloud: { env: env('references/oid4vci', ''), source }, self: { env: env('references/concepts/oid4vci', 'y/'), source } });
+  assert.equal(text.split('\n')[0], '- [OpenID for verifiable credential issuance (OID4VCI)](/identity/references/oid4vci/) <small>(WSO2 Cloud)</small> / [OpenID for verifiable credential issuance (OID4VCI)](/identity/references/concepts/oid4vci/) <small>(Self-hosted)</small> — Understand how OID4VCI works.');
+  assert.equal(text.split('\n')[1], '- [One side](/identity/y/x/) <small>(Self-hosted only)</small> and <DeploymentValue cloud="" selfHosted="y/" />.');
+  assert.doesNotMatch(text, /⁣/, 'no mark left');
+});
+
+// docs-is@c2176fcd1b50 en/includes/guides/authentication/oidc/add-logout.md:7: the target chosen by an {% if %} branch.
+test('a differing branch inside a link target writes the link once per deployment option, not labelled blocks', () => {
+  const root = tempSource({
+    'cloud/p.md': '{% include "../inc/p.md" %}', 'self/p.md': '{% include "../inc/p.md" %}',
+    'inc/p.md': 'use the [Session Management API]({% if product_name == "WSO2 Identity Server" %}/identity/apis/session-mgt-rest-api/{% else %}/identity/apis/session/{% endif %}). The application',
+  });
+  const source = { root, includeBases: [] };
+  const { text } = mergePage(path.join(root, 'cloud/p.md'), path.join(root, 'self/p.md'),
+    { cloud: { env: { product_name: 'Asgardeo' }, source }, self: { env: { product_name: 'WSO2 Identity Server' }, source } });
+  assert.equal(text, 'use the [Session Management API](/identity/apis/session/) <small>(WSO2 Cloud)</small> / [Session Management API](/identity/apis/session-mgt-rest-api/) <small>(Self-hosted)</small>. The application');
+});

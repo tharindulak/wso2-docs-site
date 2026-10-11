@@ -17,6 +17,8 @@ const inFence = (s: string): boolean => (s.match(/^[ \t]*(```|~~~)/gm) ?? []).le
 // Inside an inline code span on the current line (odd number of single backticks so far).
 const inInlineCode = (s: string): boolean => ((s.slice(s.lastIndexOf('\n') + 1).replace(/``+/g, '').match(/`/g) ?? []).length % 2 === 1);
 const attr = (v: unknown): string => String(v ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/[{}]/g, (c) => (c === '{' ? '&#123;' : '&#125;'));
+// Inside a Markdown link or image target on the current line (`](` not yet closed).
+const inLinkTarget = (s: string): boolean => /\]\([^()\n]*$/.test(s.slice(s.lastIndexOf('\n') + 1));
 // Indentation of the line being written (content inside admonitions, lists and tabs is indented).
 const currentIndent = (s: string): string => s.match(/(?:^|\n)([ \t]*)$/)?.[1] ?? '';
 // A value fills its line when only indentation precedes it and a line break (or the end) follows it.
@@ -68,6 +70,34 @@ function splitCodeSamples(text: string): string {
   return out.join('\n');
 }
 
+// A differing value inside a link target is marked, and the link is later written once per deployment option
+// (splitLinks): a component cannot sit inside a URL.
+const LINK = { cloud: '\u2063c\u2064', self: '\u2063s\u2064', end: '\u2063e\u2064' };
+const LINK_VALUE = new RegExp(`${LINK.cloud}([\\s\\S]*?)${LINK.self}([\\s\\S]*?)${LINK.end}`, 'g');
+
+/**
+ * Each link whose target holds marked values becomes one link per deployment option, labelled as
+ * <DeploymentValue> labels a value: `[x](/a) (WSO2 Cloud) / [x](/b) (Self-hosted)`. An option whose value is empty
+ * gets no link, and the other is labelled "only". Marks outside any link fall back to <DeploymentValue>.
+ */
+function splitLinks(text: string): string {
+  if (!text.includes(LINK.end)) return text;
+  const side = (url: string, k: 1 | 2): { url: string; empty: boolean } => {
+    let empty = false;
+    const out = url.replace(LINK_VALUE, (...m: string[]) => { if (!m[k]) empty = true; return m[k]!; });
+    return { url: out, empty };
+  };
+  const linked = text.replace(/(!?\[(?:[^[\]\n]|\[[^\]\n]*\])*\])\(([^()\n]*)\)/g, (whole, label: string, url: string) => {
+    if (!url.includes(LINK.end)) return whole;
+    const c = side(url, 1);
+    const s = side(url, 2);
+    if (c.empty) return `${label}(${s.url}) <small>(${SELF_HOSTED} only)</small>`;
+    if (s.empty) return `${label}(${c.url}) <small>(${CLOUD} only)</small>`;
+    return `${label}(${c.url}) <small>(${CLOUD})</small> / ${label}(${s.url}) <small>(${SELF_HOSTED})</small>`;
+  });
+  return linked.replace(LINK_VALUE, (_, c: string, s: string) => `<DeploymentValue cloud="${attr(c)}" selfHosted="${attr(s)}" />`);
+}
+
 function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sharedNames: Record<string, string>, stats: MergeStats, out: { s: string }): string {
   const c = sides.cloud;
   const s = sides.self;
@@ -92,6 +122,7 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
         out.s += applies(CLOUD, cv, ind) + applies(SELF_HOSTED, sv, ind);
         stats.splitBlocks++;
       }
+      else if (inLinkTarget(out.s)) { out.s += `${LINK.cloud}${cv}${LINK.self}${sv}${LINK.end}`; stats.values++; }
       else { out.s += `<DeploymentValue cloud="${attr(cv)}" selfHosted="${attr(sv)}" />`; stats.values++; }
       continue;
     }
@@ -112,6 +143,8 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
       if (inFence(out.s)) {
         out.s += `${MARK.cloud}${cText}${MARK.self}${sText}${MARK.end}`;
         stats.splitsInCode++;
+      } else if (inLinkTarget(out.s) && !/\n/.test(cText + sText)) {
+        out.s += `${LINK.cloud}${cText}${LINK.self}${sText}${LINK.end}`; // a path chosen by branch (see splitLinks)
       } else {
         const ind = currentIndent(out.s);
         out.s += applies(CLOUD, cText, ind) + applies(SELF_HOSTED, sText, ind);
@@ -144,7 +177,7 @@ export function mergePage(cloudFile: string, selfFile: string, sides: MergeSides
   applySets(sn, sides.self, selfFile);
   const body = (nodes: TemplateNode[]): TemplateNode[] => nodes.filter((n) => n.t !== 'set');
   if (JSON.stringify(shape(cn, cloudFile, sides.cloud.source)) === JSON.stringify(shape(sn, selfFile, sides.self.source))) {
-    return { text: splitCodeSamples(renderMerged(body(cn), cloudFile, sides, sharedNames, stats, { s: '' })), stats };
+    return { text: splitLinks(splitCodeSamples(renderMerged(body(cn), cloudFile, sides, sharedNames, stats, { s: '' }))), stats };
   }
   stats.diverged = true;
   const text = applies(CLOUD, renderSingle(body(cn), sides.cloud.env, cloudFile, sides.cloud.source))
