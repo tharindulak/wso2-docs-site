@@ -1,0 +1,26 @@
+[
+ {
+  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/README/analytics/"
+ },
+ {
+  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/README/gateway-controller-management-api/"
+ },
+ {
+  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/README/llm/"
+ },
+ {
+  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/README/mcp/"
+ },
+ {
+  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/README/observability/"
+ },
+ {
+  "page": "api-platform/ai-gateway/1.2.0/setup-and-deployment/configuration/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/setup-and-deployment/configuration/artifact-templating.md/"
+ }
+]
