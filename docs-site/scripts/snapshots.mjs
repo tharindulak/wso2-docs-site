@@ -94,7 +94,8 @@ const snapshotVersions = () => {
 };
 /** Key of a snapshot version from snapshotVersions(). */
 const keyOf = ({ v, links }, hashes) => snapshotKey(v, { ...hashes, links });
-const tar = (...a) => execFileSync('tar', a, { stdio: ['ignore', 'pipe', 'pipe'] }).toString();
+/** tar output; a verbose listing of a large snapshot exceeds the 1 MiB default buffer. */
+export const tar = (...a) => execFileSync('tar', a, { stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 30 }).toString();
 
 /** Copy a tree without overwriting: hashed assets are identical when names match; the live build always wins. */
 function copyNoOverwrite(from, to) {

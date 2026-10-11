@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { CHROME, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
+import { CHROME, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, tar, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
@@ -152,4 +152,15 @@ test('a component snapshot key covers the lock fields its cross-section links re
   section(companion, 'api-platform-apim').cloud_companion.path_prefix = 'cloud-docs';
   assert.notEqual(keys(companion)['api-platform-api-gateway--v1-0-0'], before['api-platform-api-gateway--v1-0-0'], 'the companion moves');
   assert.equal(snapshotKey(v, { ...h, links: null }), snapshotKey(v, h), 'no links input: the key is as before');
+});
+
+test('tar returns listings larger than the default 1 MiB buffer', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'tarbuf-'));
+  try {
+    const src = path.join(dir, 'src'); fs.mkdirSync(src);
+    for (let i = 0; i < 6000; i++) fs.writeFileSync(path.join(src, `${'n'.repeat(180)}-${i}.html`), '');
+    const file = path.join(dir, 'a.tgz');
+    tar('-czf', file, '-C', src, '.');
+    assert.ok(tar('-tvzf', file).length > 1024 * 1024);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
