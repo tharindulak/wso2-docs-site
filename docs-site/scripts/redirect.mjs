@@ -2,6 +2,7 @@
 // them: that file is in the snapshot key (CHROME), so editing it would rebuild every snapshot. A test keeps them equal.
 import fs from 'node:fs';
 import path from 'node:path';
+import { readLock } from './lib.mjs';
 
 export const REDIRECT_MARK = '<!-- wso2-docs: section root redirect -->';
 const escapeHtml = (t) => t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -26,21 +27,24 @@ export function writeSnapshotRootRedirect(outDir, route, warn = console.warn) {
   return true;
 }
 
-/** Every versions.json entry with a path (except those of pending snapshots) must have a page at its root; throws listing the rest. */
-export function checkVersionRoots(outDir, pendingPaths = new Set()) {
+/** Section routes in the lock file: where build-content.mjs writes each section's versions.json. */
+export const sectionRoutes = (lock = readLock()) => (lock.products ?? []).flatMap((p) => (p.sections ?? []).map((s) => s.route));
+
+/**
+ * Every versions.json entry with a path (except those of pending snapshots) must have a page at its root; throws
+ * listing the rest. Reads only /<route>/versions.json for the given section routes (default: the lock's), not the
+ * whole output tree; a route without one (a section not in this build) is skipped.
+ */
+export function checkVersionRoots(outDir, pendingPaths = new Set(), routes = sectionRoutes()) {
   const missing = [];
-  const walk = (dir) => {
-    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-      const p = path.join(dir, e.name);
-      if (e.isDirectory()) walk(p);
-      else if (e.name === 'versions.json') {
-        for (const v of JSON.parse(fs.readFileSync(p, 'utf8')).versions ?? []) {
-          if (!v.path || pendingPaths.has(v.path)) continue;
-          if (!fs.existsSync(path.join(outDir, v.path, 'index.html'))) missing.push(`${v.path} (${path.relative(outDir, p)})`);
-        }
-      }
+  const base = path.resolve(outDir);
+  for (const route of [...new Set(routes)].sort()) {
+    const file = path.resolve(base, route, 'versions.json');
+    if (!file.startsWith(base + path.sep) || !fs.existsSync(file)) continue;
+    for (const v of JSON.parse(fs.readFileSync(file, 'utf8')).versions ?? []) {
+      if (!v.path || pendingPaths.has(v.path)) continue;
+      if (!fs.existsSync(path.join(outDir, v.path, 'index.html'))) missing.push(`${v.path} (${path.relative(outDir, file)})`);
     }
-  };
-  walk(outDir);
+  }
   if (missing.length) throw new Error(`version roots without an index page:\n  ${missing.join('\n  ')}`);
 }

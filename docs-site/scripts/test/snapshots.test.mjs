@@ -6,7 +6,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { CHROME, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, tar, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
-import { REDIRECT_MARK, writeSnapshotRootRedirect, checkVersionRoots } from '../redirect.mjs';
+import { REDIRECT_MARK, writeSnapshotRootRedirect, checkVersionRoots, sectionRoutes } from '../redirect.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
 const h = { converter: 't1', chrome: 't2' };
@@ -220,5 +220,16 @@ test('the final check throws on a version root with no page, and skips pending s
     assert.doesNotThrow(() => checkVersionRoots(dir, new Set([`/${route}/`])));
     fs.mkdirSync(path.join(dir, route), { recursive: true }); fs.writeFileSync(path.join(dir, route, 'index.html'), 'x');
     assert.doesNotThrow(() => checkVersionRoots(dir));
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('the final check reads versions.json only at the section routes it is given (default: the lock)', () => {
+  const broken = JSON.stringify({ versions: [{ version: '9.9.9', status: 'snapshot', path: '/nowhere/9.9.9/' }] });
+  const dir = tmpTree({ 'not-a-route/deep/versions.json': broken, 'x/versions.json': broken });
+  try {
+    assert.doesNotThrow(() => checkVersionRoots(dir), 'a versions.json away from every lock route is not read');
+    assert.throws(() => checkVersionRoots(dir, new Set(), ['x']), /\/nowhere\/9\.9\.9\/ \(x\/versions\.json\)/);
+    assert.doesNotThrow(() => checkVersionRoots(dir, new Set(), ['../outside', 'missing']), 'routes outside the output or without a file are skipped');
+    assert.ok(sectionRoutes().includes('api-platform/api-gateway'));
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
