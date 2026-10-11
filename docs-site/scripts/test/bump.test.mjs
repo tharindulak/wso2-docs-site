@@ -1,7 +1,7 @@
 // docs-site/scripts/test/bump.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { planBumps, applyBumps, planDocsReleases, applyDocsRelease } from '../bump-lib.mjs';
+import { planBumps, applyBumps, planDocsReleases, applyDocsRelease, docsRootFolder } from '../bump-lib.mjs';
 
 const S = (c) => c.repeat(40);
 const lock = () => ({ live_window: 2, products: [{ id: 'integration', sections: [{
@@ -152,4 +152,27 @@ test('a merged section version without mkdocs or version_folder is rejected', as
   assert.equal(sectionVersions(l, 1)[1].mkdocs, 'en/identity-server/7.2.0/mkdocs.yml', 'derived from version_folder');
   delete l.self_hosted.version_folder;
   assert.throws(() => validateVersions(l, 1), /7\.2\.0: mkdocs is required/);
+});
+
+const componentLock = () => ({ products: [{ id: 'api-platform', sections: [{
+  id: 'api-platform-api-gateway', route: 'api-platform/api-gateway', kind: 'mkdocs', repo: 'wso2/docs-api-platform', product_repo: 'wso2/api-platform',
+  mkdocs: 'en/mkdocs.yml', docs_root: 'api-gateway/{version}/', release_tag: 'gateway/v',
+  versions: [{ version: '1.2.0', ref: 'main', sha: S('1'), track: true, exclude: [] }],
+}] }] });
+const componentDeps = (folders, asked = []) => ({
+  releasesOf: async () => [{ tag_name: 'gateway/v1.3.0', draft: false, prerelease: false }],
+  productReleasesOf: async () => [{ tag_name: 'v1.3.0', draft: false, prerelease: false }],
+  tagSha: async () => S('4'),
+  fileAt: async (_repo, tag, file) => { asked.push([tag, file]); return folders.includes(file); },
+});
+
+test('a docs_root promotion needs the component version folder at the tag', async () => {
+  const asked = [];
+  const missing = await planDocsReleases(componentLock(), componentDeps([], asked));
+  assert.deepEqual(missing, [{ type: 'missing-version-folder', section: 'api-platform-api-gateway', version: '1.3.0', base: '1.3.0', tag: 'gateway/v1.3.0', folder: 'en/docs/api-gateway/1.3.0' }]);
+  assert.deepEqual(asked, [['gateway/v1.3.0', 'en/docs/api-gateway/1.3.0']]);
+  const ready = await planDocsReleases(componentLock(), componentDeps(['en/docs/api-gateway/1.3.0']));
+  assert.deepEqual(ready, [{ type: 'new', section: 'api-platform-api-gateway', version: '1.3.0', base: '1.3.0', tag: 'gateway/v1.3.0', sha: S('4') }]);
+  assert.equal(docsRootFolder({ id: 'x', docs_root: 'gw/{version}/' }, '2.0.0'), 'docs/gw/2.0.0', 'mkdocs.yml at the repository root');
+  assert.throws(() => docsRootFolder({ id: 'x', mkdocs: 'en/mkdocs.yml', docs_root: '../{version}/' }, '1.0.0'), /docs_root must be a relative folder/);
 });

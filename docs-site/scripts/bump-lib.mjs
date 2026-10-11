@@ -84,8 +84,21 @@ export function versionFolder(section, version) {
 }
 
 /**
+ * The version folder of a docs_root section at a release, as a repository path: <mkdocs.yml folder>/docs/<docs_root>
+ * (MkDocs' default docs_dir, which the docs_root sources use). Null for sections without docs_root.
+ */
+export function docsRootFolder(section, version) {
+  if (!section.docs_root) return null;
+  const mkdocs = section.mkdocs ?? 'mkdocs.yml';
+  const base = mkdocs.includes('/') ? mkdocs.slice(0, mkdocs.lastIndexOf('/') + 1) : '';
+  const rel = `${base}docs/${section.docs_root.replaceAll('{version}', version)}`.replace(/\/$/, '');
+  if (!section.docs_root.includes('{version}') || !REL.test(rel)) throw new Error(`${section.id}: docs_root must be a relative folder with {version}, got ${section.docs_root}`);
+  return rel;
+}
+
+/**
  * Docs releases: a fourth segment fixes a listed version; a newer version needs the product's own GA release and,
- * for sections with per-version folders, its folder at the tag. `kinds` limits planning (and network calls) to
+ * for sections with per-version folders (version_folder or docs_root), its folder at the tag. `kinds` limits planning (and network calls) to
  * 'fix' and/or 'new'. A tracking Latest follows its branch and takes no fix releases (they could move it backwards).
  */
 export async function planDocsReleases(lock, { releasesOf, productReleasesOf, tagSha, fileAt }, kinds = ['fix', 'new']) {
@@ -119,6 +132,11 @@ export async function planDocsReleases(lock, { releasesOf, productReleasesOf, ta
       const mkdocs = versionFolder(section, base);
       if (mkdocs && !(await fileAt(repo, tag, mkdocs))) {
         proposals.push({ type: 'missing-version-folder', section: section.id, version: base, base, tag, mkdocs });
+        continue;
+      }
+      const folder = docsRootFolder(section, base);
+      if (folder && !(await fileAt(repo, tag, folder))) {
+        proposals.push({ type: 'missing-version-folder', section: section.id, version: base, base, tag, folder });
         continue;
       }
       proposals.push({ type: 'new', section: section.id, version: base, base, tag, sha: await tagSha(repo, tag), ...(mkdocs ? { mkdocs } : {}) });

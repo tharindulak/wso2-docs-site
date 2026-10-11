@@ -9,7 +9,7 @@ A docs release is a GitHub Release on your docs repository. It counts as GA when
 ## Tag names
 
 - `v<version>` in single-distribution repos, for example `v4.8.0`.
-- `<component>/v<version>` in multi-component repos, for example `api-gateway/v1.3.0` in docs-api-platform. The lock file records the prefix for each section (`release_tag`).
+- `<component>/v<version>` in multi-component repos, for example `gateway/v1.3.0` for the API Gateway in docs-api-platform. The lock file records the prefix for each section (`release_tag`).
 - Cloud trees in the same repo are not tagged. They stay Latest only.
 
 The docs version equals the product release it documents.
@@ -36,7 +36,7 @@ The bot promotes a docs release only when the product repository has a GA releas
 
 ## Version folders
 
-Repos that keep several versions as folders on one branch (docs-is, docs-api-platform) keep that layout. The site reads the version's folder at the release commit: `v7.4.0` reads `en/identity-server/7.4.0/`. The folder name must equal the version. The section's `version_folder` in the lock file (for Identity, `en/identity-server/{version}/mkdocs.yml`) names the folder; a promotion writes it into the new entry, and planning reports `missing-version-folder` instead of promoting when the folder is absent at the tag.
+Repos that keep several versions as folders on one branch (docs-is, docs-api-platform) keep that layout. The site reads the version's folder at the release commit: `v7.4.0` reads `en/identity-server/7.4.0/`. The folder name must equal the version. The section's `version_folder` in the lock file (for Identity, `en/identity-server/{version}/mkdocs.yml`) names the folder; a promotion writes it into the new entry. API Platform components name it with `docs_root` instead (for the API Gateway, `api-gateway/{version}/` inside the site's `docs` folder, so `gateway/v1.3.0` reads `en/docs/api-gateway/1.3.0/`). For either kind, planning reports `missing-version-folder` instead of promoting when the folder is absent at the tag.
 
 ## Existing versions
 

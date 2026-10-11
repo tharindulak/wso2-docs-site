@@ -18,7 +18,8 @@
 #   it becomes the section root (pages, nav: nav_root's entry for that release), and links out of it go to the section that hosts the target.
 # former_route: the route the section's pages used to live under; each Latest page there redirects to its new URL.
 # former_site: URL pattern of a version's former site, with {version}.
-# older_versions: versions with no source in git, listed as "Older versions" links to Confluence ({ version, href }).
+# older_versions: versions with no source in git, listed as "Older versions" links to their former docs (Confluence or a former
+#   site such as ei.docs.wso2.com): { version, href (https), label (optional selector text, plain, at most 80 characters) }.
 # live_window (top level): versions per section in the live build; older ones are snapshots.
 # exclude: pages that do not convert yet. They redirect to current_site until fixed; the list only shrinks.
 # deployment_options marked "confirm" are defaults awaiting the product catalogue confirmation (ticket 05).
