@@ -7,7 +7,8 @@
 // Broken links inside a snapshot fail its build only when they are not in link-baselines/<versionId>.json, the
 // version's known breakage (recorded with --record-baseline; source content we do not edit).
 // Usage: node scripts/snapshots.mjs list [--json] [--missing] | build <versionId> [--record-baseline]
-//        | assemble <liveDir> <outDir> [--allow-missing] | upload <dir>
+//        | assemble <liveDir> <outDir> [--allow-missing]
+// Uploading to the CI store is the snapshot workflow's upload job (shell, no repository scripts).
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -192,17 +193,6 @@ function assemble(liveDir, outDir, { allowMissing = false } = {}) {
   checkVersionRoots(outDir, new Set(pendingRoutes.map((r) => `/${r}/`)));
 }
 
-/** Upload packed snapshots (<key>.tgz files in dir, from a build with SNAPSHOT_STORE=local:<dir>) to the store. */
-function upload(dir) {
-  const store = createStore();
-  for (const f of fs.readdirSync(dir).filter((n) => /^[0-9a-f]{64}\.tgz$/.test(n)).sort()) {
-    const key = f.slice(0, 64);
-    if (store.has(key)) { console.log(`stored   ${key.slice(0, 12)}`); continue; }
-    store.put(key, path.join(dir, f));
-    console.log(`uploaded ${key.slice(0, 12)}`);
-  }
-}
-
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const [cmd, a, b] = process.argv.slice(2).filter((x) => !x.startsWith('--'));
   const flag = (f) => process.argv.includes(f);
@@ -213,6 +203,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.log(flag('--json') ? JSON.stringify(rows) : rows.map((r) => `${r.id}\t${r.key}`).join('\n'));
   } else if (cmd === 'build' && a) build(a, { recordBaseline: flag('--record-baseline') });
   else if (cmd === 'assemble' && a && b) assemble(path.resolve(a), path.resolve(b), { allowMissing: flag('--allow-missing') });
-  else if (cmd === 'upload' && a) upload(path.resolve(a));
-  else { console.error('Usage: node scripts/snapshots.mjs list [--json] [--missing] | build <versionId> [--record-baseline] | assemble <liveDir> <outDir> [--allow-missing] | upload <dir>'); process.exit(2); }
+  else { console.error('Usage: node scripts/snapshots.mjs list [--json] [--missing] | build <versionId> [--record-baseline] | assemble <liveDir> <outDir> [--allow-missing]'); process.exit(2); }
 }
