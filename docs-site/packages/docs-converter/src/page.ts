@@ -73,7 +73,7 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
     removed = stripped.removed;
   }
   // Icon-only and empty links get visible text before any rewrite (see home-layout.ts).
-  policy = { ...policy, text: nameIconLinks(policy.text).text };
+  policy = { ...policy, text: nameIconLinks(policy.text) };
   const withRemoved = (result: { mdx: string; stats: PageStats }) => (removed.length ? { ...result, stats: { ...result.stats, removed } } : result);
   const compileFailure = (e: unknown): void => { if (!(e instanceof PageError) || e.kind !== 'compile') throw e; };
   try {
