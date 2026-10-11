@@ -1,6 +1,7 @@
 // Frozen versions: each is its own Docusaurus build (DOCS_SNAPSHOT), packed as <key>.tgz and merged into the live
 // output under the same URLs. The key covers the version's whole lock entry (source commit, paths, exclude list,
-// inherited section settings), the converter, the site chrome and the navigation catalogue; a change rebuilds.
+// inherited section settings), the converter (src and tsconfig), the site chrome (with the fetch script), the
+// navigation catalogue and the Node.js major version; a change rebuilds.
 // A snapshot's output reads nothing else: its pages link only to their own version, and its navigation comes from
 // the lock file (docusaurus.config.js, snapshot mode). The exception, a version folder of a shared MkDocs source
 // (docs_root), links into the sections sharing that source; the lock fields those links read are part of its key.
@@ -22,8 +23,9 @@ import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
 import { writeSnapshotRootRedirect, checkVersionRoots } from './redirect.mjs';
 
-export const CHROME = ['site/src', 'site/plugins', 'site/account', 'site/account-sidebars.js', 'site/static', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
-const CONVERTER = ['packages/docs-converter/src'];
+export const CHROME = ['site/src', 'site/plugins', 'site/account', 'site/account-sidebars.js', 'site/static', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/fetch-sources.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
+// tsconfig.json decides how src compiles to the dist that build-content.mjs runs.
+export const CONVERTER = ['packages/docs-converter/src', 'packages/docs-converter/tsconfig.json'];
 const BASELINES = path.join(ROOT, 'link-baselines');
 const KEY_FILE = '.snapshot-key';
 const SECRETS = ['GH_TOKEN', 'GITHUB_TOKEN', 'ACTIONS_RUNTIME_TOKEN', 'ACTIONS_ID_TOKEN_REQUEST_TOKEN', 'ACTIONS_ID_TOKEN_REQUEST_URL'];
@@ -42,10 +44,11 @@ const canonical = (x) => (Array.isArray(x) ? x.map(canonical)
 /**
  * Key of a snapshot: its whole normalised version source (everything the conversion reads) and the build inputs.
  * links: the lock fields its cross-section links read (outsideLinkInputs), for sources shared with docs_root sections.
+ * node: the Node.js major version that runs the converter and Docusaurus.
  */
-export function snapshotKey(v, { converter, chrome, nav = '', links = null }) {
+export function snapshotKey(v, { converter, chrome, nav = '', links = null, node = '' }) {
   const source = Object.fromEntries(Object.entries(v).filter(([k]) => !NOT_KEYED.has(k)));
-  const input = { source: canonical({ ...source, exclude: [...(v.exclude ?? [])].sort() }), converter, chrome, nav, ...(links ? { links: canonical(links) } : {}) };
+  const input = { source: canonical({ ...source, exclude: [...(v.exclude ?? [])].sort() }), converter, chrome, nav, node, ...(links ? { links: canonical(links) } : {}) };
   return crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex');
 }
 
@@ -71,8 +74,11 @@ export function treeHash(paths, root = ROOT, prefix = 'docs-site/') {
   return dirty ? `${trees}-dirty-${Date.now()}` : trees;
 }
 
+/** Major version of the running Node.js (a snapshot key input). */
+export const nodeMajor = (version = process.versions.node) => version.split('.')[0];
+
 export function inputHashes(root = ROOT) {
-  return { converter: treeHash(CONVERTER, root), chrome: treeHash(CHROME, root), nav: navHash() };
+  return { converter: treeHash(CONVERTER, root), chrome: treeHash(CHROME, root), nav: navHash(), node: nodeMajor() };
 }
 
 export function checkTarEntries(names, route) {

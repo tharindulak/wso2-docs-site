@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { CHROME, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, tar, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
+import { CHROME, CONVERTER, nodeMajor, inputHashes, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, tar, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
 import { REDIRECT_MARK, writeSnapshotRootRedirect, checkVersionRoots, sectionRoutes } from '../redirect.mjs';
 
@@ -232,4 +232,29 @@ test('the final check reads versions.json only at the section routes it is given
     assert.doesNotThrow(() => checkVersionRoots(dir, new Set(), ['../outside', 'missing']), 'routes outside the output or without a file are skipped');
     assert.ok(sectionRoutes().includes('api-platform/api-gateway'));
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('the key covers fetch-sources.mjs, the converter tsconfig and the Node.js major version', () => {
+  assert.ok(CHROME.includes('scripts/fetch-sources.mjs'));
+  assert.ok(CONVERTER.includes('packages/docs-converter/tsconfig.json') && CONVERTER.includes('packages/docs-converter/src'));
+  assert.ok(!CHROME.includes('scripts/snapshots.mjs') && !CONVERTER.includes('scripts/snapshots.mjs'), 'assemble-time logic stays outside the key');
+  const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'key-'));
+  const root = path.join(repo, 'docs-site');
+  const git = (...a) => execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@example.com', ...a], { cwd: repo, stdio: 'pipe' });
+  const write = (f, c) => { fs.mkdirSync(path.dirname(path.join(root, f)), { recursive: true }); fs.writeFileSync(path.join(root, f), c); };
+  write('scripts/fetch-sources.mjs', 'a'); write('packages/docs-converter/tsconfig.json', '{}'); write('packages/docs-converter/src/x.ts', 'x');
+  git('init', '-q'); git('add', '.'); git('commit', '-qm', 'one');
+  const hashes = () => ({ converter: treeHash(CONVERTER, root), chrome: treeHash(CHROME, root), nav: 'n', node: '22' });
+  const k0 = snapshotKey(v, hashes());
+  write('scripts/fetch-sources.mjs', 'b'); git('commit', '-qam', 'fetch');
+  const k1 = snapshotKey(v, hashes());
+  assert.notEqual(k1, k0, 'fetch-sources.mjs');
+  write('packages/docs-converter/tsconfig.json', '{"compilerOptions":{}}'); git('commit', '-qam', 'tsconfig');
+  const k2 = snapshotKey(v, hashes());
+  assert.notEqual(k2, k1, 'converter tsconfig.json');
+  assert.notEqual(snapshotKey(v, { ...hashes(), node: '24' }), k2, 'Node.js major version');
+  assert.equal(snapshotKey(v, hashes()), k2, 'deterministic');
+  fs.rmSync(repo, { recursive: true, force: true });
+  assert.equal(nodeMajor('22.20.5'), '22');
+  assert.equal(inputHashes().node, process.versions.node.split('.')[0]);
 });
