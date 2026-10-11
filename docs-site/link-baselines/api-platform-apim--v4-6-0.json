@@ -1,0 +1,1766 @@
+[
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/admin-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/governance/api-governance-admin-capabilities/index.html",
+  "link": "/api-platform/api-manager/4.6.0/governance/rule-validator/rule-validator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/governance/api-governance-cicd/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/logging-and-monitoring/logging/managing-log-growth/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/logging-and-monitoring/logging/configuring-logging/#configuring-carbon-logs"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/logging-and-monitoring/monitoring/monitoring-tcp-based-messages/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/product-compatibility/#tested-jdks"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-permissions/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-permissions/``https://localhost:9443/carbon``/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-permissions/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/`https://localhost:9443/admin`/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-permissions/#adding-role-based-permissions"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/introduction-to-userstores/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/overview/#api-gateway"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/overview/#api-publisher"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-roles/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/overview/#developer-portal"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/writing-a-custom-user-store-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-users/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/multitenancy/managing-tenants/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/multitenancy/tenant-sharing-with-wso2is7/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/configure-wso2is7-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/rate-limiting/manage-advanced-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/anew-jwt-condition-regex.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/rate-limiting/manage-ai-subscription-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/rate-limiting/manage-subscription-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/graphql-api/query-complexity-limitation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/administer/rate-limiting/manage-subscription-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/graphql-api/query-depth-limitation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/ai-gateway/getting-started-with-ai-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/mcp/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/ai-gateway/mcp-gateway/invoke-a-mcp-server-using-playground/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/#step-3-get-an-access-token"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/ai-gateway/mcp-gateway/subscribe-to-a-mcp-server/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/deploy-and-publish/deploy-on-gateway/api-gateway/scaling-the-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-configurations/configuring-caching/#key-cache"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-api-revisions/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/deploy-and-publish/publish-on-dev-portal/publish-aws-apis-in-the-dev-portal/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/deploy-and-publish/publish-on-dev-portal/publish-aws-apis-in-the-dev-portal/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/importing-apis-via-dev-first-approach/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/block-subscription-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/rate-limiting/access-control/#denying-requests"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/block-subscription-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/key-concepts/#access-token"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/block-subscription-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/key-concepts/#application"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/block-subscription-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/key-concepts/#rate-limits"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/block-subscription-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/overview/#api-gateway"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/product-apis/restful-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/advanced-topics/enable-publisher-access-control-in-api-publisher-portal/index.html",
+  "link": "/api-platform/api-manager/4.6.0/reference/product-apis/restful-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/api-versioning/create-a-new-api-version/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/rate-limiting/graphql-api/overview-query-limits-for-graphql/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-ai-api/create-an-ai-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/ai-gateway/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-ai-api/create-an-ai-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-security/runtime/secure-apis-using-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-an-api-using-a-service/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-an-api-using-a-service/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-an-api-using-a-service/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/rate-limiting/rate-limiting-for-streaming-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-an-api-using-a-service/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-security/runtime/secure-apis-using-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-documentation/add-api-documentation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/api-authentication/secure-apis-using-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/adding-custom-properties-to-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/endpoint-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/lifecycle-management/api-lifecycle/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-documentation/add-api-documentation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/api-authentication/secure-apis-using-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/adding-custom-properties-to-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/endpoint-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/lifecycle-management/api-lifecycle/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/create-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-streaming-api/create-a-websocket-streaming-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-streaming-api/create-a-websocket-streaming-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-streaming-api/create-a-websocket-streaming-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/endpoints/endpoint-security/basic-auth/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/endpoint-security-symbol.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/endpoints/endpoint-security/digest-auth/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/endpoint-security-symbol.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/endpoints/endpoint-security/oauth-2.0/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/endpoint-security-symbol.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/endpoints/endpoint-types/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/api-policies/regular-gateway-policies/adding-dynamic-endpoints/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/endpoints/resiliency/endpoint-timeouts/index.html",
+  "link": "/api-platform/api-manager/4.6.0/reference/synapse-properties/endpoint-properties/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/lifecycle-management/api-lifecycle/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/lifecycle-transition-grid.png%22"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/lifecycle-management/api-lifecycle/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/lifecycle-transition-grid.png&quot;/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-documentation/add-api-documentation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/api-authentication/disable-security/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/api-authentication/secure-apis-using-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/adding-custom-properties-to-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/endpoint-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/lifecycle-management/api-lifecycle/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/prototype-api/create-mocked-js-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/rate-limiting/rate-limiting-for-ai-apis/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/design/api-monetization/monetizing-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/governance/api-governance-api-creator-capabilities/index.html",
+  "link": "/api-platform/api-manager/4.6.0/governance/api-governance-admin-capabilities/#create-a-new-policy"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/governance/api-governance-api-creator-capabilities/index.html",
+  "link": "/api-platform/api-manager/4.6.0/governance/governance-concept/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/b2b-api-consumption/api-consumption/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/b2b-api-management/setup-identity-server/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/collaboration/interact-with-the-community/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-collaborations/enable-social-media-interaction/#add-github-and-slack-channel-urls-to-an-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/collaboration/interact-with-the-community/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-collaborations/enable-social-media-interaction/#enable-sharing-api-links-on-social-media"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/discover-apis/search/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/include-additional-headers-in-the-api-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-a-soap-client/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-graphql-api-using-the-integrated-graphql-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/try-out-using-postman/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/create-application/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/consume-api-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/discover-apis/marketplace-assistant/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/test-apis-with-apichat/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/discover-apis/marketplace-assistant/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/ai-related-operations-with-apictl/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/discover-apis/marketplace-assistant/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/#control-api-visibility-in-the-developer-portal"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/generating-sdks/write-a-client-application-using-the-sdk/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/generating-sdks/generate-sdks-in-dev-portal/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/include-additional-headers-in-the-api-console/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/advanced-topics/enabling-cors-for-apis/#enabling-cors-per-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/maintaining-separate-production-and-sandbox-gateways/#multiple-gateways-to-handle-production-and-sandbox-requests-separately"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/invoke-an-graphql-api-using-the-integrated-graphql-console/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/maintaining-separate-production-and-sandbox-gateways/#multiple-gateways-to-handle-production-and-sandbox-requests-separately"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/invoke-an-graphql-api-using-the-integrated-graphql-console/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-a-graphql-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/test-apis-with-apichat/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/discover-apis/marketplace-assistant/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/test-apis-with-apichat/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/try-out-using-postman/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/invoke-apis/invoke-apis-using-tools/try-out-using-postman/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/advanced-topics/adding-an-application-creation-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/create-application/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/create-application/#create-a-new-application"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/generate-keys/generate-api-keys/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/configure-keycloak-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/generate-keys/generate-api-keys/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/configure-okta-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/generate-keys/revoke-oauth2-application/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/generate-keys/obtain-access-token/overview-of-access-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-application/sharing-applications/sharing-applications/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/advanced-topics/changing-the-owner-of-an-application/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/advanced-topics/adding-an-api-subscription-deletion-workflow/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/advanced-topics/adding-an-api-subscription-tier-update-workflow/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/subscribe-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/subscribe-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/generate-keys/generate-api-keys/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/subscribe-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/advanced-topics/adding-an-api-subscription-tier-update-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/subscribe-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/manage-subscription/subscribe-to-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/rate-limiting/resetting-application-throttling-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/grant-types/authorization-code-grant/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/rate-limiting/resetting-application-throttling-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/grant-types/client-credentials-grant/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-developer-portal/rate-limiting/resetting-application-throttling-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/grant-types/password-grant/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/federated-gateways/overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/federated-gateways/azure/deploy-on-azure-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/adding-dynamic-endpoints/index.html",
+  "link": "/api-platform/api-manager/4.6.0/learn/api-gateway/message-mediation/changing-the-default-mediation-flow-of-api-requests/#creating-and-uploading-manually-in-api-publisher"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/adding-dynamic-endpoints/index.html",
+  "link": "/api-platform/api-manager/4.6.0/learn/design-api/endpoints/endpoint-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/removing-specific-request-headers-from-response/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-gateway/message-mediation/changing-the-default-mediation-flow-of-api-requests/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/transforming-api-message-payload/index.html",
+  "link": "/api-platform/api-manager/4.6.0/integrate/examples/json_examples/json-examples/#accessing-content-from-json-payloads"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/transforming-api-message-payload/index.html",
+  "link": "/api-platform/api-manager/4.6.0/integrate/examples/json_examples/json-examples/#constructing-and-transforming-json-payloads"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/transforming-api-message-payload/index.html",
+  "link": "/api-platform/api-manager/4.6.0/integrate/examples/json_examples/json-examples/#logging-json-payloads"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/policies/transforming-api-message-payload/index.html",
+  "link": "/api-platform/api-manager/4.6.0/integrate/examples/json_examples/json-examples/#troubleshooting-debugging-and-logging"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/scaling-the-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-configurations/configuring-caching/#key-cache"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/design-time/configuring-api-security-audit/index.html",
+  "link": "auditreports"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/key-management/third-party-key-managers/configure-custom-connector/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/extending-key-management/extending-key-validation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/key-management/third-party-key-managers/configure-custom-connector/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/extending-key-management/extending-the-key-manager-interface/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/key-management/tokens/encrypting-oauth2-tokens/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/generate-keys/generate-api-keys/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/key-management/tokens/encrypting-oauth2-tokens/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/runtime/api-authentication/secure-apis-using-api-keys/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-design-manage/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/runtime/authorization/oauth2-scopes/application-scopes/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/advanced-topics/adding-an-application-key-generation-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/runtime/authorization/role-based-access-control-using-xacml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/runtime/authorization/role-based-access-control-using-xacml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso.md/#sharing-the-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-different-endpoint-security-types/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-different-endpoint-types/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-different-endpoint-types/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/message-mediation/adding-dynamic-endpoints/#adding-dynamic-endpoints"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-environment-specific-parameters/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-different-endpoint-security-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-environment-specific-parameters/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-different-endpoint-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-environment-specific-parameters/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-git-integration/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/ci-cd-with-wso2-api-management/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/using-dynamic-data-in-api-controller-projects/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/ai-related-operations-with-apictl/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/ai-related-operations-with-apictl/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/building-jenkins-ci-cd-pipeline/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/ci-cd-with-wso2-api-management/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/ci-cd-with-wso2-api-management/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/cicd-using-cli/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/api-controller/prod-dev-endpoints-petstore-api.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/#defining-the-parameters-file-for-an-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/#defining-the-parameters-file-for-an-api-product"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/#generating-the-deployment-directory"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#minimal-permissions-and-scopes-required-to-perform-apictl-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/##set-export-directory"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#set-http-request-timeout"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/importing-apis-via-dev-first-approach/#initialize-an-api-project"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/managing-apis-and-api-products/#change-status-of-an-api-or-api-product-in-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/migrating-api-products-to-different-environments/#export-an-api-product"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/migrating-apis-to-different-environments/#export-an-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/migrating-apis-to-different-environments/#import-an-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api-product/api-product-overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/cicd-using-cli/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api-from-an-openapi-definition/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/enabling-correlation-logs-with-apictl/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/enabling-correlation-logs-with-apictl/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/encrypting-secrets-with-ctl/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/mi-setup/security/encrypting_plain_text/#dynamic-secrets"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/getting-started-with-wso2-api-controller/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/getting-started-with-wso2-api-controller/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/formatting-the-output-of-get-command/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup//api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#initialize-api-projects-with-dynamic-data"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/managing-apis-and-api-products/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/formatting-the-output-of-get-command/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/managing-apis-and-api-products/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/managing-apis-and-api-products/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/managing-apis-and-api-products/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/importing-apis-via-dev-first-approach/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/#defining-the-params-file-for-an-api-product"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#add-dynamic-data-to-environment-configs"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-api-products-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/#defining-the-params-file-for-an-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#add-dynamic-data-to-environment-configs"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/migrating-apis-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/managing-applications/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/formatting-the-output-of-get-command/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/managing-applications/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/managing-applications/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/managing-applications/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-applications/migrating-applications-to-different-environments/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/migrating-applications-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/migrating-applications-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/migrating-applications-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-applications/migrating-applications-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/managing-common-api-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/formatting-the-output-of-get-command/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/managing-common-api-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/managing-common-api-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/managing-common-api-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-policies/create-policy/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/migrating-common-api-policies-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/migrating-common-api-policies-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/migrating-common-api-policies-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-common-api-policies/migrating-common-api-policies-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup//api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/managing-mcp-servers/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/formatting-the-output-of-get-command/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/managing-mcp-servers/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/managing-mcp-servers/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/managing-mcp-servers/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-mcp-servers/importing-mcp-servers-via-dev-first-approach/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/#defining-the-params-file-for-an-mcp-server"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#add-dynamic-data-to-environment-configs"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-mcp-servers/migrating-mcp-servers-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-rate-limiting-policies/migrating-rate-limiting-policies-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#add-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-rate-limiting-policies/migrating-rate-limiting-policies-to-different-environments/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-rate-limiting-policies/throttle-policy-import-export/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#download-and-initialize-the-apictl"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-rate-limiting-policies/throttle-policy-import-export/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller/#login-to-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-rate-limiting-policies/throttle-policy-import-export/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-rate-limiting-policies/migrating-rate-limiting-policies-to-different-environments/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/advanced-topics/adding-an-application-update-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/federated-gateways/azure/discover-apis-on-azure-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/maintain-seperate-gateways-per-tenants/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/federated-gateways/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/federated-gateways/aws/discover-apis-on-aws-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/federated-gateways/envoygateway/eg-k8s/discover-apis-on-eg-gateway-in-kubernetes/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/federated-gateways/kong/kong-kubernetes/discover-apis-on-kong-gateway-in-kubernetes/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/federated-gateways/kong/kong-standalone/discover-apis-on-kong-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/about-this-release/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/advanced-topics/distributed-throttling/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/apim-architecture/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/apim-architecture/index.html",
+  "link": "/api-platform/api-manager/4.6.0/monitoring/moesif-analytics/moesif-integration-guide/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/get-started/deployment-platforms/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/includes/design/invoke-prerelease-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/includes/design/invoke-prerelease-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/design/create-api/create-rest-api/test-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-the-primary-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/updating-wso2-api-manager"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-different-endpoint-types"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/formatting-the-output-of-get-command"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/ci-cd-with-wso2-api-management"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/cicd-using-cli"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/getting-started-with-wso2-api-controller"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/importing-apis-via-dev-first-approach"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/managing-apis-and-api-products"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/migrating-api-products-to-different-environments"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/migrating-apis-to-different-environments"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-applications/managing-applications"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-applications/migrating-applications-to-different-environments"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-overview"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/common-runtime-and-configuration-artifacts"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/default-product-ports"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/product-compatibility"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/deploying-api-manager-with-kubernetes-resources/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installation-prerequisites/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/product-compatibility/#tested-operating-systems-and-jdks"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installation-prerequisites/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/product-compatibility/#tested-wso2-products"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-as-a-linux-service/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/ProductCompatibility/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-as-a-windows-service/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/ProductCompatibility/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-runtime/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/attachments/thumbnails/26838941/27042151"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-runtime/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/attachments/thumbnails/26838941/27042154"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/advance-configurations/configuring-caching/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/#expiry-time-of-the-jwt"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/advance-configurations/configuring-caching/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/response-caching/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-jdbc-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setting-up-databases/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/#setting-up-an-e-mail-login"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/configuring-the-system-administrator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/security/creating_keystores/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/#setting-up-an-e-mail-login"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy/performance/performance-tuning-recommendations#performance-tuning-ldaps-pooling"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy/security/use-asymmetric-encryption"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-the-primary-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-the-primary-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-the-primary-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/configure-userstores/configure-primary-user-store/configuring-the-primary-user-store/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/default-product-ports/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-overview"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/logging-and-monitoring/logging/configuring-logging/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-overview"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/default-product-ports/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/product-compatibility/#tested-operating-systems-and-jdks"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-best-practices/tuning-performance/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/mi-setup/transport_configurations/configuring-transports/#configuring-the-httphttps-transport"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-the-primary-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-security/key-management/configuration/configure-wso2is7-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-a-single-node/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-an-active-active-deployment/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup-with-km-separated/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup-with-km-separated/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup-with-km-separated/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/exposing-apis-via-custom-hostnames/#using-a-new-gateway-environment-to-expose-apis-via-custom-hostnames"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup-with-km-separated/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/exposing-apis-via-custom-hostnames/#using-a-new-gateway-environment-to-expose-apis-via-custom-hostnames"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-simple-scalable-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-simple-scalable-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-simple-scalable-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/exposing-apis-via-custom-hostnames/#using-a-new-gateway-environment-to-expose-apis-via-custom-hostnames"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-simple-scalable-setup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/kubernetes-deployment/aws/deploying-wso2-api-m-on-eks/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-1/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-1/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-1/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/exposing-apis-via-custom-hostnames/#using-a-new-gateway-environment-to-expose-apis-via-custom-hostnames"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-1/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/exposing-apis-via-custom-hostnames/#using-a-new-gateway-environment-to-expose-apis-via-custom-hostnames"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/multi-dc-deployment/multi-dc-deployment-patterns-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/scaling-the-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/enabling-hostname-verification/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/enabling-java-security-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-security/configuring-keystores/keystore-basics/about-asymetric-cryptography/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/logins-and-passwords/configuring-recaptcha-for-single-sign-on/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/api-security/recaptcha/recaptcha-sso.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/logins-and-passwords/maintaining-logins-and-passwords/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/customizations/log-in-to-the-dev-portal-using-social-media/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-security/logins-and-passwords/carbon-secure-vault-implementation/#elements-of-the-secure-vault-implementation"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-security/logins-and-passwords/set-passwords-using-vars-and-sys-props/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/endpoint-security/basic-auth/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/endpoint-security/digest-auth/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/security/user-account-management/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/#configuring-a-jdbc-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-ibm-db2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-mssql/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-mysql/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-oracle-rac/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-oracle/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-postgresql/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/setting-up-databases/overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/all-in-one-deployment-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-a-single-node/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/all-in-one-deployment-overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-an-active-active-deployment/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setting-up-databases/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setting-up-databases/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-add-new-attribute-add.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-add-new-attribute-details.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-add-new-attribute.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-apim-add-role-permissions1.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-apim-add-role-permissions2.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-apim-add-role-permissions3.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/updating-wso2-api-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/product-configurations/common-runtime-and-configuration-artifacts/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/integrate/tutorials/service-catalog/metadata-folder-service-catalog.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/integrate/develop/integration-development-kickstart/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-an-api-using-a-service/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/reference/config-catalog-mi/#service-catalog-client"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/tutorials/integration-tutorials/service-catalog-tutorial-for-proxy-services/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/integrate/develop/working-with-service-catalog/index.html",
+  "link": "/api-platform/api-manager/4.6.0/tutorials/integration-tutorials/service-catalog-tutorial/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/monitoring/api-monetization/monetizing-an-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/adding-new-throttling-policies/#Adding-a-new-subscription---level-throttling-tier"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/monitoring/observability/monitoring-api-logs/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/managing-apis-and-api-products/#get-the-log-level-of-apis-or-an-api-in-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/monitoring/observability/monitoring-api-logs/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/managing-apis-api-products/managing-apis-and-api-products/#set-the-log-level-of-an-api-in-an-environment"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/monitoring/observability/monitoring-correlation-logs/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/monitoring/observability/monitoring-correlation-logs/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/monitoring/observability/monitoring-correlation-logs/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/page-not-found/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/images/page-not-found.svg"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/adding-internationalization/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/#uploading-via-the-admin-portal-tenants-only"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/customizations/adding-a-user-signup-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/index.html",
+  "link": "/api-platform/api-manager/4.6.0/reference/customize-product/customizations/customizing-the-developer-portal/styling-api-details-info-section/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/log-in-to-the-dev-portal-using-social-media/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/overriding-the-publisher-portal-theme/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/customizations/advanced-ui-customization/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/adding-custom-properties-to-apis/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-gateway/writing-custom-handlers/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-policies/regular-gateway-policies/adding-a-class-mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-key-management/extending-key-validation/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/configure-custom-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-key-management/extending-key-validation/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/extending-key-management/extending-scope-validation/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-key-management/extending-scope-validation/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/oauth2-scopes/scope-allowlisting/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-key-management/extending-the-key-manager-interface/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/configure-custom-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-workflows/configuring-http-redirection-for-workflows/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/product-apis/admin-apis/admin-v1/admin-v1/#tag/Workflows-(Individual)/paths/~1workflows~1update-workflow-status/post"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/extending-workflows/configuring-workflows-for-tenants/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-application/advanced-topics/adding-an-application-creation-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-external-idp-through-identity-server-for-sso/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-single-sign-on-with-saml2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/saml2-sso/configuring-external-idp-through-identity-server-for-sso/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-single-sign-on-with-saml2/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/saml2-sso/multi-factor-authentication-mfa-for-publisher-and-developer-portals/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/develop/customizations/adding-a-user-signup-workflow/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/key-concepts/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/getting-started/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-patterns/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/reference/default-product-ports/#api-manager"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/learn/design-api/publish-api/publish-through-multiple-api-gateways/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/guides/message-flow-in-the-api-manager-gateway/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-policies/overview/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/performance-test-results-token-persistence/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/setup-and-install/performance-test-results/token/cc__db_cpu.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/performance-test-results-token-persistence/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/setup-and-install/performance-test-results/token/pwd__db_cpu.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/performance-test-results-token-persistence/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/setup-and-install/performance-test-results/token/refresh__db_cpu.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/performance-test-results-token-persistence/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/api-security/oauth2/token-persistence/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/troubleshooting/error-handling/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/endpoint-types/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/troubleshooting/troubleshooting-jms/index.html",
+  "link": "/api-platform/api-manager/4.6.0/integrate/develop/customizations/creating-custom-mediators/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-a-graphql-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/design-new-streaming-api.jpg"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-a-websocket-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/resiliency/endpoint-suspension/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/resiliency/endpoint-timeouts/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/resiliency/prevent-api-suspension/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/#deploy-an-api"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/prototype-api/create-mocked-js-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/edit-an-api-by-modifyng-the-api-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/edit-an-api-by-modifyng-the-api-definition/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/enforce-throttling-and-resource-access-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-the-integrated-api-console/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/enforce-throttling-and-resource-access-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/create-api/create-rest-api/create-a-rest-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/enforce-throttling-and-resource-access-policies/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/setting-throttling-limits/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/generate-rest-api-from-soap-backend/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/integrating-with-solace/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/manage-subscription/subscribe-to-an-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/integrating-with-solace/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/adding-new-throttling-policies/#adding-a-new-subscription-level-rate-limiting-tier"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/scenarios/scenario14-external-key-manager/index.html",
+  "link": "/api-platform/api-manager/4.6.0/administer/key-managers/configure-keycloak-connector/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/scenarios/scenario5-developer-community-feature/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/generating-sdks/write-a-client-application-using-the-sdk/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/streaming-api/create-and-publish-sse-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-streaming-api/create-a-sse-streaming-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/streaming-api/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-streaming-api/create-a-websocket-streaming-api/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/streaming-api/create-and-publish-websub-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-streaming-api/create-a-websub-streaming-api/"
+ }
+]

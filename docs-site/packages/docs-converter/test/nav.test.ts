@@ -55,3 +55,8 @@ test('selectNav takes one release under a top-level entry and strips the folder 
   ]);
   assert.throws(() => selectNav(nav, { root: 'API Gateway', release: '1.0.0' }), /no release "1\.0\.0"/);
 });
+
+test('a nav path with a doubled slash names the same page as the single-slash path', () => {
+  const known = (id: string) => id === 'monitoring/tracing';
+  assert.deepEqual(navToSidebar([{ Tracing: 'monitoring//tracing.md' }], known), [{ type: 'doc', id: 'monitoring/tracing', label: 'Tracing' }]);
+});

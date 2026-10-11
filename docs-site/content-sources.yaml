@@ -419,14 +419,76 @@ products:
         route: api-platform/api-manager
         kind: mkdocs
         repo: wso2/docs-apim
-        sha: e4e26c4c20c1ce6aa40a6c07e31dd01acf6032b1
-        track: master
         mkdocs: en/mkdocs.yml
-        version: 4.7.0
         deployment_options: [Self-hosted]
         current_site: https://apim.docs.wso2.com/en/4.7.0/
-        older_versions: https://apim.docs.wso2.com/en/4.6.0/
+        former_site: https://apim.docs.wso2.com/en/{version}/
+        release_tag: v
+        product_repo: wso2/product-apim
         sparse: [en]
+        # Latest is the 4.7.0 branch (master is two days behind it); noise branches (4.5.0-new, staging-*, ...) stay out.
+        versions:
+          - version: 4.7.0
+            ref: 4.7.0
+            sha: 75726eb0a49d8c294f9979cca449ee25f1ffaa14
+            track: true
+            exclude:
+              - use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog.md  # includes/streaming/enable-publishing.md is missing from the branch
+          - version: 4.6.0
+            ref: 4.6.0
+            sha: d74917be62837707817e85d20a315265f19b8fc7
+            exclude:
+              - use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog.md  # includes/streaming/enable-publishing.md is missing from the branch
+          - version: 4.5.0
+            ref: 4.5.0
+            sha: 44d25ebbffaf209b9319caecabfca0ed9a7ef443
+            exclude:
+              - index.md  # the home page loops over tiles ({% for %})
+              - use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog.md  # includes/streaming/enable-publishing.md is missing from the branch
+          - version: 4.4.0
+            ref: 4.4.0
+            sha: 808c7e57d4d9cf8aabc694cf03b1733d7455c149
+            exclude:
+              - use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog.md  # includes/streaming/enable-publishing.md is missing from the branch
+          - version: 4.3.0
+            ref: 4.3.0
+            sha: 3b3ebf8fcc128f8687271b950e6fc6c8e8ef23be
+            exclude: []
+          - version: 4.2.0
+            ref: 4.2.0
+            sha: 3dd871cfa2b6f90c75cac9da5bcc2dc1ab510b58
+            exclude:
+              - reference/connectors/salesforce-connectors/salesforcebulk-connector-example.md  # <object> element
+          - version: 4.1.0
+            ref: 4.1.0
+            sha: 78771a76543bbe4a250d6aac69a53851c4950dac
+            exclude: []
+          - version: 4.0.0
+            ref: 4.0.0
+            sha: 5a85a65d8d6da92251f9da0c21568a9ea5509ed8
+            exclude: []
+          - version: 3.2.0
+            ref: 3.2.0
+            sha: c421978b28eca4bf161e1177f718848ca11334eb
+            exclude: []
+          - version: 3.1.0
+            ref: 3.1.0
+            sha: f110c268108df26f08fbaee8eb1cf5ac20d2a5b4
+            exclude: []
+          - version: 3.0.0
+            ref: 3.0.0
+            sha: 53584be9c5ba11a1cf0f250e7a274249649afd1b
+            exclude: []
+        # Confluence spaces (wso2/docs-apim `versions` branch, en/docs/assets/versions.json).
+        older_versions:
+          - { version: 2.6.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM260 }
+          - { version: 2.5.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM250 }
+          - { version: 2.2.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM220 }
+          - { version: 2.1.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM210 }
+          - { version: 2.0.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM200 }
+          - { version: 1.10.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM1100 }
+          - { version: 1.9.1, href: https://wso2docs.atlassian.net/wiki/spaces/AM191 }
+          - { version: 1.9.0, href: https://wso2docs.atlassian.net/wiki/spaces/AM190 }
         # Bijira (docs-api-platform's Cloud tree) is API Manager's WSO2 Cloud deployment option.
         cloud_companion:
           repo: wso2/docs-api-platform

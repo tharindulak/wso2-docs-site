@@ -1,7 +1,7 @@
 // MkDocs `nav:` -> Docusaurus sidebar items, and merging two navs (cloud + self-hosted) into one tree.
 import type { MkdocsNav, SidebarItem } from './types.js';
 
-const docId = (p: string): string => p.replace(/\\/g, '/').replace(/^\.?\//, '').replace(/\.mdx?$/, '');
+const docId = (p: string): string => p.replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/^\.?\//, '').replace(/\.mdx?$/, '');
 // A site path (/route/page/) is a link too: nav entries of a version folder that point at another section's pages.
 const isUrl = (p: string): boolean => /^[a-z]+:\/\//i.test(p) || p.startsWith('mailto:') || /^\/(?!\/).*\/$/.test(p);
 
