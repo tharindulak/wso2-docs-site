@@ -558,13 +558,29 @@ products:
         route: financial-services
         kind: mkdocs
         repo: wso2/docs-open-banking
-        sha: 81100957b6859b054c58a49e8eb1ee44b96fada5
-        track: master
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]  # confirm
         current_site: https://ob.docs.wso2.com/en/latest/
+        former_site: https://ob.docs.wso2.com/en/{version}/
+        release_tag: v
+        product_repo: wso2/financial-services-accelerator
         sparse: [en]
-        exclude: []
+        versions:
+          - version: 4.0.0
+            ref: master
+            sha: 81100957b6859b054c58a49e8eb1ee44b96fada5
+            track: true
+            exclude: []
+          - version: 3.0.0
+            ref: 3.0.0
+            sha: ec9a0315c50a66382bd8d5b0c580e4d289ee82a2
+            exclude: []
+        # Versions before 3.0.0 live on Confluence (keys from the versions selector data, branch versions of wso2/docs-open-banking).
+        older_versions:
+          - { version: 2.0.0, href: https://wso2docs.atlassian.net/wiki/spaces/OB200/ }
+          - { version: 1.5.0, href: https://wso2docs.atlassian.net/wiki/spaces/OB150/ }
+          - { version: 1.4.0, href: https://wso2docs.atlassian.net/wiki/spaces/OB140/ }
+          - { version: 1.3.0, href: https://wso2docs.atlassian.net/wiki/spaces/OB130/ }
 
   - id: updates
     name: Updates
