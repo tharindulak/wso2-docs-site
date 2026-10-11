@@ -19,7 +19,7 @@ import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
 
-const CHROME = ['site/src', 'site/plugins', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
+export const CHROME = ['site/src', 'site/plugins', 'site/account', 'site/account-sidebars.js', 'site/static', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
 const CONVERTER = ['packages/docs-converter/src'];
 const BASELINES = path.join(ROOT, 'link-baselines');
 const KEY_FILE = '.snapshot-key';
@@ -56,14 +56,17 @@ export function navHash(lock = readLock()) {
   return crypto.createHash('sha256').update(JSON.stringify(nav)).digest('hex');
 }
 
-export function inputHashes(root = ROOT) {
+/** Hash of git trees/blobs at HEAD under `prefix` plus a dirty marker; a path absent at HEAD (an empty directory) hashes as "absent". */
+export function treeHash(paths, root = ROOT, prefix = 'docs-site/') {
   const git = (...a) => execFileSync('git', a, { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
-  const hash = (paths) => {
-    const trees = paths.map((p) => git('rev-parse', `HEAD:docs-site/${p}`)).join(',');
-    const dirty = git('status', '--porcelain', '--', ...paths);
-    return dirty ? `${trees}-dirty-${Date.now()}` : trees;
-  };
-  return { converter: hash(CONVERTER), chrome: hash(CHROME), nav: navHash() };
+  const at = (p) => { try { return git('rev-parse', `HEAD:${prefix}${p}`); } catch { return 'absent'; } };
+  const trees = paths.map(at).join(',');
+  const dirty = git('status', '--porcelain', '--untracked-files=all', '--', ...paths.map((p) => `${prefix}${p}`));
+  return dirty ? `${trees}-dirty-${Date.now()}` : trees;
+}
+
+export function inputHashes(root = ROOT) {
+  return { converter: treeHash(CONVERTER, root), chrome: treeHash(CHROME, root), nav: navHash() };
 }
 
 export function checkTarEntries(names, route) {

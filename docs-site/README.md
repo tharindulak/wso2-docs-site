@@ -58,7 +58,7 @@ npm run check-links -- <build-dir> [--baselines link-baselines]      # internal 
 npm run preview -- [site/build-merged]                 # local static server (docusaurus serve 404s dotted paths like /identity/7.1.0/)
 ```
 
-A snapshot key hashes the version's whole lock entry (source commit, paths, exclude list and the section settings it inherits), the converter, the site chrome and the navigation catalogue (groups, product names and blurbs, section labels and routes), so a theme change rebuilds every snapshot. A snapshot's output depends on nothing else: its pages map links only to their own version's former site, and its Products menu and product bar link to each section's root (`/<route>/`), which the live build always serves (a redirect to the landing page when a section has no index page). `build` checks the store first, then fetches the version's sources itself, and fails when broken internal links exceed the committed baseline `link-baselines/<versionId>.json`. A re-pin that introduces new source breakage needs `build <versionId> --record-baseline` in a reviewed PR.
+A snapshot key hashes the version's whole lock entry (source commit, paths, exclude list and the section settings it inherits), the converter, the site chrome (`site/src`, `site/plugins`, `site/docusaurus.config.js`, the account section `site/account/` and `site/account-sidebars.js`, `site/static/`, the build scripts and `package-lock.json`) and the navigation catalogue (groups, product names and blurbs, section labels and routes), so a theme change rebuilds every snapshot. A snapshot's output depends on nothing else: its pages map links only to their own version's former site, and its Products menu and product bar link to each section's root (`/<route>/`), which the live build always serves (a redirect to the landing page when a section has no index page). `build` checks the store first, then fetches the version's sources itself, and fails when broken internal links exceed the committed baseline `link-baselines/<versionId>.json`. A re-pin that introduces new source breakage needs `build <versionId> --record-baseline` in a reviewed PR.
 
 `npm run content` and `fetch-sources.mjs` skip snapshot versions unless they are named by version id (`build` does that).
 
@@ -66,7 +66,7 @@ The PR check assembles the snapshots whose key is stored and reports the others 
 
 The live build needs a 12 GB heap (`DOCS_HEAP_MB`, default 12288; 8 GB fails at `live_window: 1`) and about 11 GB of disk for the merged output. The CI runner must have at least 16 GB of RAM: `ubuntu-latest` does on public repositories, but has 7 GB on private ones, which need a larger runner.
 
-`SNAPSHOT_STORE` chooses where snapshots live. Unset, it is the local directory `.cache/snapshots`. In CI it is `github-release:docs-site-snapshots` (a GitHub Release holding one tarball per key); that backend needs a GitHub remote and `GH_TOKEN`, and only the snapshot build job has write access.
+`SNAPSHOT_STORE` chooses where snapshots live. Unset, it is the local directory `.cache/snapshots`. In CI it is `github-release:docs-site-snapshots` (a GitHub Release holding one tarball per key); that backend needs a GitHub remote and `GH_TOKEN`, and only the snapshot upload job has write access. The workflow builds with read-only permissions and no token, hands the tarball over as a workflow artifact, and a separate upload job (no checkout, no `npm ci`, no repository scripts) checks its name and uploads it.
 
 ## Content source rules (summary)
 

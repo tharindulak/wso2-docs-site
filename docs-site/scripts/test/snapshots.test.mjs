@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { navHash, snapshotKey, checkTarEntries, checkTarTypes, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
+import { execFileSync } from 'node:child_process';
+import { CHROME, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
@@ -82,4 +83,30 @@ test('tar entries must be regular files or directories', () => {
 test('content steps run without repository tokens', () => {
   const env = withoutTokens({ PATH: '/bin', GH_TOKEN: 'x', GITHUB_TOKEN: 'y', ACTIONS_RUNTIME_TOKEN: 'z', DOCS_HEAP_MB: '1' });
   assert.deepEqual(env, { PATH: '/bin', DOCS_HEAP_MB: '1' });
+});
+
+test('the chrome hash covers site/account, account-sidebars.js and site/static (they feed snapshot builds)', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'chrome-'));
+  const git = (...a) => execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@example.com', ...a], { cwd: dir, stdio: 'pipe' });
+  const write = (f, c) => { fs.mkdirSync(path.dirname(path.join(dir, 'docs-site', f)), { recursive: true }); fs.writeFileSync(path.join(dir, 'docs-site', f), c); };
+  const paths = ['site/account', 'site/account-sidebars.js', 'site/static'];
+  for (const p of paths) assert.ok(CHROME.includes(p), `${p} is part of the chrome key`);
+  git('init', '-q');
+  write('site/account/index.md', 'a'); write('site/account-sidebars.js', 'b'); write('site/static/logo.svg', 'c');
+  git('add', '.'); git('commit', '-qm', 'one');
+  const base = treeHash(paths, dir);
+  assert.equal(treeHash(paths, dir), base, 'deterministic when clean');
+  for (const f of ['site/account/index.md', 'site/account-sidebars.js', 'site/static/logo.svg']) {
+    write(f, 'changed');
+    assert.notEqual(treeHash(paths, dir), base, `${f} (uncommitted)`);
+    git('commit', '-qam', f);
+    assert.notEqual(treeHash(paths, dir), base, `${f} (committed)`);
+    assert.doesNotMatch(treeHash(paths, dir), /dirty/);
+    const next = treeHash(paths, dir);
+    write(f, 'c' + f); git('commit', '-qam', 'again');
+    assert.notEqual(treeHash(paths, dir), next);
+  }
+  fs.rmSync(path.join(dir, 'docs-site/site/static'), { recursive: true }); git('commit', '-qam', 'rm');
+  assert.match(treeHash(paths, dir), /absent$/, 'a path absent at HEAD hashes without throwing');
+  fs.rmSync(dir, { recursive: true, force: true });
 });
