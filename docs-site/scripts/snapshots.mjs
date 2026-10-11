@@ -19,6 +19,7 @@ import { sectionVersions, outsideLinkInputs } from './versions.mjs';
 import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
+import { writeSnapshotRootRedirect, checkVersionRoots } from './redirect.mjs';
 
 export const CHROME = ['site/src', 'site/plugins', 'site/account', 'site/account-sidebars.js', 'site/static', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
 const CONVERTER = ['packages/docs-converter/src'];
@@ -160,12 +161,14 @@ function assemble(liveDir, outDir, { allowMissing = false } = {}) {
   const store = createStore();
   const hashes = inputHashes();
   const pending = [];
+  const pendingRoutes = [];
   for (const entry of snapshotVersions()) {
     const { v } = entry;
     const key = keyOf(entry, hashes);
     if (!store.has(key)) {
       if (!allowMissing) throw new Error(`snapshot ${v.id} (${key.slice(0, 12)}) is missing: run \`node scripts/snapshots.mjs build ${v.id}\``);
       pending.push(v.id);
+      pendingRoutes.push(v.route);
       console.log(`${process.env.GITHUB_ACTIONS ? '::warning::' : ''}pending  ${v.id} (${key.slice(0, 12)}): not stored yet; the snapshot workflow builds it after merge`);
       continue;
     }
@@ -181,10 +184,12 @@ function assemble(liveDir, outDir, { allowMissing = false } = {}) {
     if (packed !== key) throw new Error(`snapshot ${v.id}: tarball key ${packed ?? '(none)'} does not match ${key}`);
     fs.rmSync(keyFile);
     copyNoOverwrite(dir, outDir);
+    writeSnapshotRootRedirect(outDir, v.route, (m) => console.warn(`${process.env.GITHUB_ACTIONS ? '::warning::' : ''}${m}`));
     fs.rmSync(tmp, { recursive: true, force: true });
     console.log(`merged   ${v.id}`);
   }
   if (pending.length) console.log(`${pending.length} snapshot(s) pending: ${pending.join(', ')}`);
+  checkVersionRoots(outDir, new Set(pendingRoutes.map((r) => `/${r}/`)));
 }
 
 /** Upload packed snapshots (<key>.tgz files in dir, from a build with SNAPSHOT_STORE=local:<dir>) to the store. */

@@ -6,6 +6,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { CHROME, navHash, treeHash, snapshotKey, checkTarEntries, checkTarTypes, tar, newBrokenLinks, withoutTokens } from '../snapshots.mjs';
 import { createStore } from '../snapshot-store.mjs';
+import { REDIRECT_MARK, writeSnapshotRootRedirect, checkVersionRoots } from '../redirect.mjs';
 
 const v = { id: 'integration-mi--v4-4-0', repo: 'wso2/docs-mi', sha: 'c'.repeat(40), mkdocs: 'en/mkdocs.yml', exclude: [], route: 'integration/micro-integrator/4.4.0' };
 const h = { converter: 't1', chrome: 't2' };
@@ -162,5 +163,62 @@ test('tar returns listings larger than the default 1 MiB buffer', () => {
     const file = path.join(dir, 'a.tgz');
     tar('-czf', file, '-C', src, '.');
     assert.ok(tar('-tvzf', file).length > 1024 * 1024);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+const tmpTree = (files) => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'rootredir-'));
+  for (const [f, text] of Object.entries(files)) { fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true }); fs.writeFileSync(path.join(dir, f), text); }
+  return dir;
+};
+const route = 'api-platform/api-gateway/1.1.0';
+
+test('a snapshot without an index page gets a root redirect to its home page', () => {
+  const dir = tmpTree({ [`${route}/pages.json`]: JSON.stringify({ pages: ['overview/'], home: 'overview/' }) });
+  try {
+    assert.equal(writeSnapshotRootRedirect(dir, route), true);
+    const html = fs.readFileSync(path.join(dir, route, 'index.html'), 'utf8');
+    assert.ok(html.includes(REDIRECT_MARK));
+    assert.ok(html.includes(`url=/${route}/overview/"`));
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('a snapshot that has an index page keeps it', () => {
+  const dir = tmpTree({ [`${route}/pages.json`]: JSON.stringify({ home: 'overview/' }), [`${route}/index.html`]: 'real' });
+  try {
+    assert.equal(writeSnapshotRootRedirect(dir, route), false);
+    assert.equal(fs.readFileSync(path.join(dir, route, 'index.html'), 'utf8'), 'real');
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('an unsafe home is skipped with a warning', () => {
+  for (const home of ['/etc/', '../x/', 'a/../b/', 'https://evil.example/', 'a\\b', 'javascript:alert(1)']) {
+    const dir = tmpTree({ [`${route}/pages.json`]: JSON.stringify({ home }) });
+    const warnings = [];
+    try {
+      assert.equal(writeSnapshotRootRedirect(dir, route, (m) => warnings.push(m)), false, home);
+      assert.equal(fs.existsSync(path.join(dir, route, 'index.html')), false, home);
+      assert.equal(warnings.length, 1, home);
+    } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+  }
+});
+
+test('the redirect template is the one build-content.mjs writes for Latest', () => {
+  const src = fs.readFileSync(new URL('../build-content.mjs', import.meta.url), 'utf8');
+  const mine = fs.readFileSync(new URL('../redirect.mjs', import.meta.url), 'utf8');
+  for (const prefix of ['const REDIRECT_MARK =', 'const escapeHtml =', 'const redirectHtml =']) {
+    const line = (t) => t.split('\n').find((l) => l.replace('export ', '').startsWith(prefix));
+    assert.equal(line(mine).replace('export ', ''), line(src), prefix);
+  }
+});
+
+test('the final check throws on a version root with no page, and skips pending snapshots', () => {
+  const versions = JSON.stringify({ versions: [{ version: '1.2.0', status: 'latest', path: '/api-platform/api-gateway/' }, { version: '1.1.0', status: 'snapshot', path: `/${route}/` }, { version: '1.0.0', status: 'confluence', href: 'https://example.com' }] });
+  const dir = tmpTree({ 'api-platform/api-gateway/versions.json': versions, 'api-platform/api-gateway/index.html': 'x' });
+  try {
+    assert.throws(() => checkVersionRoots(dir), /api-platform\/api-gateway\/1\.1\.0\//);
+    assert.doesNotThrow(() => checkVersionRoots(dir, new Set([`/${route}/`])));
+    fs.mkdirSync(path.join(dir, route), { recursive: true }); fs.writeFileSync(path.join(dir, route, 'index.html'), 'x');
+    assert.doesNotThrow(() => checkVersionRoots(dir));
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
