@@ -1,0 +1,50 @@
+[
+ {
+  "page": "kubernetes-gateway/1.0.0/about-apk/performance-test-results/overview/index.html",
+  "link": "/kubernetes-gateway/1.0.0/en/latest/about-apk/performance-test-results/gateway-router-with-one-cpus/"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/about-apk/performance-test-results/overview/index.html",
+  "link": "/kubernetes-gateway/1.0.0/en/latest/about-apk/performance-test-results/gateway-router-with-two-cpus/"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/administration/distributed-tracing/index.html",
+  "link": "/kubernetes-gateway/1.0.0/en/latest/get-started/quick-start-guide/"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/create-api/create-and-attach-api-policies/cors/enable-cors-via-crs/index.html",
+  "link": "/kubernetes-gateway/1.0.0/create-api/get-started/quick-start-guide/#step-1-start-wso2-apk"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/create-api/create-and-attach-api-policies/cors/enable-cors-via-crs/index.html",
+  "link": "/kubernetes-gateway/1.0.0/create-api/setup/prerequisites/"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/create-api/create-and-attach-api-policies/cors/enable-cors-via-rest-api/index.html",
+  "link": "/kubernetes-gateway/1.0.0/create-api/get-started/quick-start-guide/#step-1-start-wso2-apk"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/create-api/create-and-attach-api-policies/cors/enable-cors-via-rest-api/index.html",
+  "link": "/kubernetes-gateway/1.0.0/create-api/setup/prerequisites/"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/create-api/create-and-attach-api-policies/interceptors/interceptors-overview/index.html",
+  "link": "/kubernetes-gateway/1.0.0/en/latest/assets/img/api-management/api-policies/interceptors/interceptors-dark.png#only-dark"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/create-api/create-and-attach-api-policies/interceptors/interceptors-overview/index.html",
+  "link": "/kubernetes-gateway/1.0.0/en/latest/assets/img/api-management/api-policies/interceptors/interceptors-light.png#only-light"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/get-started/quick-start-guide/index.html",
+  "link": "/kubernetes-gateway/1.0.0/en/latest/about-apk/FAQs/"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/setup/cicd/building-a-pipeline/index.html",
+  "link": "/kubernetes-gateway/1.0.0/setup/api-management-overview/tools-for-api-development.md/#option-2---generate-k8s-custom-resources-using-config-generator-tool-and-deploy-the-api-using-kubernetes-client"
+ },
+ {
+  "page": "kubernetes-gateway/1.0.0/setup/cicd/building-a-pipeline/index.html",
+  "link": "/kubernetes-gateway/1.0.0/setup/create-api/create-and-deploy-apis/rest/create-rest-api-using-crs.md/#create-backend-cr"
+ }
+]

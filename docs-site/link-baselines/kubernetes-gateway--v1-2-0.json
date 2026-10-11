@@ -1,0 +1,50 @@
+[
+ {
+  "page": "kubernetes-gateway/1.2.0/about-apk/performance-test-results/overview/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/latest/about-apk/performance-test-results/gateway-router-with-one-cpu/"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/about-apk/performance-test-results/overview/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/latest/about-apk/performance-test-results/gateway-router-with-two-cpus/"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/about-apk/performance-test-results/overview/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/latest/about-apk/performance-test-results/two-gateways-of-two-cpus-with-rate-limit/"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/control-plane/apk-as-gateway-in-apim/start-apk-cp-to-dp-k8s/index.html",
+  "link": "../../control-plane/apk-deploy"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/control-plane/overview/index.html",
+  "link": "../control-plane/api-management/control-plane-api-management-overview"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/create-api/create-and-attach-api-policies/interceptors/interceptors-overview/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/latest/assets/img/api-management/api-policies/interceptors/interceptors-dark.png#only-dark"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/create-api/create-and-attach-api-policies/interceptors/interceptors-overview/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/latest/assets/img/api-management/api-policies/interceptors/interceptors-light.png#only-light"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/create-api/create-and-deploy-apis/rest/create-rest-api-using-crs/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/latest/create-api/manage-service-endpoint/manage-certificate/"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/index.html",
+  "link": "/kubernetes-gateway/1.2.0/en/1.2.0/about-apk/what-is-apk"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/setup/deployment/apk-as-gateway-in-apim-deployment-patterns/index.html",
+  "link": "../../control-plane/apk-deploy"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/setup/deployment/apk-with-apim-cp-deployment-patterns/index.html",
+  "link": "../../control-plane/apim-apk-agent-deploy/"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/setup/deployment/apk-with-apim-cp-deployment-patterns/index.html",
+  "link": "../../control-plane/apim-deploy/"
+ }
+]

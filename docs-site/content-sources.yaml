@@ -470,13 +470,33 @@ products:
         route: kubernetes-gateway
         kind: mkdocs
         repo: wso2/docs-apk
-        sha: 15660917a3ac7190525325a65177d719f80f8c81
-        track: main
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]
         current_site: https://apk.docs.wso2.com/en/latest/
+        former_site: https://apk.docs.wso2.com/en/{version}/
+        release_tag: v
+        product_repo: wso2/apk
         sparse: [en]
-        exclude: []
+        # Latest is the 1.3.0 branch (main is labelled 1.2.0); 2.0.0 is not in the live selector and stays out.
+        versions:
+          - version: 1.3.0
+            ref: 1.3.0
+            sha: 7dbf5736c5c7e59a12e7bdbe93629c8428eeb596
+            track: true
+            exclude:
+              - setup/configuring-permissions/configuring-apk-per-cluster.md
+          - version: 1.2.0
+            ref: 1.2.0
+            sha: 5e49408a2b702f4f49df31af0d3bf990cb2cb16f
+            exclude: []
+          - version: 1.1.0
+            ref: 1.1.0
+            sha: 9b05063c2fe606e42b9efeea7e6cb2c626a1c1c2
+            exclude: []
+          - version: 1.0.0
+            ref: 1.0.0
+            sha: 83d175c04f75579ddb0b2c5cc9fc9a2e622fa560
+            exclude: []
 
   - id: developer-platform
     name: Developer Platform
