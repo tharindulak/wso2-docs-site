@@ -149,6 +149,25 @@ export function pagePaths(docsDir) {
 }
 
 /**
+ * Everything outsideLinks reads from the lock for a source, and nothing else: the sections and companions sharing its
+ * repo and mkdocs.yml. A snapshot key covers it, so a stored snapshot's cross-section links match the lock.
+ */
+export function outsideLinkInputs(lock, src) {
+  const same = (x) => x && x.repo === src.repo && x.mkdocs === src.mkdocs;
+  const sections = lock.products.flatMap((p) => p.sections);
+  const components = sections.filter((s) => s.docs_root && same(s))
+    .map((s) => ({ id: s.id, route: s.route, docs_root: s.docs_root, versions: (s.versions ?? []).map((v) => String(v.version)) }));
+  if (!components.length) return null;
+  const hosts = [
+    ...sections.filter((s) => !s.docs_root && s.kind === 'mkdocs' && same(s)).map((s) => ({ route: s.route, only: s.only ?? null, skip: s.skip ?? [] })),
+    ...sections.filter((s) => same(s.cloud_companion)).map((s) => ({
+      route: s.cloud_companion.path_prefix ? `${s.route}/${s.cloud_companion.path_prefix}` : s.route, only: s.cloud_companion.only ?? null, skip: s.cloud_companion.skip ?? [],
+    })),
+  ];
+  return { components, hosts };
+}
+
+/**
  * Where a page of a shared MkDocs source lives on this site, for links between sections reading that source (API
  * Platform: each component's version folders are a section, docs_root; the rest is the platform section and API
  * Manager's cloud companion). A component folder maps to that version's route (Latest without a version segment; a
@@ -156,16 +175,9 @@ export function pagePaths(docsDir) {
  * map to the section or companion whose only/skip takes them. Null when no section reads a docs_root from the source.
  */
 export function outsideLinks(lock, src) {
-  const same = (x) => x && x.repo === src.repo && x.mkdocs === src.mkdocs;
-  const sections = lock.products.flatMap((p) => p.sections);
-  const components = sections.filter((s) => s.docs_root && same(s));
-  if (!components.length) return null;
-  const hosts = [
-    ...sections.filter((s) => !s.docs_root && s.kind === 'mkdocs' && same(s)).map((s) => ({ only: s.only, skip: s.skip ?? [], route: s.route })),
-    ...sections.filter((s) => same(s.cloud_companion)).map((s) => ({
-      only: s.cloud_companion.only, skip: s.cloud_companion.skip ?? [], route: s.cloud_companion.path_prefix ? `${s.route}/${s.cloud_companion.path_prefix}` : s.route,
-    })),
-  ];
+  const inputs = outsideLinkInputs(lock, src);
+  if (!inputs) return null;
+  const { components, hosts } = inputs;
   const url = (route, page) => `/${route}/${mkdocsUrl(/\.md$/.test(page) || page === '' ? page : `${page.replace(/\/$/, '')}/index.md`)}`;
   return (docsPath) => {
     for (const s of components) {
@@ -176,11 +188,29 @@ export function outsideLinks(lock, src) {
       if (at <= 0) continue;
       const version = rest.slice(0, at);
       if (version === 'next') return null;
-      const i = s.versions.findIndex((v) => String(v.version) === version);
+      const i = s.versions.indexOf(version);
       return i < 0 ? `/${s.route}/` : url(i === 0 ? s.route : `${s.route}/${version}`, rest.slice(at + tail.length));
     }
     const page = /\.md$/.test(docsPath) ? docsPath : `${docsPath.replace(/\/$/, '')}/index.md`;
     const host = hosts.find((h) => (!h.only || page.startsWith(h.only)) && !h.skip.some((p) => page.startsWith(p)));
     return host ? url(host.route, docsPath) : null;
   };
+}
+
+/**
+ * Redirect pages for a section that moved (former_route): one <staticDir>/<formerRoute>/<page>/index.html per page
+ * path, sending readers to /<route>/<page>. A page path comes from the source (a front-matter slug may set it): one
+ * with a leading /, a backslash, a . or .. segment, or resolving outside <staticDir>/<formerRoute> is skipped.
+ */
+export function formerRouteRedirects(staticDir, formerRoute, route, pages) {
+  const base = path.resolve(staticDir, formerRoute);
+  const redirects = [];
+  const skipped = [];
+  for (const p of new Set(['', ...pages])) {
+    const file = path.resolve(base, p, 'index.html');
+    const unsafe = p.startsWith('/') || p.includes('\\') || p.split('/').some((s) => s === '.' || s === '..');
+    if (unsafe || !file.startsWith(base + path.sep)) { skipped.push(p); continue; }
+    redirects.push({ file, target: `/${route}/${p}` });
+  }
+  return { redirects, skipped };
 }

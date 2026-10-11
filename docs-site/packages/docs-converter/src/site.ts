@@ -285,7 +285,7 @@ export function rewriteOutsideRefs(mdx: string, ctx: {
   const target = (ref: string, html: boolean): string | null => {
     const [, p = '', suffix = ''] = ref.match(/^([^?#]*)(.*)$/) ?? [];
     const decoded = safeDecode(p);
-    if (!decoded) return null;
+    if (!decoded || decoded.includes('\0')) return null;
     const from = html ? mkdocsUrl(pageSrc) : path.posix.dirname(pageSrc);
     const resolved = path.posix.normalize(path.posix.join(from, decoded));
     if (resolved === '..' || resolved.startsWith('../')) return null; // outside docs_dir

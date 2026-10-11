@@ -12,7 +12,7 @@ import {
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
-import { sectionVersions, confluenceVersions, replaceExclude, pagePaths, outsideLinks } from './versions.mjs';
+import { sectionVersions, confluenceVersions, replaceExclude, pagePaths, outsideLinks, formerRouteRedirects } from './versions.mjs';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -259,7 +259,14 @@ for (const product of lock.products) for (const section of product.sections) {
   if (!section.former_route) continue;
   const docsDir = path.join(GENERATED, 'docs', sectionVersions(section, liveWindow(lock))[0].id);
   if (!fs.existsSync(docsDir)) continue;
-  for (const p of new Set(['', ...pagePaths(docsDir)])) write(path.join(GENERATED, 'static', section.former_route, p, 'index.html'), redirectHtml(`/${section.route}/${p}`));
+  // Redirects from an earlier run go first (pages may have gone); other files there (assets) stay.
+  const base = path.join(GENERATED, 'static', section.former_route);
+  for (const rel of walk(base, (r) => path.basename(r) === 'index.html')) {
+    if (fs.readFileSync(path.join(base, rel), 'utf8').includes(REDIRECT_MARK)) fs.rmSync(path.join(base, rel));
+  }
+  const { redirects, skipped } = formerRouteRedirects(path.join(GENERATED, 'static'), section.former_route, section.route, pagePaths(docsDir));
+  for (const { file, target } of redirects) write(file, redirectHtml(target));
+  if (skipped.length) console.warn(`${section.id}: no former_route redirect for unsafe page path(s): ${skipped.join(', ')}`);
 }
 write(path.join(GENERATED, 'manifest.json'), JSON.stringify(manifest, null, 2));
 write(path.join(GENERATED, 'content-report.json'), JSON.stringify(reports, null, 2));

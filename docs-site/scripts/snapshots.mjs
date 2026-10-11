@@ -2,7 +2,8 @@
 // output under the same URLs. The key covers the version's whole lock entry (source commit, paths, exclude list,
 // inherited section settings), the converter, the site chrome and the navigation catalogue; a change rebuilds.
 // A snapshot's output reads nothing else: its pages link only to their own version, and its navigation comes from
-// the lock file (docusaurus.config.js, snapshot mode).
+// the lock file (docusaurus.config.js, snapshot mode). The exception, a version folder of a shared MkDocs source
+// (docs_root), links into the sections sharing that source; the lock fields those links read are part of its key.
 // Broken links inside a snapshot fail its build only when they are not in link-baselines/<versionId>.json, the
 // version's known breakage (recorded with --record-baseline; source content we do not edit).
 // Usage: node scripts/snapshots.mjs list [--json] [--missing] | build <versionId> [--record-baseline]
@@ -14,7 +15,7 @@ import crypto from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { readLock, liveWindow, ROOT } from './lib.mjs';
-import { sectionVersions } from './versions.mjs';
+import { sectionVersions, outsideLinkInputs } from './versions.mjs';
 import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
@@ -36,10 +37,13 @@ const NOT_KEYED = new Set(['versions', 'older_versions']);
 const canonical = (x) => (Array.isArray(x) ? x.map(canonical)
   : x && typeof x === 'object' ? Object.fromEntries(Object.keys(x).filter((k) => x[k] !== undefined).sort().map((k) => [k, canonical(x[k])])) : x);
 
-/** Key of a snapshot: its whole normalised version source (everything the conversion reads) and the build inputs. */
-export function snapshotKey(v, { converter, chrome, nav = '' }) {
+/**
+ * Key of a snapshot: its whole normalised version source (everything the conversion reads) and the build inputs.
+ * links: the lock fields its cross-section links read (outsideLinkInputs), for sources shared with docs_root sections.
+ */
+export function snapshotKey(v, { converter, chrome, nav = '', links = null }) {
   const source = Object.fromEntries(Object.entries(v).filter(([k]) => !NOT_KEYED.has(k)));
-  const input = { source: canonical({ ...source, exclude: [...(v.exclude ?? [])].sort() }), converter, chrome, nav };
+  const input = { source: canonical({ ...source, exclude: [...(v.exclude ?? [])].sort() }), converter, chrome, nav, ...(links ? { links: canonical(links) } : {}) };
   return crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex');
 }
 
@@ -82,10 +86,14 @@ export function checkTarTypes(verboseLines) {
   for (const line of verboseLines) if (!/^[-d]/.test(line)) throw new Error(`unsafe snapshot entry type: ${line}`);
 }
 
+/** Snapshot versions, each with the cross-section link inputs its key covers (null for most). */
 const snapshotVersions = () => {
   const lock = readLock();
-  return lock.products.flatMap((p) => p.sections.flatMap((s) => sectionVersions(s, liveWindow(lock)))).filter((v) => v.status === 'snapshot');
+  return lock.products.flatMap((p) => p.sections.flatMap((s) => sectionVersions(s, liveWindow(lock)))).filter((v) => v.status === 'snapshot')
+    .map((v) => ({ v, links: outsideLinkInputs(lock, v) }));
 };
+/** Key of a snapshot version from snapshotVersions(). */
+const keyOf = ({ v, links }, hashes) => snapshotKey(v, { ...hashes, links });
 const tar = (...a) => execFileSync('tar', a, { stdio: ['ignore', 'pipe', 'pipe'] }).toString();
 
 /** Copy a tree without overwriting: hashed assets are identical when names match; the live build always wins. */
@@ -101,9 +109,10 @@ function copyNoOverwrite(from, to) {
 }
 
 function build(id, { recordBaseline = false } = {}) {
-  const v = snapshotVersions().find((x) => x.id === id);
-  if (!v) throw new Error(`${id} is not a snapshot version`);
-  const key = snapshotKey(v, inputHashes());
+  const entry = snapshotVersions().find((x) => x.v.id === id);
+  if (!entry) throw new Error(`${id} is not a snapshot version`);
+  const { v } = entry;
+  const key = keyOf(entry, inputHashes());
   const store = createStore();
   // Checked before fetching sources: a stored key costs nothing.
   if (!recordBaseline && store.has(key)) { console.log(`cached   ${id} ${key.slice(0, 12)}`); return; }
@@ -150,8 +159,9 @@ function assemble(liveDir, outDir, { allowMissing = false } = {}) {
   const store = createStore();
   const hashes = inputHashes();
   const pending = [];
-  for (const v of snapshotVersions()) {
-    const key = snapshotKey(v, hashes);
+  for (const entry of snapshotVersions()) {
+    const { v } = entry;
+    const key = keyOf(entry, hashes);
     if (!store.has(key)) {
       if (!allowMissing) throw new Error(`snapshot ${v.id} (${key.slice(0, 12)}) is missing: run \`node scripts/snapshots.mjs build ${v.id}\``);
       pending.push(v.id);
@@ -193,7 +203,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (cmd === 'list') {
     const hashes = inputHashes();
     const store = flag('--missing') ? createStore() : null;
-    const rows = snapshotVersions().map((v) => ({ id: v.id, key: snapshotKey(v, hashes) })).filter((r) => !store || !store.has(r.key));
+    const rows = snapshotVersions().map((e) => ({ id: e.v.id, key: keyOf(e, hashes) })).filter((r) => !store || !store.has(r.key));
     console.log(flag('--json') ? JSON.stringify(rows) : rows.map((r) => `${r.id}\t${r.key}`).join('\n'));
   } else if (cmd === 'build' && a) build(a, { recordBaseline: flag('--record-baseline') });
   else if (cmd === 'assemble' && a && b) assemble(path.resolve(a), path.resolve(b), { allowMissing: flag('--allow-missing') });

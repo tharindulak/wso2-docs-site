@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { sectionVersions, versionId, validateVersions, replaceExclude, pagePaths, confluenceVersions, outsideLinks } from '../versions.mjs';
+import { sectionVersions, versionId, validateVersions, replaceExclude, pagePaths, confluenceVersions, outsideLinks, formerRouteRedirects } from '../versions.mjs';
 
 const SHA = (c) => c.repeat(40);
 const mi = () => ({
@@ -183,4 +183,21 @@ test('outsideLinks: a shared source maps component folders to version routes and
   assert.equal(to('cloud/ai-workspace/overview.md'), '/api-platform/api-manager/cloud/ai-workspace/overview/', 'cloud pages live in the companion');
   assert.equal(to('next/index.md'), null);
   assert.equal(outsideLinks(lock, { repo: 'wso2/docs-apim', mkdocs: 'en/mkdocs.yml' }), null, 'sources without component folders are unchanged');
+});
+
+test('former_route redirects stay inside their folder: hostile page paths (slugs) are skipped', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'former-'));
+  const docs = path.join(dir, 'docs');
+  fs.mkdirSync(docs);
+  fs.writeFileSync(path.join(docs, 'overview.md'), '# Overview\n');
+  fs.writeFileSync(path.join(docs, 'evil.md'), '---\nslug: /../../../../../../scripts/x/\n---\n# Evil\n');
+  const pages = pagePaths(docs);
+  assert.ok(pages.includes('../../../../../../scripts/x/'), 'the slug reaches the page list as written');
+  const staticDir = path.join(dir, 'static');
+  const { redirects, skipped } = formerRouteRedirects(staticDir, 'api-platform/platform/api-gateway/1.2.0', 'api-platform/api-gateway', [...pages, 'a/./b/', 'a\\b/', '/abs/']);
+  assert.deepEqual(redirects.map((r) => [path.relative(staticDir, r.file), r.target]), [
+    ['api-platform/platform/api-gateway/1.2.0/index.html', '/api-platform/api-gateway/'],
+    ['api-platform/platform/api-gateway/1.2.0/overview/index.html', '/api-platform/api-gateway/overview/'],
+  ]);
+  assert.deepEqual(skipped, ['../../../../../../scripts/x/', 'a/./b/', 'a\\b/', '/abs/']);
 });

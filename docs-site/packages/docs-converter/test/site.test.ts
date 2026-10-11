@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, rewriteOutsideRefs } from '../src/site.js';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -260,4 +260,14 @@ test('a section sharing the source: links into folders it skips map through link
     linkOutside: (p) => (p.startsWith('api-gateway/1.2.0/') ? `/gw/${mkdocsUrl(p.slice(18))}` : null),
   }, { outDir: out, route: 'platform' });
   assert.match(fs.readFileSync(path.join(out, 'index.md'), 'utf8'), /\[Gateway\]\(\/gw\/overview\/\) and \[hub\]\(policy-hub\/overview\.md\)/);
+});
+
+test('rewriteOutsideRefs leaves a reference that decodes to a NUL byte as written', () => {
+  const root = componentRepo();
+  const docsDir = path.join(root, 'en/docs');
+  const mdx = '![x](../../../assets/%00.png) <img src="../../../../assets/%00.png" />';
+  assert.equal(rewriteOutsideRefs(mdx, {
+    rel: 'setup/config.md', pageSrc: 'api-gateway/1.2.0/setup/config.md', docsDir, route: 'gw', outDir: fs.mkdtempSync(path.join(root, 'out-')),
+    inside: (p) => p.startsWith('api-gateway/1.2.0/'),
+  }), mdx);
 });

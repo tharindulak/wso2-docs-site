@@ -130,3 +130,26 @@ test('treeHash sees dirty and untracked edits when root is the docs-site directo
   assert.match(treeHash(paths, root), /dirty/, 'untracked file');
   fs.rmSync(repo, { recursive: true, force: true });
 });
+
+test('a component snapshot key covers the lock fields its cross-section links read; other keys do not change', async () => {
+  const { readLock, liveWindow } = await import('../lib.mjs');
+  const { sectionVersions, outsideLinkInputs } = await import('../versions.mjs');
+  const keys = (lock) => Object.fromEntries(lock.products.flatMap((p) => p.sections.flatMap((s) => sectionVersions(s, liveWindow(lock))))
+    .filter((x) => x.status === 'snapshot').map((x) => [x.id, snapshotKey(x, { ...h, links: outsideLinkInputs(lock, x) })]));
+  const lock = readLock();
+  const before = keys(lock);
+  const section = (l, id) => l.products.flatMap((p) => p.sections).find((s) => s.id === id);
+  const grown = structuredClone(lock);
+  section(grown, 'api-platform-api-gateway').versions.unshift({ version: '1.3.0', ref: 'main', sha: 'f'.repeat(40), track: true });
+  const after = keys(grown);
+  assert.notEqual(after['api-platform-ai-gateway--v1-2-0'], before['api-platform-ai-gateway--v1-2-0'], 'another component released');
+  assert.equal(after['integration-mi--v4-5-0'], before['integration-mi--v4-5-0'], 'unrelated section');
+  assert.equal(after['identity--v7-2-0'], before['identity--v7-2-0'], 'unrelated section');
+  const reskipped = structuredClone(lock);
+  section(reskipped, 'api-platform-platform').skip.push('tools/');
+  assert.notEqual(keys(reskipped)['api-platform-ai-gateway--v1-1-0'], before['api-platform-ai-gateway--v1-1-0'], 'the platform section skips more');
+  const companion = structuredClone(lock);
+  section(companion, 'api-platform-apim').cloud_companion.path_prefix = 'cloud-docs';
+  assert.notEqual(keys(companion)['api-platform-api-gateway--v1-0-0'], before['api-platform-api-gateway--v1-0-0'], 'the companion moves');
+  assert.equal(snapshotKey(v, { ...h, links: null }), snapshotKey(v, h), 'no links input: the key is as before');
+});
