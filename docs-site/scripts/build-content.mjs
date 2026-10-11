@@ -12,7 +12,7 @@ import {
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
-import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, outsideLinks, formerRouteRedirects } from './versions.mjs';
+import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, pagePath, outsideLinks, formerRouteRedirects } from './versions.mjs';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -83,7 +83,7 @@ function fillTemplatePages(product, section, outDir, sidebarFile) {
     const f = path.join(outDir, `${id}${ext}`);
     return fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
   });
-  const href = (id) => `/${section.route}/${id.replace(/(^|\/)index$/, '$1')}${/(^|\/)index$/.test(id) && id !== 'index' ? '' : '/'}`.replace(/\/+$/, '/');
+  const href = (id) => `/${section.route}/${urlOfId(outDir, id)}`;
   for (const rel of walk(outDir, (r) => r.endsWith('.md'))) {
     const file = path.join(outDir, rel);
     const text = fs.readFileSync(file, 'utf8');
@@ -97,6 +97,24 @@ function fillTemplatePages(product, section, outDir, sidebarFile) {
     const list = links.map((l) => `- [${l.label.replace(/[[\]]/g, '')}](${href(l.id)})`).join('\n');
     write(file, `---\n${yaml.dump({ ...data, title })}---\n\n${list}\n`);
   }
+}
+
+/** Site path of a generated page by doc id, relative to its version route ("" for the index); a README may be the folder index. */
+function urlOfId(docsDir, id) {
+  const file = [`${id}.md`, `${id}/index.md`].map((f) => path.join(docsDir, f)).find((f) => fs.existsSync(f));
+  return file ? pagePath(path.relative(docsDir, file), fs.readFileSync(file, 'utf8')) : `${id.replace(/(^|\/)index$/, '$1')}/`.replace(/^\/$/, '');
+}
+
+/** Where a version's static files go (Latest: generated/static; others: their own static-versions folder). */
+const staticDirOf = (v) => (v.status === 'latest' ? path.join(GENERATED, 'static', v.route) : path.join(GENERATED, 'static-versions', v.id, v.route));
+
+/** Origin of the former site a version's pages were served from, when its paths are /en/<version>/ (root-relative links). */
+function formerOrigin(v) {
+  for (const u of [v.former_site && v.version ? v.former_site.replace('{version}', v.version) : null, v.current_site, v.self_hosted?.current_site]) {
+    if (!u) continue;
+    try { const url = new URL(u); if (/^\/en\/[^/]+\//.test(url.pathname)) return url.origin; } catch { /* not a URL */ }
+  }
+  return undefined;
 }
 
 /**
@@ -113,16 +131,25 @@ function rewriteLinksToHostedPages(lock) {
   for (const { section, v } of all) {
     const latest = v.status === 'latest';
     const docsDir = path.join(GENERATED, 'docs', v.id);
+    const page = (f) => fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
+    // A README.md without a slug is its folder's index (MkDocs serves it there); a pinned one answers at README/.
+    const readmeIndex = (f) => page(f) && !/^slug:/m.test(fs.readFileSync(f, 'utf8').split('\n---')[0]);
     const hosts = (sub) => (p) => {
       const base = path.join(docsDir, sub, p);
-      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')])
-        .some((f) => fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'"));
+      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')]).some(page) || readmeIndex(path.join(base, 'README.md'));
+    };
+    // Files (images, downloads) the version's pages are served with; the caller copies a linked one to static.
+    const hasFile = (sub) => (p) => {
+      const root = path.resolve(docsDir, sub);
+      const f = path.resolve(root, p);
+      return f.startsWith(root + path.sep) && !/\.mdx?$/.test(f) && Boolean(fs.statSync(f, { throwIfNoEntry: false })?.isFile());
     };
     const add = (url, sub = '') => {
       if (!url) return;
       const route = sub ? `${v.route}/${sub}` : v.route;
       const prefixes = new Set([url, ...(latest ? [url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')] : [])]);
-      for (const prefix of prefixes) sites.push({ prefix, route, hosts: hosts(sub), owner: v.id, snapshot: v.status === 'snapshot' });
+      const files = { from: path.join(docsDir, sub), to: path.join(staticDirOf(v), sub) };
+      for (const prefix of prefixes) sites.push({ prefix, route, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
     };
     const refs = latest && v.kind === 'mkdocs-merge' ? [v.cloud, v.self_hosted] : [v];
     for (const ref of refs) add(ref.current_site);
@@ -141,8 +168,15 @@ function rewriteLinksToHostedPages(lock) {
       const file = path.join(docsDir, rel);
       const text = fs.readFileSync(file, 'utf8');
       if (text.includes("from '@site/src/components/Redirect'")) continue;
-      const { text: out, rewritten } = rewriteSiteLinks(text, own);
+      const { text: out, rewritten, files } = rewriteSiteLinks(text, own, { origin: formerOrigin(v) });
       if (rewritten) { fs.writeFileSync(file, out); total += rewritten; }
+      // A root-relative former-site link to a file now points at /<route>/<file>: serve the file there.
+      for (const { site, path: p } of files) {
+        const to = path.join(site.files.to, p);
+        if (fs.existsSync(to)) continue;
+        fs.mkdirSync(path.dirname(to), { recursive: true });
+        fs.copyFileSync(path.join(site.files.from, p), to);
+      }
     }
   }
   return total;
@@ -169,7 +203,7 @@ function landingOf(v) {
   const sidebarFile = sidebarsOf(v.id);
   const ids = fs.existsSync(sidebarFile) ? Object.values(JSON.parse(fs.readFileSync(sidebarFile, 'utf8'))).flatMap((items) => [...sidebarDocIds(normalizeSidebar(items))]) : [];
   const landingId = ['index', ...ids].find(isPage);
-  return !landingId || landingId === 'index' ? '' : `${landingId.replace(/(^|\/)index$/, '')}/`.replace(/^\/$/, '');
+  return !landingId || landingId === 'index' ? '' : urlOfId(docsDir, landingId);
 }
 
 for (const product of lock.products) {

@@ -73,3 +73,12 @@ test('an API reference page takes its title and summary from the spec and gets t
   assert.match(mdx, /^hide_table_of_contents: true$/m);
   assert.match(mdx, /import ApiReference from '@site\/src\/components\/ApiReference';\n\n<ApiReference spec="\/identity\/apis\/restapis\/scim2\.yaml" \/>/);
 });
+
+test('a page with no title and no heading takes the fallback title; a title or heading always wins', async () => {
+  const opts = { deploymentOptions: ['Self-hosted' as const], fallbackTitle: 'Home: start' };
+  const plain = (await convertRendered('Some text.\n', opts)).mdx;
+  assert.match(plain, /^title: 'Home: start'$/m, 'YAML-escaped');
+  assert.match((await convertRendered('# Real heading\n\nText.\n', opts)).mdx, /^title: Real heading$/m);
+  assert.match((await convertRendered('---\ntitle: Front\n---\nText.\n', opts)).mdx, /^title: Front$/m);
+  assert.doesNotMatch((await convertRendered('---\ntemplate: templates/home.html\n---\n', opts)).mdx, /^title:/m, 'empty template pages are filled later');
+});

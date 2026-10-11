@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, rewriteOutsideRefs } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, mkdocsTitle, rewriteOutsideRefs } from '../src/site.js';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -270,4 +270,91 @@ test('rewriteOutsideRefs leaves a reference that decodes to a NUL byte as writte
     rel: 'setup/config.md', pageSrc: 'api-gateway/1.2.0/setup/config.md', docsDir, route: 'gw', outDir: fs.mkdtempSync(path.join(root, 'out-')),
     inside: (p) => p.startsWith('api-gateway/1.2.0/'),
   }), mdx);
+});
+
+test('a page with no title and no H1 is titled like MkDocs: nav label, else the file name', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: T\nnav:\n  - Home: index.md\n  - "Guides: all":\n      - guides/index.md\n      - guides/set_up-steps.md\n  - Named: guides/named.md\n',
+    'en/docs/index.md': '<div class="homePage">Hi</div>\n',
+    'en/docs/guides/index.md': 'Guide list.\n',
+    'en/docs/guides/set_up-steps.md': 'Steps.\n',
+    'en/docs/guides/named.md': 'Named.\n',
+    'en/docs/guides/headed.md': '# Has heading\n',
+    'en/docs/guides/titled.md': '---\ntitle: From front matter\n---\nText.\n',
+    'en/docs/admin-guide/index.md': 'Admin.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 't' });
+  const title = (rel: string) => fs.readFileSync(path.join(out, rel), 'utf8').match(/^title: (.*)$/m)?.[1];
+  assert.equal(title('index.md'), 'Home', 'nav label');
+  assert.equal(title('guides/named.md'), 'Named');
+  assert.equal(title('guides/set_up-steps.md'), 'Set up steps', 'file name: - and _ become spaces, first letter capitalised');
+  assert.equal(title('guides/index.md'), 'Guides', 'an index page takes its folder name');
+  assert.equal(title('admin-guide/index.md'), 'Admin guide');
+  assert.equal(title('guides/headed.md'), 'Has heading');
+  assert.equal(title('guides/titled.md'), 'From front matter');
+});
+
+test('mkdocsTitle: nav label first, then the file or folder name', () => {
+  assert.equal(mkdocsTitle('a/introduction-to-user-management.md'), 'Introduction to user management');
+  assert.equal(mkdocsTitle('a/FAQs.md'), 'FAQs');
+  assert.equal(mkdocsTitle('index.md'), 'Home');
+  assert.equal(mkdocsTitle('my_section/index.md'), 'My section');
+  assert.equal(mkdocsTitle('my_section/README.md'), 'My section');
+  assert.equal(mkdocsTitle('x.md', 'Label'), 'Label');
+});
+
+test('the merged pair also titles pages from the nav', async () => {
+  const root = tempSource({
+    'cloud/mkdocs.yml': 'site_name: C\nnav:\n  - Start here: p.md\n',
+    'cloud/docs/p.md': 'Cloud text.\n',
+    'self/mkdocs.yml': 'site_name: S\nnav:\n  - p.md\n',
+    'self/docs/p.md': 'Self text.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMergedSites({ cloud: { root, mkdocs: 'cloud/mkdocs.yml' }, self: { root, mkdocs: 'self/mkdocs.yml' } }, { outDir: out, route: 'p' });
+  assert.match(fs.readFileSync(path.join(out, 'p.md'), 'utf8'), /^title: Start here$/m);
+});
+
+test('a host-only base_path followed by /en/<version>/ becomes the full former-site URL; other uses stay on the route', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: K\nplugins:\n  - markdownextradata\nextra:\n  base_path: https://k.example\n  site_version: 1.3.0\n',
+    'en/docs/index.md': '# K\n\n<a href="{{base_path}}/en/{{site_version}}/about/what-is/">What</a> [latest]({{base_path}}/en/latest/setup/) ![i]({{base_path}}/assets/i.png)\n',
+    'en/docs/assets/i.png': 'PNG',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'k' });
+  const page = fs.readFileSync(path.join(out, 'index.md'), 'utf8');
+  assert.match(page, /href="https:\/\/k\.example\/en\/1\.3\.0\/about\/what-is\/"/);
+  assert.match(page, /\[latest\]\(https:\/\/k\.example\/en\/latest\/setup\/\)/);
+  assert.match(page, /!\[i\]\(assets\/i\.png\)/, 'not /en/: the route, as before');
+
+  const withPath = tempSource({
+    'en/mkdocs.yml': 'site_name: M\nplugins:\n  - markdownextradata\nextra:\n  base_path: https://m.example/en/4.4.0\n',
+    'en/docs/index.md': '# M\n\n[x]({{base_path}}/en/4.4.0/x/)\n',
+  });
+  const out2 = fs.mkdtempSync(path.join(withPath, 'out-'));
+  await convertMkdocsSite({ root: withPath, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out2, route: 'm' });
+  assert.match(fs.readFileSync(path.join(out2, 'index.md'), 'utf8'), /\[x\]\(\/m\/en\/4\.4\.0\/x\/\)/, 'a base_path with a path keeps mapping to the route');
+});
+
+test('a README.md is its folder index (no index.md beside it); otherwise it stays pinned', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: R\n',
+    'en/docs/gw/README.md': '# Gateway\n\n[analytics](analytics/)\n',
+    'en/docs/gw/analytics/index.md': '# Analytics\n',
+    'en/docs/both/README.md': '# Readme\n',
+    'en/docs/both/index.md': '# Index\n',
+    'en/docs/low/readme.md': '# lower\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'r' });
+  assert.doesNotMatch(fs.readFileSync(path.join(out, 'gw/README.md'), 'utf8'), /^slug:/m, 'Docusaurus serves it at gw/');
+  assert.match(fs.readFileSync(path.join(out, 'both/README.md'), 'utf8'), /^slug: \/both\/README\/$/m);
+  assert.match(fs.readFileSync(path.join(out, 'low/readme.md'), 'utf8'), /^slug: \/low\/readme\/$/m, 'MkDocs matches README exactly');
+  assert.equal(mkdocsUrl('gw/README.md'), 'gw/');
+  assert.equal(mkdocsUrl('README.md'), '');
+  assert.equal(mkdocsUrl('low/readme.md'), 'low/readme/');
+  assert.equal(keepMkdocsUrl('---\ntitle: a\n---\nx', 'gw/README.md', { readmeIndex: true }), '---\ntitle: a\n---\nx');
+  assert.equal(keepMkdocsUrl('---\ntitle: a\n---\nx', 'gw/README.md'), '---\nslug: /gw/README/\ntitle: a\n---\nx');
 });

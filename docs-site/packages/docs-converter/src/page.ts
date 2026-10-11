@@ -47,6 +47,11 @@ export interface ConvertOptions {
   pageData?: Partial<PageData>;
   /** Title and summary of an OpenAPI spec referenced by <ApiReference spec>, for pages that have no heading. */
   specInfo?: (spec: string) => { title?: string; description?: string } | undefined;
+  /**
+   * Title for a page with no front-matter title, no heading and no spec title (as MkDocs: the nav label, else from
+   * the file name). Without it Docusaurus shows the file id.
+   */
+  fallbackTitle?: string;
 }
 
 export type PageStats = SyntaxStats & { removed?: string[]; htmlBlocks?: number; format?: 'md' };
@@ -107,6 +112,8 @@ async function assemble(
     front.title ??= info?.title;
     if (info?.description && front.description === undefined) front.description = info.description;
   }
+  // An empty MkDocs template page gets its title and overview links later (the docs site's fillTemplatePages).
+  if (!(source.template && !mdxBody.trim())) front.title ??= opts.fallbackTitle;
   if (source.template) front.mkdocs_template = String(source.template).replace(/^templates\//, '').replace(/\.html$/, '');
   front.deployment_options = opts.deploymentOptions;
   if (opts.editUrl) front.custom_edit_url = opts.editUrl;

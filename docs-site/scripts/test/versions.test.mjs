@@ -138,6 +138,16 @@ test('pagePaths lists real pages as URL paths, honours slugs and skips redirects
   assert.deepEqual(pagePaths(dir), ['', 'guides/', 'guides/setup/', 'ref/ref/']);
 });
 
+test('pagePaths: a README.md left unpinned is its folder index; a pinned one keeps README/', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'pages-'));
+  const put = (rel, text) => { fs.mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true }); fs.writeFileSync(path.join(dir, rel), text); };
+  put('README.md', '---\ntitle: Gateway\n---\n# Gateway\n');
+  put('wip/README.md', '# WIP\n');
+  put('both/README.md', '---\nslug: /both/README/\n---\n# Readme\n');
+  put('low/readme.md', '---\nslug: /low/readme/\n---\n# lower\n');
+  assert.deepEqual(pagePaths(dir), ['', 'both/README/', 'low/readme/', 'wip/']);
+});
+
 const aiGateway = () => ({
   id: 'api-platform-ai-gateway', label: 'AI Gateway', route: 'api-platform/ai-gateway', kind: 'mkdocs',
   repo: 'wso2/docs-api-platform', mkdocs: 'en/mkdocs.yml', sparse: ['en'], deployment_options: ['Self-hosted'],

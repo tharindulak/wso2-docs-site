@@ -145,11 +145,19 @@ export function pagePaths(docsDir) {
   for (const rel of walk(docsDir, (r) => r.endsWith('.md'))) {
     const text = fs.readFileSync(path.join(docsDir, rel), 'utf8');
     if (text.includes(REDIRECT)) continue;
-    const slug = splitFrontMatter(text).data.slug;
-    const p = typeof slug === 'string' ? slug.replace(/^\//, '') : rel.replace(/\\/g, '/').replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '/');
-    out.add(p.replace(/^\/$/, ''));
+    out.add(pagePath(rel, text));
   }
   return [...out].sort();
+}
+
+/**
+ * Site path of a generated page relative to its version route ("" for the index): its slug, else from the file
+ * (index.md, and a README.md the converter left unpinned because MkDocs serves it as the folder index, are the folder).
+ */
+export function pagePath(rel, text) {
+  const slug = splitFrontMatter(text).data.slug;
+  const p = typeof slug === 'string' ? slug.replace(/^\//, '') : rel.replace(/\\/g, '/').replace(/(^|\/)(?:index|README)\.md$/, '$1').replace(/\.md$/, '/');
+  return p.replace(/^\/$/, '');
 }
 
 /**

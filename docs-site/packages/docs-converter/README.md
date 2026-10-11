@@ -2,7 +2,7 @@
 
 Converts WSO2 documentation sources into Docusaurus MDX for the WSO2 docs site:
 
-- **MkDocs sites**: renders the Jinja subset WSO2 docs use (`{{ var }}`, `{% if %}`, `{% include %}`, `{% set %}`, `{% raw %}`) with an allow-listed grammar that never runs code, expands `{!file!}` and `--8<--` includes (never outside the repository), applies the HTML allow-list, rewrites MkDocs Material syntax (admonitions, tabs, collapsibles, `attr_list`) and builds the sidebar from `nav:`.
+- **MkDocs sites**: renders the Jinja subset WSO2 docs use (`{{ var }}`, `{% if %}`, `{% include %}`, `{% set %}`, `{% raw %}`) with an allow-listed grammar that never runs code, expands `{!file!}` and `--8<--` includes (never outside the repository), applies the HTML allow-list, rewrites MkDocs Material syntax (admonitions, tabs, collapsibles, `attr_list`) and builds the sidebar from `nav:`. Pages keep MkDocs URLs and titles: a `README.md` with no `index.md` beside it is its folder's index, a page with no `title` and no H1 takes its nav label or a title from its file name (folder name for an index page), and `{{ base_path }}/en/<version>/` with a host-only `base_path` becomes the full former-site URL.
 - **Cloud + self-hosted pairs** that share templates (for example `docs-is`): merges them into one page per topic; differences become labelled `<Applies>` blocks, differing values `<DeploymentValue>`, differing code samples one labelled copy per option.
 - **Docusaurus docs folders**: adds deployment options and edit links, fixes image paths and `.mdx` links, swaps source-only components for stand-ins, and evaluates the sidebars file.
 

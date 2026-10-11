@@ -11,7 +11,7 @@ import { outsideCode } from './syntax.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type PageErrorKind } from './page.js';
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
-import type { DeploymentOption, SidebarInput, SidebarItem } from './types.js';
+import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem } from './types.js';
 
 /** `{{ base_path }}` renders as this marker, then maps to the section's route. */
 const BASE = '@@BASE@@';
@@ -136,21 +136,70 @@ export function copyReferencedAssets(fromDir: string, pagesDir: string, toDir: s
   return copied;
 }
 
-/** URL of a page on an MkDocs site, relative to the site root. */
-export const mkdocsUrl = (rel: string): string => rel.replace(/\\/g, '/').replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '/');
+/** URL of a page on an MkDocs site, relative to the site root. MkDocs serves README.md as its folder's index. */
+export const mkdocsUrl = (rel: string): string => rel.replace(/\\/g, '/').replace(/(^|\/)(?:index|README)\.md$/, '$1').replace(/\.md$/, '/');
 
-const titleOf = (text: string, rel: string): string =>
-  String(splitFrontMatter(text).data.title ?? (text.match(/^#\s+(.+)$/m)?.[1] ?? path.basename(rel, path.extname(rel)))).replace(/[{}<>]/g, '').trim();
+/**
+ * A page's title as MkDocs gives it when the page has no title and no H1: its nav label, else the file name with
+ * `-` and `_` as spaces and the first letter capitalised; an index page (index.md, README.md) takes its folder's
+ * name, and the home page is "Home".
+ */
+export function mkdocsTitle(rel: string, navLabel?: string): string {
+  if (navLabel?.trim()) return navLabel.trim();
+  const parts = rel.replace(/\\/g, '/').replace(/\.mdx?$/, '').split('/');
+  if (/^(?:index|README)$/.test(parts.at(-1)!)) parts.pop();
+  const name = parts.at(-1);
+  if (!name) return 'Home';
+  return name.replace(/[-_]/g, ' ').trim().replace(/^./, (c) => c.toUpperCase());
+}
 
-const resolveBase = (text: string, route: string): string => text.replaceAll(`${BASE}/`, `/${route}/`).replaceAll(BASE, `/${route}`);
+const docPath = (p: string): string => p.replace(/\\/g, '/').replace(/\/{2,}/g, '/').replace(/^\.?\//, '').replace(/\.mdx?$/, '');
+
+/** Labels the nav gives pages, by docs_dir path without extension (the first label wins). */
+export function navLabels(nav: MkdocsNav | undefined, acc = new Map<string, string>()): Map<string, string> {
+  for (const entry of nav ?? []) {
+    if (!entry || typeof entry !== 'object') continue;
+    for (const [label, value] of Object.entries(entry)) {
+      if (typeof value === 'string') {
+        if (!/^[a-z]+:/i.test(value) && !value.startsWith('/') && String(label).trim() && !acc.has(docPath(value))) acc.set(docPath(value), String(label));
+      } else if (Array.isArray(value)) navLabels(value as MkdocsNav, acc);
+    }
+  }
+  return acc;
+}
+
+const titleOf = (text: string, fallback: string): string =>
+  String(splitFrontMatter(text).data.title ?? (text.match(/^#\s+(.+)$/m)?.[1] ?? fallback)).replace(/[{}<>]/g, '').trim();
+
+/**
+ * `{{ base_path }}` resolves to the section route. A base_path that is only a host (https://apk.docs.wso2.com) makes
+ * `{{ base_path }}/en/<version>/...` a full former-site URL, which the docs site maps to its page like any other.
+ */
+const resolveBase = (text: string, route: string, host?: string): string => (host ? text.replace(new RegExp(`${BASE}(?=/en/[^/\\s"')]+/)`, 'g'), host) : text)
+  .replaceAll(`${BASE}/`, `/${route}/`).replaceAll(BASE, `/${route}`);
+
+/** The origin of a base_path that is a host only (no path), else undefined. */
+export function hostOnly(basePath: unknown): string | undefined {
+  if (typeof basePath !== 'string' || !/^https?:\/\//i.test(basePath)) return undefined;
+  try {
+    const url = new URL(basePath);
+    return url.pathname.replace(/\/+$/, '') === '' && !url.search && !url.hash ? url.origin : undefined;
+  } catch { return undefined; }
+}
+
+/** MkDocs serves a README.md as its folder's index when the folder has no index.md. */
+const readmeIsIndex = (rel: string, dirs: string[]): boolean => path.basename(rel) === 'README.md'
+  && !dirs.some((d) => fs.existsSync(path.join(d, path.dirname(rel), 'index.md')));
 
 /**
  * Docusaurus turns `x/x.md` and `x/README.md` into the folder's index page (URL without the last segment);
  * MkDocs does not. Pin such pages to their MkDocs URL so existing links keep working.
  */
-export function keepMkdocsUrl(mdx: string, rel: string): string {
+export function keepMkdocsUrl(mdx: string, rel: string, { readmeIndex = false }: { readmeIndex?: boolean } = {}): string {
   const parts = rel.replace(/\\/g, '/').replace(/\.mdx?$/, '').split('/');
   const name = parts.at(-1) ?? '';
+  // A README.md that MkDocs serves as the folder index (readmeIndex) keeps the folder URL Docusaurus gives it.
+  if (readmeIndex && name === 'README') return mdx;
   const collides = /^readme$/i.test(name) || (parts.length > 1 && name.toLowerCase() === (parts.at(-2) ?? '').toLowerCase());
   if (!collides || /^slug:/m.test(mdx.split('\n---')[0] ?? '')) return mdx;
   return mdx.replace(/^---\n/, `---\nslug: /${parts.join('/')}/\n`);
@@ -193,15 +242,17 @@ function specInfoFor(docsDirs: string[], route: string, rel: string): (spec: str
   };
 }
 
-async function emit(out: SiteOutput, report: SiteReport, rel: string, produce: () => Promise<string>, fallback: Omit<FallbackInfo, 'rel'>): Promise<void> {
+async function emit(
+  out: SiteOutput, report: SiteReport, rel: string, produce: () => Promise<string>, fallback: Omit<FallbackInfo, 'rel'>, { readmeIndex = false } = {},
+): Promise<void> {
   const file = path.join(out.outDir, rel.replace(/\.mdx$/, '.md'));
   const excluded = (out.exclude ?? []).includes(rel);
   const writeFallback = (): void => {
     const page = out.fallback?.({ rel, ...fallback });
-    if (page) { write(file, keepMkdocsUrl(page, rel)); report.redirected++; }
+    if (page) { write(file, keepMkdocsUrl(page, rel, { readmeIndex })); report.redirected++; }
   };
   try {
-    const mdx = keepMkdocsUrl(await produce(), rel);
+    const mdx = keepMkdocsUrl(await produce(), rel, { readmeIndex });
     // An excluded page stays a fallback until it is taken off the list: it may pass conversion and still fail
     // the Docusaurus build.
     if (excluded) { report.nowPassing.push(rel); writeFallback(); return; }
@@ -328,23 +379,26 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     const rel = docsRoot ? docsPath.slice(docsRoot.length) : docsPath;
     return page ? wanted(/\.md$/.test(rel) ? rel : `${rel.replace(/\/$/, '')}/index.md`) || wanted(`${rel.replace(/\/$/, '')}.md`) : !(src.skip ?? []).some((p) => rel.startsWith(p));
   };
+  const labels = navLabels(site.nav);
+  const host = hostOnly(site.extra.base_path);
   for (const rel of walk(pages, wanted)) {
     const file = path.join(pages, rel);
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
+    const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(`${docsRoot ?? ''}${rel}`)));
     await emit(out, report, withPrefix(rel), async () => {
       const env = { ...site.extra, config: site.config, base_path: BASE };
-      const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route);
+      const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route, host);
       const result = await convertRendered(rendered, {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
-        specInfo: specInfoFor([pages], route, rel),
+        specInfo: specInfoFor([pages], route, rel), fallbackTitle,
       });
       const mdx = src.docsRoot || src.linkOutside ? rewriteOutsideRefs(result.mdx, {
         rel: withPrefix(rel), pageSrc: `${docsRoot ?? ''}${rel.replace(/\\/g, '/')}`, docsDir: site.docsDir, route: out.route,
         outDir: out.outDir, staticDir: out.staticDir, inside, linkOutside: src.linkOutside,
       }) : result.mdx;
       return relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
-    }, { title: titleOf(raw, rel), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
+    }, { title: titleOf(raw, fallbackTitle), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions }, { readmeIndex: readmeIsIndex(rel, [pages]) });
   }
   if (out.staticDir) copyReferencedAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
   copyAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
@@ -375,12 +429,14 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
   const c = side(opts.cloud);
   const s = side(opts.self);
   const envOf = (x: ReturnType<typeof side>) => ({ ...x.site.extra, config: x.site.config, base_path: BASE });
+  const labels = navLabels(s.site.nav, navLabels(c.site.nav));
   for (const rel of [...new Set([...c.pages, ...s.pages])].sort()) {
     const inC = c.pages.has(rel);
     const inS = s.pages.has(rel);
     const deploymentOptions = inC && inS ? [CLOUD, SELF_HOSTED] : inC ? [CLOUD] : [SELF_HOSTED];
     const primary = inC ? c : s;
     const file = path.join(primary.site.docsDir, rel);
+    const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(rel)));
     await emit(out, report, rel, async () => {
       let text: string;
       if (inC && inS) {
@@ -398,10 +454,11 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
       const pageData = { frontMatter: { ...(sData?.frontMatter ?? {}), ...(cData?.frontMatter ?? {}) }, meta: cData?.meta ?? sData?.meta };
       const result = await convertRendered(resolveBase(text, out.route), {
         deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts,
-        specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel),
+        specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel), fallbackTitle,
       });
       return relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
-    }, { title: titleOf(fs.readFileSync(file, 'utf8'), rel), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
+    }, { title: titleOf(fs.readFileSync(file, 'utf8'), fallbackTitle), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions },
+    { readmeIndex: readmeIsIndex(rel, [c.site.docsDir, s.site.docsDir]) });
   }
   if (out.staticDir) {
     copyReferencedAssets(c.site.docsDir, out.outDir, out.staticDir, out.route);
@@ -472,7 +529,7 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
         await compileCheck(md, { format: 'md' });
         return md;
       }
-    }, { title: titleOf(raw, rel), to: (src.currentSite ?? '') + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions });
+    }, { title: titleOf(raw, path.basename(rel, path.extname(rel))), to: (src.currentSite ?? '') + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions });
   }
   if (out.staticDir) copyAssets(docsDir, out.staticDir);
   copyAssets(docsDir, out.outDir);
