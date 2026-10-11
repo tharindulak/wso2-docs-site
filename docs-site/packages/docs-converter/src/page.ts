@@ -7,6 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeValidElements from './rehype-valid-elements.js';
 import { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements, type PolicyResult } from './html-policy.js';
 import { htmlBlocksToJsx } from './html-blocks.js';
+import { isHomeLayout, nameIconLinks } from './home-layout.js';
 import { toMdx, type SyntaxStats } from './syntax.js';
 import type { DeploymentOption } from './types.js';
 import type { PageData } from './render.js';
@@ -71,6 +72,8 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
     policy = { ...again, meta: again.meta ?? policy.meta };
     removed = stripped.removed;
   }
+  // Icon-only and empty links get visible text before any rewrite (see home-layout.ts).
+  policy = { ...policy, text: nameIconLinks(policy.text).text };
   const withRemoved = (result: { mdx: string; stats: PageStats }) => (removed.length ? { ...result, stats: { ...result.stats, removed } } : result);
   const compileFailure = (e: unknown): void => { if (!(e instanceof PageError) || e.kind !== 'compile') throw e; };
   try {
@@ -113,7 +116,12 @@ async function assemble(
     if (info?.description && front.description === undefined) front.description = info.description;
   }
   // An empty MkDocs template page gets its title and overview links later (the docs site's fillTemplatePages).
-  if (!(source.template && !mdxBody.trim())) front.title ??= opts.fallbackTitle;
+  if (!(source.template && !mdxBody.trim()) && front.title === undefined && opts.fallbackTitle !== undefined) {
+    front.title = opts.fallbackTitle;
+    // MkDocs Material shows a synthesized title as the H1, but a custom home layout does not; keep it for the
+    // browser tab, breadcrumb and search only.
+    if (isHomeLayout(mdxBody)) front.hide_title = true;
+  }
   if (source.template) front.mkdocs_template = String(source.template).replace(/^templates\//, '').replace(/\.html$/, '');
   front.deployment_options = opts.deploymentOptions;
   if (opts.editUrl) front.custom_edit_url = opts.editUrl;

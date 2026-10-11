@@ -46,3 +46,39 @@
 .api-reference pre { background-color: #11171A !important; color: #E8E9EC !important; }
 .api-reference pre code { background: transparent !important; color: inherit !important; border: 0 !important; }
 .older-version-banner { margin: 0 0 1rem; padding: 0.6rem 0.9rem; border-left: 4px solid var(--ifm-color-warning); background: var(--ifm-color-warning-contrast-background); color: var(--ifm-color-warning-contrast-foreground); border-radius: 4px; }
+
+/* Custom MkDocs home layouts (WSO2 themes: <div class="homePage">, section01..05, linkWrapper, linkSet2..5).
+   The layout follows the former themes (intro beside media, rows of link cards); colours are the site's tokens. */
+.homePage { --home-gap: 1.25rem; }
+.homePage h2, .homePage h3 { border-bottom: 0; }
+.homePage h2 { font-size: 1.35rem; }
+.homePage h3 { font-size: 1.1rem; }
+.homePage h4 { font-size: 1rem; margin: 0.25rem 0; }
+.homePage img, .homePage iframe { max-width: 100%; }
+.homePage img { height: auto; }
+.homePage iframe { height: auto; aspect-ratio: 16 / 9; border: 0; border-radius: var(--ifm-global-radius); }
+.homePage > [class*='section'] { margin-bottom: 2rem; }
+.homePage .section01 { display: flex; flex-wrap: wrap; gap: var(--home-gap); align-items: flex-start; }
+.homePage .section01 > * { flex: 1 1 20rem; min-width: 0; }
+.homePage .about-home { font-size: 1.05rem; line-height: 1.6; }
+/* Icon-only download link: the converter names it after its heading; the heading stays for the outline only. */
+.homePage .download-btn-wrapper { margin-top: 1rem; }
+.homePage .download-btn-wrapper h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.homePage .download-btn-wrapper a {
+  display: inline-flex; align-items: center; padding: 0.55rem 1.4rem; border-radius: var(--ifm-button-border-radius, 8px);
+  background: var(--ifm-color-primary); color: var(--ifm-background-color); font-weight: 600;
+}
+.homePage .download-btn-wrapper a:hover { background: var(--ifm-color-primary-dark); text-decoration: none; }
+/* Link cards: a responsive grid; one column on phones. Some layouts put the cards straight in a section. */
+.homePage :is(.linkWrapper, [class*='section']:has(> [class*='linkSet'])) {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--home-gap); margin: 1rem 0;
+}
+.homePage [class*='section']:has(> [class*='linkSet']) > :not([class*='linkSet']) { grid-column: 1 / -1; }
+.homePage [class*='linkSet'] {
+  padding: 1rem 1.1rem; border: 1px solid var(--ifm-toc-border-color); border-radius: var(--ifm-global-radius);
+  background: var(--ifm-card-background-color); min-width: 0;
+}
+.homePage [class*='linkSet']:hover { border-color: var(--ifm-color-primary); }
+.homePage [class*='linkSet'] > :first-child { margin-top: 0; }
+.homePage [class*='linkSet'] > :last-child { margin-bottom: 0; }
+.homePage [class*='linkSet'] a h3, .homePage [class*='linkSet'] a h4 { color: var(--ifm-link-color); }
