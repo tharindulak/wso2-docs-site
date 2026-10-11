@@ -61,7 +61,7 @@ export function treeHash(paths, root = ROOT, prefix = 'docs-site/') {
   const git = (...a) => execFileSync('git', a, { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
   const at = (p) => { try { return git('rev-parse', `HEAD:${prefix}${p}`); } catch { return 'absent'; } };
   const trees = paths.map(at).join(',');
-  const dirty = git('status', '--porcelain', '--untracked-files=all', '--', ...paths.map((p) => `${prefix}${p}`));
+  const dirty = git('status', '--porcelain', '--untracked-files=all', '--', ...paths.map((p) => `:(top)${prefix}${p}`)); // :(top): pathspecs are cwd-relative otherwise, and callers run in docs-site/
   return dirty ? `${trees}-dirty-${Date.now()}` : trees;
 }
 

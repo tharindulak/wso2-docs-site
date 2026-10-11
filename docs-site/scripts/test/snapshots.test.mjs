@@ -110,3 +110,23 @@ test('the chrome hash covers site/account, account-sidebars.js and site/static (
   assert.match(treeHash(paths, dir), /absent$/, 'a path absent at HEAD hashes without throwing');
   fs.rmSync(dir, { recursive: true, force: true });
 });
+
+test('treeHash sees dirty and untracked edits when root is the docs-site directory (the real caller shape)', () => {
+  const repo = fs.mkdtempSync(path.join(os.tmpdir(), 'chrome-sub-'));
+  const root = path.join(repo, 'docs-site');
+  const git = (...a) => execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@example.com', ...a], { cwd: repo, stdio: 'pipe' });
+  fs.mkdirSync(path.join(root, 'site/static'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'site/account-sidebars.js'), 'a');
+  fs.writeFileSync(path.join(root, 'site/static/logo.svg'), 'a');
+  git('init', '-q'); git('add', '.'); git('commit', '-qm', 'one');
+  const paths = ['site/account-sidebars.js', 'site/static'];
+  const clean = treeHash(paths, root);
+  assert.equal(treeHash(paths, root), clean);
+  fs.writeFileSync(path.join(root, 'site/account-sidebars.js'), 'edited');
+  assert.match(treeHash(paths, root), /dirty/, 'modified tracked file');
+  git('checkout', '--', '.');
+  assert.equal(treeHash(paths, root), clean);
+  fs.writeFileSync(path.join(root, 'site/static/new.svg'), 'x');
+  assert.match(treeHash(paths, root), /dirty/, 'untracked file');
+  fs.rmSync(repo, { recursive: true, force: true });
+});
