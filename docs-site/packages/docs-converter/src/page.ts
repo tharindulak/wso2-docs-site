@@ -94,7 +94,7 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
   const html: string[] = [];
   const nested = htmlBlocksToJsx(policy.text, { html: true, protect: (h) => `MDXHTMLBLOCK${html.push(h) - 1}X` });
   const md = async (text: string, restore?: (mdx: string) => string) => withRemoved(await assemble(text, data, body, policy, opts, { format: 'md', restore }).then((r) => ({ ...r, stats: { ...r.stats, format: 'md' as const } })));
-  if (nested.blocks) {
+  if (nested.text !== policy.text) {
     try { return await md(nested.text, (mdx) => mdx.replace(/MDXHTMLBLOCK(\d+)X/g, (_, i: string) => html[Number(i)]!)); } catch (e) { compileFailure(e); }
   }
   return md(policy.text);

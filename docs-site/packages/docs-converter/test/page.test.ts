@@ -108,3 +108,19 @@ test('on a CommonMark page, an HTML block nested in a list item becomes one line
   assert.match(mdx, /^<table>\n<tr><td>Top \[level\]\(y\.md\)<\/td><\/tr>\n<\/table>$/m, 'a top-level block stays raw');
   assert.match(mdx, /^ {9}<div><svg><path d="M1,2&#10;C3,4"><\/path><\/svg><pre>a&#10;b<\/pre><\/div>$/m, 'line breaks in values and <pre> keep the block on one line');
 });
+
+// docs-apim (API-M 4.2) expose-a-kafka-topic-as-a-managed-websocket-api.md: a nested <html> note holding tabs after a
+// blank line. The block is left as written, so the code stays code; on a CommonMark page the wrapper is dropped too.
+test('a nested <html> block left as written loses its wrapper, not its tabs or code, on a CommonMark page', async () => {
+  const src = [
+    '1. Invoke the API.', '',
+    '        <html>', '        <div class="admonition note">', '        <p class="admonition-title">Note</p>', '        <p>Send the token as a query parameter:</p>', '',
+    '        === "WS"', '            ``` java', '            wscat -c "ws://localhost:9104/x?access_token=[accesstoken]"', '            ```', '',
+    '        </div>', '        </html>', '',
+    '2. Next <img src="/r/a.png" width=250>', '',
+  ].join('\n');
+  const { mdx, stats } = await convertRendered(src, { deploymentOptions: ['Self-hosted'] });
+  assert.equal(stats.format, 'md');
+  assert.doesNotMatch(mdx, /&lt;\/?html|<\/?html>/);
+  assert.match(mdx, /```java\n {8}wscat -c "ws:\/\/localhost:9104\/x\?access_token=\[accesstoken\]"\n {8}```/);
+});

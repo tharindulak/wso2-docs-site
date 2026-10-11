@@ -40,6 +40,7 @@ const JSX_ATTR: Record<string, string> = {
 // document level it makes everything up to </html> raw, indented lines included.
 const START = new RegExp(`^([ \\t]*)<(html|${BLOCK_TAGS.join('|')})\\b[^>]*>`, 'i');
 const FENCE = /^\s*(```|~~~)/;
+const HTML_TAG = /<\/?html\b[^>]*>/gi;
 /** Indentation from which Python-Markdown reads an HTML block as Markdown text (it is inside a container). */
 const NESTED = 4;
 /** Width of an indentation, a tab reaching the next multiple of 4 (Python-Markdown's tab_length). */
@@ -187,6 +188,10 @@ function serialize(node: P5Node, out: Out, inPre = false): string {
   return `<${node.tagName}${attrs}>${children}</${node.tagName}>`;
 }
 
+/** A code fence, tab or admonition line after a blank line: block Markdown inside the lines of an HTML block. */
+const blockMarkdown = (lines: string[]): boolean =>
+  lines.some((l, k) => k > 0 && !lines[k - 1]!.trim() && /^\s*(?:```|~~~|===\+?\s|!!!\s|\?\?\?\+?\s)/.test(l));
+
 /**
  * Rewrite each multi-line HTML block (outside fenced code) as one line of JSX, keeping its indentation so it
  * stays inside a list item. A block indented NESTED or more has its inline Markdown rendered (see the header).
@@ -198,8 +203,9 @@ export function htmlBlocksToJsx(text: string, { protect = (jsx: string) => jsx, 
   const out: string[] = [];
   let blocks = 0;
   let fence: number | null = null; // indentation of the open code fence
+  let unwrap = -1; // the line closing an <html> wrapper left as written
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]!;
+    const line = i === unwrap ? lines[i]!.replace(HTML_TAG, '') : lines[i]!;
     const indent = width(line.match(/^[ \t]*/)![0]);
     // A fence left open ends with its container (a less indented line other than a closing fence), as in
     // Python-Markdown and CommonMark.
@@ -218,10 +224,18 @@ export function htmlBlocksToJsx(text: string, { protect = (jsx: string) => jsx, 
       if (depth <= 0) { end = j; break; }
     }
     if (end <= i || (html && !nested)) { out.push(line); continue; } // one line, never closed, or raw in CommonMark: as written
+    // Python-Markdown renders each blank-line chunk of a nested block on its own, so a code fence, tab set or
+    // admonition after a blank line is block Markdown, which one line of JSX cannot hold: leave the block as written
+    // (its inner blocks are looked at line by line, and the Markdown around them converts as usual).
+    if (nested && blockMarkdown(lines.slice(i + 1, end + 1))) {
+      // An <html> wrapper is dropped (as a browser ignores it) rather than printed as text.
+      if (tag === 'html') { out.push(line.replace(HTML_TAG, '')); unwrap = end; } else out.push(line);
+      continue;
+    }
     const fragment = parseFragment(lines.slice(i, end + 1).join('\n').trim()) as unknown as P5Node;
     out.push(start[1]! + protect(serialize(fragment, { html, markdown: nested })));
     blocks++;
     i = end;
   }
-  return { text: blocks ? out.join('\n') : text, blocks };
+  return { text: blocks || unwrap >= 0 ? out.join('\n') : text, blocks };
 }

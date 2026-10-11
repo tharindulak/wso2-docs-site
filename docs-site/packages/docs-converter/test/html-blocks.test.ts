@@ -146,6 +146,67 @@ test('a code fence left open ends with its container', () => {
   const src = '??? note "compress"\n    **Error**\n\n    ```json\n    {\n        "success": false\n    }\n\n??? note "copy"\n    Copies the file.\n    <table>\n        <tr><td>See [SMBJ documentation](https://www.javadoc.io/doc/com.hierynomus/smbj/).</td></tr>\n    </table>\n';
   const { blocks, text } = htmlBlocksToJsx(src);
   assert.equal(blocks, 1);
-  assert.match(text, /\[\{"SMBJ documentation"\}\]\(https:\/\/www\.javadoc\.io\/doc\/com\.hierynomus\/smbj\/\)/);  const outdented = '1. Step\n\n    ```html\n    <table>\n```\n\n<table>\n<tr><td>a</td></tr>\n</table>\n';
+  assert.match(text, /\[\{"SMBJ documentation"\}\]\(https:\/\/www\.javadoc\.io\/doc\/com\.hierynomus\/smbj\/\)/);
+  const outdented = '1. Step\n\n    ```html\n    <table>\n```\n\n<table>\n<tr><td>a</td></tr>\n</table>\n';
   assert.equal(htmlBlocksToJsx(outdented).blocks, 1, 'a less indented closing fence still closes the fence');
+});
+
+// docs-apim@d74917be6283 en/docs/tutorials/streaming-api/create-and-publish-websocket-api.md:172-173,264-294 (API-M 4.6;
+// 4.2 to 4.5 and latest have the same block). Python-Markdown 3.7 renders a tab set of four <pre><code class="language-bash">
+// blocks inside the note: block Markdown after a blank line, which one line of JSX cannot hold.
+const websocket = [
+  '4. Try out the operations.',
+  '     ',
+  '          As there are two users connected to `room1`, both of them can send and receive chats via `room1`.',
+  '',
+  '          <html>',
+  '          <div class="admonition note">',
+  '          <p class="admonition-title">Note</p>',
+  '          <p>',
+  '              There are clients (especially browsers) that do not allow you to add headers to the WebSocket handshake.',
+  '          </p>',
+  '          ',
+  '        === "WS-OAuth2"',
+  '            ``` bash',
+  '            wscat -c "ws://localhost:9099/chats/1.0.0/notifications?access_token=[accesstoken]" ',
+  '            ```',
+  '  ',
+  '        === "WSS-OAuth2"',
+  '            ``` bash',
+  '            wscat -n -c "wss://localhost:8099/chats/1.0.0/notifications?access_token=[accesstoken]"',
+  '            ```',
+  '',
+  '          </div>',
+  '          </html>',
+].join('\n');
+
+// docs-apim@c421978b28ec en/docs/learn/kubernetes-operators/k8s-api-operator/enabling-privatejet-mode-to-deploy-apis.md:215-230
+// (API-M 3.2): fenced code inside a nested admonition; its <Environment-type> placeholder must stay code.
+const privatejet = [
+  '1. Step', '',
+  '     <html><div class="admonition note">',
+  '        <p class="admonition-title">Note</p>',
+  '        <p> Super tenant users can customize the container management implementations if required.</p>',
+  '        ',
+  '    ``` json tab="Format"',
+  '    [ContainerMgtConfig]',
+  '    <Environment-type> = "<class-name>"',
+  '    ```  ',
+  '  ',
+  '      </div>',
+  '      </html>',
+].join('\n');
+
+test('a nested block holding block Markdown after a blank line (tabs, fenced code) is left as written', async () => {
+  const unwrapped = (t: string) => t.replace(/<\/?html>/g, '');
+  assert.deepEqual(htmlBlocksToJsx(websocket), { text: unwrapped(websocket), blocks: 0 }, 'only the <html> wrapper goes');
+  assert.deepEqual(htmlBlocksToJsx(privatejet), { text: unwrapped(privatejet), blocks: 0 });
+  assert.deepEqual(htmlBlocksToJsx(privatejet, { html: true }), { text: unwrapped(privatejet), blocks: 0 });
+  const { convertRendered } = await import('../src/page.js');
+  const ws = (await convertRendered(websocket, { deploymentOptions: ['Self-hosted'] })).mdx;
+  assert.match(ws, /<TabItem value="tab-0" label="WS-OAuth2">\n\n {8}```bash\n {8}wscat -c "ws:\/\/localhost:9099\/chats\/1\.0\.0\/notifications\?access_token=\[accesstoken\]" \n {8}```/);
+  assert.match(ws, /<TabItem value="tab-1" label="WSS-OAuth2">/);
+  assert.doesNotMatch(ws, /=== "|<code>\{"bash/, 'no tab marker as text, no flattened code');
+  const pj = (await convertRendered(privatejet, { deploymentOptions: ['Self-hosted'] })).mdx;
+  assert.match(pj, /```json\n {4}\[ContainerMgtConfig\]\n {4}<Environment-type> = "<class-name>"\n {4}```/);
 });
