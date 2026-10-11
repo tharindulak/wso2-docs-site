@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { findBrokenLinks, targetOf, notIn, readBaselines } from '../check-links.mjs';
+import { findBrokenLinks, targetOf, notIn, readBaselines, findLiteralMarkdown, literalMarkdownCount, literalOverBaseline } from '../check-links.mjs';
 
 const site = (files) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'links-'));
@@ -79,4 +79,29 @@ test('preview server maps directory URLs with dotted segments to index.html and 
   assert.equal(fileFor(dir, '/../etc/passwd'), null);
   assert.equal(fileFor(dir, '/%2e%2e/x'), null);
   assert.equal(fileFor(dir, '/%E0%A4%A'), null);
+});
+
+test('literal Markdown link and image syntax in paragraph text is counted per page; code and parsed links are not', () => {
+  const dir = site({
+    'a/index.html': '<p>Chart: ![Line chart](../_shared/four-core-AP- with-8.svg) and [x](y z)</p><p class="c">ok <a href="/a/">link</a></p>',
+    'b/index.html': '<p>Use <code>![alt](src)</code> in Markdown.</p><pre><code>[a](b)</code></pre><div>![not a paragraph](x)</div>',
+    'c/index.html': '<p>A lone ](</p>',
+    'd/index.html': '<p>[plain brackets] and (parens)</p>',
+  });
+  assert.deepEqual(findLiteralMarkdown(dir), [{ page: 'a/index.html', count: 2 }, { page: 'c/index.html', count: 1 }]);
+  assert.deepEqual(findLiteralMarkdown(dir, { under: 'c/' }), [{ page: 'c/index.html', count: 1 }]);
+  assert.equal(literalMarkdownCount('![a](b) ![ ]('), 2, 'a whole `![alt](` counts once');
+  assert.equal(literalMarkdownCount('![\nx ]('), 2, 'a lone `![` and a lone `](`');
+});
+
+test('literal Markdown fails only above the baseline count, and its baseline file is not a link baseline', () => {
+  const found = [{ page: 'a/index.html', count: 2 }, { page: 'b/index.html', count: 1 }, { page: 'c/index.html', count: 3 }];
+  assert.deepEqual(literalOverBaseline(found, { 'a/index.html': 2, 'c/index.html': 1 }).map((f) => f.page), ['b/index.html', 'c/index.html']);
+  assert.deepEqual(literalOverBaseline(found).length, 3);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'baselines-'));
+  fs.writeFileSync(path.join(dir, 'literal-markdown.json'), JSON.stringify({ 'a/index.html': 2 }));
+  fs.writeFileSync(path.join(dir, 'live.json'), '[]');
+  const known = readBaselines(dir);
+  assert.deepEqual(known.versions, []);
+  assert.deepEqual(known.literal, { 'a/index.html': 2 });
 });

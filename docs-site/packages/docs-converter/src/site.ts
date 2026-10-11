@@ -325,6 +325,15 @@ export function pagesDir(root: string, docsDir: string, docsRoot?: string): stri
 const SHARED = '_shared';
 
 /**
+ * A decoded path written back as a URL that is safe in a Markdown link destination and in an HTML or JSX attribute:
+ * every character outside RFC 3986 unreserved, `/` and a few harmless sub-delimiters is percent-encoded (space, `%`,
+ * `"`, `'`, `<`, `>`, `&`, `{`, `}`, `(`, `)`, `#`, `?`, backslash and non-ASCII among them).
+ */
+export function encodePath(decoded: string): string {
+  return decoded.replace(/[^A-Za-z0-9\-._~!$*+,;=:@/]/gu, (c) => Array.from(new TextEncoder().encode(c), (b) => `%${b.toString(16).toUpperCase().padStart(2, '0')}`).join(''));
+}
+
+/**
  * References from a page to files the section does not take (outside docsRoot, or filtered out by only/skip):
  * Markdown links and images resolve against the page file, HTML src/href against the page URL (as MkDocs serves
  * them). Pages map through linkOutside; files are copied into <outDir>/_shared/ (and <staticDir>/_shared/ for HTML
@@ -361,15 +370,16 @@ export function rewriteOutsideRefs(mdx: string, ctx: {
     if (ctx.inside(resolved, page)) return null;
     if (page) {
       const url = ctx.linkOutside?.(resolved);
-      return url ? `${url}${suffix}` : null;
+      return url ? `${encodePath(url)}${suffix}` : null;
     }
+    // The decoded path is for file-system lookups only; what goes back into the page is re-encoded (encodePath).
     if (isPage(resolved) || !fileInDocs(resolved)) return null;
     copy(resolved, ctx.outDir);
     if (html) {
       if (ctx.staticDir) copy(resolved, ctx.staticDir);
-      return `/${ctx.route}/${SHARED}/${resolved}${suffix}`;
+      return `/${ctx.route}/${SHARED}/${encodePath(resolved)}${suffix}`;
     }
-    return `${path.posix.relative(path.posix.dirname(ctx.rel.replace(/\\/g, '/')), `${SHARED}/${resolved}`)}${suffix}`;
+    return `${encodePath(path.posix.relative(path.posix.dirname(ctx.rel.replace(/\\/g, '/')), `${SHARED}/${resolved}`))}${suffix}`;
   };
   return outsideCode(mdx, (t) => t.replace(RELATIVE_REF, (m, htmlRef?: string, mdRef?: string) => {
     if (htmlRef !== undefined && !/^(?:src|href)=/i.test(m)) return m;

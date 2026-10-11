@@ -3,7 +3,11 @@
 // Usage: node scripts/check-links.mjs <build dir> [--under <path prefix>] [--baselines <dir>] [--record-live]
 //   --baselines <dir>  fail only on broken links missing from every baseline file in <dir> (the per-version files
 //                      plus live.json); for the merged output, where known source breakage is listed, not fixed.
-//   --record-live      with --baselines: write <dir>/live.json, the broken links no per-version file lists.
+//   --record-live      with --baselines: write <dir>/live.json, the broken links no per-version file lists, and
+//                      <dir>/literal-markdown.json, the literal Markdown counts per page (below).
+// It also counts literal Markdown link and image syntax (`![`, `](`) left in rendered paragraph text: a link or
+// image that failed to parse is not a link, so the link check cannot see it. With --baselines a page fails only when
+// its count exceeds the one in literal-markdown.json; without, any occurrence fails.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -54,6 +58,33 @@ export function findBrokenLinks(dir, { under } = {}) {
   return broken;
 }
 
+/** Literal Markdown link/image syntax in one paragraph's text: `![alt](` or `[text](` counts once, a lone `![` or `](` once. */
+export function literalMarkdownCount(text) {
+  return (text.match(/!?\[[^\]\n]*\]\(|!\[|\]\(/g) ?? []).length;
+}
+
+/** Pages whose rendered <p> text (outside <code>) holds literal Markdown link or image syntax: { page, count }[]. */
+export function findLiteralMarkdown(dir, { under } = {}) {
+  const found = [];
+  for (const page of walkHtml(dir)) {
+    if (under && !page.startsWith(under)) continue;
+    const html = fs.readFileSync(path.join(dir, page), 'utf8');
+    let count = 0;
+    for (const [, inner] of html.matchAll(/<p(?:\s[^>]*)?>([\s\S]*?)<\/p>/g)) {
+      count += literalMarkdownCount(inner.replace(/<code[\s>][\s\S]*?<\/code>/g, ' ').replace(/<[^>]*>/g, ''));
+    }
+    if (count) found.push({ page, count });
+  }
+  return found;
+}
+
+export const LITERAL_BASELINE = 'literal-markdown.json';
+
+/** Pages with more literal Markdown than the baseline ({ page: count }) allows. */
+export function literalOverBaseline(found, baseline = {}) {
+  return found.filter((f) => f.count > (Object.hasOwn(baseline, f.page) ? baseline[f.page] : 0));
+}
+
 const linkKey = (b) => `${b.page}\n${b.link}`;
 const byKey = (x, y) => (linkKey(x) < linkKey(y) ? -1 : linkKey(x) > linkKey(y) ? 1 : 0);
 export const LIVE_BASELINE = 'live.json';
@@ -63,8 +94,9 @@ export function readBaselines(dir) {
   const read = (f) => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
   const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.json')).sort() : [];
   return {
-    versions: files.filter((f) => f !== LIVE_BASELINE).flatMap(read),
+    versions: files.filter((f) => f !== LIVE_BASELINE && f !== LITERAL_BASELINE).flatMap(read),
     live: files.includes(LIVE_BASELINE) ? read(LIVE_BASELINE) : [],
+    literal: files.includes(LITERAL_BASELINE) ? read(LITERAL_BASELINE) : {},
   };
 }
 
@@ -86,19 +118,30 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const usage = () => { console.error('Usage: node scripts/check-links.mjs <dir> [--under <prefix>] [--baselines <dir> [--record-live]]'); process.exit(2); };
   if (!dir || dir.startsWith('--') || (args.includes('--under') && !under) || (args.includes('--baselines') && !baselines) || (record && !baselines)) usage();
   const broken = findBrokenLinks(dir, { under });
+  const literal = findLiteralMarkdown(dir, { under });
+  const reportLiteral = (over) => {
+    for (const f of over.slice(0, 50)) console.error(`${f.page}: ${f.count} literal Markdown sequence(s) in paragraph text`);
+    console.log(`${literal.reduce((n, f) => n + f.count, 0)} literal Markdown sequence(s) on ${literal.length} page(s), ${over.length} page(s) over the baseline`);
+  };
   if (!baselines) {
     for (const b of broken.slice(0, 50)) console.error(`${b.page}: ${b.link}`);
     console.log(`${broken.length} broken internal link(s)`);
-    process.exit(broken.length ? 1 : 0);
+    reportLiteral(literal);
+    process.exit(broken.length || literal.length ? 1 : 0);
   }
   const known = readBaselines(baselines);
   if (record) {
     const live = sortedPairs(notIn(broken, known.versions));
     fs.writeFileSync(path.join(baselines, LIVE_BASELINE), `${JSON.stringify(live, null, 1)}\n`);
     console.log(`recorded ${live.length} broken link(s) in ${path.join(baselines, LIVE_BASELINE)}`);
+    const counts = Object.fromEntries(literal.map((f) => [f.page, f.count]));
+    fs.writeFileSync(path.join(baselines, LITERAL_BASELINE), `${JSON.stringify(counts, null, 1)}\n`);
+    console.log(`recorded ${literal.length} page(s) with literal Markdown in ${path.join(baselines, LITERAL_BASELINE)}`);
   }
   const fresh = notIn(broken, known.versions, record ? notIn(broken, known.versions) : known.live);
   for (const b of fresh.slice(0, 50)) console.error(`${b.page}: ${b.link}`);
   console.log(`${broken.length} broken internal link(s), ${broken.length - fresh.length} in baselines, ${fresh.length} new`);
-  process.exit(fresh.length ? 1 : 0);
+  const over = record ? [] : literalOverBaseline(literal, known.literal);
+  reportLiteral(over);
+  process.exit(fresh.length || over.length ? 1 : 0);
 }

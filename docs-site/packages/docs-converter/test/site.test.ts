@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, containedFile, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, mkdocsTitle, rewriteOutsideRefs } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, containedFile, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl, mkdocsTitle, rewriteOutsideRefs, encodePath } from '../src/site.js';
+import { compile } from '@mdx-js/mdx';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -260,6 +261,53 @@ test('a section sharing the source: links into folders it skips map through link
     linkOutside: (p) => (p.startsWith('api-gateway/1.2.0/') ? `/gw/${mkdocsUrl(p.slice(18))}` : null),
   }, { outDir: out, route: 'platform' });
   assert.match(fs.readFileSync(path.join(out, 'index.md'), 'utf8'), /\[Gateway\]\(\/gw\/overview\/\) and \[hub\]\(policy-hub\/overview\.md\)/);
+});
+
+/** Image sources and JSX src/href attributes in an MDX page, as the MDX parser reads them. */
+async function parsedRefs(mdx: string): Promise<{ images: string[]; attrs: string[] }> {
+  const images: string[] = [];
+  const attrs: string[] = [];
+  type Node = { type: string; url?: string; name?: string; value?: unknown; attributes?: Node[]; children?: Node[] };
+  const visit = (n: Node): void => {
+    if (n.type === 'image') images.push(n.url!);
+    for (const a of n.attributes ?? []) if (a.name === 'src' || a.name === 'href') attrs.push(String(a.value));
+    for (const c of n.children ?? []) visit(c);
+  };
+  await compile(mdx, { remarkPlugins: [() => (tree: Node) => { visit(tree); }] });
+  return { images, attrs };
+}
+
+test('rewriteOutsideRefs re-encodes the path it writes: %20 stays an image, %22 cannot break the attribute', async () => {
+  const root = componentRepo();
+  const docsDir = path.join(root, 'en/docs');
+  fs.writeFileSync(path.join(docsDir, 'assets/img/four core.svg'), 'SVG');
+  fs.writeFileSync(path.join(docsDir, 'assets/img/q"u<o{e.png'), 'PNG');
+  fs.writeFileSync(path.join(docsDir, 'assets/img/q&a.png'), 'PNG');
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  const staticDir = fs.mkdtempSync(path.join(root, 'static-'));
+  const mdx = [
+    '![Four cores](../../../assets/img/four%20core.svg)', '',
+    '![Quote](../../../assets/img/q%22u%3Co%7Be.png)', '',
+    '<img src="../../../../assets/img/q%22u%3Co%7Be.png" alt="q" />', '',
+    '<img src="../../../../assets/img/q&a.png" alt="amp" />', '',
+    '<a href="../../../../assets/img/four%20core.svg">chart</a>', '',
+  ].join('\n');
+  const rewritten = rewriteOutsideRefs(mdx, {
+    rel: 'setup/config.md', pageSrc: 'api-gateway/1.2.0/setup/config.md', docsDir, route: 'gw', outDir: out, staticDir,
+    inside: (p) => p.startsWith('api-gateway/1.2.0/'),
+  });
+  assert.ok(!rewritten.includes('four core'), 'no decoded space is written back');
+  assert.ok(fs.existsSync(path.join(out, '_shared/assets/img/four core.svg')), 'the file is found and copied by its decoded name');
+  assert.ok(fs.existsSync(path.join(staticDir, '_shared/assets/img/q"u<o{e.png')));
+  const { images, attrs } = await parsedRefs(rewritten);
+  assert.deepEqual(images, ['../_shared/assets/img/four%20core.svg', '../_shared/assets/img/q%22u%3Co%7Be.png'], 'both stay parsed images');
+  assert.deepEqual(attrs, ['/gw/_shared/assets/img/q%22u%3Co%7Be.png', '/gw/_shared/assets/img/q%26a.png', '/gw/_shared/assets/img/four%20core.svg']);
+  assert.ok(!/!\[|\]\(/.test(rewritten.replace(/!\[[^\]]*\]\([^)\s]+\)/g, '')), 'no literal Markdown left over');
+});
+
+test('encodePath escapes what would end a Markdown destination or an attribute, and keeps path separators', () => {
+  assert.equal(encodePath('_shared/a b/c"d<e>f&g{h}(i)#j?k%l\'m.png'), '_shared/a%20b/c%22d%3Ce%3Ef%26g%7Bh%7D%28i%29%23j%3Fk%25l%27m.png');
+  assert.equal(encodePath('/route/ünï/x-y_z.~.png'), '/route/%C3%BCn%C3%AF/x-y_z.~.png');
 });
 
 test('rewriteOutsideRefs leaves a reference that decodes to a NUL byte as written', () => {
