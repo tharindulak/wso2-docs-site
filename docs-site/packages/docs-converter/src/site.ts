@@ -385,7 +385,7 @@ export function rewriteOutsideRefs(mdx: string, ctx: {
     if (htmlRef !== undefined && !/^(?:src|href)=/i.test(m)) return m;
     const ref = (htmlRef ?? mdRef)!.trim();
     const to = target(ref, htmlRef !== undefined);
-    return to === null ? m : m.replace(ref, to);
+    return to === null ? m : m.replace(ref, () => to); // a function: `$` in a file name is not a replacement pattern
   }));
 }
 

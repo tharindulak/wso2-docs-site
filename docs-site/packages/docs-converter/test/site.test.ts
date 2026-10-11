@@ -320,6 +320,20 @@ test('rewriteOutsideRefs leaves a reference that decodes to a NUL byte as writte
   }), mdx);
 });
 
+test('rewriteOutsideRefs writes a `$` in a file name or suffix as written, not as a replacement pattern', () => {
+  const root = componentRepo();
+  const docsDir = path.join(root, 'en/docs');
+  fs.writeFileSync(path.join(docsDir, 'assets/img/d$$x.png'), 'PNG');
+  fs.writeFileSync(path.join(docsDir, "assets/img/e$'y.png"), 'PNG');
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  const staticDir = fs.mkdtempSync(path.join(root, 'static-'));
+  const rewritten = rewriteOutsideRefs("![d](../../../assets/img/d$$x.png#a$&b) <img src=\"../../../../assets/img/e$'y.png\" />", {
+    rel: 'setup/config.md', pageSrc: 'api-gateway/1.2.0/setup/config.md', docsDir, route: 'gw', outDir: out, staticDir,
+    inside: (p) => p.startsWith('api-gateway/1.2.0/'),
+  });
+  assert.equal(rewritten, '![d](../_shared/assets/img/d$$x.png#a$&b) <img src="/gw/_shared/assets/img/e$%27y.png" />');
+});
+
 test('a page with no title and no H1 is titled like MkDocs: nav label, else the file name', async () => {
   const root = tempSource({
     'en/mkdocs.yml': 'site_name: T\nnav:\n  - Home: index.md\n  - "Guides: all":\n      - guides/index.md\n      - guides/set_up-steps.md\n  - Named: guides/named.md\n',
