@@ -196,11 +196,15 @@ export function htmlBlocksToJsx(text: string, { protect = (jsx: string) => jsx, 
   const lines = text.split('\n');
   const out: string[] = [];
   let blocks = 0;
-  let fenced = false;
+  let fence: number | null = null; // indentation of the open code fence
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]!;
-    if (FENCE.test(line)) fenced = !fenced;
-    const start = !fenced ? line.match(START) : null;
+    const indent = width(line.match(/^[ \t]*/)![0]);
+    // A fence left open ends with its container (a less indented line other than a closing fence), as in
+    // Python-Markdown and CommonMark.
+    if (FENCE.test(line)) fence = fence === null ? indent : null;
+    else if (fence !== null && line.trim() && indent < fence) fence = null;
+    const start = fence === null ? line.match(START) : null;
     if (!start) { out.push(line); continue; }
     const tag = start[2]!.toLowerCase();
     const nested = width(start[1]!) >= NESTED;

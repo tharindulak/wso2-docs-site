@@ -139,3 +139,13 @@ test('a tab-indented block is nested (a tab is 4 columns)', () => {
   const src = '2.\tEnter the required values as given below.\n\n\t<table>\n\t\t<tr><td>\n\t\t<p>For more information, see [Getting Started with WUM](https://docs.wso2.com/display/ADMIN44x/Getting+Started+with+WUM).</p>\n\t\t</td></tr>\n\t</table>';
   assert.equal(htmlBlocksToJsx(src).text.split('\n').at(-1), '\t<table><tbody><tr><td><p>{"For more information, see "}[{"Getting Started with WUM"}](https://docs.wso2.com/display/ADMIN44x/Getting+Started+with+WUM){"."}</p></td></tr></tbody></table>');
 });
+
+// docs-mi@16f84ae6e39b en/docs/reference/connectors/file-connector/6.x/file-connector-config.md:1708-1718: a ```json
+// fence left open at the end of a `??? note` block; the blocks after it are not code.
+test('a code fence left open ends with its container', () => {
+  const src = '??? note "compress"\n    **Error**\n\n    ```json\n    {\n        "success": false\n    }\n\n??? note "copy"\n    Copies the file.\n    <table>\n        <tr><td>See [SMBJ documentation](https://www.javadoc.io/doc/com.hierynomus/smbj/).</td></tr>\n    </table>\n';
+  const { blocks, text } = htmlBlocksToJsx(src);
+  assert.equal(blocks, 1);
+  assert.match(text, /\[\{"SMBJ documentation"\}\]\(https:\/\/www\.javadoc\.io\/doc\/com\.hierynomus\/smbj\/\)/);  const outdented = '1. Step\n\n    ```html\n    <table>\n```\n\n<table>\n<tr><td>a</td></tr>\n</table>\n';
+  assert.equal(htmlBlocksToJsx(outdented).blocks, 1, 'a less indented closing fence still closes the fence');
+});
