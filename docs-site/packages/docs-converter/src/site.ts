@@ -221,7 +221,7 @@ export interface MkdocsSiteOptions extends DeploymentDefaults {
   root: string;
   /** Path of mkdocs.yml inside root. */
   mkdocs: string;
-  /** Page URL prefix on the product's current site (fallback targets). */
+  /** Page URL prefix on the product's current site (fallback targets); with docsRoot, the URL of that folder. */
   currentSite?: string;
   editUrl?: EditUrl;
   /** Path prefixes of the pages to take (several sections may share one source). */
@@ -229,19 +229,107 @@ export interface MkdocsSiteOptions extends DeploymentDefaults {
   skip?: string[];
   nav?: NavSelection;
   iframeHosts?: readonly string[];
+  /**
+   * Folder inside docs_dir that is the section root (a component's version folder, for example api-gateway/1.2.0/):
+   * page paths, nav ids, `only`, `skip`, `exclude` and deployment overrides are relative to it.
+   */
+  docsRoot?: string;
+  /**
+   * Site URL of a page outside docsRoot, from its docs_dir path (for example policy-hub/overview.md); null leaves
+   * the link as written. Files outside docsRoot that pages reference are copied into the section's _shared/ folder.
+   */
+  linkOutside?: (docsPath: string) => string | null;
+}
+
+/** The folder pages are read from: docs_dir, or docsRoot inside it (then never outside the repository checkout). */
+export function pagesDir(root: string, docsDir: string, docsRoot?: string): string {
+  if (!docsRoot) return docsDir;
+  const real = (p: string): string => fs.realpathSync(p);
+  const inside = (p: string, dir: string): boolean => p === dir || p.startsWith(dir + path.sep);
+  if (!fs.existsSync(docsDir) || !inside(real(docsDir), real(root))) throw new Error(`docs_dir is outside the content source: ${docsDir}`);
+  const dir = path.resolve(docsDir, docsRoot);
+  if (!inside(dir, path.resolve(docsDir)) || dir === path.resolve(docsDir) || !fs.existsSync(dir) || !inside(real(dir), real(docsDir))) {
+    throw new Error(`docs_root must be a folder inside docs_dir: ${docsRoot}`);
+  }
+  return dir;
+}
+
+const SHARED = '_shared';
+
+/**
+ * References from a page to files the section does not take (outside docsRoot, or filtered out by only/skip):
+ * Markdown links and images resolve against the page file, HTML src/href against the page URL (as MkDocs serves
+ * them). Pages map through linkOutside; files are copied into <outDir>/_shared/ (and <staticDir>/_shared/ for HTML
+ * references) and point there. Anything resolving outside docs_dir, or not found, stays as written.
+ */
+export function rewriteOutsideRefs(mdx: string, ctx: {
+  /** Output path of the page (section-relative) and its path in docs_dir. */
+  rel: string; pageSrc: string; docsDir: string; route: string; outDir: string; staticDir?: string;
+  /** Whether the section takes this docs_dir path (a page, or a file copied with the pages). */
+  inside: (docsPath: string, page: boolean) => boolean;
+  linkOutside?: (docsPath: string) => string | null;
+}): string {
+  const pageSrc = ctx.pageSrc.replace(/\\/g, '/');
+  const realDocs = fs.realpathSync(ctx.docsDir);
+  const copy = (docsPath: string, toDir: string): void => {
+    const to = path.join(toDir, SHARED, docsPath);
+    if (fs.existsSync(to)) return;
+    fs.mkdirSync(path.dirname(to), { recursive: true });
+    fs.copyFileSync(path.join(ctx.docsDir, docsPath), to);
+  };
+  const fileInDocs = (docsPath: string): boolean => {
+    const file = path.join(ctx.docsDir, docsPath);
+    const stat = fs.statSync(file, { throwIfNoEntry: false });
+    return Boolean(stat?.isFile()) && fs.realpathSync(file).startsWith(realDocs + path.sep);
+  };
+  const target = (ref: string, html: boolean): string | null => {
+    const [, p = '', suffix = ''] = ref.match(/^([^?#]*)(.*)$/) ?? [];
+    const decoded = safeDecode(p);
+    if (!decoded) return null;
+    const from = html ? mkdocsUrl(pageSrc) : path.posix.dirname(pageSrc);
+    const resolved = path.posix.normalize(path.posix.join(from, decoded));
+    if (resolved === '..' || resolved.startsWith('../')) return null; // outside docs_dir
+    const page = /\.md$/.test(resolved) || (!html && !/\.[A-Za-z0-9]+$/.test(resolved));
+    if (ctx.inside(resolved, page)) return null;
+    if (page) {
+      const url = ctx.linkOutside?.(resolved);
+      return url ? `${url}${suffix}` : null;
+    }
+    if (isPage(resolved) || !fileInDocs(resolved)) return null;
+    copy(resolved, ctx.outDir);
+    if (html) {
+      if (ctx.staticDir) copy(resolved, ctx.staticDir);
+      return `/${ctx.route}/${SHARED}/${resolved}${suffix}`;
+    }
+    return `${path.posix.relative(path.posix.dirname(ctx.rel.replace(/\\/g, '/')), `${SHARED}/${resolved}`)}${suffix}`;
+  };
+  return outsideCode(mdx, (t) => t.replace(RELATIVE_REF, (m, htmlRef?: string, mdRef?: string) => {
+    if (htmlRef !== undefined && !/^(?:src|href)=/i.test(m)) return m;
+    const ref = (htmlRef ?? mdRef)!.trim();
+    const to = target(ref, htmlRef !== undefined);
+    return to === null ? m : m.replace(ref, to);
+  }));
 }
 
 /** Convert one MkDocs site. Returns sidebar items (ids relative to the section) and the report. */
 export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput): Promise<{ sidebar: SidebarItem[]; report: SiteReport }> {
   const report = out.report ?? emptyReport();
   const site = mkdocsSite(path.join(src.root, src.mkdocs));
+  const pages = pagesDir(src.root, site.docsDir, src.docsRoot);
   const source = { root: src.root, includeBases: site.includeBases };
   const prefix = out.prefix ?? '';
   const route = prefix ? `${out.route}/${prefix}` : out.route;
   const withPrefix = (rel: string): string => (prefix ? `${prefix}/${rel}` : rel);
   const wanted = (r: string): boolean => r.endsWith('.md') && (!src.only || r.startsWith(src.only)) && !(src.skip ?? []).some((p) => r.startsWith(p));
-  for (const rel of walk(site.docsDir, wanted)) {
-    const file = path.join(site.docsDir, rel);
+  const docsRoot = src.docsRoot?.replace(/\\/g, '/').replace(/\/?$/, '/');
+  // A docs_dir path the section takes: under docsRoot (its own filters apply below it), else a page it keeps or an asset it copies.
+  const inside = (docsPath: string, page: boolean): boolean => {
+    if (docsRoot && !docsPath.startsWith(docsRoot)) return false;
+    const rel = docsRoot ? docsPath.slice(docsRoot.length) : docsPath;
+    return page ? wanted(/\.md$/.test(rel) ? rel : `${rel.replace(/\/$/, '')}/index.md`) || wanted(`${rel.replace(/\/$/, '')}.md`) : !(src.skip ?? []).some((p) => rel.startsWith(p));
+  };
+  for (const rel of walk(pages, wanted)) {
+    const file = path.join(pages, rel);
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
     await emit(out, report, withPrefix(rel), async () => {
@@ -249,14 +337,18 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
       const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route);
       const result = await convertRendered(rendered, {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
-        specInfo: specInfoFor([site.docsDir], route, rel),
+        specInfo: specInfoFor([pages], route, rel),
       });
-      return relativeImages(result.mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(site.docsDir, prefix ? a.slice(prefix.length + 1) : a)));
+      const mdx = src.docsRoot || src.linkOutside ? rewriteOutsideRefs(result.mdx, {
+        rel: withPrefix(rel), pageSrc: `${docsRoot ?? ''}${rel.replace(/\\/g, '/')}`, docsDir: site.docsDir, route: out.route,
+        outDir: out.outDir, staticDir: out.staticDir, inside, linkOutside: src.linkOutside,
+      }) : result.mdx;
+      return relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
     }, { title: titleOf(raw, rel), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions });
   }
-  if (out.staticDir) copyReferencedAssets(site.docsDir, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
-  copyAssets(site.docsDir, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
-  const nav = selectNav(site.nav, src.nav);
+  if (out.staticDir) copyReferencedAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
+  copyAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
+  const nav = selectNav(site.nav, { ...src.nav, ...(docsRoot ? { strip: docsRoot, outside: src.linkOutside } : {}) });
   const items = navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav);
   return { sidebar: prefix ? prefixIds(items, prefix) : items, report };
 }

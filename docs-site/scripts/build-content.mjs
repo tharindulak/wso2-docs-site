@@ -12,7 +12,7 @@ import {
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
-import { sectionVersions, confluenceVersions, replaceExclude, pagePaths } from './versions.mjs';
+import { sectionVersions, confluenceVersions, replaceExclude, pagePaths, outsideLinks } from './versions.mjs';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -44,7 +44,8 @@ const mkdocsOptions = (src) => {
   return {
     root, mkdocs: src.mkdocs, currentSite: src.current_site, editUrl: githubEditUrl(src.repo, src.sha, root),
     deployment_options: src.deployment_options, deployment_overrides: src.deployment_overrides,
-    only: src.only, skip: src.skip, nav: { root: src.nav_root, drop: src.nav_drop, pick: src.nav_pick },
+    only: src.only, skip: src.skip, nav: { root: src.nav_root, drop: src.nav_drop, pick: src.nav_pick, release: src.docs_root ? String(src.version) : undefined },
+    docsRoot: src.docs_root, linkOutside: outsideLinks(lock, src) ?? undefined,
   };
 };
 
@@ -252,6 +253,13 @@ for (const product of manifest.products) for (const s of product.sections) {
     if (v.status === 'latest' && !pages.includes('') && v.landing) write(rootRedirect, redirectHtml(`/${v.route}/${v.landing}`));
     else if (fs.existsSync(rootRedirect) && fs.readFileSync(rootRedirect, 'utf8').includes(REDIRECT_MARK)) fs.rmSync(rootRedirect);
   }
+}
+// A section that moved (API Platform components were under the platform section): its former URLs redirect to its pages.
+for (const product of lock.products) for (const section of product.sections) {
+  if (!section.former_route) continue;
+  const docsDir = path.join(GENERATED, 'docs', sectionVersions(section, liveWindow(lock))[0].id);
+  if (!fs.existsSync(docsDir)) continue;
+  for (const p of new Set(['', ...pagePaths(docsDir)])) write(path.join(GENERATED, 'static', section.former_route, p, 'index.html'), redirectHtml(`/${section.route}/${p}`));
 }
 write(path.join(GENERATED, 'manifest.json'), JSON.stringify(manifest, null, 2));
 write(path.join(GENERATED, 'content-report.json'), JSON.stringify(reports, null, 2));

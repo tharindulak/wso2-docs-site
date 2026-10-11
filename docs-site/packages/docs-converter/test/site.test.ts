@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles } from '../src/site.js';
+import { convertMkdocsSite, convertMergedSites, keepMkdocsUrl, relativeImages, copyReferencedAssets, referencedFiles, mkdocsUrl } from '../src/site.js';
 import { loadConfig, ConfigError } from '../src/config.js';
 import { tempSource } from './helpers.js';
 
@@ -187,4 +187,77 @@ test('referencedFiles resolves like a browser and never leaves the section route
   assert.deepEqual(referencedFiles('<img src="../../assets/img/client secret 2.png" />', 'learn/jwt-grant.md', 'demo'), ['assets/img/client secret 2.png'], 'spaces in a quoted attribute');
   assert.deepEqual(referencedFiles('[WSDL](../../assets/attachments/a.wsdl) ![shot](img/b.png "t") [page](../other/) [ext](https://x/a.png)', 'develop/x.md', 'demo/5.9.0'),
     ['assets/attachments/a.wsdl', 'develop/x/img/b.png'], 'Markdown links and images, resolved against the page URL');
+});
+
+const componentRepo = () => tempSource({
+  'en/mkdocs.yml': [
+    'site_name: Platform', 'nav:', '  - Overview: index.md', '  - API Gateway:', '    - "next":', '        - Overview: api-gateway/next/overview.md',
+    '    - "1.2.0":', '        - Overview: api-gateway/1.2.0/overview.md', '        - Setup:', '          - Config: api-gateway/1.2.0/setup/config.md',
+    '          - Hub: policy-hub/overview.md', '',
+  ].join('\n'),
+  'en/docs/index.md': '# Platform\n',
+  'en/docs/policy-hub/overview.md': '# Hub\n',
+  'en/docs/assets/img/g.png': 'PNG',
+  'en/docs/assets/img/h.png': 'PNG2',
+  'en/docs/api-gateway/next/overview.md': '# Next\n',
+  'en/docs/api-gateway/1.2.0/overview.md': '# Gateway\n\nSee [config](setup/config.md).\n',
+  'en/docs/api-gateway/1.2.0/setup/config.md': [
+    '# Config', '', 'Policies: [hub](../../../policy-hub/overview.md#list).', '', 'Upcoming: [next](../../next/overview.md).', '',
+    'Back: [overview](../overview.md).', '', '![Diagram](../../../assets/img/g.png)', '',
+    '<img src="../../../../assets/img/h.png" alt="h" />', '', '![Escape](../../../../../../secret.png)', '',
+  ].join('\n'),
+  'secret.png': 'NOT DOCS',
+});
+
+test('a version folder as section root: paths and nav ids lose the prefix; references leaving it are rewritten', async () => {
+  const root = componentRepo();
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  const staticDir = fs.mkdtempSync(path.join(root, 'static-'));
+  const asked: string[] = [];
+  const { sidebar, report } = await convertMkdocsSite({
+    root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'], currentSite: 'https://p.example/docs/api-gateway/1.2.0/',
+    docsRoot: 'api-gateway/1.2.0/', nav: { root: 'API Gateway', release: '1.2.0' },
+    linkOutside: (p) => { asked.push(p); return p.startsWith('api-gateway/next/') ? null : `/platform/${mkdocsUrl(p)}`; },
+  }, { outDir: out, staticDir, route: 'api-gateway' });
+  assert.equal(report.ok, 2);
+  assert.deepEqual(fs.readdirSync(out).filter((f) => f.endsWith('.md')).sort(), ['overview.md']);
+  assert.ok(fs.existsSync(path.join(out, 'setup/config.md')));
+  assert.ok(!fs.existsSync(path.join(out, 'index.md')), 'pages outside the folder are not taken');
+  assert.deepEqual(sidebar, [
+    { type: 'doc', id: 'overview', label: 'Overview' },
+    { type: 'category', label: 'Setup', items: [{ type: 'doc', id: 'setup/config', label: 'Config' }, { type: 'link', label: 'Hub', href: '/platform/policy-hub/overview/' }] },
+  ]);
+  assert.deepEqual(report.droppedNav, []);
+  const page = fs.readFileSync(path.join(out, 'setup/config.md'), 'utf8');
+  assert.match(page, /\[hub\]\(\/platform\/policy-hub\/overview\/#list\)/, 'escaping page link -> site route');
+  assert.match(page, /\[next\]\(\.\.\/\.\.\/next\/overview\.md\)/, 'unmapped page link stays as written');
+  assert.match(page, /\[overview\]\(\.\.\/overview\.md\)/, 'links inside the folder stay');
+  assert.match(page, /!\[Diagram\]\(\.\.\/_shared\/assets\/img\/g\.png\)/, 'escaping image -> copy in the section');
+  assert.equal(fs.readFileSync(path.join(out, '_shared/assets/img/g.png'), 'utf8'), 'PNG');
+  assert.match(page, /src="\/api-gateway\/_shared\/assets\/img\/h\.png"/, 'HTML reference resolves against the page URL');
+  assert.equal(fs.readFileSync(path.join(staticDir, '_shared/assets/img/h.png'), 'utf8'), 'PNG2');
+  assert.match(page, /\(\.\.\/\.\.\/\.\.\/\.\.\/\.\.\/\.\.\/secret\.png\)/, 'a reference outside docs_dir stays as written');
+  assert.ok(!fs.readdirSync(out, { recursive: true }).some((f) => String(f).endsWith('secret.png')), 'nothing outside docs_dir is copied');
+  assert.deepEqual([...new Set(asked)].sort(), ['api-gateway/next/overview.md', 'policy-hub/overview.md']);
+});
+
+test('docs_root must be a folder inside docs_dir', async () => {
+  const root = componentRepo();
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  for (const docsRoot of ['../', '../../', '/etc/', 'missing/', '.']) {
+    await assert.rejects(convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [], docsRoot }, { outDir: out, route: 'x' }), /docs_root must be a folder inside docs_dir/, docsRoot);
+  }
+  fs.symlinkSync(path.dirname(root), path.join(root, 'en/docs/link'));
+  await assert.rejects(convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [], docsRoot: 'link/' }, { outDir: out, route: 'x' }), /docs_root must be a folder inside docs_dir/);
+});
+
+test('a section sharing the source: links into folders it skips map through linkOutside', async () => {
+  const root = componentRepo();
+  fs.writeFileSync(path.join(root, 'en/docs/index.md'), '# Platform\n\n[Gateway](api-gateway/1.2.0/overview.md) and [hub](policy-hub/overview.md).\n');
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({
+    root, mkdocs: 'en/mkdocs.yml', deployment_options: [], skip: ['api-gateway/'], nav: { drop: ['API Gateway'] },
+    linkOutside: (p) => (p.startsWith('api-gateway/1.2.0/') ? `/gw/${mkdocsUrl(p.slice(18))}` : null),
+  }, { outDir: out, route: 'platform' });
+  assert.match(fs.readFileSync(path.join(out, 'index.md'), 'utf8'), /\[Gateway\]\(\/gw\/overview\/\) and \[hub\]\(policy-hub\/overview\.md\)/);
 });

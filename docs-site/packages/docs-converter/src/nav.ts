@@ -2,7 +2,8 @@
 import type { MkdocsNav, SidebarItem } from './types.js';
 
 const docId = (p: string): string => p.replace(/\\/g, '/').replace(/^\.?\//, '').replace(/\.mdx?$/, '');
-const isUrl = (p: string): boolean => /^[a-z]+:\/\//i.test(p) || p.startsWith('mailto:');
+// A site path (/route/page/) is a link too: nav entries of a version folder that point at another section's pages.
+const isUrl = (p: string): boolean => /^[a-z]+:\/\//i.test(p) || p.startsWith('mailto:') || /^\/(?!\/).*\/$/.test(p);
 
 /**
  * Convert an MkDocs nav to sidebar items. Entries whose page is not `known` are dropped and reported.
@@ -77,13 +78,15 @@ export function sidebarDocIds(items: SidebarItem[], acc = new Set<string>()): Se
   return acc;
 }
 
-export interface NavSelection { root?: string; drop?: string[]; pick?: Record<string, string | number> }
+export interface NavSelection { root?: string; drop?: string[]; pick?: Record<string, string | number>; release?: string; strip?: string; outside?: (docsPath: string) => string | null }
 
 /**
- * Narrow a MkDocs `nav:` for one section: `root` takes a top-level entry's children, `drop` removes
- * top-level entries, `pick` replaces a versioned entry's children with those of one release.
+ * Narrow a MkDocs `nav:` for one section: `root` takes a top-level entry's children, `release` then takes the
+ * children of one release under it (a component's version folder), `drop` removes top-level entries, `pick`
+ * replaces a versioned entry's children with those of one release, and `strip` removes a folder prefix from page
+ * paths (the folder is the section root); `outside` gives other pages' site paths (labelled entries become links).
  */
-export function selectNav(nav: MkdocsNav | undefined, { root, drop = [], pick = {} }: NavSelection = {}): MkdocsNav {
+export function selectNav(nav: MkdocsNav | undefined, { root, drop = [], pick = {}, release, strip, outside }: NavSelection = {}): MkdocsNav {
   const labelOf = (entry: unknown): string | null => (entry && typeof entry === 'object' ? Object.keys(entry)[0] ?? null : null);
   let items: MkdocsNav = nav ?? [];
   if (root) {
@@ -91,13 +94,31 @@ export function selectNav(nav: MkdocsNav | undefined, { root, drop = [], pick = 
     if (!entry) throw new Error(`nav has no top-level entry "${root}"`);
     items = entry[root] as MkdocsNav;
   }
+  if (release !== undefined) {
+    const entry = items.find((e) => String(labelOf(e)) === String(release)) as Record<string, unknown> | undefined;
+    if (!entry) throw new Error(`nav${root ? ` entry "${root}"` : ''} has no release "${release}"`);
+    items = entry[labelOf(entry)!] as MkdocsNav;
+  }
   items = items.filter((e) => !drop.includes(labelOf(e) ?? ''));
-  return items.map((e) => {
+  const picked = items.map((e) => {
     const label = labelOf(e);
     if (!label || !(label in pick)) return e;
     const releases = (e as Record<string, MkdocsNav>)[label]!;
-    const release = releases.find((r) => String(labelOf(r)) === String(pick[label])) as Record<string, unknown> | undefined;
-    if (!release) throw new Error(`nav entry "${label}" has no release "${pick[label]}"`);
-    return { [label]: release[labelOf(release)!] };
+    const chosen = releases.find((r) => String(labelOf(r)) === String(pick[label])) as Record<string, unknown> | undefined;
+    if (!chosen) throw new Error(`nav entry "${label}" has no release "${pick[label]}"`);
+    return { [label]: chosen[labelOf(chosen)!] };
   });
+  return strip ? stripNav(picked, strip, outside) : picked;
+}
+
+/**
+ * Page paths under `prefix` lose it; labelled pages outside it become site links when `outside` knows them; the rest
+ * stay as written (and drop out when no such page is generated).
+ */
+function stripNav(nav: MkdocsNav, prefix: string, outside?: (docsPath: string) => string | null): MkdocsNav {
+  const page = (v: string): string => (v.startsWith(prefix) ? v.slice(prefix.length) : isUrl(v) || /^[a-z]+:/i.test(v) ? v : outside?.(v) ?? v);
+  const fix = (v: unknown): unknown => (typeof v === 'string' ? page(v)
+    : Array.isArray(v) ? v.map(fix)
+      : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fix(x)])) : v);
+  return fix(nav) as MkdocsNav;
 }

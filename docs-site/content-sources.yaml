@@ -14,6 +14,9 @@
 #   older versions stay pinned. Merged sections put versions: under self_hosted:.
 # version_folder: for versions kept as folders on one branch, the mkdocs.yml path with {version}; a promotion writes it.
 # release_tag: prefix of a version's docs-release tag; default v (v4.6.0), or <component>/v for a component's tags.
+# docs_root: for components kept as version folders inside one MkDocs site, the folder with {version} (api-gateway/{version}/);
+#   it becomes the section root (pages, nav: nav_root's entry for that release), and links out of it go to the section that hosts the target.
+# former_route: the route the section's pages used to live under; each Latest page there redirects to its new URL.
 # former_site: URL pattern of a version's former site, with {version}.
 # older_versions: versions with no source in git, listed as "Older versions" links to Confluence ({ version, href }).
 # live_window (top level): versions per section in the live build; older ones are snapshots.
@@ -278,18 +281,120 @@ products:
         track: main
         mkdocs: en/mkdocs.yml
         deployment_options: [WSO2 Cloud, Self-hosted]  # confirm
-        deployment_overrides:  # confirm: self-hosted components
-          api-gateway/: [Self-hosted]
-          ai-gateway/: [Self-hosted]
-          api-portal/: [Self-hosted]
-          ai-workspace/: [Self-hosted]
         current_site: https://wso2.com/bijira/docs/
         sparse: [en]
-        # Bijira's Cloud tree goes to the API Manager section; each component shows its newest GA release.
-        nav_drop: [Cloud, API Manager]
-        nav_pick: { API Gateway: "1.2.0", AI Gateway: "2026.09.24", API Portal: "1.0.0", AI Workspace: "1.0.0" }
-        skip: [cloud/, api-manager/, next/, api-gateway/next/, api-gateway/1.1.0/, api-gateway/1.0.0/, ai-gateway/next/, ai-gateway/1.2.0/, ai-gateway/1.1.0/, ai-gateway/1.0.0/, api-portal/next/, ai-workspace/next/]
+        # Bijira's Cloud tree goes to the API Manager section; each component's version folders are their own section below.
+        nav_drop: [Cloud, API Manager, API Gateway, AI Gateway, API Portal, AI Workspace]
+        skip: [cloud/, api-manager/, next/, api-gateway/, ai-gateway/, api-portal/, ai-workspace/]
         exclude: []
+      # A component of the API Platform: each release is a version folder (docs_root) of the one MkDocs site on main.
+      - id: api-platform-api-gateway
+        label: API Gateway
+        route: api-platform/api-gateway
+        kind: mkdocs
+        repo: wso2/docs-api-platform
+        mkdocs: en/mkdocs.yml
+        docs_root: api-gateway/{version}/
+        nav_root: API Gateway
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://wso2.com/bijira/docs/
+        former_site: https://wso2.com/bijira/docs/api-gateway/{version}/
+        former_route: api-platform/platform/api-gateway/1.2.0
+        release_tag: gateway/v
+        product_repo: wso2/api-platform
+        sparse: [en]
+        versions:
+          - version: 1.2.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            track: true
+            exclude: []
+          - version: 1.1.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            exclude: []
+          - version: 1.0.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            exclude: []
+      # A component of the API Platform: each release is a version folder (docs_root) of the one MkDocs site on main.
+      - id: api-platform-ai-gateway
+        label: AI Gateway
+        route: api-platform/ai-gateway
+        kind: mkdocs
+        repo: wso2/docs-api-platform
+        mkdocs: en/mkdocs.yml
+        docs_root: ai-gateway/{version}/
+        nav_root: AI Gateway
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://wso2.com/bijira/docs/
+        former_site: https://wso2.com/bijira/docs/ai-gateway/{version}/
+        former_route: api-platform/platform/ai-gateway/2026.09.24
+        release_tag: ai-gateway/v
+        product_repo: wso2/api-platform
+        sparse: [en]
+        versions:
+          - version: 2026.09.24
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            track: true
+            exclude: []
+          - version: 1.2.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            exclude: []
+          - version: 1.1.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            exclude: []
+          - version: 1.0.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            exclude: []
+      # A component of the API Platform: each release is a version folder (docs_root) of the one MkDocs site on main.
+      - id: api-platform-api-portal
+        label: API Portal
+        route: api-platform/api-portal
+        kind: mkdocs
+        repo: wso2/docs-api-platform
+        mkdocs: en/mkdocs.yml
+        docs_root: api-portal/{version}/
+        nav_root: API Portal
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://wso2.com/bijira/docs/
+        former_site: https://wso2.com/bijira/docs/api-portal/{version}/
+        former_route: api-platform/platform/api-portal/1.0.0
+        release_tag: api-portal/v
+        product_repo: wso2/api-platform
+        sparse: [en]
+        versions:
+          - version: 1.0.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            track: true
+            exclude: []
+      # A component of the API Platform: each release is a version folder (docs_root) of the one MkDocs site on main.
+      - id: api-platform-ai-workspace
+        label: AI Workspace
+        route: api-platform/ai-workspace
+        kind: mkdocs
+        repo: wso2/docs-api-platform
+        mkdocs: en/mkdocs.yml
+        docs_root: ai-workspace/{version}/
+        nav_root: AI Workspace
+        deployment_options: [Self-hosted]  # confirm
+        current_site: https://wso2.com/bijira/docs/
+        former_site: https://wso2.com/bijira/docs/ai-workspace/{version}/
+        former_route: api-platform/platform/ai-workspace/1.0.0
+        release_tag: portals/ai-workspace/v
+        product_repo: wso2/api-platform
+        sparse: [en]
+        versions:
+          - version: 1.0.0
+            ref: main
+            sha: f7a46e1d7d8b8e0d277e008ca006df1c51b8e83a
+            track: true
+            exclude: []
       - id: api-platform-apim
         label: API Manager
         route: api-platform/api-manager

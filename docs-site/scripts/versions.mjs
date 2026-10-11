@@ -2,7 +2,7 @@
 // of version sources, newest first. A version source looks like a section, so the pipeline converts it unchanged.
 import fs from 'node:fs';
 import path from 'node:path';
-import { compareValues, splitFrontMatter, walk } from '@wso2/docs-converter';
+import { compareValues, splitFrontMatter, walk, mkdocsUrl } from '@wso2/docs-converter';
 
 export const LIVE_WINDOW_DEFAULT = 2;
 const VERSION = /^\d+\.\d+\.\d+$/;
@@ -20,7 +20,7 @@ const listOf = (section) => section.versions ?? section.self_hosted?.versions ??
 export function sourceKind(section, v) {
   const tag = `${section.release_tag ?? 'v'}${v.version}`;
   if (v.ref === tag || v.ref.startsWith(`${tag}.`)) return 'release';
-  return v.mkdocs || v.docs ? 'folder' : 'branch';
+  return v.mkdocs || v.docs || section.docs_root ? 'folder' : 'branch';
 }
 
 /** The release base a tag stands for: "v4.5.0.1" -> "4.5.0"; null when the ref is not a release tag. */
@@ -56,6 +56,11 @@ export function sectionVersions(section, liveWindow = LIVE_WINDOW_DEFAULT) {
     const overrides = Object.fromEntries(['mkdocs', 'docs', 'sidebar', 'sparse', 'nav_pick', 'skip', 'deployment_overrides']
       .filter((k) => v[k] !== undefined).map((k) => [k, v[k]]));
     if (folder && overrides.mkdocs === undefined) overrides.mkdocs = folder;
+    // A component's version folder inside one MkDocs site: the folder is the section root, its former site the folder's URL.
+    if (section.docs_root) {
+      overrides.docs_root = section.docs_root.replaceAll('{version}', v.version);
+      if (section.former_site) overrides.current_site = section.former_site.replaceAll('{version}', v.version);
+    }
     const exclude = v.exclude ?? [];
     if (section.kind === 'mkdocs-merge') {
       const sh = section.self_hosted;
@@ -107,6 +112,9 @@ export function validateVersions(section, liveWindow) {
     if (!/^https:\/\/[^\s]+$/.test(o.href ?? '')) throw new Error(`${id}: older version ${o.version} href must be https`);
   }
   if (section.former_site && !section.former_site.includes('{version}')) throw new Error(`${id}: former_site must contain {version}`);
+  if (section.docs_root !== undefined && (!REL.test(section.docs_root.replace('{version}', 'v')) || !section.docs_root.endsWith('/') || section.docs_root.split('/').filter((p) => p === '{version}').length !== 1)) {
+    throw new Error(`${id}: docs_root must be a relative folder (ending in /) with one {version} segment`);
+  }
   if (!Number.isInteger(liveWindow) || liveWindow < 1 || liveWindow > 3) throw new Error(`live_window must be 1, 2 or 3`);
 }
 
@@ -138,4 +146,41 @@ export function pagePaths(docsDir) {
     out.add(p.replace(/^\/$/, ''));
   }
   return [...out].sort();
+}
+
+/**
+ * Where a page of a shared MkDocs source lives on this site, for links between sections reading that source (API
+ * Platform: each component's version folders are a section, docs_root; the rest is the platform section and API
+ * Manager's cloud companion). A component folder maps to that version's route (Latest without a version segment; a
+ * version not in the lock to the section root); `next/` folders are not published and stay as written. Other pages
+ * map to the section or companion whose only/skip takes them. Null when no section reads a docs_root from the source.
+ */
+export function outsideLinks(lock, src) {
+  const same = (x) => x && x.repo === src.repo && x.mkdocs === src.mkdocs;
+  const sections = lock.products.flatMap((p) => p.sections);
+  const components = sections.filter((s) => s.docs_root && same(s));
+  if (!components.length) return null;
+  const hosts = [
+    ...sections.filter((s) => !s.docs_root && s.kind === 'mkdocs' && same(s)).map((s) => ({ only: s.only, skip: s.skip ?? [], route: s.route })),
+    ...sections.filter((s) => same(s.cloud_companion)).map((s) => ({
+      only: s.cloud_companion.only, skip: s.cloud_companion.skip ?? [], route: s.cloud_companion.path_prefix ? `${s.route}/${s.cloud_companion.path_prefix}` : s.route,
+    })),
+  ];
+  const url = (route, page) => `/${route}/${mkdocsUrl(/\.md$/.test(page) || page === '' ? page : `${page.replace(/\/$/, '')}/index.md`)}`;
+  return (docsPath) => {
+    for (const s of components) {
+      const [head, tail] = s.docs_root.split('{version}');
+      if (!docsPath.startsWith(head)) continue;
+      const rest = docsPath.slice(head.length);
+      const at = rest.indexOf(tail);
+      if (at <= 0) continue;
+      const version = rest.slice(0, at);
+      if (version === 'next') return null;
+      const i = s.versions.findIndex((v) => String(v.version) === version);
+      return i < 0 ? `/${s.route}/` : url(i === 0 ? s.route : `${s.route}/${version}`, rest.slice(at + tail.length));
+    }
+    const page = /\.md$/.test(docsPath) ? docsPath : `${docsPath.replace(/\/$/, '')}/index.md`;
+    const host = hosts.find((h) => (!h.only || page.startsWith(h.only)) && !h.skip.some((p) => page.startsWith(p)));
+    return host ? url(host.route, docsPath) : null;
+  };
 }

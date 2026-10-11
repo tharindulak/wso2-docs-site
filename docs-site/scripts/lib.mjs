@@ -35,6 +35,9 @@ export function readLock() {
         if (!REL.test(rel)) throw new Error(`${s.id}: path must be relative and inside the repo: ${rel}`);
       }
       if (!/^[a-z0-9/-]+$/.test(s.route)) throw new Error(`${s.id}: invalid route ${s.route}`);
+      if (s.former_route !== undefined && (!/^[a-z0-9][a-z0-9./-]*$/.test(s.former_route) || s.former_route.split('/').some((p) => p === '..' || p === '.'))) {
+        throw new Error(`${s.id}: invalid former_route ${s.former_route}`);
+      }
     }
   }
   return lock;

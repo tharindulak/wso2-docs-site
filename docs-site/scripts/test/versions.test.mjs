@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { sectionVersions, versionId, validateVersions, replaceExclude, pagePaths, confluenceVersions } from '../versions.mjs';
+import { sectionVersions, versionId, validateVersions, replaceExclude, pagePaths, confluenceVersions, outsideLinks } from '../versions.mjs';
 
 const SHA = (c) => c.repeat(40);
 const mi = () => ({
@@ -127,4 +127,60 @@ test('pagePaths lists real pages as URL paths, honours slugs and skips redirects
   put('ref/ref.md', '---\nslug: /ref/ref/\n---\n# Ref\n');
   put('gone.md', "---\ntitle: Gone\n---\n\nimport Redirect from '@site/src/components/Redirect';\n");
   assert.deepEqual(pagePaths(dir), ['', 'guides/', 'guides/setup/', 'ref/ref/']);
+});
+
+const aiGateway = () => ({
+  id: 'api-platform-ai-gateway', label: 'AI Gateway', route: 'api-platform/ai-gateway', kind: 'mkdocs',
+  repo: 'wso2/docs-api-platform', mkdocs: 'en/mkdocs.yml', sparse: ['en'], deployment_options: ['Self-hosted'],
+  docs_root: 'ai-gateway/{version}/', nav_root: 'AI Gateway', release_tag: 'ai-gateway/v',
+  current_site: 'https://wso2.com/bijira/docs/', former_site: 'https://wso2.com/bijira/docs/ai-gateway/{version}/',
+  versions: [
+    { version: '2026.09.24', ref: 'main', sha: SHA('a'), track: true },
+    { version: '1.2.0', ref: 'main', sha: SHA('a') },
+    { version: '1.1.0', ref: 'ai-gateway/v1.1.0', sha: SHA('b') },
+  ],
+});
+
+test('a date-style version (2026.09.24) validates and sorts above 1.2.0', () => {
+  assert.doesNotThrow(() => validateVersions(aiGateway(), 1));
+  const swapped = aiGateway();
+  swapped.versions = [swapped.versions[1], swapped.versions[0], swapped.versions[2]];
+  assert.throws(() => validateVersions(swapped, 1), /newest first/);
+  const vs = sectionVersions(aiGateway(), 1);
+  assert.deepEqual(vs.map((v) => [v.id, v.route, v.status]), [
+    ['api-platform-ai-gateway', 'api-platform/ai-gateway', 'latest'],
+    ['api-platform-ai-gateway--v1-2-0', 'api-platform/ai-gateway/1.2.0', 'snapshot'],
+    ['api-platform-ai-gateway--v1-1-0', 'api-platform/ai-gateway/1.1.0', 'snapshot'],
+  ]);
+});
+
+test('docs_root: each version reads its own folder, with that folder on the former site as its fallback target', () => {
+  const vs = sectionVersions(aiGateway(), 1);
+  assert.deepEqual(vs.map((v) => [v.docs_root, v.current_site, v.source]), [
+    ['ai-gateway/2026.09.24/', 'https://wso2.com/bijira/docs/ai-gateway/2026.09.24/', 'folder'],
+    ['ai-gateway/1.2.0/', 'https://wso2.com/bijira/docs/ai-gateway/1.2.0/', 'folder'],
+    ['ai-gateway/1.1.0/', 'https://wso2.com/bijira/docs/ai-gateway/1.1.0/', 'release'],
+  ]);
+  for (const docs_root of ['ai-gateway/1.0.0/', '../{version}/', 'ai-gateway/{version}', '{version}/{version}/', 'ai-gateway/v{version}/']) {
+    assert.throws(() => validateVersions({ ...aiGateway(), docs_root }, 1), /docs_root must be/, docs_root);
+  }
+});
+
+test('outsideLinks: a shared source maps component folders to version routes and other pages to the section that takes them', () => {
+  const src = { repo: 'wso2/docs-api-platform', mkdocs: 'en/mkdocs.yml' };
+  const lock = { products: [{ sections: [
+    { id: 'api-platform-platform', route: 'api-platform/platform', kind: 'mkdocs', ...src, skip: ['cloud/', 'next/', 'ai-gateway/'] },
+    aiGateway(),
+    { id: 'api-platform-apim', route: 'api-platform/api-manager', kind: 'mkdocs', repo: 'wso2/docs-apim', mkdocs: 'en/mkdocs.yml', cloud_companion: { ...src, only: 'cloud/' } },
+  ] }] };
+  const to = outsideLinks(lock, src);
+  assert.equal(to('ai-gateway/2026.09.24/routing/a.md'), '/api-platform/ai-gateway/routing/a/', 'Latest has no version segment');
+  assert.equal(to('ai-gateway/1.2.0/index.md'), '/api-platform/ai-gateway/1.2.0/');
+  assert.equal(to('ai-gateway/0.9.0/overview.md'), '/api-platform/ai-gateway/', 'a version not in the lock: the section root');
+  assert.equal(to('ai-gateway/next/overview.md'), null, 'next/ is not published');
+  assert.equal(to('policy-hub/overview.md'), '/api-platform/platform/policy-hub/overview/');
+  assert.equal(to('guides/x'), '/api-platform/platform/guides/x/');
+  assert.equal(to('cloud/ai-workspace/overview.md'), '/api-platform/api-manager/cloud/ai-workspace/overview/', 'cloud pages live in the companion');
+  assert.equal(to('next/index.md'), null);
+  assert.equal(outsideLinks(lock, { repo: 'wso2/docs-apim', mkdocs: 'en/mkdocs.yml' }), null, 'sources without component folders are unchanged');
 });

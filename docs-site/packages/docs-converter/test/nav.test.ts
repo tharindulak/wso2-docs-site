@@ -40,3 +40,18 @@ test('selectNav takes a subtree, drops entries and keeps one release of a versio
   assert.deepEqual(selectNav(nav, {}), nav, 'no options: unchanged');
   assert.throws(() => selectNav(nav, { pick: { 'API Gateway': '9.9.9' } }), /9\.9\.9/);
 });
+
+test('selectNav takes one release under a top-level entry and strips the folder from page paths', () => {
+  const nav = [
+    { Overview: 'index.md' },
+    { 'API Gateway': [{ next: [{ Overview: 'api-gateway/next/overview.md' }] }, { '2026.09.24': [{ Overview: 'api-gateway/2026.09.24/overview.md' }, { Hub: 'policy-hub/overview.md' }, { Site: 'https://example.com' }] }] },
+  ];
+  assert.deepEqual(selectNav(nav, { root: 'API Gateway', release: '2026.09.24', strip: 'api-gateway/2026.09.24/' }),
+    [{ Overview: 'overview.md' }, { Hub: 'policy-hub/overview.md' }, { Site: 'https://example.com' }]);
+  const linked = selectNav(nav, { root: 'API Gateway', release: '2026.09.24', strip: 'api-gateway/2026.09.24/', outside: (p) => `/platform/${p.replace(/\.md$/, '/')}` });
+  assert.deepEqual(linked, [{ Overview: 'overview.md' }, { Hub: '/platform/policy-hub/overview/' }, { Site: 'https://example.com' }]);
+  assert.deepEqual(navToSidebar(linked, (id) => id === 'overview'), [
+    { type: 'doc', id: 'overview', label: 'Overview' }, { type: 'link', label: 'Hub', href: '/platform/policy-hub/overview/' }, { type: 'link', label: 'Site', href: 'https://example.com' },
+  ]);
+  assert.throws(() => selectNav(nav, { root: 'API Gateway', release: '1.0.0' }), /no release "1\.0\.0"/);
+});
