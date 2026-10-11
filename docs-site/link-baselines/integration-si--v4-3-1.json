@@ -1,0 +1,194 @@
+[
+ {
+  "page": "integration/streaming-integrator/4.3.1/admin/configuring-Cluster-Coordination/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/admin/configuring-Cluster-Coordination/_Configuring_Datasources_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/admin/configuring-Cluster-Coordination/index.html",
+  "link": "minimum-ha-deployment"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/admin/configuring-Cluster-Coordination/index.html",
+  "link": "scalable-ha-deployment"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/admin/configuring-Database-and-File-System-State-Persistence/index.html",
+  "link": "_Configuring_Datasources_"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/admin/protecting-sensitive-data-via-the-secure-vault/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/admin/protecting-sensitive-data-via-the-secure-vault/configuring-datasources/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/admin/viewing-overall-statistics/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/images/viewing-overall-statistics/on-demand-query-statistics.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/develop/installing-siddhi-extensions/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/connectors/writing-Custom-Siddhi-Extensions.md/#writing-custom-siddhi-extensions"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/develop/si-for-vscode-overview/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/assets/images/si-for-vscode/docker-export.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/develop/siddhi-Application-Overview/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/develop/siddhi-Application-Overview/_Storage_Integration_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/develop/testing-a-Siddhi-Application/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/images/Testing-Siddhi-Applications/Created_Feed-Simulation.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/examples/triggering-integrations-via-micro-integrator/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/develop/installing-siddhi-extensions.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/cleansing-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/cleansing-data/testing-a-Siddhi-Application/#simulating-a-single-event"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/cleansing-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/enriching-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/loading-and-writing-date/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/performing-etl-tasks/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/ref/performance-analysis-results.md/#performing-etl-tasks"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/summarizing-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/transforming-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/connectors/downloading-and-installing-siddhi-extensions.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/guides/transforming-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/authentication-APIs/index.html",
+  "link": "_HTTP_Status_Codes_"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/authorization-Permission-Model/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/authorization-Permission-Model/_Manager_Runtime_-_REST_APIs_Permission_Model_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/authorization-Permission-Model/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/authorization-Permission-Model/_Worker_Runtime_-_REST_APIs_Permission_Model_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Authentication_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Business_Rules_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Dashboard_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Event_Simulation_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Healthcheck_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Permission_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Siddhi_Application_Management_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Status_Monitoring_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/public-APIs/_Store_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/store-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/Guides/storage-Integration.md/#performing-crud-operations-via-rest-api"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/stream-Processor-REST-API-Guide/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/stream-Processor-REST-API-Guide/_HTTP_Status_Codes_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/ref/stream-Processor-REST-API-Guide/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/ref/stream-Processor-REST-API-Guide/_Public_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/samples/GeoDistanceCalculation/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/images/execution-geo-sample/attribute-values.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/samples/execution-geo-sample/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/images/execution-geo-sample/attribute-values.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/samples/execution-geo-sample/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/images/execution-geo-sample/siddhi-app-and-stream.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/samples/sample/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/samples/sample/ClusTreeTestApp/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/configuring-data-sources/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/admin/adding-third-party-non-osgi-libraries.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/defining-Data-Tables/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/setup/defining-Data-Tables/_Defining_Tables_for_Physical_Stores_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/defining-Tables-for-Physical-Stores/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/setup/defining-Tables-for-Physical-Stores/_Configuring_Datasources_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/defining-Tables-for-Physical-Stores/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/setup/defining-Tables-for-Physical-Stores/_Managing_Stored_Data_via_REST_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/defining-Tables-for-Physical-Stores/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/setup/defining-Tables-for-Physical-Stores/_Managing_Stored_Data_via_Streams_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/installing-as-a-windows-service/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/installing-as-a-windows-service/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/install-and-setup/ProductCompatibility/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/upgrading-from-previous-version/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/setup/connectors/downloading-and-Installing-Siddhi-Extensions.md/#downloading-and-installing-siddhi-extensions-manually"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/viewing-dashboards/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/admin/managing-grafana-dashboards.md/#importing-dashboards"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.1/setup/viewing-dashboards/index.html",
+  "link": "/integration/streaming-integrator/4.3.1/admin/managing-grafana-dashboards.md/#organizing-dashboards-in-folders"
+ }
+]

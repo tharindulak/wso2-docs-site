@@ -1,0 +1,386 @@
+[
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/configuring-Cluster-Coordination/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/configuring-Cluster-Coordination/_Configuring_Datasources_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/configuring-Cluster-Coordination/index.html",
+  "link": "minimum-ha-deployment"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/configuring-Cluster-Coordination/index.html",
+  "link": "scalable-ha-deployment"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/configuring-Database-and-File-System-State-Persistence/index.html",
+  "link": "_Configuring_Datasources_"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/creating-business-rules-templates/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/creating-business-rules-templates/business-rules-templates/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/creating-business-rules-templates/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/creating-business-rules-templates/creating-a-business-rule-template/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/protecting-sensitive-data-via-the-secure-vault/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/protecting-sensitive-data-via-the-secure-vault/configuring-datasources/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/admin/viewing-overall-statistics/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/viewing-overall-statistics/on-demand-query-statistics.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/installing-siddhi-extensions/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/connectors/writing-Custom-Siddhi-Extensions.md/#writing-custom-siddhi-extensions"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/siddhi-Application-Overview/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/siddhi-Application-Overview/_Storage_Integration_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/streaming-integrator-studio-overview/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/examples/integrating-stores.md/#perform-crud-operations-via-rest-api"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/streaming-integrator-studio-overview/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/streaming-integrator-studio-overview/_Simulating_Events_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/streaming-integrator-studio-overview/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/handling-errors.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/images/working-with-the design-view/generate-stream-with-inline-datasource-configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/images/working-with-the design-view/select-file-type.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Aggregation_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Aggregation_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Filter_Query_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Filter_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Function_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Function_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Generate-Stream.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Join_Query_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Join_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Partition_Configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Partition_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Pattern_Query_Configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Pattern_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Projection_QueryConfiguration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Projection_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sequence_Query_Configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sequence_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sink_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sink_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Source-Configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Source_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Stream_Configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Stream_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Table_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Table_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Trigger_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Trigger_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Window_Configuration_Form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Window_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Window_Query_Icon.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/generate-stream-form.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/generate-stream-with-externally-defined-datasource.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/examples/connectors/downloading-and-Installing-Siddhi-Extensions/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/triggering-integrations-via-micro-integrator/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/installing-siddhi-extensions.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/cleansing-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/cleansing-data/testing-a-Siddhi-Application/#simulating-a-single-event"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/cleansing-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/correlating-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/enriching-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/extracting-data-from-static-sources-in-real-time/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/installing-siddhi-extensions.md/#installing-an-extension"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/extracting-data-from-static-sources-in-real-time/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/loading-and-writing-date/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/performing-etl-tasks/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/ref/performance-analysis-results.md/#performing-etl-tasks"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/publishing-data-to-event-stream-consumers/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/receiving-data-in-transit/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/summarizing-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/transforming-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/connectors/downloading-and-installing-siddhi-extensions.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/guides/transforming-data/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/guides/develop/streaming-integrator-studio-overview.md/#starting-streaming-integrator-tooling"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/authentication-APIs/index.html",
+  "link": "_HTTP_Status_Codes_"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/authorization-Permission-Model/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/authorization-Permission-Model/_Manager_Runtime_-_REST_APIs_Permission_Model_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/authorization-Permission-Model/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/authorization-Permission-Model/_Worker_Runtime_-_REST_APIs_Permission_Model_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Authentication_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Business_Rules_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Dashboard_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Event_Simulation_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Healthcheck_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Permission_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Siddhi_Application_Management_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Status_Monitoring_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/public-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/public-APIs/_Store_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/store-APIs/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/Guides/storage-Integration.md/#performing-crud-operations-via-rest-api"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/stream-Processor-REST-API-Guide/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/stream-Processor-REST-API-Guide/_HTTP_Status_Codes_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/ref/stream-Processor-REST-API-Guide/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/ref/stream-Processor-REST-API-Guide/_Public_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/samples/GeoDistanceCalculation/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/execution-geo-sample/attribute-values.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/samples/execution-geo-sample/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/execution-geo-sample/attribute-values.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/samples/execution-geo-sample/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/execution-geo-sample/siddhi-app-and-stream.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/samples/sample/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/samples/sample/ClusTreeTestApp/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/change-hostname-and-context-path/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/streaming-integrator-studio-overview.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/change-hostname-and-context-path/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/admin/creating-business-rules-templates.md/#creating-a-business-rules-template"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/configuring-business-rules-deployment/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/admin/creating-business-rules-templates.md/#creating-a-business-rules-template"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/configuring-data-sources/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/adding-third-party-non-osgi-libraries.md/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/defining-Data-Tables/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/defining-Data-Tables/_Defining_Tables_for_Physical_Stores_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/defining-Tables-for-Physical-Stores/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/defining-Tables-for-Physical-Stores/_Configuring_Datasources_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/defining-Tables-for-Physical-Stores/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/defining-Tables-for-Physical-Stores/_Managing_Stored_Data_via_REST_APIs_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/defining-Tables-for-Physical-Stores/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/defining-Tables-for-Physical-Stores/_Managing_Stored_Data_via_Streams_/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/installing-as-a-windows-service/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/installing-as-a-windows-service/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/install-and-setup/ProductCompatibility/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/upgrading-from-4.2.0-to-4.3.x/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/install-si-for-vscode/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/upgrading-from-4.2.0-to-4.3.x/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/develop/si-for-vscode-overview/"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/upgrading-from-previous-version/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/setup/connectors/downloading-and-Installing-Siddhi-Extensions.md/#downloading-and-installing-siddhi-extensions-manually"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/viewing-dashboards/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/managing-grafana-dashboards.md/#importing-dashboards"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/setup/viewing-dashboards/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/admin/managing-grafana-dashboards.md/#organizing-dashboards-in-folders"
+ }
+]

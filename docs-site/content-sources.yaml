@@ -143,13 +143,28 @@ products:
         route: integration/streaming-integrator
         kind: mkdocs
         repo: wso2/docs-si
-        sha: 9c75a97812621531cc66d63c59aeeb8ad6e9884e
-        track: main
         mkdocs: en/mkdocs.yml
         deployment_options: [Self-hosted]
         current_site: https://si.docs.wso2.com/
+        former_site: https://si.docs.wso2.com/{version}/
+        release_tag: v
+        product_repo: wso2/streaming-integrator
         sparse: [en]
-        exclude: []
+        # Latest is main (4.4.0, same as the 4.4.0 branch); older releases are branches.
+        versions:
+          - version: 4.4.0
+            ref: main
+            sha: 9c75a97812621531cc66d63c59aeeb8ad6e9884e
+            track: true
+            exclude: []
+          - version: 4.3.1
+            ref: 4.3.1
+            sha: c6acd40667d06019e965cc85e9bc8f4496e1f142
+            exclude: []
+          - version: 4.3.0
+            ref: 4.3.0
+            sha: 09e25e709468cbb593bfb5dfbb55929fb00a5fa8
+            exclude: []
 
   - id: identity
     name: Identity Platform
