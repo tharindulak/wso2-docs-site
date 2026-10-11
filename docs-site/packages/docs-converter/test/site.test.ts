@@ -148,6 +148,9 @@ test('markdown images under the section route become page-relative when the file
   assert.equal(relativeImages('![A](/demo/assets/img/a.png)', 'guides/setup.md', 'demo', exists), '![A](../assets/img/a.png)');
   assert.equal(relativeImages('![A](/demo/assets/img/a.png "t")', 'index.md', 'demo', exists), '![A](assets/img/a.png "t")');
   assert.equal(relativeImages('![B](/demo/assets/img/b.png)', 'index.md', 'demo', exists), '![B](/demo/assets/img/b.png)', 'missing file left alone');
+  // docs-si@09e25e709468 en/docs/connectors/downloading-and-Installing-Siddhi-Extensions.md:162: a space in the file name
+  assert.equal(relativeImages('![All](/demo/assets/img/Central%20Maven%20Repository.png)', 'index.md', 'demo', (a) => a === 'assets/img/Central Maven Repository.png'),
+    '![All](assets/img/Central%20Maven%20Repository.png)', 'found by its decoded name, written encoded');
   assert.equal(relativeImages('<img src="/demo/assets/img/a.png" />', 'index.md', 'demo', exists), '<img src="/demo/assets/img/a.png" />', 'HTML stays absolute');
   assert.equal(relativeImages('```\n![A](/demo/assets/img/a.png)\n```', 'index.md', 'demo', exists), '```\n![A](/demo/assets/img/a.png)\n```', 'code untouched');
 });

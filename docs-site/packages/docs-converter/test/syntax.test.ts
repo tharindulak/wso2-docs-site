@@ -60,3 +60,47 @@ test('Redoc embeds become <ApiReference>; options kept; external https specs onl
   assert.match(toMdx('<redoc spec-url="/a/b.yaml"></redoc>').body, /^<ApiReference spec="\/a\/b\.yaml" \/>$/);
   assert.match(toMdx('<redoc spec-url="javascript:x"></redoc>').body, /^&lt;redoc/, 'unconverted embeds are escaped as before');
 });
+
+// Python-Markdown 3.7 makes each of these a link or image (href/src as written; a browser drops the newline).
+test('a line break in a link target is joined, as Python-Markdown and the browser read it', () => {
+  // docs-apim@808c7e57d4d9 en/docs/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster.md:5-7
+  const gateway = 'with multiple Gateways. In such scenarios, for [Burst Control](/api-platform/api-manager/4.4.0\n/design/rate-limiting/setting-throttling-limits/#burst-control) and [Backend Rate Limiting](/api-platform/api-manager/4.4.0\n/design/rate-limiting/setting-maximum-backend-throughput-limits) to work properly, it requires maintaining';
+  assert.equal(toMdx(gateway).body, 'with multiple Gateways. In such scenarios, for [Burst Control](/api-platform/api-manager/4.4.0/design/rate-limiting/setting-throttling-limits/#burst-control) and [Backend Rate Limiting](/api-platform/api-manager/4.4.0/design/rate-limiting/setting-maximum-backend-throughput-limits) to work properly, it requires maintaining');
+  // docs-is identity-server/5.10.0/docs/develop/customizing-identity-server-uis.md:12-13, indented in a list item
+  assert.equal(toMdx('1. Item\n\n    see [Updating WSO2 Products](https://is.docs.wso2\n    .com/en/latest/administer/getting-wso2-updates/)\n').body,
+    '1. Item\n\n    see [Updating WSO2 Products](https://is.docs.wso2.com/en/latest/administer/getting-wso2-updates/)\n');
+  // docs-apim@53584be9c5ba .../configure-worker/active-passive.md:23-24, an image
+  assert.equal(toMdx('    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes\n    .png)').body,
+    '    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes.png)');
+});
+
+test('spaces in a link or image target are percent-encoded; a quoted title stays a title', () => {
+  // docs-is identity-server/5.9.0/docs/administer/load-balancing.md:11
+  assert.equal(toMdx('![load-balancing](../../assets/img/administer/load balancing/load-balancing.png)').body,
+    '![load-balancing](../../assets/img/administer/load%20balancing/load-balancing.png)');
+  // docs-api-platform@f7a46e1d7d8b en/docs/cloud/develop-api-proxy/authentication-and-authorization/secure-api-access-with-azure-ad.md:94
+  assert.equal(toMdx('refer to the Azure documentation: [Assign the app to users and groups to restrict access](Assign the app to users and groups to restrict access)').body,
+    'refer to the Azure documentation: [Assign the app to users and groups to restrict access](Assign%20the%20app%20to%20users%20and%20groups%20to%20restrict%20access)');
+  // docs-choreo-dev@eca033c47c57 en/developer-docs/docs/references/choreo-platform-services-billing-and-upgrades.md:12,
+  // after {{ product_name }} renders as "WSO2 Developer Platform"
+  assert.equal(toMdx('contact [WSO2 Developer Platform support](mailto:WSO2 Developer Platform-support@wso2.com).').body,
+    'contact [WSO2 Developer Platform support](mailto:WSO2%20Developer%20Platform-support@wso2.com).');
+  assert.equal(toMdx('[t](a b.md "A title") and [u](<c d.md>) and [v](#Run the \'sample\' scenario) and [w](x.md "T")').body,
+    '[t](a%20b.md "A title") and [u](c%20d.md) and [v](#Run%20the%20\'sample\'%20scenario) and [w](x.md "T")');
+  // docs-is identity-server/5.9.0/docs/get-started/single-sign-on-and-identity-federation.md:242: a browser drops the
+  // tabs from the URL and keeps the spaces
+  assert.equal(toMdx('[here](http://code.google.com/p/saml2-consumer-module/downloads/detail?\t\t   name=opensaml2-2.0.0.alpha1-wso2v1.jar)').body,
+    '[here](http://code.google.com/p/saml2-consumer-module/downloads/detail?%20%20%20name=opensaml2-2.0.0.alpha1-wso2v1.jar)');
+  assert.equal(toMdx('[a](b(c d)e) and [f](g\n\nh) and `[i](j k)`').body, '[a](b(c%20d)e) and [f](g\n\nh) and `[i](j k)`', 'nested parentheses; a blank line ends the search; code untouched');
+});
+
+test('joined and encoded targets compile as links', async () => {
+  const { compileCheck } = await import('../src/page.js');
+  const { compile } = await import('@mdx-js/mdx');
+  const body = toMdx('[x](https://github\n.com/a) ![y](a b.png "T") [z](mailto:A B-c@d.com)').body;
+  await compileCheck(`---\n---\n${body}`);
+  const js = String(await compile(body, { jsx: true }));
+  assert.match(js, /href="https:\/\/github\.com\/a"/);
+  assert.match(js, /src="a%20b\.png" alt="y" title="T"/);
+  assert.match(js, /href="mailto:A%20B-c@d\.com"/);
+});

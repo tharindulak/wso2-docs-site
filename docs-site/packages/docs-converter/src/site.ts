@@ -101,7 +101,7 @@ export function relativeImages(mdx: string, pageRel: string, route: string, exis
     const asset = decodeURI(url.slice(prefix.length));
     if (!exists(asset)) return m;
     const rel = path.posix.relative(path.posix.dirname(pageRel.replace(/\\/g, '/')), asset);
-    return `${pre}${rel}${post}`;
+    return `${pre}${encodePath(rel)}${post}`; // the decoded name is for the lookup only (a space would end the target)
   }));
 }
 

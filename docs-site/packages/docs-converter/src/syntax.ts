@@ -153,9 +153,68 @@ export function redocToApiReference(text: string): { text: string; count: number
   return { text: out, count };
 }
 
+/**
+ * Index of the `)` closing a link target that starts at `from` (just after `](`), or -1. Parentheses nest; a quoted
+ * title may hold any of them; a blank line ends the paragraph, and so the search.
+ */
+export function targetEnd(s: string, from: number, titles = true): number {
+  let depth = 0;
+  let quote = '';
+  for (let i = from; i < s.length && i < from + 2000; i++) {
+    const c = s[i]!;
+    if (c === '\\') { i++; continue; }
+    if (c === '\n' && /^[ \t]*\r?\n/.test(s.slice(i + 1))) break;
+    if (quote) { if (c === quote && /^[ \t]*\)/.test(s.slice(i + 1))) quote = ''; continue; }
+    if (titles && (c === '"' || c === "'") && /\s/.test(s[i - 1] ?? '')) { quote = c; continue; }
+    if (c === '(') depth++;
+    else if (c === ')' && depth-- === 0) return i;
+  }
+  return titles ? targetEnd(s, from, false) : -1; // a quote that opens no title (`#the 'x' step`)
+}
+
+/** A link target as Python-Markdown reads it: the destination (angle brackets removed) and the quoted title, if any. */
+export function splitTarget(inner: string): { dest: string; title?: string } {
+  const t = inner.trim();
+  const m = t.match(/^([\s\S]*?)\s+("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')$/);
+  const dest = (m ? m[1]! : t).trim();
+  return { dest: /^<[^<>]*>$/.test(dest) ? dest.slice(1, -1) : dest, title: m?.[2] };
+}
+
+/**
+ * A destination with its line breaks joined (with the indentation around them) and its tabs dropped, as a browser
+ * drops them from a URL, and its remaining whitespace percent-encoded.
+ */
+export const joinTarget = (dest: string): string => dest.replace(/[ \t]*\r?\n[ \t]*/g, '').replace(/\t/g, '').trim()
+  .replace(/\s/g, (c) => (c === ' ' ? '%20' : encodeURIComponent(c)));
+
+/**
+ * Python-Markdown reads a link or image target up to its closing parenthesis, line breaks and spaces included
+ * (`[x](https://github\n.com/a)`, `![a](img/load balancing/x.png)`, `mailto:WSO2 Developer Platform-support@wso2.com`);
+ * CommonMark does not, and the link prints as text. Such targets are joined and encoded (joinTarget); a quoted title
+ * stays a title. Runs before the site link rewrites, which then see the whole URL.
+ */
+export function linkTargets(text: string): string {
+  let out = '';
+  let last = 0;
+  const re = /\]\(/g;
+  for (let m = re.exec(text); m; m = re.exec(text)) {
+    const start = m.index + 2;
+    const end = targetEnd(text, start);
+    if (end < 0) continue;
+    re.lastIndex = end;
+    const inner = text.slice(start, end);
+    const { dest, title } = splitTarget(inner);
+    if (!/\s/.test(dest) && !/^\s*</.test(inner)) continue; // already a CommonMark target
+    out += `${text.slice(last, start)}${joinTarget(dest)}${title ? ` ${title}` : ''}`;
+    last = end;
+  }
+  return last ? out + text.slice(last) : text;
+}
+
 function inline(text: string, stats: SyntaxStats): string {
   return outsideCode(placeholderHostLinks(text), (t) => {
     let s = redocToApiReference(t).text;
+    s = linkTargets(s);
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g,
       (m) => (m.startsWith('{:') || /=|^\{\s*[.#]/.test(m) ? (stats.attrLists++, '') : m));
     s = s.replace(/\]\(([^)\s]*[<>][^)\s]*)\)/g, (_, url: string) => `](${url.replace(/</g, '%3C').replace(/>/g, '%3E')})`);
