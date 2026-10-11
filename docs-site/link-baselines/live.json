@@ -16,26 +16,6 @@
   "link": "/api-platform/api-gateway/1.1.0/policies/overview.md/"
  },
  {
-  "page": "api-platform/ai-gateway/README/index.html",
-  "link": "/api-platform/ai-gateway/README/analytics/"
- },
- {
-  "page": "api-platform/ai-gateway/README/index.html",
-  "link": "/api-platform/ai-gateway/README/gateway-controller-management-api/"
- },
- {
-  "page": "api-platform/ai-gateway/README/index.html",
-  "link": "/api-platform/ai-gateway/README/llm/"
- },
- {
-  "page": "api-platform/ai-gateway/README/index.html",
-  "link": "/api-platform/ai-gateway/README/mcp/"
- },
- {
-  "page": "api-platform/ai-gateway/README/index.html",
-  "link": "/api-platform/ai-gateway/README/observability/"
- },
- {
   "page": "api-platform/ai-gateway/ai-workspace/connect-the-gateway/index.html",
   "link": "/api-platform/ai-workspace/next/ai-gateways/setting-up.md/"
  },
@@ -102,6 +82,22 @@
  {
   "page": "api-platform/ai-gateway/guardrails/index.html",
   "link": "/api-gateway/next/policies/overview.md/"
+ },
+ {
+  "page": "api-platform/ai-gateway/index.html",
+  "link": "/api-platform/ai-gateway/gateway-controller-management-api/"
+ },
+ {
+  "page": "api-platform/ai-gateway/index.html",
+  "link": "/api-platform/ai-gateway/llm/"
+ },
+ {
+  "page": "api-platform/ai-gateway/index.html",
+  "link": "/api-platform/ai-gateway/mcp/"
+ },
+ {
+  "page": "api-platform/ai-gateway/index.html",
+  "link": "/api-platform/ai-gateway/observability/"
  },
  {
   "page": "api-platform/ai-gateway/logging-and-tracing/log-requests-and-responses/index.html",
@@ -1284,10 +1280,6 @@
   "link": "/api-platform/api-manager/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
  },
  {
-  "page": "api-platform/api-manager/4.5.0/includes/deploy/steps-to-deploy-apim-in-a-distributed-setup-with-km-separation/index.html",
-  "link": "/en/4.5.0/assets/attachments/pizzashack.war"
- },
- {
   "page": "api-platform/api-manager/4.5.0/includes/deploy/steps-to-deploy-apim-in-a-distributed-setup-with-tm-separation/index.html",
   "link": "/api-platform/api-manager/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
  },
@@ -1304,80 +1296,8 @@
   "link": "/api-platform/api-manager/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
  },
  {
-  "page": "api-platform/api-manager/4.5.0/includes/deploy/steps-to-deploy-apim-in-a-distributed-setup-with-tm-separation/index.html",
-  "link": "/en/4.5.0/assets/attachments/pizzashack.war"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/update-operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/deploy-revision/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/delete-and-deploy-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/deploy-revision/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/deploy-first-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/deploy-revision/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/deploy-new-revision.png"
- },
- {
   "page": "api-platform/api-manager/4.5.0/includes/design/generate-api-key/index.html",
   "link": "../../../../assets/img/learn/generate-api-key.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/includes/design/redis-counter-note/index.html",
-  "link": "/en/4.5.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
  },
  {
   "page": "api-platform/api-manager/4.5.0/includes/design/stream-more-links/index.html",
@@ -1420,116 +1340,8 @@
   "link": "/api-platform/use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog/"
  },
  {
-  "page": "api-platform/api-manager/4.5.0/includes/work-in-progress/index.html",
-  "link": "/en/4.5.0/assets/img/work-in-progress.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup-with-km-separated/index.html",
-  "link": "/en/4.5.0/assets/attachments/pizzashack.war"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/en/4.5.0/assets/attachments/pizzashack.war"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-1/index.html",
-  "link": "/en/4.5.0/assets/attachments/pizzashack.war"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/install-and-setup/setup/multi-dc-deployment/configuring-multi-dc-deployment-pattern-2/index.html",
-  "link": "/en/4.5.0/assets/attachments/pizzashack.war"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/en/4.5.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/delete-and-deploy-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/deploy-first-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/deploy-new-revision.png"
- },
- {
   "page": "api-platform/api-manager/4.5.0/manage-apis/design/api-security/api-authentication/secure-apis-using-api-keys/index.html",
   "link": "/manage-apis/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-api-revisions/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/delete-and-deploy-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-api-revisions/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/deploy-first-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-api-revisions/index.html",
-  "link": "/en/4.5.0/assets/img/design/revision/deploy-new-revision.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/create-api/create-graphql-api/create-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/update-operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/rate-limiting/setting-maximum-backend-throughput-limits/index.html",
-  "link": "/en/4.5.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/manage-apis/design/rate-limiting/setting-throttling-limits/index.html",
-  "link": "/en/4.5.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
  },
  {
   "page": "api-platform/api-manager/4.5.0/reference/customize-product/customizations/customizing-login-pages-for-dev-portal-and-publisher/index.html",
@@ -1538,114 +1350,6 @@
  {
   "page": "api-platform/api-manager/4.5.0/reference/faq/index.html",
   "link": "/install-and-setup/setup/security/configuring-transport-level-security/#disabling-weak-ciphers"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.5.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.5.0/assets/img/learn/update-operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/attachments/learn/schema_graphql.graphql"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/update-operations.png"
  },
  {
   "page": "api-platform/api-manager/4.6.0/api-developer-portal/generating-sdks/write-a-client-application-using-the-sdk/index.html",
@@ -1686,62 +1390,6 @@
  {
   "page": "api-platform/api-manager/4.6.0/includes/deploy/steps-to-deploy-apim-in-a-distributed-setup-with-tm-separation/index.html",
   "link": "/api-platform/api-manager/manage-apis/design/api-security/oauth2/encrypting-oauth2-tokens/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/attachments/learn/schema_graphql.graphql"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/update-operations.png"
  },
  {
   "page": "api-platform/api-manager/4.6.0/includes/design/generate-api-key/index.html",
@@ -1806,62 +1454,6 @@
  {
   "page": "api-platform/api-manager/4.6.0/reference/faq/index.html",
   "link": "/install-and-setup/setup/security/configuring-transport-level-security/#disabling-weak-ciphers"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/attachments/learn/schema_graphql.graphql"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.6.0/assets/img/learn/update-operations.png"
  },
  {
   "page": "api-platform/api-manager/administer/admin-overview/index.html",
@@ -2026,62 +1618,6 @@
  {
   "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
   "link": "/api-platform/api-manager/api-design-manage/design/rate-limiting/graphql-api/overview-query-limits-for-graphql/"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/attachments/learn/schema_graphql.graphql"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/update-operations.png"
  },
  {
   "page": "api-platform/api-manager/api-design-manage/design/create-api/create-ai-api/create-an-ai-api/index.html",
@@ -3024,62 +2560,6 @@
   "link": "/api-platform/reference/config-catalog/#api-m-gateway-notification-configurations"
  },
  {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/attachments/learn/schema_graphql.graphql"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/includes/design/create-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/update-operations.png"
- },
- {
   "page": "api-platform/api-manager/includes/design/create-publish-api/index.html",
   "link": "../../../../assets/img/learn/api-key-option.png"
  },
@@ -3898,62 +3378,6 @@
  {
   "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
   "link": "/api-platform/api-manager/manage-apis/design/create-api/create-a-graphql-api"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/administer/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/administer/managing-users-and-roles/managing-users/"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/attachments/learn/schema_graphql.graphql"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/add-scope.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/cli-output.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-graphql-api-details.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-graphql-schema-option.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/create-scope.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/download-schema-definition.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/import-graphql-schema-via-file.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/operations.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/starwars-scope-list.png"
- },
- {
-  "page": "api-platform/api-manager/tutorials/create-and-publish-a-graphql-api/index.html",
-  "link": "/en/4.7.0/assets/img/learn/update-operations.png"
  },
  {
   "page": "api-platform/api-manager/tutorials/create-and-publish-websocket-api/index.html",
@@ -5920,18 +5344,6 @@
   "link": "/integration/integrator/cloud/assets/img/administer/configure-domain/configure-a-custom-domain-for-your-organization/configure-approvals-for-choreo-workflows.md/"
  },
  {
-  "page": "integration/integrator/cloud/index.html",
-  "link": "/integration/integrator/develop/develop/"
- },
- {
-  "page": "integration/integrator/cloud/index.html",
-  "link": "/integration/integrator/guides/guides/"
- },
- {
-  "page": "integration/integrator/cloud/index.html",
-  "link": "/integration/integrator/reference/reference/"
- },
- {
   "page": "integration/integrator/cloud/search-results.html",
   "link": "../docs"
  },
@@ -7260,18 +6672,6 @@
   "link": "../../../../api-management-overview/apk-conf-lang-support"
  },
  {
-  "page": "kubernetes-gateway/about-apk/performance-test-results/overview/index.html",
-  "link": "/kubernetes-gateway/en/latest/about-apk/performance-test-results/gateway-router-with-one-cpu/"
- },
- {
-  "page": "kubernetes-gateway/about-apk/performance-test-results/overview/index.html",
-  "link": "/kubernetes-gateway/en/latest/about-apk/performance-test-results/gateway-router-with-two-cpus/"
- },
- {
-  "page": "kubernetes-gateway/about-apk/performance-test-results/overview/index.html",
-  "link": "/kubernetes-gateway/en/latest/about-apk/performance-test-results/two-gateways-of-two-cpus-with-rate-limit/"
- },
- {
   "page": "kubernetes-gateway/control-plane/overview/index.html",
   "link": "../control-plane/api-management/control-plane-api-management-overview"
  },
@@ -7288,20 +6688,8 @@
   "link": "/control-plane/apk-deploy/"
  },
  {
-  "page": "kubernetes-gateway/create-api/create-and-attach-api-policies/interceptors/interceptors-overview/index.html",
-  "link": "/kubernetes-gateway/en/latest/assets/img/api-management/api-policies/interceptors/interceptors-dark.png#only-dark"
- },
- {
-  "page": "kubernetes-gateway/create-api/create-and-attach-api-policies/interceptors/interceptors-overview/index.html",
-  "link": "/kubernetes-gateway/en/latest/assets/img/api-management/api-policies/interceptors/interceptors-light.png#only-light"
- },
- {
   "page": "kubernetes-gateway/includes/create-apk-conf-api/index.html",
   "link": "../../../../api-management-overview/apk-conf-lang-support"
- },
- {
-  "page": "kubernetes-gateway/index.html",
-  "link": "/kubernetes-gateway/en/1.3.0/about-apk/what-is-apk"
  },
  {
   "page": "kubernetes-gateway/setup/deployment/apk-dataplane-per-cluster/index.html",

@@ -1,22 +1,22 @@
 [
  {
-  "page": "api-platform/ai-gateway/1.0.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.0.0/README/ai-gateway-rest-api/"
+  "page": "api-platform/ai-gateway/1.0.0/index.html",
+  "link": "/api-platform/ai-gateway/1.0.0/ai-gateway-rest-api/"
  },
  {
-  "page": "api-platform/ai-gateway/1.0.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.0.0/README/analytics/"
+  "page": "api-platform/ai-gateway/1.0.0/index.html",
+  "link": "/api-platform/ai-gateway/1.0.0/analytics/"
  },
  {
-  "page": "api-platform/ai-gateway/1.0.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.0.0/README/llm/"
+  "page": "api-platform/ai-gateway/1.0.0/index.html",
+  "link": "/api-platform/ai-gateway/1.0.0/llm/"
  },
  {
-  "page": "api-platform/ai-gateway/1.0.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.0.0/README/mcp/"
+  "page": "api-platform/ai-gateway/1.0.0/index.html",
+  "link": "/api-platform/ai-gateway/1.0.0/mcp/"
  },
  {
-  "page": "api-platform/ai-gateway/1.0.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.0.0/README/observability/"
+  "page": "api-platform/ai-gateway/1.0.0/index.html",
+  "link": "/api-platform/ai-gateway/1.0.0/observability/"
  }
 ]

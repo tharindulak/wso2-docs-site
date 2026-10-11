@@ -1,23 +1,19 @@
 [
  {
-  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.2.0/README/analytics/"
+  "page": "api-platform/ai-gateway/1.2.0/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/gateway-controller-management-api/"
  },
  {
-  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.2.0/README/gateway-controller-management-api/"
+  "page": "api-platform/ai-gateway/1.2.0/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/llm/"
  },
  {
-  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.2.0/README/llm/"
+  "page": "api-platform/ai-gateway/1.2.0/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/mcp/"
  },
  {
-  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.2.0/README/mcp/"
- },
- {
-  "page": "api-platform/ai-gateway/1.2.0/README/index.html",
-  "link": "/api-platform/ai-gateway/1.2.0/README/observability/"
+  "page": "api-platform/ai-gateway/1.2.0/index.html",
+  "link": "/api-platform/ai-gateway/1.2.0/observability/"
  },
  {
   "page": "api-platform/ai-gateway/1.2.0/setup-and-deployment/configuration/index.html",
