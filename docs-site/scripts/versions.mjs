@@ -81,6 +81,9 @@ export function sectionVersions(section, liveWindow = LIVE_WINDOW_DEFAULT) {
 
 export const confluenceVersions = (section) => (section.older_versions && Array.isArray(section.older_versions) ? section.older_versions : []);
 
+/** The selector entries of older_versions: label is the entry's own (Enterprise Integrator 7.1.0) or its version. */
+export const confluenceEntries = (section) => confluenceVersions(section).map((o) => ({ version: o.version, label: o.label ?? o.version, status: 'confluence', href: o.href }));
+
 export function validateVersions(section, liveWindow) {
   const list = listOf(section);
   if (!list) return;
@@ -110,6 +113,7 @@ export function validateVersions(section, liveWindow) {
   if (tracked) throw new Error(`${id}: only Latest (${list[0].version}) may track a branch; ${tracked.version} is pinned`);
   for (const o of confluenceVersions(section)) {
     if (!/^https:\/\/[^\s]+$/.test(o.href ?? '')) throw new Error(`${id}: older version ${o.version} href must be https`);
+    if (o.label !== undefined && !/^[^\x00-\x1f<>]{1,80}$/.test(String(o.label))) throw new Error(`${id}: older version ${o.version} label must be plain text of at most 80 characters`);
   }
   if (section.former_site && !section.former_site.includes('{version}')) throw new Error(`${id}: former_site must contain {version}`);
   if (section.docs_root !== undefined && (!REL.test(section.docs_root.replace('{version}', 'v')) || !section.docs_root.endsWith('/') || section.docs_root.split('/').filter((p) => p === '{version}').length !== 1)) {

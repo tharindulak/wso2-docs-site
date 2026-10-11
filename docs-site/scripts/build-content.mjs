@@ -12,7 +12,7 @@ import {
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
-import { sectionVersions, confluenceVersions, replaceExclude, pagePaths, outsideLinks, formerRouteRedirects } from './versions.mjs';
+import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, outsideLinks, formerRouteRedirects } from './versions.mjs';
 
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
@@ -221,7 +221,7 @@ for (const product of lock.products) {
       sidebar: fs.existsSync(sidebarsOf(v.id)) ? `${v.id}.json` : fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${v.id}.`)),
       landing: landingOf(v),
     }));
-    const confluence = confluenceVersions(section).map((o) => ({ version: o.version, label: o.version, status: 'confluence', href: o.href }));
+    const confluence = confluenceEntries(section);
     if (!listed && typeof section.older_versions === 'string') confluence.push({ version: 'older', label: 'Older versions', status: 'confluence', href: section.older_versions });
     entry.sections.push({
       ...versionEntries[0], id: section.id, label: section.label, kind: section.kind,

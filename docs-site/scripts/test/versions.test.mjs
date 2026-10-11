@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { sectionVersions, versionId, validateVersions, replaceExclude, pagePaths, confluenceVersions, outsideLinks, formerRouteRedirects } from '../versions.mjs';
+import { sectionVersions, versionId, validateVersions, replaceExclude, pagePaths, confluenceVersions, confluenceEntries, outsideLinks, formerRouteRedirects } from '../versions.mjs';
 
 const SHA = (c) => c.repeat(40);
 const mi = () => ({
@@ -94,6 +94,15 @@ test('validation rejects unordered, duplicate, malformed and tracked older versi
 
 test('confluenceVersions lists older_versions', () => {
   assert.deepEqual(confluenceVersions(mi()), [{ version: '1.2.0', href: 'https://wso2docs.atlassian.net/wiki/spaces/EI611' }]);
+});
+
+test('older_versions entries may carry a label; it defaults to the version', () => {
+  const s = mi();
+  s.older_versions.push({ version: '7.1.0', label: 'Enterprise Integrator 7.1.0', href: 'https://ei.docs.wso2.com/en/7.1.0/' });
+  assert.deepEqual(confluenceEntries(s).map((e) => [e.version, e.label, e.status]), [['1.2.0', '1.2.0', 'confluence'], ['7.1.0', 'Enterprise Integrator 7.1.0', 'confluence']]);
+  assert.doesNotThrow(() => validateVersions(s, 2));
+  s.older_versions[1].label = '<b>EI</b>';
+  assert.throws(() => validateVersions(s, 2), /older version 7\.1\.0 label must be plain text/);
 });
 
 test('replaceExclude rewrites one version entry and leaves the rest', () => {
