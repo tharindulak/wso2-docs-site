@@ -1396,10 +1396,6 @@
   "link": "../../../../assets/img/learn/generate-api-key.png"
  },
  {
-  "page": "api-platform/api-manager/4.6.0/includes/design/redis-counter-note/index.html",
-  "link": "/en/4.6.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
- },
- {
   "page": "api-platform/api-manager/4.6.0/includes/design/stream-more-links/index.html",
   "link": "/api-platform/api-manager/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/"
  },
@@ -1438,14 +1434,6 @@
  {
   "page": "api-platform/api-manager/4.6.0/includes/design/stream-more-links/index.html",
   "link": "/api-platform/use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/work-in-progress/index.html",
-  "link": "/en/4.5.0/assets/img/work-in-progress.png"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/en/4.6.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
  },
  {
   "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/customizing-login-pages-for-dev-portal-and-publisher/index.html",
@@ -2010,10 +1998,6 @@
  {
   "page": "api-platform/api-manager/api-gateway/scaling-the-gateway/index.html",
   "link": "/api-platform/api-manager/administer/product-configurations/configuring-caching/#key-cache"
- },
- {
-  "page": "api-platform/api-manager/api-security/design-time/configuring-api-security-audit/index.html",
-  "link": "auditreports"
  },
  {
   "page": "api-platform/api-manager/api-security/key-management/applications/provisioning-out-of-band-oauth-clients/index.html",
@@ -2652,10 +2636,6 @@
   "link": "/api-platform/api-security/runtime/api-authentication/disable-security/"
  },
  {
-  "page": "api-platform/api-manager/includes/design/redis-counter-note/index.html",
-  "link": "/en/4.7.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
- },
- {
   "page": "api-platform/api-manager/includes/design/stream-more-links/index.html",
   "link": "/api-platform/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/"
  },
@@ -2694,10 +2674,6 @@
  {
   "page": "api-platform/api-manager/includes/design/stream-more-links/index.html",
   "link": "/use-cases/streaming-usecase/exposing-stream-as-managed-api-in-service-catalog/"
- },
- {
-  "page": "api-platform/api-manager/includes/work-in-progress/index.html",
-  "link": "/en/4.5.0/assets/img/work-in-progress.png"
  },
  {
   "page": "api-platform/api-manager/install-and-setup/install-and-setup-overview/index.html",
@@ -3078,10 +3054,6 @@
  {
   "page": "api-platform/api-manager/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
   "link": "/api-platform/api-manager/install-and-setup/setting-up-databases/overview/"
- },
- {
-  "page": "api-platform/api-manager/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/en/4.7.0/manage-apis/design/rate-limiting/advanced-topics/configuring-rate-limiting-api-gateway-cluster/"
  },
  {
   "page": "api-platform/api-manager/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",

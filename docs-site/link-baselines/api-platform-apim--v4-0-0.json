@@ -236,10 +236,6 @@
   "link": "/api-platform/api-manager/4.0.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/"
  },
  {
-  "page": "api-platform/api-manager/4.0.0/design/api-security/configuring-api-security-audit/index.html",
-  "link": "auditreports"
- },
- {
   "page": "api-platform/api-manager/4.0.0/design/api-security/oauth2/encrypting-oauth2-tokens/index.html",
   "link": "/api-platform/api-manager/4.0.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
  },

@@ -584,10 +584,6 @@
   "link": "/api-platform/api-manager/3.0.0/reference/wso2-api-manager-best-practices/_Error_Handling_/"
  },
  {
-  "page": "api-platform/api-manager/3.0.0/wip/configuring-api-security-audit/index.html",
-  "link": "auditreports"
- },
- {
   "page": "api-platform/api-manager/3.0.0/wip/deleted-pages/changing-to-embedded-h2/index.html",
   "link": "/api-platform/api-manager/3.0.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-embedded-h2/"
  },

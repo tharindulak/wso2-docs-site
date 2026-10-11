@@ -180,10 +180,6 @@
   "link": "/api-platform/api-manager/4.4.0/administer/product-administration/multitenancy/introduction-to-multitenancy/"
  },
  {
-  "page": "api-platform/api-manager/4.4.0/design/api-security/configuring-api-security-audit/index.html",
-  "link": "auditreports"
- },
- {
   "page": "api-platform/api-manager/4.4.0/design/api-security/oauth2/encrypting-oauth2-tokens/index.html",
   "link": "/api-platform/api-manager/4.4.0/install-and-setup/deploying-wso2-api-manager/ThirdPartyKeyManager/configuring-wso2-identity-server-as-a-key-manager/"
  },

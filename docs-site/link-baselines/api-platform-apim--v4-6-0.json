@@ -544,10 +544,6 @@
   "link": "/api-platform/api-manager/4.6.0/administer/product-configurations/configuring-caching/#key-cache"
  },
  {
-  "page": "api-platform/api-manager/4.6.0/api-security/design-time/configuring-api-security-audit/index.html",
-  "link": "auditreports"
- },
- {
   "page": "api-platform/api-manager/4.6.0/api-security/key-management/third-party-key-managers/configure-custom-connector/index.html",
   "link": "/api-platform/api-manager/4.6.0/develop/extending-api-manager/extending-key-management/extending-key-validation/"
  },
