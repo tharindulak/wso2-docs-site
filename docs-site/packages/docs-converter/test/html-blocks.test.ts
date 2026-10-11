@@ -51,3 +51,91 @@ test('a placeholder that parses as a tag with an invalid name (dotted, @) stays 
   assert.match(text, /\{"<travelocity\.com-home>"\}\{"\/WEB-INF\/x\.properties` and "\}\{"<mail@address\.tld>"\}/);
   await compileCheck(`---\n---\n${text}`);
 });
+
+/** The page as MDX compiles it (JSX output), to check what renders: links, images and elements. */
+async function compiled(text: string): Promise<string> {
+  const { compile } = await import('@mdx-js/mdx');
+  await compileCheck(`---\n---\n${text}`);
+  return String(await compile(text, { jsx: true }));
+}
+
+// docs-mi@840cd49e8494 en/docs/reference/connectors/file-connector/file-connector-config.md:1085-1148 (cut down).
+// Python-Markdown 3.7 renders the table inside `??? note` as paragraph text: <strong>SMB2</strong>, <a href=...>.
+const fileConnector = `??? note "checkExist"
+    Check if a given file or folder exists.
+    <table>
+        <tr>
+            <th>Parameter Name</th>
+        </tr>
+        <tr>
+            <td>
+                <p> The <code>diskShareAccessMask</code> configuration applies when using the **SMB2** or **SMB3** protocol. Refer to the [SMBJ documentation](https://www.javadoc.io/doc/com.hierynomus/smbj/0.11.3/com/hierynomus/msdtyp/AccessMask.html) for the available access masks.</p>
+            </td>
+        </tr>
+    </table>`;
+
+test('an HTML block nested in a container (indent 4+) renders its inline Markdown, as Python-Markdown does', async () => {
+  const { text, blocks } = htmlBlocksToJsx(fileConnector);
+  assert.equal(blocks, 1);
+  const jsx = text.split('\n').find((l) => l.trimStart().startsWith('<table>'))!;
+  assert.match(jsx, /<p>\{"The "\}<code>\{"diskShareAccessMask"\}<\/code>\{" configuration applies when using the "\}<strong>\{"SMB2"\}<\/strong>\{" or "\}<strong>\{"SMB3"\}<\/strong>/);
+  assert.match(jsx, /\{" protocol\. Refer to the "\}\[\{"SMBJ documentation"\}\]\(https:\/\/www\.javadoc\.io\/doc\/com\.hierynomus\/smbj\/0\.11\.3\/com\/hierynomus\/msdtyp\/AccessMask\.html\)\{" for the available access masks\."\}<\/p>/);
+  const js = await compiled(jsx);
+  assert.match(js, /<_components\.a href="https:\/\/www\.javadoc\.io\/doc\/com\.hierynomus\/smbj\/0\.11\.3\/com\/hierynomus\/msdtyp\/AccessMask\.html">\{"SMBJ documentation"\}<\/_components\.a>/);
+  assert.match(js, /<strong>\{"SMB2"\}<\/strong>/);
+});
+
+// docs-apim@53584be9c5ba en/docs/learn/api-monetization/monetizing-an-api.md:133-138: an <html> wrapper indented 5
+// in a list item. Python-Markdown: <a href="#granularity">monetization granularity</a>.
+const monetizing = `2. Optionally, preserve the required API usage data table in WSO2 API Manager Analytics.
+
+     <html>
+     <div class="admonition note">
+     <p class="admonition-title">Note</p>
+     <p>This is only mandatory if you customized the API usage-based [monetization granularity](#granularity).</p>
+     </div> 
+     </html>`;
+
+test('a nested <html> wrapper is taken with its block and dropped; the link inside renders', async () => {
+  const { text, blocks } = htmlBlocksToJsx(monetizing);
+  assert.equal(blocks, 1);
+  assert.equal(text.split('\n').at(-1), '     <div className={"admonition note"}><p className={"admonition-title"}>{"Note"}</p><p>{"This is only mandatory if you customized the API usage-based "}[{"monetization granularity"}](#granularity){"."}</p></div>');
+  assert.match(await compiled(text), /<_components\.a href="#granularity">\{"monetization granularity"\}<\/_components\.a>/);
+  // docs-apim@53584be9c5ba .../monetizing-an-api.md:778-785: <html> at column 0 makes the indented admonition raw too.
+  assert.equal(htmlBlocksToJsx('<html>\n    <div class="admonition note">\n        <p>Please refer the [document](https://stripe.com/docs/payments/cards/collecting) to find out.</p>\n    </div> \n</html>').text,
+    '<div className={"admonition note"}><p>{"Please refer the [document](https://stripe.com/docs/payments/cards/collecting) to find out."}</p></div>');
+});
+
+// docs-apim@53584be9c5ba en/docs/learn/analytics/analyzing-apim-statistics-with-batch-analytics/viewing-api-statistics.md:466:
+// a <table> at column 0 is raw HTML in Python-Markdown; its Markdown stays literal.
+test('a top-level HTML block (indent 3 or less) keeps its text literal, as Python-Markdown does', () => {
+  const { text } = htmlBlocksToJsx('<table>\n<tr>\n<td>See [Configuring APIM Analytics](../configuring-apim-analytics.md) and **bold**.</td>\n</tr>\n</table>');
+  assert.equal(text, '<table><tbody><tr><td>{"See [Configuring APIM Analytics](../configuring-apim-analytics.md) and **bold**."}</td></tr></tbody></table>');
+  assert.equal(htmlBlocksToJsx('   <div>\n   [a](b)\n   </div>').text, '   <div>{"[a](b)"}</div>');
+});
+
+test('inline Markdown in a nested block: MDX-safe targets and titles, escapes, word-internal underscores, pre left alone', async () => {
+  const src = [
+    '- item', '',
+    '    <table>',
+    '    <tr><td>A [l **b**](u v.md "T {x}") ![i [m]](x y.png) [x](a',
+    '    b.md) \\*n\\* {c} &lt;t&gt; snake_case_name _u_ __s__ ***bs*** 2 * 3 `{code}` <b>[q](r&amp;s)</b></td></tr>',
+    '    <tr><td><pre>[p](q) *y*', '    z</pre></td></tr>',
+    '    </table>',
+  ].join('\n');
+  const jsx = htmlBlocksToJsx(src).text.split('\n').at(-1)!;
+  assert.equal(jsx, '    <table><tbody><tr><td>{"A "}[{"l "}<strong>{"b"}</strong>](u%20v.md "T \\{x\\}"){" "}![i \\[m\\]](x%20y.png){" "}[{"x"}](ab.md)'
+    + '{" *n* {c} <t> snake_case_name "}<em>{"u"}</em>{" "}<strong>{"s"}</strong>{" "}<strong><em>{"bs"}</em></strong>{" 2 * 3 "}<code>{"{code}"}</code>{" "}'
+    + '<b>[{"q"}](r&amp;s)</b></td></tr><tr><td><pre>{"[p](q) *y*\\n    z"}</pre></td></tr></tbody></table>');
+  const js = await compiled(htmlBlocksToJsx(src).text);
+  assert.match(js, /<_components\.a href="u%20v\.md" title="T \{x\}">/);
+  assert.match(js, /<_components\.img src="x%20y\.png" alt="i \[m\]" \/>/);
+  assert.match(js, /<_components\.a href="r&amp;s">\{"q"\}/, 'JSX decodes the entity: href is r&s');
+});
+
+// docs-is identity-server/5.10.0/docs/learn/configuring-saml-2.0-web-sso.md:91,133: a table indented with a tab in a
+// list item (Python-Markdown expands a tab to 4 columns), holding a Markdown link.
+test('a tab-indented block is nested (a tab is 4 columns)', () => {
+  const src = '2.\tEnter the required values as given below.\n\n\t<table>\n\t\t<tr><td>\n\t\t<p>For more information, see [Getting Started with WUM](https://docs.wso2.com/display/ADMIN44x/Getting+Started+with+WUM).</p>\n\t\t</td></tr>\n\t</table>';
+  assert.equal(htmlBlocksToJsx(src).text.split('\n').at(-1), '\t<table><tbody><tr><td><p>{"For more information, see "}[{"Getting Started with WUM"}](https://docs.wso2.com/display/ADMIN44x/Getting+Started+with+WUM){"."}</p></td></tr></tbody></table>');
+});

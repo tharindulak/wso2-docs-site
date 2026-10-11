@@ -82,3 +82,29 @@ test('a page with no title and no heading takes the fallback title; a title or h
   assert.match((await convertRendered('---\ntitle: Front\n---\nText.\n', opts)).mdx, /^title: Front$/m);
   assert.doesNotMatch((await convertRendered('---\ntemplate: templates/home.html\n---\n', opts)).mdx, /^title:/m, 'empty template pages are filled later');
 });
+
+// docs-apim@5a85a65d8d6d en/docs/design/advanced-topics/block-subscription-to-an-api.md:42-47 and :100. The unquoted
+// width=250 fails MDX twice, so the page is CommonMark; the admonition nested in the list item still renders its link
+// (Python-Markdown 3.7: <a href="{{base_path}}/design/...">Create and Publish an API</a>).
+test('on a CommonMark page, an HTML block nested in a list item becomes one line of HTML with its Markdown rendered', async () => {
+  const src = [
+    '# Block', '',
+    '1.  Sign in to the Developer Portal.', '',
+    '         <html>',
+    '         <div class="admonition tip"> ',
+    '         <p class="admonition-title">Tip</p>',
+    '         <p>For more information, see [Create and Publish an API](/r/design/create-api/create-rest-api/create-a-rest-api/) or [x](x.md), **b** `a &lt; b`.</p>',
+    '         </div>',
+    '         </html>', '',
+    '2.  Click **Subscriptions**.', '',
+    '         <a href="/r/assets/img/learn/subscriptions-menu.png" alt="subscriptions menu"><img src="/r/assets/img/learn/subscriptions-menu.png" width=250></a>', '',
+    '         <div>', '         <svg><path d="M1,2', 'C3,4"></path></svg><pre>a', 'b</pre>', '         </div>', '',
+    '<table>', '<tr><td>Top [level](y.md)</td></tr>', '</table>', '',
+  ].join('\n');
+  const { mdx, stats } = await convertRendered(src, { deploymentOptions: ['Self-hosted'] });
+  assert.equal(stats.format, 'md');
+  assert.match(mdx, /^ {9}<div class="admonition tip"><p class="admonition-title">Tip<\/p><p>For more information, see <a href="\/r\/design\/create-api\/create-rest-api\/create-a-rest-api\/">Create and Publish an API<\/a> or \[x\]\(x\.md\), <strong>b<\/strong> <code>a &lt; b<\/code>\.<\/p><\/div>$/m,
+    'a relative .md link stays text: only Docusaurus could resolve it, from Markdown');
+  assert.match(mdx, /^<table>\n<tr><td>Top \[level\]\(y\.md\)<\/td><\/tr>\n<\/table>$/m, 'a top-level block stays raw');
+  assert.match(mdx, /^ {9}<div><svg><path d="M1,2&#10;C3,4"><\/path><\/svg><pre>a&#10;b<\/pre><\/div>$/m, 'line breaks in values and <pre> keep the block on one line');
+});

@@ -89,9 +89,15 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
     } catch (e) { compileFailure(e); }
   }
   // Last resort: CommonMark (Docusaurus `mdx.format: md`), where raw HTML is parsed leniently, as browsers do.
-  // The page stays on the site; JSX components (tabs, deployment blocks) show as plain content.
-  const result = await assemble(policy.text, data, body, policy, opts, { format: 'md' });
-  return withRemoved({ ...result, stats: { ...result.stats, format: 'md' } });
+  // The page stays on the site; JSX components (tabs, deployment blocks) show as plain content. HTML blocks nested in
+  // a container become one line of HTML with their inline Markdown rendered, as Python-Markdown renders it.
+  const html: string[] = [];
+  const nested = htmlBlocksToJsx(policy.text, { html: true, protect: (h) => `MDXHTMLBLOCK${html.push(h) - 1}X` });
+  const md = async (text: string, restore?: (mdx: string) => string) => withRemoved(await assemble(text, data, body, policy, opts, { format: 'md', restore }).then((r) => ({ ...r, stats: { ...r.stats, format: 'md' as const } })));
+  if (nested.blocks) {
+    try { return await md(nested.text, (mdx) => mdx.replace(/MDXHTMLBLOCK(\d+)X/g, (_, i: string) => html[Number(i)]!)); } catch (e) { compileFailure(e); }
+  }
+  return md(policy.text);
 }
 
 async function assemble(
