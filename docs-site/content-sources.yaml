@@ -122,6 +122,10 @@ products:
             sha: 840cd49e849489ff4f0e0774c9f6f7e13188460b
             exclude:
               - learn/examples/data-integration/excel-data-service.md
+        # Micro Integrator 1.x shipped inside Enterprise Integrator 7.x; its docs stay on the EI site.
+        older_versions:
+          - { version: 7.1.0, label: Enterprise Integrator 7.1.0, href: https://ei.docs.wso2.com/en/7.1.0/ }
+          - { version: 7.0.0, label: Enterprise Integrator 7.0.0, href: https://ei.docs.wso2.com/en/7.0.0/ }
       - id: integration-bi
         label: BI
         route: integration/bi
