@@ -445,6 +445,10 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
+  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/product-profiles/#product-profiles"
+ },
+ {
+  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/performance-tuning-and-test-results/tuning-performance"
  },
  {
@@ -486,6 +490,10 @@
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#backup-and\n-recovery-recommendations"
+ },
+ {
+  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
+  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#production-deployment-guidelines"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
@@ -1081,7 +1089,7 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/design-api/create-api/create-a-rest-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/advanced-topics/enable-publisher-access-control-in-api-publisher-portal/"
+  "link": "/api-platform/api-manager/3.1.0/advanced-topics/enable-publisher-access-control-in-api-publisher-portal"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/design-api/endpoints/endpoint-types/index.html",

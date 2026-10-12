@@ -244,6 +244,10 @@
   "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
  },
  {
+  "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-rest-api/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/setting-throttling-limits/"
+ },
+ {
   "page": "api-platform/api-manager/4.6.0/api-design-manage/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/index.html",
   "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
  },
@@ -750,6 +754,10 @@
  {
   "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
   "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/#steps-to-create-a-custom-user-who-can-perform-api-controller-operations"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#add-dynamic-data-to-operation-policies-in-an-api-project"
  },
  {
   "page": "api-platform/api-manager/4.6.0/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
@@ -1729,7 +1737,15 @@
  },
  {
   "page": "api-platform/api-manager/4.6.0/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-a-soap-client/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
   "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-rest-api/generate-rest-api-from-soap-backend/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/rate-limiting/setting-throttling-limits/"
  },
  {
   "page": "api-platform/api-manager/4.6.0/tutorials/integrating-with-solace/index.html",

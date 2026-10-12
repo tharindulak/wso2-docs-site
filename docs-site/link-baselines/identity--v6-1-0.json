@@ -537,15 +537,35 @@
  },
  {
   "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.1.0/assets/img/tutorials/super-admin.png"
+ },
+ {
+  "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.1.0/learn/adding-and-configuring-an-identity-provider/"
+ },
+ {
+  "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
   "link": "/identity/6.1.0/learn/claim-management/"
  },
  {
   "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
-  "link": "/identity/6.1.0/learn/logging-in-to-salesforce-with-facebook/#salesforce-step8"
+  "link": "/identity/6.1.0/learn/logging-in-to-salesforce-with-facebook#salesforce-step8"
+ },
+ {
+  "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.1.0/learn/logging-in-to-salesforce-with-facebook/#samlsinglesignon"
+ },
+ {
+  "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.1.0/setup/configuring-user-stores/"
  },
  {
   "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
   "link": "/identity/6.1.0/setup/getting-started-with-the-management-console/"
+ },
+ {
+  "page": "identity/6.1.0/guides/login/log-into-salesforce-using-fb/index.html",
+  "link": "/identity/6.1.0/setup/running-the-product/#change-ip-or-hostname"
  },
  {
   "page": "identity/6.1.0/guides/login/log-into-salesforce-using-iwa/index.html",
@@ -594,6 +614,10 @@
  {
   "page": "identity/6.1.0/guides/login/request-attributes/index.html",
   "link": "/identity/6.1.0/sp-attributes-config/"
+ },
+ {
+  "page": "identity/6.1.0/guides/login/sp-attributes-config/index.html",
+  "link": "/identity/6.1.0/guides/login/sp-attributes-config/insert link/"
  },
  {
   "page": "identity/6.1.0/guides/login/webapp-sts/index.html",

@@ -337,6 +337,10 @@
  },
  {
   "page": "api-platform/api-manager/4.0.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "../../../..%20%20/assets/img/streaming/working-with-the%20design-view/configure-siddhi-component-in-design-view.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.0.0/develop/streaming-apps/working-with-the-design-view/index.html",
   "link": "/api-platform/api-manager/4.0.0/assets/img/streaming//working-with-the design-view/source-configuration.png"
  },
  {
@@ -689,7 +693,7 @@
  },
  {
   "page": "api-platform/api-manager/4.0.0/install-and-setup/setup/mi-setup/user_stores/setting_up_a_userstore/index.html",
-  "link": "/api-platform/api-manager/4.0.0/install-and-setup/setup/mi-setup/setup/security/importing_ssl_certificate/"
+  "link": "/api-platform/api-manager/4.0.0/install-and-setup/setup/mi-setup/setup/security/importing_ssl_certificate"
  },
  {
   "page": "api-platform/api-manager/4.0.0/install-and-setup/setup/reference/supported-cipher-suites/index.html",

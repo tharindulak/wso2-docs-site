@@ -501,7 +501,7 @@
  },
  {
   "page": "api-platform/api-manager/3.0.0/learn/design-api/create-api/create-a-rest-api/index.html",
-  "link": "/api-platform/api-manager/3.0.0/advanced-topics/enable-publisher-access-control-in-api-publisher-portal/"
+  "link": "/api-platform/api-manager/3.0.0/advanced-topics/enable-publisher-access-control-in-api-publisher-portal"
  },
  {
   "page": "api-platform/api-manager/3.0.0/learn/design-api/endpoints/resiliency/prevent-api-suspension/index.html",
@@ -526,6 +526,10 @@
  {
   "page": "api-platform/api-manager/3.0.0/learn/extensions/extending-the-key-manager-interface/index.html",
   "link": "/api-platform/api-manager/3.0.0/assets/img/learn/extensions/KeyManagerInterface/generate-keys-button.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/extensions/managing-workflow-extension/configuring-http-redirection-for-workflows/index.html",
+  "link": "/api-platform/api-manager/3.0.0/develop/admin-apis/admin-v0.15/admin-v0.15/#/Workflows%20(Individual)/post_workflows_update_workflow_status"
  },
  {
   "page": "api-platform/api-manager/3.0.0/learn/extensions/managing-workflow-extension/configuring-workflows-for-tenants/index.html",

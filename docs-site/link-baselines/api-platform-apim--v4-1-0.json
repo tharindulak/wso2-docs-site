@@ -412,6 +412,22 @@
   "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/window-query-icon.png"
  },
  {
+  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "/assets/img/streaming/working-with-the%20design-view/Connect-Siddhi-Components.gif"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "/assets/img/streaming/working-with-the%20design-view/Drag-And-Drop-Siddhi-Component.gif"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "/assets/img/streaming/working-with-the%20design-view/design-view.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "/assets/img/streaming/working-with-the%20design-view/open-design-view.png"
+ },
+ {
   "page": "api-platform/api-manager/4.1.0/get-started/about-this-release/index.html",
   "link": "/api-platform/api-manager/4.1.0/getting-started/overview/"
  },
@@ -665,7 +681,7 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/user_stores/setting_up_a_userstore/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/setup/security/importing_ssl_certificate/"
+  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/setup/security/importing_ssl_certificate"
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/reference/supported-cipher-suites/index.html",
