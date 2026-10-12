@@ -205,7 +205,19 @@
  },
  {
   "page": "api-platform/api-manager/3.0.0/learn/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/learn/api-security/oauth2/oauth2-scopes/fine-grained-access-control-with-oauth-scopes/"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/learn/consume-api/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-a-soap-client/"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
   "link": "/api-platform/api-manager/learn/design-api/create-api/generate-rest-api-from-soap-backend/"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/learn/rate-limiting/setting-throttling-limits/"
  },
  {
   "page": "api-platform/api-manager/3.0.0/reference/faq/index.html",
@@ -744,6 +756,14 @@
   "link": "/administer/managing-users-and-roles/managing-users/"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/api-analytics/choreo-analytics/gateways/configure-synapse-gateway/index.html",
+  "link": "/api-analytics/choreo-analytics/getting-started-guide/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/api-analytics/choreo-analytics/getting-started-guide/index.html",
+  "link": "/api-analytics/choreo-analytics/getting-started-guide/"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/deploy-and-publish/deploy-on-gateway/choreo-connect/deploy-api/deploy-rest-to-soap-api/index.html",
   "link": "/api-platform/api-manager/4.2.0}/deploy-and-publish/deploy-on-gateway/choreo-connect/security/generate-a-test-jwt/"
  },
@@ -754,6 +774,10 @@
  {
   "page": "api-platform/api-manager/4.2.0/design/api-monetization/monetizing-an-api/index.html",
   "link": "/design/api-monetization/monetizing-an-api/#monetization-support-via-elasticsearch"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/includes/analytics/configure-synapse-gateway/index.html",
+  "link": "/api-analytics/choreo-analytics/getting-started-guide/"
  },
  {
   "page": "api-platform/api-manager/4.2.0/includes/deploy/backend-jwt-gw-note/index.html",
@@ -1696,6 +1720,10 @@
   "link": "/api-platform/api-manager/manage-apis/design/rate-limiting/introducing-throttling-use-cases/"
  },
  {
+  "page": "api-platform/api-manager/api-design-manage/design/create-api/create-rest-api/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/manage-apis/design/rate-limiting/setting-throttling-limits/"
+ },
+ {
   "page": "api-platform/api-manager/api-design-manage/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/index.html",
   "link": "/api-platform/api-manager/deploy-and-publish/publish-on-dev-portal/publish-an-api/"
  },
@@ -2209,6 +2237,10 @@
  },
  {
   "page": "api-platform/api-manager/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
+  "link": "/api-platform/api-manager/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#add-dynamic-data-to-operation-policies-in-an-api-project"
+ },
+ {
+  "page": "api-platform/api-manager/apiops/cli/managing-apis-api-products/importing-apis-via-dev-first-approach/index.html",
   "link": "/api-platform/api-manager/install-and-setup/setup/api-controller/advanced-topics/using-dynamic-data-in-api-controller-projects/#initialize-api-projects-with-dynamic-data"
  },
  {
@@ -2442,6 +2474,10 @@
  {
   "page": "api-platform/api-manager/cloud/ai-gateway/llm/quick-start-guide/index.html",
   "link": "/api-platform/api-manager/cloud/ai-gateway/llm/quick-start-guide/llm/guardrails/aws-bedrock-guardrail/"
+ },
+ {
+  "page": "api-platform/api-manager/cloud/develop-api-proxy/authentication-and-authorization/secure-api-access-with-azure-ad/index.html",
+  "link": "/api-platform/api-manager/cloud/develop-api-proxy/authentication-and-authorization/secure-api-access-with-azure-ad/Assign the app to users and groups to restrict access/"
  },
  {
   "page": "api-platform/api-manager/cloud/develop-api-proxy/subscription-plans/index.html",
@@ -3405,7 +3441,15 @@
  },
  {
   "page": "api-platform/api-manager/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-a-soap-client/"
+ },
+ {
+  "page": "api-platform/api-manager/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
   "link": "/api-platform/api-manager/manage-apis/design/create-api/create-rest-api/generate-rest-api-from-soap-backend/"
+ },
+ {
+  "page": "api-platform/api-manager/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
+  "link": "/api-platform/api-manager/manage-apis/design/rate-limiting/setting-throttling-limits/"
  },
  {
   "page": "api-platform/api-manager/tutorials/integrating-with-solace/index.html",
@@ -3556,6 +3600,38 @@
   "link": "assets/stylesheets/palette.a0c5b2b5.min.css"
  },
  {
+  "page": "developer-platform/developers/authentication-and-authorization/secure-api-access-with-azure-ad/index.html",
+  "link": "/developer-platform/developers/authentication-and-authorization/secure-api-access-with-azure-ad/Assign the app to users and groups to restrict access/"
+ },
+ {
+  "page": "developer-platform/developers/authentication-and-authorization/secure-web-applications-with-managed-authentication/index.html",
+  "link": "/developer-platform/developers/authentication-and-authorization/test-secure-api-access-with-WSO2 Developer Platform-built-in-security-token-service/"
+ },
+ {
+  "page": "developer-platform/developers/authentication-and-authorization/secure-web-applications-with-managed-authentication/index.html",
+  "link": "/developer-platform/developers/authentication-and-authorization/test-secure-api-access-with-WSO2 Developer Platform-built-in-security-token-service/#step-2-create-roles-and-assign-permissions"
+ },
+ {
+  "page": "developer-platform/developers/authentication-and-authorization/secure-web-applications-with-managed-authentication/index.html",
+  "link": "/developer-platform/developers/authentication-and-authorization/test-secure-api-access-with-WSO2 Developer Platform-built-in-security-token-service/#step-3-assign-roles-to-user-groups"
+ },
+ {
+  "page": "developer-platform/developers/develop-components/connect-to-remote-dependencies-while-developing/index.html",
+  "link": "/developer-platform/developers/WSO2 Developer Platform-cli/get-started-with-the-WSO2 Developer Platform-cli/"
+ },
+ {
+  "page": "developer-platform/developers/develop-components/connect-to-remote-dependencies-while-developing/index.html",
+  "link": "/developer-platform/developers/WSO2 Developer Platform-cli/manage-authentication-with-personal-access-tokens/"
+ },
+ {
+  "page": "developer-platform/developers/develop-components/connect-to-remote-dependencies-while-developing/index.html",
+  "link": "/developer-platform/developers/WSO2 Developer Platform-concepts/connections/"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/insights-overview/index.html",
+  "link": "/WSO2 Developer Platform/docs/administer/control-access-in-the-WSO2 Developer Platform-console/"
+ },
+ {
   "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/choreo-insights-api/index.html",
   "link": "/developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/choreo-insights-api/graphiql-explorer/index.html/"
  },
@@ -3602,6 +3678,18 @@
  {
   "page": "developer-platform/developers/search-results.html",
   "link": "assets/stylesheets/palette.a0c5b2b5.min.css"
+ },
+ {
+  "page": "developer-platform/platform-engineers/db-and-services/databases/choreo-managed-caches/index.html",
+  "link": "/developer-platform/platform-engineers/db-and-services/databases/add-WSO2 Developer Platform-managed-databases-and-caches-to-the-marketplace/"
+ },
+ {
+  "page": "developer-platform/platform-engineers/db-and-services/databases/choreo-managed-mysql-databases/index.html",
+  "link": "/developer-platform/platform-engineers/db-and-services/databases/add-WSO2 Developer Platform-managed-databases-and-caches-to-the-marketplace/"
+ },
+ {
+  "page": "developer-platform/platform-engineers/db-and-services/databases/choreo-managed-postgresql-databases/index.html",
+  "link": "/developer-platform/platform-engineers/db-and-services/databases/add-WSO2 Developer Platform-managed-databases-and-caches-to-the-marketplace/"
  },
  {
   "page": "developer-platform/platform-engineers/devops/cd-pipelines/deploying-application-using-choreo-cd-pipeline/index.html",
@@ -4726,6 +4814,10 @@
  {
   "page": "identity/guides/authorization/user-impersonation/via-console/index.html",
   "link": "/identity/guides/organization-management/invite-parent-organization-users/"
+ },
+ {
+  "page": "identity/guides/branding/customize-email-templates/index.html",
+  "link": "/identity/guides/branding/localization-in-asgardeo/#supported-languages"
  },
  {
   "page": "identity/guides/branding/customize-email-templates/index.html",
@@ -6694,5 +6786,9 @@
  {
   "page": "updates/updates/archive/migrating-to-updates2.0/index.html",
   "link": "/updates/updates/updates/update-tool/"
+ },
+ {
+  "page": "updates/updates/wso2-registry-faq/index.html",
+  "link": "/updates/updates/wso2-registry-faq/wso2-registry-image-retention-policy.md.md/#Image%20Retention%20Policy"
  }
 ]
