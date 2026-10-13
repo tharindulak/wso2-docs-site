@@ -59,7 +59,7 @@ test('files referenced by URL in attributes are shared by path in static/, serve
     'docs/guides/setup.md': page('Setup', '# Setup\n\n<ApiReference spec="/p/apis/users.yaml" />\n\n[Download the spec](/p/apis/users.yaml)\n'),
     'static/assets/logo.svg': 'LOGO', 'static/apis/users.yaml': 'NEW',
   }, {
-    'docs/index.md': page('Home', '# Old\n\n<img src="/p/7.2.0/assets/logo.svg" />\n\n<div><img className={"x"} src={"/p/7.2.0/apis/users.yaml"} /></div>\n\n<ApiReference spec="/p/7.2.0/apis/users.yaml" />\n\n[Download the spec](/p/7.2.0/apis/users.yaml)\n'),
+    'docs/index.md': page('Home', '# Old\n\n<img src="/p/7.2.0/assets/logo.svg" />\n\n<div><img className={"x"} src={"/p/7.2.0/apis/users.yaml"} /></div>\n\n<img src=\'/p/7.2.0/assets/logo.svg\' className=\'z\' />\n\n<ApiReference spec="/p/7.2.0/apis/users.yaml" />\n\n[Download the spec](/p/7.2.0/apis/users.yaml)\n'),
     'static/assets/logo.svg': 'LOGO', 'static/apis/users.yaml': 'OLD',
   });
   writeDocusaurusTree(versions, out, { route: 'p' });
@@ -69,6 +69,7 @@ test('files referenced by URL in attributes are shared by path in static/, serve
   assert.match(read('docs/guides/setup.md'), /\[Download the spec\]\(\/p\/apis\/users\.yaml\)/);
   const old = read('versioned_docs/version-7.2.0/index.md');
   assert.match(old, /src="\/p\/assets\/logo\.svg"/);
+  assert.doesNotMatch(old, /\/p\/7\.2\.0\/assets\/logo\.svg/);
   assert.match(old, /spec="\/p\/_versions\/7\.2\.0\/apis\/users\.yaml"/);
   assert.match(old, /\[Download the spec\]\(\/p\/_versions\/7\.2\.0\/apis\/users\.yaml\)/);
   assert.match(old, /src=\{"\/p\/_versions\/7\.2\.0\/apis\/users\.yaml"\}/);

@@ -59,8 +59,8 @@ const fileIn = (root: string | undefined, rel: string): string | undefined => {
 
 // A space may follow the parenthesis (`]( /p/x.png)`): CommonMark allows it, and sources use it.
 const MD_TARGET = /(\]\()[ \t]*([^)\s]+)((?:\s+"[^"]*")?\))/g;
-// HTML form `src="…"` and the JSX form the converter writes for HTML blocks, `src={"…"}`.
-const URL_ATTR = /(\b(?:src|href|spec)=\{?")([^"#][^"]*)("\}?)/g;
+// HTML forms `src="…"` and `src='…'`, and the JSX form the converter writes for HTML blocks, `src={"…"}`.
+const URL_ATTR = /(\b(?:src|href|spec)=\{?(["']))((?:(?!\2)[^#])(?:(?!\2).)*)(\2\}?)/g;
 
 /** URL path of a page inside its version (`/guides/setup/`): its front matter slug, else Docusaurus's default. */
 function pageUrl(rel: string, text: string): string {
@@ -149,7 +149,7 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
         const key = target.startsWith(`/${v.route}/`) ? target.slice(v.route.length + 2) : undefined;
         const asStatic = key !== undefined ? fileIn(v.staticDir, key) : undefined;
         return asStatic ? `${pre}/${opts.route}/${encodePath(statics.place(key!, asStatic, v.version).slice('static/'.length))}${post}` : m;
-      }).replace(URL_ATTR, (m, pre: string, url: string, post: string) => {
+      }).replace(URL_ATTR, (m, pre: string, _quote: string, url: string, post: string) => {
         // Attributes need a URL: the file goes to static/, served under the product's route.
         const [decoded, anchor] = [safeDecode(url.split('#')[0]!), url.includes('#') ? url.slice(url.indexOf('#')) : ''];
         if (!decoded || /^[a-z][a-z0-9+.-]*:/i.test(decoded) || decoded.startsWith('//')) return m;
