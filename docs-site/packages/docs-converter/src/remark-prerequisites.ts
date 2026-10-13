@@ -6,7 +6,8 @@
 // ends the block. A page opts out with `prerequisites: false` in front matter. Styles: .prerequisites in the site CSS.
 import type { Parent, PhrasingContent, Root, RootContent } from 'mdast';
 
-const TITLE = /^(prerequisites|before you begin)$/i;
+/** "Prerequisites" or "Before you begin", in any case; a trailing "!" too (88 docs-is admonitions write one). */
+const TITLE = /^(prerequisites|before you begin)!?$/i;
 
 const text = (node: RootContent | PhrasingContent): string =>
   'value' in node ? String(node.value) : 'children' in node ? (node.children as PhrasingContent[]).map(text).join('') : '';

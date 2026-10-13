@@ -27,11 +27,11 @@ test('a Prerequisites heading becomes a panel: the heading as its title, its con
   assert.match(js, /A tenant\.[\s\S]*<\/_components\.ul><\/_components\.div><\/_components\.div>\{"\\n"\}<_components\.h2 id="configure">/, 'the next heading at its level ends the block');
 });
 
-test('h2 and h3 headings titled "Prerequisites" or "Before you begin", in any case, are blocks; other headings are not', async () => {
-  for (const h of ['## Prerequisites', '### Prerequisites', '## Before you begin', '### BEFORE YOU BEGIN', '## prerequisites']) {
+test('h2 and h3 headings titled "Prerequisites" or "Before you begin", in any case and with a trailing "!", are blocks; other headings are not', async () => {
+  for (const h of ['## Prerequisites', '### Prerequisites', '## Before you begin', '### BEFORE YOU BEGIN', '## prerequisites', '## Before you begin!']) {
     assert.equal(count(await jsx(`${h}\n\nNeed a.\n\n## Next\n\nb`), /className="prerequisites"/), 1, h);
   }
-  for (const h of ['#### Prerequisites', '# Prerequisites', '## General prerequisites', '## Prerequisites for SSO', '## Before you begin!']) {
+  for (const h of ['#### Prerequisites', '# Prerequisites', '## General prerequisites', '## Prerequisites for SSO', '## Before you begin: Enable tenant URL mode']) {
     assert.doesNotMatch(await jsx(`${h}\n\nNeed a.\n\n## Next\n\nb`), /className="prerequisites/, h);
   }
 });
@@ -106,4 +106,8 @@ test('a block inside another block\'s content is not wrapped again', async () =>
 test('a heading with nothing under it before the next heading or stepper is left as written', async () => {
   assert.doesNotMatch(await jsx('## Prerequisites\n\n## Configure\n\na'), /className="prerequisites/);
   assert.doesNotMatch(await jsx('## Prerequisites\n\n### Step 1: A\n\na\n\n### Step 2: B\n\nb'), /className="prerequisites/);
+});
+
+test('an admonition titled "Before you begin!" (as 88 docs-is admonitions are) is a block too', async () => {
+  assert.equal(count(await jsx(':::note[Before you begin!]\n\nNeed a.\n\n:::\n\nAfter.'), /className="prerequisites"/), 1);
 });
