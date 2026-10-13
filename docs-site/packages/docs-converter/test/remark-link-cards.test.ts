@@ -88,10 +88,11 @@ test('a section runs to the next heading at its level or above; a deeper heading
   assert.equal(await count(`## See also\n\n${LIST}\n### More\n\nProse.`), 0, 'a sub-heading is part of the section');
 });
 
-test('prose, several blocks, nested lists and items that do not start with a link stay as written', async () => {
+test('prose, several blocks (two intro paragraphs, a non-paragraph intro, text after the list), nested lists and items that do not start with a link stay as written', async () => {
   const left = [
     'Read [Users](/u/) next.',
-    `Some intro.\n\n${LIST}`,
+    `First intro.\n\nSecond intro.\n\n${LIST}`,
+    `:::note\nAn admonition first.\n:::\n\n${LIST}`,
     `${LIST}\nAnd a closing line.`,
     '- [Users](/u/)\n  - [Roles](/r/)\n- [Apps](/a/)',
     '- [Users](/u/)\n- Learn about [apps](/a/).',
@@ -104,6 +105,14 @@ test('prose, several blocks, nested lists and items that do not start with a lin
     assert.equal(await count(md), 0, body);
     assert.doesNotMatch(await jsx(md), /LinkCards/, body);
   }
+});
+
+test('one intro paragraph before the list is allowed: it stays above the cards, as written', async () => {
+  const md = `## What's next?\n\nNow that you have set it up, try these.\n\n${LIST}`;
+  assert.equal(await count(md), 1);
+  const js = await jsx(md);
+  assert.ok(js.indexOf('Now that you have set it up, try these.') < js.indexOf('<LinkCards'), 'the intro comes first');
+  assert.doesNotMatch(js.slice(js.indexOf('<LinkCards')), /Now that you have set it up/, 'the intro is not inside the cards');
 });
 
 test('an ordered list of links becomes cards too, and a paragraph item ("loose" list) counts', async () => {

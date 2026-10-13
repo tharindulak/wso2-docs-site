@@ -1,12 +1,13 @@
 // Closing sections ("What's next", "See also", ...) that are a list of links render as cards, without author changes.
 // A section is an h2/h3 with one of the closing titles; it runs to the next heading at its level or above. Only a
-// section that is exactly one list, whose items each start with a link and hold no nested list, is changed: the list
-// is wrapped in `<LinkCards>` and stays as its children (the fallback), and each item's href, link text (the card
-// title) and the author's text after the link (the description, leading dash or colon dropped) are passed as the
-// `items` prop. Anything else stays as written. The heading stays as it is (its id and TOC entry are set before the
-// plugin runs). Runs in the site build after Docusaurus has rewritten `.md` links to permalinks; the site's LinkCards
-// component looks up descriptions for internal links without author text. A page opts out with `link_cards: false`
-// in front matter. Styles: .link-cards in the site CSS.
+// section that is one list (after at most one intro paragraph, which stays as written above the cards), whose items
+// each start with a link and hold no nested list, is changed: the list is wrapped in `<LinkCards>` and stays as its
+// children (the fallback), and each item's href, link text (the card title) and the author's text after the link (the
+// description, leading dash or colon dropped) are passed as the `items` prop. Anything else stays as written. The
+// heading stays as it is (its id and TOC entry are set before the plugin runs). Runs in the site build after
+// Docusaurus has rewritten `.md` links to permalinks; the site's LinkCards component looks up descriptions for
+// internal links without author text. A page opts out with `link_cards: false` in front matter. Styles: .link-cards
+// in the site CSS.
 import type { List, ListItem, Parent, PhrasingContent, Root, RootContent } from 'mdast';
 import type { MdxJsxFlowElement } from 'mdast-util-mdx-jsx';
 
@@ -46,11 +47,16 @@ function cardOf(item: ListItem): LinkCard | null {
 const silent = (node: RootContent): boolean =>
   node.type === 'mdxjsEsm' || (node.type === 'mdxFlowExpression' && /^\s*\/\*[\s\S]*\*\/\s*$/.test(node.value));
 
-/** The section's list and its cards, when the section is exactly one list of link items; else null. */
+/**
+ * The section's list and its cards, when the section is one list of link items, optionally after one intro paragraph
+ * ("Now that you have…", which stays above the cards as written); else null.
+ */
 function cardsOf(body: RootContent[]): { list: List; items: LinkCard[] } | null {
   const content = body.filter((n) => !silent(n));
-  if (content.length !== 1 || content[0].type !== 'list') return null;
-  const list = content[0];
+  const intro = content.length === 2 && content[0].type === 'paragraph';
+  if (!(content.length === 1 || intro)) return null;
+  const list = content[content.length - 1];
+  if (list.type !== 'list') return null;
   const items = list.children.map(cardOf);
   return items.length && items.every(Boolean) ? { list, items: items as LinkCard[] } : null;
 }
