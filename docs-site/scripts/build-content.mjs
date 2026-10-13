@@ -65,9 +65,15 @@ async function buildSection(section, outDir, staticDir, sidebarsDir, report) {
     return (await convertMergedSites({ cloud: side(section.cloud), self: side(section.self_hosted), sharedNames: section.shared_names ?? {}, partials }, out)).sidebar;
   }
   const root = checkoutDir(section.repo, section.sha);
+  // A migrated tree (tree_root): its static folder serves the product's route; this version's redirects.json entries.
+  const productRoute = lock.products.flatMap((p) => p.sections).find((s) => s.id === section.sectionId)?.route ?? section.route;
+  const routeStatic = section.status === 'latest' ? path.join(GENERATED, 'static', productRoute) : path.join(GENERATED, 'static-versions', section.id, productRoute);
   const { sidebarId, sidebar } = await prepareDocusaurusDocs({
     root, docs: section.docs, sidebar: section.sidebar, currentSite: section.current_site, editUrl: githubEditUrl(section.repo, section.sha, root),
     shims: SHIMS, deployment_options: section.deployment_options, deployment_overrides: section.deployment_overrides,
+    treeRoot: section.tree_root, strict: Boolean(section.strict),
+    static: section.tree_static ? { from: section.tree_static, to: routeStatic } : undefined,
+    redirects: section.tree_redirects ? { file: section.tree_redirects, version: section.status === 'latest' ? 'current' : section.version } : undefined,
   }, out);
   const main = companion ? placeCompanion(sidebar, await companionSidebar(), companion) : sidebar;
   write(path.join(sidebarsDir, `${section.id}.json`), JSON.stringify({ [sidebarId]: main }, null, 2));
@@ -207,10 +213,22 @@ function landingOf(v) {
   return !landingId || landingId === 'index' ? '' : urlOfId(docsDir, landingId);
 }
 
+/** A migrated tree lists its older versions in versions.json; the lock decides what is published, and they must agree. */
+function checkTreeVersions(section, versions) {
+  if (section.kind !== 'docusaurus' || !section.tree_root) return;
+  const file = containedFile(checkoutDir(versions[0].repo, versions[0].sha), path.posix.join(section.tree_root, 'versions.json'));
+  const tree = file ? JSON.parse(fs.readFileSync(file, 'utf8')) : [];
+  const locked = versions.slice(1).map((v) => v.version);
+  if (JSON.stringify(tree) !== JSON.stringify(locked)) {
+    throw new Error(`${section.id}: ${section.tree_root}/versions.json lists ${JSON.stringify(tree)}, the lock file ${JSON.stringify(locked)}`);
+  }
+}
+
 for (const product of lock.products) {
   const entry = { id: product.id, name: product.name, group: product.group, blurb: product.blurb, sections: [] };
   for (const section of product.sections) {
     const versions = sectionVersions(section, liveWindow(lock));
+    if (!only.size || only.has(section.id)) checkTreeVersions(section, versions);
     const listed = Boolean(section.versions ?? section.self_hosted?.versions);
     for (const v of versions) {
       const outDir = path.join(GENERATED, 'docs', v.id);
@@ -260,7 +278,7 @@ for (const product of lock.products) {
     if (!listed && typeof section.older_versions === 'string') confluence.push({ version: 'older', label: 'Older versions', status: 'confluence', href: section.older_versions });
     entry.sections.push({
       ...versionEntries[0], id: section.id, label: section.label, kind: section.kind,
-      cloud: section.kind === 'mkdocs-merge' || Boolean(section.cloud_companion),
+      cloud: section.kind === 'mkdocs-merge' || Boolean(section.cloud_companion) || (versions[0].deployment_options ?? []).includes('WSO2 Cloud'),
       version: versions[0].version, olderVersions: null,
       versions: [...versionEntries, ...confluence],
     });

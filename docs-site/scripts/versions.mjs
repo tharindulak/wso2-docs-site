@@ -142,9 +142,10 @@ export function replaceExclude(text, sectionId, version, list) {
 /** URL paths of the real pages in a generated docs folder, relative to the version base ("" is the home page). */
 export function pagePaths(docsDir) {
   const out = new Set();
-  for (const rel of walk(docsDir, (r) => r.endsWith('.md'))) {
+  // Docusaurus makes no page of a file or folder whose name starts with _ (partials, _tree assets).
+  for (const rel of walk(docsDir, (r) => r.endsWith('.md') && !r.split('/').some((part) => part.startsWith('_')))) {
     const text = fs.readFileSync(path.join(docsDir, rel), 'utf8');
-    if (text.includes(REDIRECT)) continue;
+    if (text.includes(REDIRECT) || /^<Redirect to=/m.test(text)) continue; // a stub for an excluded page (import dropped in a migrated tree)
     out.add(pagePath(rel, text));
   }
   return [...out].sort();

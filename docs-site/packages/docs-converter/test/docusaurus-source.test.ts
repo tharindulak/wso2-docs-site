@@ -68,3 +68,10 @@ test('the version\'s entries in the tree\'s redirects.json become redirect pages
   assert.ok(!fs.existsSync(path.join(staticDir, 'gone/index.html')), 'another version\'s entries are not this version\'s');
   assert.ok(!fs.existsSync(path.join(staticDir, 'index.html')), 'a real page keeps its URL');
 });
+
+test('a page that declares CommonMark (mdx.format: md) compiles as CommonMark, also in strict mode', async () => {
+  const root = migrated({ 'docusaurus/docs/table.md': '---\ntitle: Table\nmdx:\n  format: md\n---\n\n# Table\n\n<table><tr><td>x</tr></table>\n' });
+  const { read, result } = await prepare(root, 'docusaurus/docs', { strict: true });
+  assert.deepEqual(result.report.failures, []);
+  assert.match(read('table.md'), /format: md/);
+});
