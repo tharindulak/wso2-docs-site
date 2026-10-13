@@ -35,7 +35,7 @@ test('Latest goes to docs/, older versions to versioned_docs/ with their sidebar
 test('images are stored once by file path; a version whose copy differs keeps its own under assets/_versions/; unreferenced files are left out', () => {
   const { versions, out, read } = twoVersions({
     'docs/index.md': page('Home', '# Home\n\n![Same](assets/img/same.png)\n\n![Changed](assets/img/changed.png)\n'),
-    'docs/guides/setup.md': page('Setup', '# Setup\n\n![Same](../assets/img/same.png)\n'),
+    'docs/guides/setup.md': page('Setup', '# Setup\n\n![Same](../assets/img/same.png)\n\n![Spaced]( /p/assets/img/same.png)\n'),
     'docs/assets/img/same.png': 'SAME', 'docs/assets/img/changed.png': 'NEW', 'docs/convert_links.sh': 'echo',
   }, {
     'docs/index.md': page('Home', '# Old\n\n![Same](assets/img/same.png)\n\n![Changed](assets/img/changed.png)\n'),
@@ -47,6 +47,7 @@ test('images are stored once by file path; a version whose copy differs keeps it
   assert.equal(read('assets/_versions/7.2.0/img/changed.png'), 'OLD');
   assert.match(read('docs/index.md'), /!\[Same\]\(\.\.\/assets\/img\/same\.png\)/);
   assert.match(read('docs/guides/setup.md'), /!\[Same\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
+  assert.match(read('docs/guides/setup.md'), /!\[Spaced\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
   assert.match(read('versioned_docs/version-7.2.0/index.md'), /!\[Same\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
   assert.match(read('versioned_docs/version-7.2.0/index.md'), /!\[Changed\]\(\.\.\/\.\.\/assets\/_versions\/7\.2\.0\/img\/changed\.png\)/);
   assert.ok(!fs.existsSync(path.join(out, 'docs/convert_links.sh')) && !fs.existsSync(path.join(out, 'docs/assets')));

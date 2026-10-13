@@ -682,7 +682,9 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
       if (src.treeRoot) text = treeRefs(text, rel, docsDir, path.join(src.root, src.treeRoot), out.outDir);
       const edit = src.editUrl?.(file);
       const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit && !data.custom_edit_url ? { custom_edit_url: edit } : {}) };
-      const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
+      // A partial (any _ name) is no page: Docusaurus ignores front matter there and warns, so it gets none.
+      const partial = rel.split('/').some((part) => part.startsWith('_'));
+      const mdx = partial ? text : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       const declared = (data.mdx as { format?: unknown } | undefined)?.format;
       try {
         // A page may declare CommonMark itself (Docusaurus's mdx.format front matter): compile it as it says.

@@ -57,7 +57,8 @@ const fileIn = (root: string | undefined, rel: string): string | undefined => {
   return file.startsWith(path.resolve(root) + path.sep) && fs.existsSync(file) && fs.statSync(file).isFile() ? file : undefined;
 };
 
-const MD_TARGET = /(\]\()([^)\s]+)((?:\s+"[^"]*")?\))/g;
+// A space may follow the parenthesis (`]( /p/x.png)`): CommonMark allows it, and sources use it.
+const MD_TARGET = /(\]\()[ \t]*([^)\s]+)((?:\s+"[^"]*")?\))/g;
 const URL_ATTR = /(\b(?:src|href|spec)=")(\/[^"]+)(")/g;
 
 /** URL path of a page inside its version (`/guides/setup/`): its front matter slug, else Docusaurus's default. */

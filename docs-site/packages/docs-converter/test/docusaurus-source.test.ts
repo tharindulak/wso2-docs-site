@@ -75,3 +75,9 @@ test('a page that declares CommonMark (mdx.format: md) compiles as CommonMark, a
   assert.deepEqual(result.report.failures, []);
   assert.match(read('table.md'), /format: md/);
 });
+
+test('partials (files under a _ name) are copied without front matter: Docusaurus ignores it there and warns', async () => {
+  const root = migrated({ 'docusaurus/docs/_partials/db/config.mdx': 'Set the **datasource**.\n' });
+  const { read } = await prepare(root, 'docusaurus/docs', { editUrl: () => 'https://github.com/o/r/blob/x/f.md' });
+  assert.equal(read('_partials/db/config.md'), 'Set the **datasource**.\n');
+});
