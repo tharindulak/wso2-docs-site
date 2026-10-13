@@ -52,7 +52,7 @@ class SharedFiles {
 const safeDecode = (s: string): string | undefined => { try { return decodeURI(s); } catch { return undefined; } };
 /** A file inside `root` (never outside it), or undefined. */
 const fileIn = (root: string | undefined, rel: string): string | undefined => {
-  if (!root) return undefined;
+  if (!root || /\.mdx?\/*$/.test(rel) || rel.endsWith('/')) return undefined; // pages and folders are never assets
   const file = path.resolve(root, rel);
   return file.startsWith(path.resolve(root) + path.sep) && fs.existsSync(file) && fs.statSync(file).isFile() ? file : undefined;
 };
@@ -130,7 +130,7 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
       // Markdown link and image targets naming a file the version holds: point them at the shared copy.
       const text = outsideCode(withoutComponentImports(fs.readFileSync(path.join(v.docsDir, rel), 'utf8')), (t) => t.replace(MD_TARGET, (m, pre: string, url: string, post: string) => {
         const target = safeDecode(url.split('#')[0]!);
-        if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target) || /\.mdx?$/.test(target)) return m;
+        if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target) || /\.mdx?\/*$/.test(target)) return m;
         // A page of this version: a relative file link, which Docusaurus resolves within the version.
         const linked = target === `/${v.route}` || target.startsWith(`/${v.route}/`) ? pageAt.get(withSlash(`/${target.slice(v.route.length + 2)}`)) : undefined;
         if (linked) return `${pre}${encodePath(path.posix.relative(pageDir, linked))}${url.includes('#') ? url.slice(url.indexOf('#')) : ''}${post}`;

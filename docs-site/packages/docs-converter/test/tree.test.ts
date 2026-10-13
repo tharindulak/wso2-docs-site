@@ -75,7 +75,7 @@ test('files referenced by URL in attributes are shared by path in static/, serve
 test('links to pages of the same version become relative .md links; other versions and unknown pages keep their URL', () => {
   const { versions, out, read } = twoVersions({
     'docs/index.md': page('Home', '# Home\n\nSee [setup](/p/guides/setup/#ports), [guides](/p/guides/), [old](/p/7.2.0/) and [gone](/p/nowhere/).\n\n```\ncurl /p/guides/setup/\n```\n'),
-    'docs/guides/index.md': page('Guides', '# Guides\n\nBack [home](/p/).\n'),
+    'docs/guides/index.md': page('Guides', '# Guides\n\nBack [home](/p/). Odd [link](setup.md/).\n'),
     'docs/guides/setup.md': page('Setup', '# Setup\n'),
     'docs/guides/sso/sso.md': '---\ntitle: SSO\nslug: /guides/sso/sso/\n---\n\n# SSO\n\n[Setup](/p/guides/setup/)\n',
   }, {
@@ -89,6 +89,8 @@ test('links to pages of the same version become relative .md links; other versio
   assert.match(home, /\[gone\]\(\/p\/nowhere\/\)/);
   assert.match(home, /curl \/p\/guides\/setup\//);
   assert.match(read('docs/guides/index.md'), /\[home\]\(\.\.\/index\.md\)/);
+  assert.match(read('docs/guides/index.md'), /\[link\]\(setup\.md\/\)/);
+  assert.ok(!fs.existsSync(path.join(out, 'assets')), 'pages are never copied as assets');
   assert.match(read('docs/guides/sso/sso.md'), /\[Setup\]\(\.\.\/setup\.md\)/);
   assert.match(read('versioned_docs/version-7.2.0/index.md'), /\[Latest home\]\(\/p\/\) and \[self\]\(index\.md\)/);
 });

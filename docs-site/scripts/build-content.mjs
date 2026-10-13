@@ -4,6 +4,7 @@
 //   --onboard  for a section whose exclude list is empty, record today's failing pages as its exclude list
 //              (first onboarding only; afterwards the list may only shrink).
 //   --prune    remove pages that now convert from their exclude list.
+//   --partials merged sections write shared includes as _partials/*.mdx (for a migration; see migrate-docusaurus.mjs).
 import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
@@ -17,6 +18,7 @@ import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, pagePath
 const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
 const prune = args.includes('--prune');
+const partials = args.includes('--partials');
 const only = new Set(args.filter((a) => !a.startsWith('--')));
 
 const write = (file, text) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
@@ -60,7 +62,7 @@ async function buildSection(section, outDir, staticDir, sidebarsDir, report) {
   }
   if (section.kind === 'mkdocs-merge') {
     const side = (ref) => { const root = checkoutDir(ref.repo, ref.sha); return { root, mkdocs: ref.mkdocs, currentSite: ref.current_site, editUrl: githubEditUrl(ref.repo, ref.sha, root) }; };
-    return (await convertMergedSites({ cloud: side(section.cloud), self: side(section.self_hosted), sharedNames: section.shared_names ?? {} }, out)).sidebar;
+    return (await convertMergedSites({ cloud: side(section.cloud), self: side(section.self_hosted), sharedNames: section.shared_names ?? {}, partials }, out)).sidebar;
   }
   const root = checkoutDir(section.repo, section.sha);
   const { sidebarId, sidebar } = await prepareDocusaurusDocs({

@@ -20,3 +20,4 @@ export {
 export { loadConfig, ConfigError, type SourceConfig } from './config.js';
 export { convertSource, CONTRACT_VERSION } from './source.js';
 export { writeDocusaurusTree, withoutComponentImports, TREE_MARKER, type TreeVersion, type TreeOptions } from './tree.js';
+export { redirectMaps } from './redirects.js';
