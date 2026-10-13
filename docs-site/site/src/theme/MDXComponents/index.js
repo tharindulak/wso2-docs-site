@@ -7,5 +7,6 @@ import Applies from '@site/src/components/Applies';
 import DeploymentValue from '@site/src/components/DeploymentValue';
 import ApiReference from '@site/src/components/ApiReference';
 import Redirect from '@site/src/components/Redirect';
+import LinkCards from '@site/src/components/LinkCards'; // placed by remark-link-cards, not by authors
 
-export default { ...MDXComponents, Tabs, TabItem, Applies, DeploymentValue, ApiReference, Redirect };
+export default { ...MDXComponents, Tabs, TabItem, Applies, DeploymentValue, ApiReference, Redirect, LinkCards };

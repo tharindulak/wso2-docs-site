@@ -7,6 +7,7 @@ import rehypeValidElements from '@wso2/docs-converter/rehype-valid-elements';
 import remarkSteps from '@wso2/docs-converter/remark-steps';
 import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
 import remarkPrerequisites from '@wso2/docs-converter/remark-prerequisites';
+import remarkLinkCards from '@wso2/docs-converter/remark-link-cards';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -40,8 +41,9 @@ const docsPlugins = included.map(({ section, v }) => [
     sidebarPath: path.join(generated, 'sidebars', v.sidebar),
     sidebarCollapsed: true,
     // Runs of `Step N` headings render as a stepper (after heading ids and the TOC); Tabs blocks offering the same
-    // choices switch together; prerequisites blocks render as a panel (after remark-steps: a stepper ends the block).
-    remarkPlugins: [remarkSteps, remarkLinkedTabs, remarkPrerequisites],
+    // choices switch together; prerequisites blocks render as a panel (after remark-steps: a stepper ends the block);
+    // closing sections that are a list of links render as cards (last: it sees sections inside steps and panels).
+    remarkPlugins: [remarkSteps, remarkLinkedTabs, remarkPrerequisites, remarkLinkCards],
     rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
     ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),

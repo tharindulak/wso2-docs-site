@@ -10,3 +10,7 @@ test('remark-prerequisites runs after remark-steps, so a stepper ends a prerequi
   assert.ok(plugins.includes('remarkSteps'), plugins.join());
   assert.ok(plugins.indexOf('remarkPrerequisites') > plugins.indexOf('remarkSteps'), plugins.join());
 });
+
+test('remark-link-cards runs last, so closing sections inside steppers and panels are already in place', () => {
+  assert.equal(plugins.at(-1), 'remarkLinkCards', plugins.join());
+});

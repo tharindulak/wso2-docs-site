@@ -32,6 +32,11 @@
       "types": "./dist/src/remark-prerequisites.d.ts",
       "import": "./dist/src/remark-prerequisites.js",
       "default": "./dist/src/remark-prerequisites.js"
+    },
+    "./remark-link-cards": {
+      "types": "./dist/src/remark-link-cards.d.ts",
+      "import": "./dist/src/remark-link-cards.js",
+      "default": "./dist/src/remark-link-cards.js"
     }
   },
   "bin": {
