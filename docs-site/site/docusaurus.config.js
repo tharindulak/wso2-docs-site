@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import rehypeValidElements from '@wso2/docs-converter/rehype-valid-elements';
 import remarkSteps from '@wso2/docs-converter/remark-steps';
 import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
+import remarkPrerequisites from '@wso2/docs-converter/remark-prerequisites';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -39,8 +40,8 @@ const docsPlugins = included.map(({ section, v }) => [
     sidebarPath: path.join(generated, 'sidebars', v.sidebar),
     sidebarCollapsed: true,
     // Runs of `Step N` headings render as a stepper (after heading ids and the TOC); Tabs blocks offering the same
-    // choices switch together.
-    remarkPlugins: [remarkSteps, remarkLinkedTabs],
+    // choices switch together; prerequisites blocks render as a panel (after remark-steps: a stepper ends the block).
+    remarkPlugins: [remarkSteps, remarkLinkedTabs, remarkPrerequisites],
     rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
     ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),

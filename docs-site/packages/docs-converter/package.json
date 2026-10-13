@@ -27,6 +27,11 @@
       "types": "./dist/src/remark-linked-tabs.d.ts",
       "import": "./dist/src/remark-linked-tabs.js",
       "default": "./dist/src/remark-linked-tabs.js"
+    },
+    "./remark-prerequisites": {
+      "types": "./dist/src/remark-prerequisites.d.ts",
+      "import": "./dist/src/remark-prerequisites.js",
+      "default": "./dist/src/remark-prerequisites.js"
     }
   },
   "bin": {

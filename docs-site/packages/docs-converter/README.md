@@ -71,6 +71,7 @@ const { sidebar, report } = await convertMkdocsSite(
 `@wso2/docs-converter/rehype-valid-elements` exports just the rehype plugin for CommonMark pages, without loading the converter (the docs site's Docusaurus config uses it).
 `@wso2/docs-converter/remark-steps` does the same for the remark plugin that renders runs of `Step N` headings as a stepper; a page opts out with `stepper: false` in front matter.
 `@wso2/docs-converter/remark-linked-tabs` is the remark plugin for linked tabs: `<Tabs>` blocks offering the same choices (labels compared ignoring case, spaces, Markdown formatting and order; Linux and macOS/Linux forms are one choice) switch together, and the choice is remembered. Blocks with an author-set `groupId`, value or `defaultValue`, a single tab, or two labels naming one choice are left as written.
+`@wso2/docs-converter/remark-prerequisites` renders prerequisites blocks as a panel where they are written: an `h2`/`h3` titled "Prerequisites" or "Before you begin" (up to the next heading at its level or above, or a stepper; run it after `remark-steps`), or an admonition of any type with that title; a page opts out with `prerequisites: false` in front matter.
 
 The docs site uses the same functions, passing a `fallback` that writes a redirect page for excluded or failing pages; the CLI writes none.
 
