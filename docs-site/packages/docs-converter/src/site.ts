@@ -71,8 +71,8 @@ const isPage = (rel: string): boolean => /\.mdx?$/.test(rel);
 const write = (file: string, text: string): void => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
 
 /** Copy non-page files (images, attachments) keeping their paths; existing files are kept. */
-export function copyAssets(fromDir: string, toDir: string, skip: string[] = []): void {
-  for (const rel of walk(fromDir, (r) => !isPage(r) && !r.endsWith('.yml') && !skip.some((p) => r.startsWith(p)))) {
+export function copyAssets(fromDir: string, toDir: string, skip: string[] = [], { yml = false } = {}): void {
+  for (const rel of walk(fromDir, (r) => !isPage(r) && (yml || !r.endsWith('.yml')) && !skip.some((p) => r.startsWith(p)))) {
     const to = path.join(toDir, rel);
     if (fs.existsSync(to)) continue;
     fs.mkdirSync(path.dirname(to), { recursive: true });
@@ -617,6 +617,47 @@ export interface DocusaurusDocsOptions extends DeploymentDefaults {
   editUrl?: EditUrl;
   /** Component imports to replace, for example the source site's own components with site stand-ins. */
   shims?: Record<string, string>;
+  /**
+   * Folder inside root holding a migrated source's whole tree (docs-is: `docusaurus`). Files that pages reference
+   * outside their docs folder but inside the tree (shared `assets/`) are copied to `<outDir>/_tree/`.
+   */
+  treeRoot?: string;
+  /** A static folder inside root (`from`) copied to the folder that serves the product's route (`to`). */
+  static?: { from: string; to: string };
+  /** A page that does not compile as MDX fails (an owned, checked tree) instead of falling back to CommonMark. */
+  strict?: boolean;
+  /** The tree's redirects file (inside root) and this version's key in it (`current` for Latest, else the release). */
+  redirects?: { file: string; version: string };
+}
+
+/** One version's old page -> new page entries from a tree's redirects.json. */
+function treeRedirects(root: string, file: string, version: string): Array<[string, string]> {
+  const found = containedFile(root, file);
+  if (!found) return [];
+  const all = JSON.parse(fs.readFileSync(found, 'utf8')) as Record<string, Record<string, unknown>>;
+  return Object.entries(all[version] ?? {}).filter((e): e is [string, string] => typeof e[1] === 'string');
+}
+
+const TREE = '_tree';
+
+/** Markdown targets leaving the docs folder for a file elsewhere in the tree: copy the file under _tree/ and point there. */
+function treeRefs(text: string, rel: string, docsDir: string, treeDir: string, outDir: string): string {
+  const realTree = fs.realpathSync(treeDir) + path.sep;
+  const realDocs = fs.realpathSync(docsDir) + path.sep;
+  return outsideCode(text, (t) => t.replace(/(\]\()([^)\s]+)((?:\s+"[^"]*")?\))/g, (m, pre: string, url: string, post: string) => {
+    const [, p = '', suffix = ''] = url.match(/^([^?#]*)(.*)$/) ?? [];
+    const decoded = safeDecode(p);
+    if (!decoded || decoded.startsWith('/') || /^[a-z][a-z0-9+.-]*:/i.test(decoded)) return m;
+    const file = path.resolve(docsDir, path.dirname(rel), decoded);
+    const stat = fs.statSync(file, { throwIfNoEntry: false });
+    if (!stat?.isFile()) return m;
+    const real = fs.realpathSync(file);
+    if (real.startsWith(realDocs) || !real.startsWith(realTree)) return m;
+    const inTree = path.relative(treeDir, file).split(path.sep).join('/');
+    const to = path.join(outDir, TREE, inTree);
+    if (!fs.existsSync(to)) { fs.mkdirSync(path.dirname(to), { recursive: true }); fs.copyFileSync(file, to); }
+    return `${pre}${encodePath(path.posix.relative(path.posix.dirname(rel), `${TREE}/${inTree}`))}${suffix}${post}`;
+  }));
 }
 
 /**
@@ -638,14 +679,15 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${out.route}/$2/`);
       text = text.replace(/(\]\((?!https?:)[^)\s]*?)\.mdx(?=[)#])/g, '$1.md'); // pages are written as .md
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
+      if (src.treeRoot) text = treeRefs(text, rel, docsDir, path.join(src.root, src.treeRoot), out.outDir);
       const edit = src.editUrl?.(file);
-      const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit ? { custom_edit_url: edit } : {}) };
+      const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit && !data.custom_edit_url ? { custom_edit_url: edit } : {}) };
       const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       try {
         await compileCheck(mdx);
         return mdx;
       } catch (e) {
-        if (!(e instanceof PageError) || e.kind !== 'compile') throw e;
+        if (!(e instanceof PageError) || e.kind !== 'compile' || src.strict) throw e;
         // Same last resort as MkDocs pages: CommonMark keeps the page on the site, components show as plain content.
         const md = `---\n${yaml.dump({ ...front, mdx: { format: 'md' } }, { lineWidth: -1 })}---\n${withoutImports(text)}`;
         await compileCheck(md, { format: 'md' });
@@ -657,6 +699,18 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
   copyAssets(docsDir, out.outDir);
   const staticSrc = path.join(src.root, path.dirname(src.docs) === '.' ? 'static' : path.join(path.dirname(src.docs), 'static'));
   if (out.staticDir) copyAssets(staticSrc, out.staticDir);
+  // Old page URLs keep answering, as the MkDocs redirects plugin made them do (pages already written above).
+  if (src.redirects && out.staticDir) {
+    writeRedirectPages(treeRedirects(src.root, src.redirects.file, src.redirects.version), out.staticDir, {
+      route: out.route, currentSite: src.currentSite, toSection: (docsPath) => docsPath,
+      hostedUrl: (rel) => (fs.existsSync(path.join(out.outDir, rel)) ? mkdocsUrl(rel) : null),
+    });
+  }
+  if (src.static) {
+    const from = path.resolve(src.root, src.static.from);
+    if (!from.startsWith(path.resolve(src.root) + path.sep)) throw new Error(`static folder outside the content source: ${src.static.from}`);
+    copyAssets(from, src.static.to, [], { yml: true }); // a static folder holds no mkdocs.yml; its .yml files are specs
+  }
   const sidebars = loadSidebarFile(path.join(src.root, src.sidebar));
   const [sidebarId, items] = Object.entries(sidebars)[0] ?? ['docs', []];
   return { sidebarId, sidebar: items, report };
