@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
+import { redirectMaps, writeRedirectPages } from './redirects.js';
 import { loadPage, loadPlain, renderSingle, readPageData } from './render.js';
 import { mergePage, CLOUD, SELF_HOSTED } from './merge.js';
 import { outsideCode } from './syntax.js';
@@ -428,6 +429,18 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     }, { title: titleOf(raw, fallbackTitle), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions }, { readmeIndex: readmeIsIndex(rel, [pages]) });
   }
   if (out.staticDir) copyReferencedAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
+  // Old page URLs from the MkDocs redirects plugin keep answering, as they did on the former site.
+  if (out.staticDir) {
+    writeRedirectPages(redirectMaps(site.config), prefix ? path.join(out.staticDir, prefix) : out.staticDir, {
+      route, currentSite: src.currentSite,
+      toSection: (docsPath) => {
+        if (docsRoot && !docsPath.startsWith(docsRoot)) return null;
+        const rel = docsRoot ? docsPath.slice(docsRoot.length) : docsPath;
+        return wanted(rel) ? rel : null;
+      },
+      hostedUrl: (rel) => (fs.existsSync(path.join(out.outDir, withPrefix(rel))) ? mkdocsUrl(rel) : null),
+    });
+  }
   copyAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
   const nav = selectNav(site.nav, { ...src.nav, ...(docsRoot ? { strip: docsRoot, outside: src.linkOutside } : {}) });
   const items = navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav);
