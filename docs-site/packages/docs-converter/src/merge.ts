@@ -1,7 +1,7 @@
 // Render one page for two deployment options at once (content sources whose cloud and self-hosted pages
 // share templates, such as docs-is). Agreeing content is kept once; differences become labelled blocks.
 import { evaluate, takenBranch, setValue } from './template.js';
-import { loadPage, renderSingle, findInclude } from './render.js';
+import { loadPage, renderSingle, findInclude, standsAlone, inlining } from './render.js';
 import type { Env, Source, TemplateNode } from './types.js';
 
 export const CLOUD = 'WSO2 Cloud';
@@ -104,8 +104,8 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
   for (const [index, node] of nodes.entries()) {
     if (node.t === 'text') { out.s += node.v; continue; }
     if (node.t === 'set') {
-      c.env[node.name] = setValue(node.expr, c.env, (n, e) => renderSingle(n, e, file, c.source));
-      s.env[node.name] = setValue(node.expr, s.env, (n, e) => renderSingle(n, e, file, s.source));
+      c.env[node.name] = setValue(node.expr, c.env, (n, e) => renderSingle(n, e, file, inlining(c.source)));
+      s.env[node.name] = setValue(node.expr, s.env, (n, e) => renderSingle(n, e, file, inlining(s.source)));
       continue;
     }
     if (node.t === 'var') {
@@ -128,7 +128,8 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
     }
     if (node.t === 'include') {
       const target = findInclude(c.source, file, node.path);
-      renderMerged(loadPage(target, c.source), target, sides, sharedNames, stats, out);
+      const render = (): string => renderMerged(loadPage(target, c.source), target, sides, sharedNames, stats, { s: out.s }).slice(out.s.length);
+      out.s += c.source.partials && standsAlone(out.s, nodes[index + 1]) ? c.source.partials(target, render) : render();
       continue;
     }
     if (node.t === 'if') {
@@ -138,8 +139,8 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
         if (bc >= 0) renderMerged(node.branches[bc]!.kids, file, sides, sharedNames, stats, out);
         continue;
       }
-      const cText = bc >= 0 ? renderSingle(node.branches[bc]!.kids, { ...c.env }, file, c.source) : '';
-      const sText = bs >= 0 ? renderSingle(node.branches[bs]!.kids, { ...s.env }, file, s.source) : '';
+      const cText = bc >= 0 ? renderSingle(node.branches[bc]!.kids, { ...c.env }, file, inlining(c.source)) : '';
+      const sText = bs >= 0 ? renderSingle(node.branches[bs]!.kids, { ...s.env }, file, inlining(s.source)) : '';
       if (inFence(out.s)) {
         out.s += `${MARK.cloud}${cText}${MARK.self}${sText}${MARK.end}`;
         stats.splitsInCode++;
@@ -154,6 +155,15 @@ function renderMerged(nodes: TemplateNode[], file: string, sides: MergeSides, sh
   }
   return out.s;
 }
+
+/** An include file rendered for both deployment options on its own, as a partial holds it (before finishMerged). */
+export function renderMergedInclude(target: string, sides: MergeSides, sharedNames: Record<string, string> = {}): string {
+  const stats: MergeStats = { sharedNames: 0, placeholders: 0, values: 0, splitBlocks: 0, splitsInCode: 0, diverged: false };
+  return renderMerged(loadPage(target, sides.cloud.source), target, sides, sharedNames, stats, { s: '' });
+}
+
+/** Write out the code samples and links that merged rendering marked as differing. */
+export const finishMerged = (text: string): string => splitLinks(splitCodeSamples(text));
 
 const shape = (nodes: TemplateNode[], file: string, source: Source): string[] => nodes
   .filter((n) => n.t !== 'set' && !(n.t === 'text' && !n.v.trim()))
@@ -171,16 +181,16 @@ export function mergePage(cloudFile: string, selfFile: string, sides: MergeSides
   const cn = loadPage(cloudFile, sides.cloud.source);
   const sn = loadPage(selfFile, sides.self.source);
   const applySets = (nodes: TemplateNode[], side: MergeSide, file: string): void => {
-    for (const n of nodes) if (n.t === 'set') side.env[n.name] = setValue(n.expr, side.env, (x, e) => renderSingle(x, e, file, side.source));
+    for (const n of nodes) if (n.t === 'set') side.env[n.name] = setValue(n.expr, side.env, (x, e) => renderSingle(x, e, file, inlining(side.source)));
   };
   applySets(cn, sides.cloud, cloudFile);
   applySets(sn, sides.self, selfFile);
   const body = (nodes: TemplateNode[]): TemplateNode[] => nodes.filter((n) => n.t !== 'set');
   if (JSON.stringify(shape(cn, cloudFile, sides.cloud.source)) === JSON.stringify(shape(sn, selfFile, sides.self.source))) {
-    return { text: splitLinks(splitCodeSamples(renderMerged(body(cn), cloudFile, sides, sharedNames, stats, { s: '' }))), stats };
+    return { text: finishMerged(renderMerged(body(cn), cloudFile, sides, sharedNames, stats, { s: '' })), stats };
   }
   stats.diverged = true;
-  const text = applies(CLOUD, renderSingle(body(cn), sides.cloud.env, cloudFile, sides.cloud.source))
-    + applies(SELF_HOSTED, renderSingle(body(sn), sides.self.env, selfFile, sides.self.source));
+  const text = applies(CLOUD, renderSingle(body(cn), sides.cloud.env, cloudFile, inlining(sides.cloud.source)))
+    + applies(SELF_HOSTED, renderSingle(body(sn), sides.self.env, selfFile, inlining(sides.self.source)));
   return { text, stats };
 }

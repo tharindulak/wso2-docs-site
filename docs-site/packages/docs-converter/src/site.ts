@@ -6,13 +6,14 @@ import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
 import { redirectMaps, writeRedirectPages } from './redirects.js';
-import { loadPage, loadPlain, renderSingle, readPageData } from './render.js';
-import { mergePage, CLOUD, SELF_HOSTED } from './merge.js';
+import { loadPage, loadPlain, renderSingle, readPageData, inlining } from './render.js';
+import { mergePage, renderMergedInclude, finishMerged, CLOUD, SELF_HOSTED } from './merge.js';
+import { PartialPlan, insertPartials, type RenderMode } from './partials.js';
 import { outsideCode } from './syntax.js';
 import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type PageErrorKind } from './page.js';
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
-import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem } from './types.js';
+import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem, Source } from './types.js';
 
 /** `{{ base_path }}` renders as this marker, then maps to the section's route. */
 const BASE = '@@BASE@@';
@@ -28,6 +29,8 @@ export interface SiteReport {
   /** nav: entries pointing at pages that are not generated. */
   droppedNav: string[];
   merge: { splitBlocks: number; diverged: number };
+  /** Partials written, and shared includes inlined because their partial failed to convert (with the reason). */
+  partials?: { written: number; inlined: string[] };
 }
 
 export const emptyReport = (): SiteReport => ({ ok: 0, redirected: 0, failures: [], nowPassing: [], droppedNav: [], merge: { splitBlocks: 0, diverged: 0 } });
@@ -457,6 +460,39 @@ export interface MergedSitesOptions {
   /** Text for a variable that differs but sits in shared text (product_name -> "WSO2 Identity Platform"). */
   sharedNames?: Record<string, string>;
   iframeHosts?: readonly string[];
+  /** Write includes that several pages share as `_partials/*.mdx` imported by those pages (migration to Docusaurus). */
+  partials?: boolean;
+}
+
+interface WithSource { source: Source }
+
+/** Set `hook` to decide the stand-alone includes of both sides (undefined: inline them). */
+function setPartialHook(c: WithSource, s: WithSource, hook: Source['partials']): void {
+  for (const x of [c, s]) { if (hook) x.source.partials = hook; else delete x.source.partials; }
+}
+
+/** Run `fn` with `hook` in place, then put back the hook that was there. */
+function withPartialHook<T>(c: WithSource, s: WithSource, hook: Source['partials'], fn: () => T): T {
+  const before = c.source.partials;
+  setPartialHook(c, s, hook);
+  try { return fn(); } finally { setPartialHook(c, s, before); }
+}
+
+/** Pass 1: render every page with includes inlined, recording each stand-alone include; then pick the partials. */
+function choosePartials(
+  plan: PartialPlan, pages: string[], modeOf: (rel: string) => RenderMode, renderPage: (rel: string, count: boolean) => string,
+  standalone: (target: string, mode: RenderMode) => string, sides: [WithSource, WithSource], root: string,
+) {
+  withPartialHook(sides[0], sides[1], plan.collect, () => {
+    for (const rel of pages) {
+      plan.page = rel;
+      plan.mode = modeOf(rel);
+      try { renderPage(rel, false); } catch { /* the page fails again in pass 2, where it is reported */ }
+    }
+  });
+  const partials = plan.choose(root, standalone);
+  setPartialHook(sides[0], sides[1], plan.emit);
+  return partials;
 }
 
 /** Convert a cloud and a self-hosted MkDocs site that share templates into one set of pages. */
@@ -470,7 +506,51 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
   const s = side(opts.self);
   const envOf = (x: ReturnType<typeof side>) => ({ ...x.site.extra, config: x.site.config, base_path: BASE });
   const labels = navLabels(s.site.nav, navLabels(c.site.nav));
-  for (const rel of [...new Set([...c.pages, ...s.pages])].sort()) {
+  const pages = [...new Set([...c.pages, ...s.pages])].sort();
+  const modeOf = (rel: string): RenderMode => (c.pages.has(rel) && s.pages.has(rel) ? 'merged' : c.pages.has(rel) ? 'cloud' : 'self');
+  const sidesOf = (src: (x: ReturnType<typeof side>) => Source) => ({ cloud: { env: envOf(c), source: src(c) }, self: { env: envOf(s), source: src(s) } });
+  /** The page rendered for its deployment options; counts merge statistics when `count` is set. */
+  const renderPage = (rel: string, count: boolean): string => {
+    const mode = modeOf(rel);
+    if (mode === 'merged') {
+      const merged = mergePage(path.join(c.site.docsDir, rel), path.join(s.site.docsDir, rel), sidesOf((x) => x.source), opts.sharedNames ?? {});
+      if (count) {
+        report.merge.splitBlocks += merged.stats.splitBlocks;
+        if (merged.stats.diverged) report.merge.diverged++;
+      }
+      return merged.text;
+    }
+    const primary = mode === 'cloud' ? c : s;
+    const file = path.join(primary.site.docsDir, rel);
+    return renderSingle(loadPage(file, primary.source), envOf(primary), file, primary.source);
+  };
+  const plan = opts.partials ? new PartialPlan() : undefined;
+  const partials = plan ? choosePartials(plan, pages, modeOf, renderPage, (target, mode) => (mode === 'merged'
+    ? renderMergedInclude(target, sidesOf((x) => inlining(x.source)), opts.sharedNames ?? {})
+    : renderSingle(loadPage(target, (mode === 'cloud' ? c : s).source), envOf(mode === 'cloud' ? c : s), target, inlining((mode === 'cloud' ? c : s).source))), [c, s], opts.cloud.root) : [];
+  // Partials first: one that fails to convert is inlined on its pages instead.
+  if (plan) report.partials ??= { written: 0, inlined: [] };
+  for (const p of partials) {
+    const rel = `_partials/${p.name}`;
+    try {
+      plan!.begin(rel, p.mode);
+      const side = p.mode === 'self' ? s : c;
+      const text = p.mode === 'merged'
+        ? finishMerged(renderMergedInclude(p.target, sidesOf((x) => x.source), opts.sharedNames ?? {}))
+        : renderSingle(loadPage(p.target, side.source), envOf(side), p.target, side.source);
+      const nested = plan!.pagePartials;
+      const result = await convertRendered(resolveBase(text, out.route), { deploymentOptions: [], iframeHosts: opts.iframeHosts, fallbackTitle: p.name });
+      if (result.stats.format === 'md') throw new PageError('compile', 'does not compile as MDX');
+      const body = splitFrontMatter(result.mdx).body.replace(/^\n+/, '');
+      const mdx = relativeImages(body, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
+      write(path.join(out.outDir, out.prefix ?? '', rel), insertPartials(mdx, rel, nested));
+      report.partials!.written++;
+    } catch (e) {
+      plan!.drop(p.target);
+      report.partials!.inlined.push(`${rel}: ${(e as Error).message.slice(0, 200)}`);
+    }
+  }
+  for (const rel of pages) {
     const inC = c.pages.has(rel);
     const inS = s.pages.has(rel);
     const deploymentOptions = inC && inS ? [CLOUD, SELF_HOSTED] : inC ? [CLOUD] : [SELF_HOSTED];
@@ -478,28 +558,30 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
     const file = path.join(primary.site.docsDir, rel);
     const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(rel)));
     await emit(out, report, rel, async () => {
-      let text: string;
-      if (inC && inS) {
-        const merged = mergePage(path.join(c.site.docsDir, rel), path.join(s.site.docsDir, rel),
-          { cloud: { env: envOf(c), source: c.source }, self: { env: envOf(s), source: s.source } }, opts.sharedNames ?? {});
-        text = merged.text;
-        report.merge.splitBlocks += merged.stats.splitBlocks;
-        if (merged.stats.diverged) report.merge.diverged++;
-      } else {
-        text = renderSingle(loadPage(file, primary.source), envOf(primary), file, primary.source);
-      }
+      plan?.begin(rel, modeOf(rel));
+      let text = renderPage(rel, true);
       // Page data: the cloud wrapper's front matter and quick-start meta win; self-hosted fills gaps.
       const cData = inC ? readPageData(path.join(c.site.docsDir, rel), c.source) : undefined;
       const sData = inS ? readPageData(path.join(s.site.docsDir, rel), s.source) : undefined;
       const pageData = { frontMatter: { ...(sData?.frontMatter ?? {}), ...(cData?.frontMatter ?? {}) }, meta: cData?.meta ?? sData?.meta };
-      const result = await convertRendered(resolveBase(text, out.route), {
+      const convert = (t: string) => convertRendered(resolveBase(t, out.route), {
         deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts,
         specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel), fallbackTitle,
       });
-      return relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
+      let used = plan?.pagePartials ?? [];
+      let result = await convert(text);
+      if (used.length && result.stats.format === 'md') {
+        // A CommonMark page cannot import: inline its partials.
+        text = withPartialHook(c, s, undefined, () => renderPage(rel, false));
+        used = [];
+        result = await convert(text);
+      }
+      const mdx = relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
+      return insertPartials(mdx, path.join(out.prefix ?? '', rel).split(path.sep).join('/'), used);
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), fallbackTitle), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions },
     { readmeIndex: readmeIsIndex(rel, [c.site.docsDir, s.site.docsDir]) });
   }
+  setPartialHook(c, s, undefined);
   if (out.staticDir) {
     copyReferencedAssets(c.site.docsDir, out.outDir, out.staticDir, out.route);
     copyReferencedAssets(s.site.docsDir, out.outDir, out.staticDir, out.route);

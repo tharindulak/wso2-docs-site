@@ -87,16 +87,27 @@ export function loadPlain(file: string, source: Source): TemplateNode[] {
   return [{ t: 'text', v: expandMarkers(splitPageData(readInside(source, file)).body, file, source) }];
 }
 
+const inFence = (s: string): boolean => (s.match(/^[ \t]*(```|~~~)/gm) ?? []).length % 2 === 1;
+
+/** An include whose text would fill its own lines (only indentation before it, a line break after), outside code. */
+export function standsAlone(before: string, next: TemplateNode | undefined): boolean {
+  return /(?:^|\n)[ \t]*$/.test(before) && (!next || (next.t === 'text' && /^[ \t]*(?:\r?\n|$)/.test(next.v))) && !inFence(before);
+}
+
+/** The same source with includes always inlined (content rendered for one option inside a merged page). */
+export const inlining = (source: Source): Source => (source.partials ? { root: source.root, includeBases: source.includeBases } : source);
+
 /** Render nodes for one deployment option, the way MkDocs does today. env is mutated by {% set %}. */
 export function renderSingle(nodes: TemplateNode[], env: Env, file: string, source: Source): string {
   let out = '';
-  for (const node of nodes) {
+  for (const [index, node] of nodes.entries()) {
     if (node.t === 'text') out += node.v;
     else if (node.t === 'set') env[node.name] = setValue(node.expr, env, (n, e) => renderSingle(n, e, file, source));
     else if (node.t === 'var') out += String(evaluate(node.expr, env) ?? '');
     else if (node.t === 'include') {
       const target = findInclude(source, file, node.path);
-      out += renderSingle(loadPage(target, source), env, target, source);
+      const render = (): string => renderSingle(loadPage(target, source), env, target, source);
+      out += source.partials && standsAlone(out, nodes[index + 1]) ? source.partials(target, render) : render();
     } else if (node.t === 'if') {
       const b = takenBranch(node, env);
       if (b >= 0) out += renderSingle(node.branches[b]!.kids, env, file, source);
