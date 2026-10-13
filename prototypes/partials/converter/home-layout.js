@@ -1,0 +1,202 @@
+// Custom MkDocs home layouts (`<div class="homePage">`) and links that only the former site's theme made visible:
+// an anchor holding just a Font Awesome icon, or an empty anchor its CSS filled with a background image.
+// The docs site loads neither, so such a link would be invisible and nameless.
+import { closingTag } from './html-policy.js';
+import { outsideCode } from './syntax.js';
+/**
+ * Apply fn to the prose of a Markdown text: outside fenced code, indented code and inline code. An indented code
+ * block is a run of lines indented 4 or more after a blank line, outside a raw HTML block that starts at column 0
+ * (as Python-Markdown reads it: inside such a block nothing is code, which keeps indented home layouts as prose).
+ * Anything doubtful counts as code, so it is left unchanged.
+ */
+export function outsideAllCode(text, fn) {
+    const lines = text.split('\n');
+    const code = new Array(lines.length).fill(false);
+    const blank = (l) => l.trim() === '';
+    let htmlEnd = -1;
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const fence = line.match(/^[ \t]*(`{3,}|~{3,})/);
+        if (fence && i > htmlEnd) {
+            let j = i + 1;
+            while (j < lines.length && !new RegExp(`^[ \\t]*${fence[1]}[ \\t]*$`).test(lines[j]))
+                j++;
+            for (let k = i; k <= Math.min(j, lines.length - 1); k++)
+                code[k] = true;
+            i = j;
+            continue;
+        }
+        if (i > htmlEnd) {
+            const open = line.match(/^<([a-zA-Z][\w-]*)\b/);
+            if (open)
+                htmlEnd = htmlBlockEnd(lines, i, open[1]);
+        }
+        if (i <= htmlEnd)
+            continue;
+        if (/^(?: {4}|\t)/.test(line) && !blank(line) && (i === 0 || blank(lines[i - 1]) || code[i - 1])) {
+            // Lines after a blank line, or continuing a code run (blank lines inside the run are code too).
+            let j = i;
+            while (j < lines.length && (blank(lines[j]) || /^(?: {4}|\t)/.test(lines[j])))
+                code[j++] = true;
+            i = j - 1;
+        }
+    }
+    let out = '';
+    let run = '';
+    lines.forEach((line, i) => {
+        const piece = i < lines.length - 1 ? `${line}\n` : line;
+        if (!code[i]) {
+            run += piece;
+            return;
+        }
+        out += outsideCode(run, fn) + piece;
+        run = '';
+    });
+    return out + outsideCode(run, fn);
+}
+/** Last line of a raw HTML block opened by `tag` at line `start`: its matching close tag, else the next blank line. */
+function htmlBlockEnd(lines, start, tag) {
+    let depth = 0;
+    const re = new RegExp(`<(/?)${tag}\\b[^>]*?(/?)>`, 'gi');
+    for (let i = start; i < lines.length; i++) {
+        for (const m of lines[i].matchAll(re)) {
+            if (m[2])
+                continue;
+            depth += m[1] ? -1 : 1;
+            if (depth === 0)
+                return i;
+        }
+    }
+    let i = start;
+    while (i + 1 < lines.length && lines[i + 1].trim() !== '')
+        i++;
+    return i;
+}
+/** A page body with its own `<h1>` element outside code (MkDocs Material then shows no title of its own). */
+export function hasHtmlH1(text) {
+    let found = false;
+    outsideAllCode(text, (prose) => {
+        found ||= /<h1[\s>]/i.test(prose);
+        return prose;
+    });
+    return found;
+}
+/** A page body built on a custom MkDocs home layout (WSO2 themes: `<div class="homePage">`), outside code. */
+export function isHomeLayout(text) {
+    let found = false;
+    outsideAllCode(text, (prose) => {
+        found ||= /<div\b[^>]*\bclass(?:Name)?=\{?["']?[^"'>}]*\bhomePage\b/.test(prose);
+        return prose;
+    });
+    return found;
+}
+const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+// Attributes of a tag, with quoted values that may hold `>`.
+const ATTRS = String.raw `((?:[^>"']|"[^"]*"|'[^']*')*)`;
+// An icon element: an empty <i>, or an empty <span> whose class names an icon. It shows only through an icon font
+// or stylesheet the docs site does not load.
+const ICON = new RegExp(String.raw `<i\b${ATTRS}>\s*</i\s*>|<span\b[^>]*\bclass(?:Name)?=(?:["'][^"']*\b(?:fa[a-z-]*|icon[a-z-]*|material-[a-z-]*)\b[^"']*["']|(?:fa|icon|material-)[\w-]*)[^>]*>\s*</span\s*>`, 'gi');
+// A Material Icons ligature (`<i class="material-icons">timer</i>`): the font draws the name as an icon, and without
+// it the name shows as a word. It keeps the empty element, an icon to the rules below.
+const LIGATURE = /(<(i|span)\b[^>]*\bclass(?:Name)?=["'][^"']*\bmaterial-(?:icons|symbols)[\w-]*\b[^"']*["'][^>]*>)\s*[a-z0-9_]+\s*(<\/\2\s*>)/gi;
+const ANCHOR = new RegExp(String.raw `<a\b${ATTRS}>([\s\S]*?)</a\s*>`, 'gi');
+/** An attribute's value, quoted or not (JSX expression values are not read). */
+const attr = (attrs, name) => attrs.match(new RegExp(String.raw `(?:^|\s)${name}\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>\x60{]+))`, 'i'))?.slice(1).find((v) => v !== undefined)?.trim() || undefined;
+const textOf = (html) => html.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+const escapeText = (s) => s.replace(/&(?![a-z]+;|#\d+;)/gi, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+/** Markup that renders nothing: whitespace, non-breaking spaces, comments and line breaks only. */
+const isEmptyMarkup = (html) => html.replace(/<!--[\s\S]*?-->/g, '').replace(/&nbsp;|&#160;|&#xa0;/gi, '').replace(/<br\s*\/?>/gi, '').trim() === '';
+/** Start of the element that encloses position `at` (0 when none does). */
+function parentStart(text, at) {
+    const tags = [...text.slice(0, at).matchAll(new RegExp(String.raw `<(/?)([a-zA-Z][\w-]*)\b${ATTRS}>`, 'g'))];
+    let depth = 0;
+    for (let i = tags.length - 1; i >= 0; i--) {
+        const [, closing, name, attrs] = tags[i];
+        if (attrs.trimEnd().endsWith('/') || VOID.has(name.toLowerCase()))
+            continue;
+        if (closing)
+            depth++;
+        else if (depth === 0)
+            return tags[i].index;
+        else
+            depth--;
+    }
+    return 0;
+}
+/** Text of the last heading between the enclosing element's start and `at`. */
+function precedingHeading(text, at) {
+    const region = text.slice(parentStart(text, at), at);
+    const headings = [...region.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1\s*>/gi)];
+    return headings.length ? textOf(headings.at(-1)[2]) || undefined : undefined;
+}
+/** A name from the link target: its host, else its last path segment. */
+function hrefName(href) {
+    try {
+        return new URL(href).host || undefined;
+    }
+    catch { /* relative */ }
+    const last = href.replace(/[?#].*$/, '').replace(/\/+$/, '').split('/').at(-1);
+    return last ? last.replace(/\.[a-z0-9]+$/i, '').replace(/[-_]+/g, ' ').trim() || undefined : undefined;
+}
+/**
+ * Give every link visible text. An anchor whose only content is icon elements loses the icons (they cannot render
+ * here) and takes, in order, its `title` or `aria-label`, the nearest preceding heading in the same wrapper, or the
+ * link's host. An empty anchor (only whitespace, `&nbsp;`, comments or `<br>`) takes its `title` or `aria-label`;
+ * without one it is dropped, keeping an `id` or `name` as a plain target. Any other child (an element, a component)
+ * keeps the anchor as written. Same-page anchors (`href="#..."`), anchors without an href, and code are left alone.
+ */
+export function nameIconLinks(text) {
+    return outsideAllCode(text, (prose) => prose.replace(LIGATURE, '$1$3').replace(ANCHOR, (whole, attrs, inner, offset) => {
+        if (/<a\b/i.test(inner))
+            return whole;
+        const href = attr(attrs, 'href');
+        if (!href)
+            return whole;
+        const icons = inner.match(ICON)?.length ?? 0;
+        if (!isEmptyMarkup(inner.replace(ICON, '')))
+            return whole;
+        const label = attr(attrs, 'title') ?? attr(attrs, 'aria-label');
+        if (icons) {
+            const name = label ?? precedingHeading(prose, offset) ?? hrefName(href);
+            return name ? `<a${attrs}>${escapeText(name)}</a>` : whole;
+        }
+        if (href.startsWith('#'))
+            return whole;
+        if (label)
+            return `<a${attrs}>${escapeText(label)}</a>`;
+        const target = attrs.match(/(?:^|\s)(?:id|name)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`{]+)/i)?.[0];
+        return target ? `<a ${target.trim()}></a>` : '';
+    }));
+}
+const OPEN_TAG = (tag) => new RegExp(String.raw `<${tag}\b${ATTRS}>`, 'gi');
+const classes = (attrs) => (attr(attrs, 'class') ?? attr(attrs, 'className') ?? '').split(/\s+/);
+/**
+ * Image lightboxes the former theme drove with a script (docs-updates): a trigger `<a class="open-modal" data-open>`
+ * around an image, and a `<div class="modal">` dialog with a close control that its CSS hid until opened. Without
+ * that script and CSS the dialog would show inline, close button and all; it repeats the image, so it is dropped and
+ * the trigger keeps only its image. Code is left alone.
+ */
+export function dropScriptedModals(text) {
+    return outsideAllCode(text, (prose) => {
+        let s = prose;
+        for (const [tag, wanted, replace] of [
+            ['div', (a, inner) => classes(a).includes('modal') && /\bdata-close\b|\bclose-modal\b/.test(inner), () => ''],
+            ['a', (a) => classes(a).includes('open-modal') && attr(a, 'href') === undefined, (inner) => inner.trim()],
+        ]) {
+            const open = OPEN_TAG(tag);
+            for (let m = open.exec(s); m; m = open.exec(s)) {
+                const end = closingTag(s, tag, open.lastIndex);
+                if (!end)
+                    continue;
+                const inner = s.slice(open.lastIndex, end.start);
+                if (!wanted(m[1], inner))
+                    continue;
+                const kept = replace(inner);
+                s = s.slice(0, m.index) + kept + s.slice(end.end);
+                open.lastIndex = m.index + kept.length;
+            }
+        }
+        return s;
+    });
+}
+//# sourceMappingURL=home-layout.js.map
