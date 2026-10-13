@@ -1,0 +1,59 @@
+/* PROTOTYPE, throwaway. Stepper variants, switched by html[data-stp]. */
+
+/* Shared: the "Step N:" prefix stays in the heading (anchor, search, screen readers) but is hidden visually. */
+html:not([data-stp="0"]) .stp-prefix { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.stp-strip { display: none; }
+
+/* A. Rail: circles with the author's number, joined by a line (Cloudflare-style). */
+[data-stp="A"] .stp-run { margin: 1.5rem 0; }
+[data-stp="A"] .stp-step { position: relative; padding-left: 3rem; padding-bottom: 1rem; }
+[data-stp="A"] .stp-step::before {
+  content: attr(data-step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700; font-size: .95rem; color: #fff; background: var(--ifm-color-primary);
+}
+[data-stp="A"] .stp-step::after { content: ""; position: absolute; left: calc(1rem - 1px); top: 2.4rem; bottom: .3rem; width: 2px; background: var(--ifm-color-emphasis-300); }
+[data-stp="A"] .stp-step:last-child::after { display: none; }
+[data-stp="A"] .stp-step > :first-child { margin-top: 0; line-height: 2rem; }
+
+/* B. Cards: one bordered box per step, "Step N of M" eyebrow above the title. */
+[data-stp="B"] .stp-run { display: grid; gap: 1rem; margin: 1.5rem 0; }
+[data-stp="B"] .stp-step { border: 1px solid var(--ifm-color-emphasis-300); border-radius: 10px; padding: 1rem 1.25rem .25rem; background: var(--ifm-background-surface-color); }
+[data-stp="B"] .stp-step::before { content: attr(data-of); display: block; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ifm-color-primary); margin-bottom: .25rem; }
+[data-stp="B"] .stp-step > :first-child { margin-top: 0; }
+
+/* C. Progress strip: a sticky row of numbered dots above the run (current and done states follow scrolling);
+   headings stay plain, with the number as a small badge. */
+[data-stp="C"] .stp-strip {
+  display: flex; gap: .25rem; position: sticky; top: calc(var(--ifm-navbar-height) + .5rem); z-index: 2; overflow-x: auto;
+  margin: 1.5rem 0 1rem; padding: .4rem; border-radius: 999px; background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-300); box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+}
+[data-stp="C"] .stp-dot { display: flex; align-items: center; gap: .35rem; flex: 0 0 auto; padding: .15rem .6rem .15rem .15rem; border-radius: 999px; color: var(--ifm-color-emphasis-700); font-size: .8rem; text-decoration: none; }
+[data-stp="C"] .stp-dot b { display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 2px solid var(--ifm-color-emphasis-400); font-size: .75rem; }
+[data-stp="C"] .stp-dot span { display: none; max-width: 16rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+[data-stp="C"] .stp-dot.is-current { background: var(--ifm-color-emphasis-200); color: var(--ifm-color-emphasis-900); }
+[data-stp="C"] .stp-dot.is-current span { display: inline; }
+[data-stp="C"] .stp-dot.is-current b { border-color: var(--ifm-color-primary); color: var(--ifm-color-primary); }
+[data-stp="C"] .stp-dot.is-done b { background: var(--ifm-color-primary); border-color: var(--ifm-color-primary); color: #fff; }
+[data-stp="C"] .stp-step > :first-child::before {
+  content: attr(data-step); display: inline-grid; place-items: center; width: 1.6em; height: 1.6em; margin-right: .5rem; border-radius: 6px;
+  font-size: .8em; color: #fff; background: var(--ifm-color-primary); vertical-align: .1em;
+}
+[data-stp="C"] .stp-step > :first-child { scroll-margin-top: calc(var(--ifm-navbar-height) + 4rem); }
+
+/* Mobile: narrower rail. */
+@media (max-width: 996px) {
+  [data-stp="A"] .stp-step { padding-left: 2.5rem; }
+  [data-stp="A"] .stp-step::before { width: 1.75rem; height: 1.75rem; font-size: .85rem; }
+  [data-stp="A"] .stp-step::after { left: calc(.875rem - 1px); }
+  [data-stp="B"] .stp-step { padding: .85rem .9rem .1rem; }
+}
+
+/* Prototype bar: not part of the design being judged. */
+.stp-bar { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 1000; max-width: min(92vw, 52rem);
+  background: #111; color: #eee; border-radius: 14px; padding: .5rem .75rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .35); font: 13px/1.4 system-ui, sans-serif; }
+.stp-bar__row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.stp-bar button { background: #333; color: #fff; border: 0; border-radius: 8px; padding: .2rem .6rem; cursor: pointer; font-size: 14px; }
+.stp-bar strong { background: #fff; color: #111; border-radius: 6px; padding: 0 .45rem; }
+.stp-bar select { max-width: 18rem; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; padding: .15rem; }
+.stp-bar__state { margin: .4rem 0 0; padding: .35rem .5rem; background: #1d1d1d; color: #9fe39f; border-radius: 8px; font-size: 11.5px; white-space: pre-wrap; max-height: 6.5rem; overflow: auto; }

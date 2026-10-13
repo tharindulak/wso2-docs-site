@@ -1,0 +1,49 @@
+/* PROTOTYPE, throwaway. Prerequisites block variants, switched by html[data-pq]. */
+
+.pq__head > h2, .pq__head > h3, .pq__title { margin: 0; }
+.pq__body > :last-child { margin-bottom: 0; }
+
+/* A. Panel: a box where the block was written, with ordinary bullets. */
+[data-pq="A"] .pq { margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid var(--ifm-toc-border-color); border-left: 4px solid var(--ifm-color-primary); border-radius: 10px; background: color-mix(in srgb, var(--ifm-color-primary) 5%, transparent); }
+[data-pq="A"] .pq__head { display: flex; align-items: center; gap: .5rem; margin-bottom: .6rem; }
+[data-pq="A"] .pq__head::before { content: "✓"; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: var(--ifm-color-primary); color: #fff; font-weight: 700; font-size: .85rem; flex: none; }
+[data-pq="A"] .pq__head > h2, [data-pq="A"] .pq__head > h3, [data-pq="A"] .pq__title { font-size: 1.15rem; font-weight: 700; }
+
+/* B. Collapsible: one line with a count; the reader opens it when they need the detail. */
+[data-pq="B"] .pq { margin: 1.25rem 0; border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; }
+[data-pq="B"] .pq__details > summary { display: flex; align-items: center; gap: .75rem; padding: .7rem 1rem; cursor: pointer; list-style: none; }
+[data-pq="B"] .pq__details > summary::-webkit-details-marker { display: none; }
+[data-pq="B"] .pq__details > summary::before { content: "▸"; color: var(--ifm-color-primary); transition: transform .15s; }
+[data-pq="B"] .pq__details[open] > summary::before { transform: rotate(90deg); }
+[data-pq="B"] .pq__details > summary h2, [data-pq="B"] .pq__details > summary h3, [data-pq="B"] .pq__title { font-size: 1rem; font-weight: 700; }
+[data-pq="B"] .pq__count { margin-left: auto; font-size: .85rem; color: var(--ifm-color-emphasis-700); }
+[data-pq="B"] .pq__body { padding: 0 1rem 1rem 2.6rem; }
+
+/* C. Rail: the block is a ✓ item on the same rail as the stepper, so it reads as "step zero". */
+[data-pq="C"] .pq { position: relative; margin: 1.5rem 0 0; padding: 0 0 1rem 3rem; }
+[data-pq="C"] .pq::before { content: "✓"; position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center; font-weight: 700; color: var(--ifm-color-primary); background: var(--ifm-background-color); border: 2px solid var(--ifm-color-primary); box-sizing: border-box; }
+[data-pq="C"] .pq.pq--before-steps::after { content: ""; position: absolute; left: calc(1rem - 1px); top: 2.4rem; bottom: -1.5rem; width: 2px; background: var(--ifm-toc-border-color); }
+[data-pq="C"] .pq.pq--before-steps + .steps { margin-top: 1.5rem; }
+[data-pq="C"] .pq__head > h2, [data-pq="C"] .pq__head > h3, [data-pq="C"] .pq__title { line-height: 2rem; font-size: 1.35rem; font-weight: 700; }
+[data-pq="C"] .pq__body { margin-top: .5rem; }
+
+/* D. Header box: moved up under Deployment options, styled as page metadata. */
+[data-pq="D"] .pq { margin: -0.5rem 0 1.5rem; padding: .7rem 1rem; border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; font-size: .92rem; }
+[data-pq="D"] .pq__head > h2, [data-pq="D"] .pq__head > h3, [data-pq="D"] .pq__title { font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ifm-color-primary); margin-bottom: .3rem; }
+[data-pq="D"] .pq__body > ul { padding-left: 1.1rem; }
+[data-pq="D"] .pq__body p { margin-bottom: .3rem; }
+
+@media (max-width: 996px) {
+  [data-pq="C"] .pq { padding-left: 2.5rem; }
+  [data-pq="C"] .pq::before { width: 1.75rem; height: 1.75rem; }
+  [data-pq="C"] .pq.pq--before-steps::after { left: calc(.875rem - 1px); }
+}
+
+/* Prototype bar: not part of the design being judged. */
+.pq-bar { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 1000; max-width: min(92vw, 56rem);
+  background: #111; color: #eee; border-radius: 14px; padding: .5rem .75rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .35); font: 13px/1.4 system-ui, sans-serif; }
+.pq-bar__row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.pq-bar button { background: #333; color: #fff; border: 0; border-radius: 8px; padding: .2rem .6rem; cursor: pointer; font-size: 14px; }
+.pq-bar strong { background: #fff; color: #111; border-radius: 6px; padding: 0 .45rem; }
+.pq-bar select { max-width: 20rem; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; padding: .15rem; }
+.pq-bar__state { margin: .4rem 0 0; padding: .35rem .5rem; background: #1d1d1d; color: #9fe39f; border-radius: 8px; font-size: 11.5px; white-space: pre-wrap; max-height: 6.5rem; overflow: auto; }
