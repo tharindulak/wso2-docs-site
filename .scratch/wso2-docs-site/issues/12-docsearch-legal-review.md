@@ -2,7 +2,7 @@
 
 Parent: [map](../map.md)
 Type: task (HITL)
-Status: open
+Status: on hold (user decision 2026-10-12)
 Assignee:
 Blocked by:
 

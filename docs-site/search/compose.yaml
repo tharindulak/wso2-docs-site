@@ -1,0 +1,26 @@
+# Local Typesense for the docs site's search: development and review only. The production engine is still open
+# (.scratch/wso2-docs-site/issues/17-production-search-engine.md); the server is GPL-3.0, run unmodified.
+#   export TYPESENSE_ADMIN_KEY=$(openssl rand -hex 24) TYPESENSE_SEARCH_KEY=$(openssl rand -hex 24)
+#   docker compose -f search/compose.yaml up -d
+services:
+  typesense:
+    image: typesense/typesense:30.2@sha256:610f2d34b1f93d00762869da2c67736775e5798d19a2c8b91b014b8a0cc1e110
+    environment:
+      TYPESENSE_API_KEY: ${TYPESENSE_ADMIN_KEY:?set TYPESENSE_ADMIN_KEY}
+      TYPESENSE_DATA_DIR: /data
+      TYPESENSE_ENABLE_CORS: "true"
+      TYPESENSE_CORS_DOMAINS: http://localhost:3000,http://127.0.0.1:3000
+      TYPESENSE_ENABLE_SEARCH_ANALYTICS: "true"
+      TYPESENSE_ANALYTICS_DIR: /analytics
+      TYPESENSE_ANALYTICS_FLUSH_INTERVAL: "60"
+      # The container may come back on another internal address after a restart, which leaves a single node stuck
+      # ("Node not ready yet"). Resetting peers can drop data; acceptable here, where the index is rebuilt from a build.
+      TYPESENSE_RESET_PEERS_ON_ERROR: "true"
+    ports:
+      - 127.0.0.1:8108:8108
+    volumes:
+      - typesense-data:/data
+      - typesense-analytics:/analytics
+volumes:
+  typesense-data:
+  typesense-analytics:

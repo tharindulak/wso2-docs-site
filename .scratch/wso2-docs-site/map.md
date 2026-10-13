@@ -37,6 +37,7 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - [Navigation across hub and products](issues/10-navigation.md): HashiCorp model with a Products mega-menu, per-product second bar with section tabs and version selector; product names open an overview page; hub appears as "Account and billing"; provisional on the product catalogue.
 - [Measure conversion of every product's docs](issues/16-measure-conversion-all-products.md): 92% of 6,617 Latest pages across 16 sources compile clean; failures are mostly invalid HTML in MI, IS and APIM; single-source products are cheap to bring in.
 
+- [Search choice and behaviour](issues/11-search-choice.md): search starts scoped to the current product (whole product, Latest plus the viewed version) with an "All products" tab; hub pages in every scope; optional deployment-option filter; modal plus results page; re-index per deploy; skeleton uses self-hosted Typesense while the Algolia legal review is on hold.
 ## Not yet specified
 
 - Redirects from current docs URLs (wso2.com docs, Asgardeo, Devant) to the docs site.
@@ -53,3 +54,4 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - Fixing source HTML on exclude lists: owned by product teams; pages appear as lists shrink.
 - Launching the site.
 - Moving Moesif docs off moesif.com.
+- Ask AI or other AI answers in search: sends reader questions to a third-party LLM service with unconfirmed retention; ruled out with [Search choice and behaviour](issues/11-search-choice.md) (2026-10-12).

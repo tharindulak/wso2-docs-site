@@ -6,6 +6,7 @@ import NavbarLogo from '@theme/Navbar/Logo';
 import NavbarColorModeToggle from '@theme/Navbar/ColorModeToggle';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import ProductsMenu from '@site/src/components/ProductsMenu.js';
+import SearchButton from '@site/src/components/search/SearchButton.js';
 
 export default function NavbarContent() {
   return (
@@ -17,7 +18,7 @@ export default function NavbarContent() {
         <Link className="navbar__item navbar__link navbar-account" to="/account/">Account and billing</Link>
       </div>
       <div className="navbar__items navbar__items--right">
-        <div className="search-placeholder" title="Search is being set up (Search choice ticket)" aria-disabled="true">🔍 Search (coming soon)</div>
+        <SearchButton />
         <NavbarColorModeToggle />
       </div>
     </div>
