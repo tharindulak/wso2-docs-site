@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 // Subpath imports: the plugins alone, without loading the converter (and its ES-module-only dependencies) into the config.
 import rehypeValidElements from '@wso2/docs-converter/rehype-valid-elements';
 import remarkSteps from '@wso2/docs-converter/remark-steps';
+import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -37,7 +38,9 @@ const docsPlugins = included.map(({ section, v }) => [
     routeBasePath: v.route,
     sidebarPath: path.join(generated, 'sidebars', v.sidebar),
     sidebarCollapsed: true,
-    remarkPlugins: [remarkSteps], // runs of `Step N` headings render as a stepper; after heading ids and the TOC
+    // Runs of `Step N` headings render as a stepper (after heading ids and the TOC); Tabs blocks offering the same
+    // choices switch together.
+    remarkPlugins: [remarkSteps, remarkLinkedTabs],
     rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
     ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),
