@@ -195,9 +195,10 @@ const titleOf = (text: string, fallback: string): string =>
 /**
  * `{{ base_path }}` resolves to the section route. A base_path that is only a host (https://apk.docs.wso2.com) makes
  * `{{ base_path }}/en/<version>/...` a full former-site URL, which the docs site maps to its page like any other.
+ * `{{ base_path }}//x` is `{{ base_path }}/x`: the former sites' servers merged the doubled slash.
  */
 const resolveBase = (text: string, route: string, host?: string): string => (host ? text.replace(new RegExp(`${BASE}(?=/en/[^/\\s"')]+/)`, 'g'), host) : text)
-  .replaceAll(`${BASE}/`, `/${route}/`).replaceAll(BASE, `/${route}`);
+  .replace(new RegExp(`${BASE}/+`, 'g'), `/${route}/`).replaceAll(BASE, `/${route}`);
 
 /** The origin of a base_path that is a host only (no path), else undefined. */
 export function hostOnly(basePath: unknown): string | undefined {

@@ -405,6 +405,17 @@ test('a host-only base_path followed by /en/<version>/ becomes the full former-s
   assert.match(fs.readFileSync(path.join(out2, 'index.md'), 'utf8'), /\[x\]\(\/m\/en\/4\.4\.0\/x\/\)/, 'a base_path with a path keeps mapping to the route');
 });
 
+test('{{ base_path }}//assets (a doubled slash) finds the file, as the former site served it with slashes merged', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: D\nplugins:\n  - markdownextradata\nextra:\n  base_path: /d/docs\n',
+    'en/docs/guides/a/b.md': '# B\n\n![i]({{base_path}}//assets/i.png)\n',
+    'en/docs/assets/i.png': 'PNG',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'd' });
+  assert.match(fs.readFileSync(path.join(out, 'guides/a/b.md'), 'utf8'), /!\[i\]\(\.\.\/\.\.\/assets\/i\.png\)/);
+});
+
 test('a README.md is its folder index (no index.md beside it); otherwise it stays pinned', async () => {
   const root = tempSource({
     'en/mkdocs.yml': 'site_name: R\n',
