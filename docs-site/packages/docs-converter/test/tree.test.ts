@@ -148,3 +148,16 @@ test('relative URLs in attributes resolve against the page URL, like a browser, 
   assert.match(read('docs/apis/users-rest-api.md'), /spec="\/p\/apis\/restapis\/users\.yaml"/);
   assert.equal(read('static/apis/restapis/users.yaml'), 'SPEC');
 });
+
+test('a Markdown link written relative to the page URL (as MkDocs pages often are) still finds its file', () => {
+  const { versions, out, read } = twoVersions({ 'docs/index.md': page('Home', '# Home\n') }, {
+    'docs/index.md': page('Home', '# Old\n'),
+    'docs/develop/admin-services.md': page('Admin services', '- [WSDL](../../assets/attachments/admin.wsdl)\n- [Shot](../assets/img/a.png)\n'),
+    'docs/assets/attachments/admin.wsdl': 'WSDL', 'docs/assets/img/a.png': 'A',
+  });
+  writeDocusaurusTree(versions, out, { route: 'p' });
+  const text = read('versioned_docs/version-7.2.0/develop/admin-services.md');
+  assert.match(text, /\[WSDL\]\(\.\.\/\.\.\/\.\.\/assets\/attachments\/admin\.wsdl\)/);
+  assert.match(text, /\[Shot\]\(\.\.\/\.\.\/\.\.\/assets\/img\/a\.png\)/);
+  assert.equal(read('assets/attachments/admin.wsdl'), 'WSDL');
+});

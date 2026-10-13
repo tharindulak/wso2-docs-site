@@ -139,8 +139,14 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
         // A page of this version: a relative file link, which Docusaurus resolves within the version.
         const linked = target === `/${v.route}` || target.startsWith(`/${v.route}/`) ? pageAt.get(withSlash(`/${target.slice(v.route.length + 2)}`)) : undefined;
         if (linked) return `${pre}${encodePath(path.posix.relative(pageDir, linked))}${url.includes('#') ? url.slice(url.indexOf('#')) : ''}${post}`;
-        const fromDocs = target.startsWith(`/${v.route}/`) ? target.slice(v.route.length + 2) : target.startsWith('/') ? undefined : path.posix.join(pageDir, target);
-        const file = fromDocs !== undefined ? fileIn(v.docsDir, fromDocs) : undefined;
+        let fromDocs = target.startsWith(`/${v.route}/`) ? target.slice(v.route.length + 2) : target.startsWith('/') ? undefined : path.posix.join(pageDir, target);
+        let file = fromDocs !== undefined ? fileIn(v.docsDir, fromDocs) : undefined;
+        if (!file && !target.startsWith('/')) {
+          // MkDocs pages often write file links relative to the page URL (`../../assets/x` from `/a/b/`), as a browser reads them.
+          const viaUrl = resolveUrl(target);
+          fromDocs = viaUrl.startsWith(`/${v.route}/`) ? viaUrl.slice(v.route.length + 2) : undefined;
+          file = fromDocs !== undefined ? fileIn(v.docsDir, fromDocs) : undefined;
+        }
         if (file && fromDocs) {
           const stored = assets.place(fromDocs.replace(/^assets\//, ''), file, v.version);
           return `${pre}${encodePath(path.posix.relative(outDir, stored))}${post}`;
