@@ -48,6 +48,10 @@ _Avoid_: Shared topic, common docs
 A product team's own docs repository, which the team owns and from which the docs site draws that product's pages.
 _Avoid_: Docs repo (when ambiguous with the docs site's own repository), upstream
 
+**Linked tabs**:
+Tab sets anywhere on the docs site that offer the same choices and switch together when a reader picks one, remembering that choice on later pages.
+_Avoid_: Synced tabs, tab groups
+
 **Primary reader**:
 The reader a page is written for first: a new customer onboarding, or a customer of one product discovering the others.
 _Avoid_: Persona, audience
