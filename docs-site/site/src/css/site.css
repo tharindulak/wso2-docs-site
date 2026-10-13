@@ -23,6 +23,24 @@
 .applies--hybrid { --c: var(--deployment-hybrid); }
 .applies--self-hosted { --c: var(--deployment-self-hosted); }
 
+/* Steps (remark-steps): runs of `Step N` headings as numbered circles joined by a line (Cloudflare style). The circle
+   shows the author's number; the "Step N:" prefix stays in the heading for anchors and screen readers. */
+.steps { margin: 1.5rem 0; }
+.steps__step { position: relative; padding: 0 0 1rem 3rem; }
+.steps__step::before {
+  content: attr(data-step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700; font-size: 0.95rem; color: #fff; background: var(--ifm-color-primary);
+}
+.steps__step::after { content: ""; position: absolute; left: calc(1rem - 1px); top: 2.4rem; bottom: 0.3rem; width: 2px; background: var(--ifm-toc-border-color); }
+.steps__step:last-child::after { display: none; }
+.steps__step > :first-child { margin-top: 0; line-height: 2rem; }
+.steps__prefix { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 996px) {
+  .steps__step { padding-left: 2.5rem; }
+  .steps__step::before { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
+  .steps__step::after { left: calc(0.875rem - 1px); }
+}
+
 /* Search: global-bar button, dialog (native <dialog>) and results page. */
 .search-button {
   display: flex; align-items: center; gap: 0.5rem; min-width: 14rem; padding: 0.3rem 0.75rem; cursor: pointer;

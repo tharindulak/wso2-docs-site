@@ -69,6 +69,7 @@ const { sidebar, report } = await convertMkdocsSite(
 ```
 
 `@wso2/docs-converter/rehype-valid-elements` exports just the rehype plugin for CommonMark pages, without loading the converter (the docs site's Docusaurus config uses it).
+`@wso2/docs-converter/remark-steps` does the same for the remark plugin that renders runs of `Step N` headings as a stepper; a page opts out with `stepper: false` in front matter.
 
 The docs site uses the same functions, passing a `fallback` that writes a redirect page for excluded or failing pages; the CLI writes none.
 

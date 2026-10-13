@@ -17,6 +17,11 @@
       "types": "./dist/src/rehype-valid-elements.d.ts",
       "import": "./dist/src/rehype-valid-elements.js",
       "default": "./dist/src/rehype-valid-elements.js"
+    },
+    "./remark-steps": {
+      "types": "./dist/src/remark-steps.d.ts",
+      "import": "./dist/src/remark-steps.js",
+      "default": "./dist/src/remark-steps.js"
     }
   },
   "bin": {
