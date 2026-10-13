@@ -41,6 +41,7 @@ Navigation still lists every product; links into sections left out of a quick bu
 | `scripts/bump-sources.mjs` | Bump bot: moves Latest to the head of its tracked branch and listed versions to docs fix releases (auto-merged PR), and proposes Latest promotions when a docs release matches a product GA release (PR needing docs-team approval). See `CONTENT-RELEASES.md`. |
 | `scripts/snapshots.mjs` | Builds, stores and assembles frozen versions (snapshots): `list`, `build`, `assemble`. |
 | `scripts/check-links.mjs` | Checks internal links in a built site, including the merged live and snapshot output. |
+| `scripts/search-index.mjs`, `site/src/components/search/` | Search. The script indexes a built site (live or merged) into Typesense; the dialog (Ctrl/Cmd+K) and `/search` page query it with a search-only key. See Search below. |
 | `wso2-docs` CLI, `check-action/` | The same conversion for content repos: `wso2-docs check` on pull requests (the Action annotates failing lines), `wso2-docs convert` to produce a converted artifact. |
 | `.github/workflows/docs-site-*.yml` | CI build and merged link check, snapshot builds, hourly content bump, daily version promotion. Actions pinned by commit, least-privilege tokens, no credentials persisted, no tokens in content repos. |
 
@@ -72,6 +73,31 @@ The live build needs a 12 GB heap (`DOCS_HEAP_MB`, default 12288; 8 GB fails at 
 
 `SNAPSHOT_STORE` chooses where snapshots live. Unset, it is the local directory `.cache/snapshots`. In CI it is `github-release:docs-site-snapshots` (a GitHub Release holding one tarball per key); that backend needs a GitHub remote and `GH_TOKEN`, and only the snapshot upload job has write access. The workflow builds with read-only permissions and no token, hands the tarball over as a workflow artifact, and a separate upload job (no checkout, no `npm ci`, no repository scripts) checks its name and uploads it.
 
+## Search
+
+Behaviour is decided in `.scratch/wso2-docs-site/issues/11-search-choice.md`; the production engine is still open (`17-production-search-engine.md`, waiting on the Algolia legal review), so the skeleton runs on self-hosted Typesense.
+
+- **Scope.** On a product page search starts scoped to that product (every section), with an "All products" tab; the choice is not stored. Home and Account and billing pages search all products. Account and billing pages appear in every scope.
+- **Versions.** Latest of every product, plus the version being viewed when on an older one. The site runs one docs plugin per version, so Docusaurus's own contextual search would match every version; `site/src/lib/search.mjs` builds the Typesense filter instead.
+- **Index.** `scripts/search-index.mjs` reads the built HTML: one record per page and per h2/h3 section, with product, section, version and the page's deployment options (`<meta name="wso2:deployment">`), plus one record per link-out product. Redirect and `noindex` pages are skipped. Each run fills a new collection `docs_<timestamp>`, moves the alias `docs` to it and drops older ones, so readers never see a half-built index. Run it after the merged build is assembled; the merged output today gives about 134,000 records in about a minute, and Typesense holds them in about 350 MB.
+- **Keys.** The admin key stays in the indexing environment (a CI secret). The browser gets `TYPESENSE_SEARCH_KEY`, created as a key that can only search `docs`, through `/search-config.json`, which the script writes into the build directory. Snapshots never embed an endpoint or key.
+- **Analytics.** Aggregate query and no-results counts only (Typesense `popular_queries` and `nohits_queries` rules on the alias, into `search_queries` and `search_nohits`): no cookies, no reader ids. Typesense uses the client IP in memory to group one reader's keystrokes into a query. Privacy review is still needed before production.
+- **Outage.** Without `/search-config.json`, or when Typesense does not answer, the dialog says search is unavailable and offers the product list and a site-restricted DuckDuckGo search.
+
+Local run (needs Docker; the image is pinned by digest and listens on 127.0.0.1 only; keys stay in your shell):
+
+```sh
+export TYPESENSE_ADMIN_KEY=$(openssl rand -hex 24) TYPESENSE_SEARCH_KEY=$(openssl rand -hex 24)
+docker compose -p docs-search -f search/compose.yaml up -d
+TYPESENSE_URL=http://127.0.0.1:8108 TYPESENSE_PUBLIC_URL=http://localhost:8108 npm run search-index -- site/build-merged
+npm run preview -- site/build-merged                  # http://localhost:3000, allowed by the compose file's CORS list
+npm run search-index -- site/build-merged --dry-run records.jsonl   # records only, no Typesense
+```
+
+The script writes `search-config.json` into the build it indexed and into `.cache/search-public/` (gitignored). Later `npm start`, quick and full builds serve that copy, so search works in them without re-indexing; snapshot builds never include it. Without settings, a local build's search dialog says search is not set up and shows this command; readers on the real site only see "Search is unavailable right now".
+
+`TYPESENSE_PUBLIC_URL` must be https outside localhost. In production, also allow the Typesense host in the site's Content-Security-Policy `connect-src` (explicitly, no wildcard) and set `TYPESENSE_CORS_DOMAINS` to the site's origin.
+
 ## Content source rules (summary)
 
 Allowed: Jinja `if/elif/else`, comparisons, `and/or/not`, `in`, `is defined`, `include`, `set`, `raw`, `{{ variable }}`; MkDocs admonitions, collapsibles, tabs, `attr_list`, fenced code. Not allowed: ternaries, filters, macros, loops; `<script>` (except the quick-start `const meta = {…}` literal), `<style>`, `<form>`, `<object>`, `<embed>`, event-handler attributes, `javascript:` URLs, iframes outside YouTube and Vimeo. Full contract: `.scratch/wso2-docs-site/issues/13-conversion-contract.md`.
@@ -79,7 +105,7 @@ Allowed: Jinja `if/elif/else`, comparisons, `and/or/not`, `in`, `is defined`, `i
 ## Known limits
 
 - The converter's compile check uses MDX 3 + GFM + directives. Docusaurus adds link and image processing, so a page can pass the check and still fail the site build; CI runs the full build as the final gate.
-- Search is a placeholder until the search decision (Algolia DocSearch legal review) lands.
+- Search runs on self-hosted Typesense until the production engine is chosen; the Typesense server is GPL-3.0 (run unmodified as a separate service), to be checked against WSO2's OSS policy before use beyond development. No CI job indexes yet: there is no deploy step to attach it to.
 - Agent Manager's cloud pages (a hand-forked Docusaurus version) are not combined yet. Integration Platform (Devant) and API Platform (Bijira) place their cloud trees into the self-hosted sidebar through `cloud_companion` placement maps awaiting product-team confirmation.
 - Pages MkDocs builds from theme templates (section homes, catalogues) get a generated overview of links; `redoc` API reference pages are not rendered yet.
 - `npm audit` reports advisories in Docusaurus 3.10.2's build-time dependencies. The published site is static; mitigate with `overrides` and isolated CI builds after security review.

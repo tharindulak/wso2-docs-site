@@ -19,7 +19,8 @@
     "serve": "docusaurus serve site",
     "preview": "node scripts/serve.mjs",
     "snapshots": "node scripts/snapshots.mjs",
-    "check-links": "node scripts/check-links.mjs"
+    "check-links": "node scripts/check-links.mjs",
+    "search-index": "node scripts/search-index.mjs"
   },
   "dependencies": {
     "@docusaurus/core": "3.10.2",
@@ -37,6 +38,7 @@
     "redoc": "2.5.4"
   },
   "devDependencies": {
+    "htmlparser2": "8.0.2",
     "js-yaml": "4.3.2"
   },
   "workspaces": [

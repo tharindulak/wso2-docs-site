@@ -10,6 +10,7 @@ const generated = path.resolve(here, '../generated');
 const manifestFile = path.join(generated, 'manifest.json');
 if (!fs.existsSync(manifestFile)) throw new Error('Run `npm run content` first: generated/manifest.json is missing.');
 const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+const searchPublic = path.resolve(here, '../.cache/search-public');
 
 // Quick builds (scripts/build-sections.mjs): DOCS_SECTIONS=id,id builds only those sections. Navigation still
 // lists every product; links into sections left out are reported as broken links (warnings).
@@ -73,7 +74,10 @@ export default {
   future: { v4: false }, // Faster bundler broke on near-identical versioned MDX in docs-agent-platform; re-test before enabling.
   // The last entry serves redoc.standalone.js for API pages (src/components/ApiReference.js).
   // A snapshot build serves only its own version's files: generated/static (every live product) stays with the live build.
-  staticDirectories: ['static', ...(snapshot ? [] : [path.join(generated, 'static')]), ...versionStatics, path.resolve(here, '../node_modules/redoc/bundles')],
+  // Local search settings (.cache/search-public/search-config.json, written by scripts/search-index.mjs) reach dev and
+  // quick builds; never snapshots, which must not depend on the environment. A deploy writes its own into the output.
+  staticDirectories: ['static', ...(snapshot ? [] : [path.join(generated, 'static')]), ...versionStatics, path.resolve(here, '../node_modules/redoc/bundles'),
+    ...(!snapshot && fs.existsSync(searchPublic) ? [searchPublic] : [])],
   themes: ['@docusaurus/theme-mermaid'],
   presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css'] } }]],
   plugins: [
