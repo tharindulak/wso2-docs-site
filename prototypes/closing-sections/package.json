@@ -1,0 +1,6 @@
+{
+  "name": "closing-sections-prototype",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node serve.ts" }
+}
