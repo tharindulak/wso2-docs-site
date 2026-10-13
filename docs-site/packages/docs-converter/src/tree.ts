@@ -59,7 +59,8 @@ const fileIn = (root: string | undefined, rel: string): string | undefined => {
 
 // A space may follow the parenthesis (`]( /p/x.png)`): CommonMark allows it, and sources use it.
 const MD_TARGET = /(\]\()[ \t]*([^)\s]+)((?:\s+"[^"]*")?\))/g;
-const URL_ATTR = /(\b(?:src|href|spec)=")([^"#][^"]*)(")/g;
+// HTML form `src="…"` and the JSX form the converter writes for HTML blocks, `src={"…"}`.
+const URL_ATTR = /(\b(?:src|href|spec)=\{?")([^"#][^"]*)("\}?)/g;
 
 /** URL path of a page inside its version (`/guides/setup/`): its front matter slug, else Docusaurus's default. */
 function pageUrl(rel: string, text: string): string {
