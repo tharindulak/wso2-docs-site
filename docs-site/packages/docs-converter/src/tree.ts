@@ -58,7 +58,7 @@ const fileIn = (root: string | undefined, rel: string): string | undefined => {
 };
 
 // A space may follow the parenthesis (`]( /p/x.png)`): CommonMark allows it, and sources use it.
-const MD_TARGET = /(\]\()[ \t]*([^)\s]+)((?:\s+"[^"]*")?\))/g;
+const MD_TARGET = /(\]\()\s*([^)\s]+)((?:\s+"[^"]*")?\))/g;
 // HTML forms `src="…"` and `src='…'`, and the JSX form the converter writes for HTML blocks, `src={"…"}`.
 const URL_ATTR = /(\b(?:src|href|spec)=\{?(["']))((?:(?!\2)[^#])(?:(?!\2).)*)(\2\}?)/g;
 
@@ -146,6 +146,10 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
           const viaUrl = resolveUrl(target);
           fromDocs = viaUrl.startsWith(`/${v.route}/`) ? viaUrl.slice(v.route.length + 2) : undefined;
           file = fromDocs !== undefined ? fileIn(v.docsDir, fromDocs) : undefined;
+        }
+        if (file && fromDocs && /\.html?$/i.test(fromDocs)) {
+          // Docusaurus never bundles a linked .html file, so it needs a URL, as attributes do.
+          return `${pre}/${opts.route}/${encodePath(statics.place(fromDocs, file, v.version).slice('static/'.length))}${post}`;
         }
         if (file && fromDocs) {
           const stored = assets.place(fromDocs.replace(/^assets\//, ''), file, v.version);

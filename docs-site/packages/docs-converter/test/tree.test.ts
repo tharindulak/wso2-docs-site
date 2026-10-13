@@ -161,3 +161,24 @@ test('a Markdown link written relative to the page URL (as MkDocs pages often ar
   assert.match(text, /\[Shot\]\(\.\.\/\.\.\/\.\.\/assets\/img\/a\.png\)/);
   assert.equal(read('assets/attachments/admin.wsdl'), 'WSDL');
 });
+
+test('a link target on the line after `](` still finds its file', () => {
+  const { versions, out, read } = twoVersions({ 'docs/index.md': page('Home', '# Home\n') }, {
+    'docs/index.md': page('Home', '# Old\n'),
+    'docs/learn/self-registration.md': page('Self registration', '![config](\n../assets/img/config.png)\n'),
+    'docs/assets/img/config.png': 'PNG',
+  });
+  writeDocusaurusTree(versions, out, { route: 'p' });
+  assert.match(read('versioned_docs/version-7.2.0/learn/self-registration.md'), /!\[config\]\(\.\.\/\.\.\/\.\.\/assets\/img\/config\.png\)/);
+});
+
+test('a linked .html file, which Docusaurus never bundles, goes to static/ and is linked by URL under the route', () => {
+  const { versions, out, read } = twoVersions({ 'docs/index.md': page('Home', '# Home\n') }, {
+    'docs/index.md': page('Home', '# Old\n'),
+    'docs/develop/sso-page.md': page('SSO page', 'See [here](../../assets/attachments/template.html).\n'),
+    'docs/assets/attachments/template.html': '<html></html>',
+  });
+  writeDocusaurusTree(versions, out, { route: 'p' });
+  assert.match(read('versioned_docs/version-7.2.0/develop/sso-page.md'), /\[here\]\(\/p\/assets\/attachments\/template\.html\)/);
+  assert.equal(read('static/assets/attachments/template.html'), '<html></html>');
+});
