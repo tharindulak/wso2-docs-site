@@ -59,7 +59,7 @@ const fileIn = (root: string | undefined, rel: string): string | undefined => {
 
 // A space may follow the parenthesis (`]( /p/x.png)`): CommonMark allows it, and sources use it.
 const MD_TARGET = /(\]\()[ \t]*([^)\s]+)((?:\s+"[^"]*")?\))/g;
-const URL_ATTR = /(\b(?:src|href|spec)=")(\/[^"]+)(")/g;
+const URL_ATTR = /(\b(?:src|href|spec)=")([^"#][^"]*)(")/g;
 
 /** URL path of a page inside its version (`/guides/setup/`): its front matter slug, else Docusaurus's default. */
 function pageUrl(rel: string, text: string): string {
@@ -128,8 +128,11 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
     for (const rel of pageFiles) {
       const pageDir = path.posix.dirname(rel);
       const outDir = path.posix.join(pagesRoot, pageDir);
+      const raw = fs.readFileSync(path.join(v.docsDir, rel), 'utf8');
+      /** Where a browser on this page takes an attribute's URL (absolute stays; relative resolves against the page URL). */
+      const resolveUrl = (target: string): string => (target.startsWith('/') ? target : path.posix.resolve(`/${v.route}${pageUrl(rel, raw)}`, target));
       // Markdown link and image targets naming a file the version holds: point them at the shared copy.
-      const text = outsideCode(withoutComponentImports(fs.readFileSync(path.join(v.docsDir, rel), 'utf8')), (t) => t.replace(MD_TARGET, (m, pre: string, url: string, post: string) => {
+      const text = outsideCode(withoutComponentImports(raw), (t) => t.replace(MD_TARGET, (m, pre: string, url: string, post: string) => {
         const target = safeDecode(url.split('#')[0]!);
         if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target) || /\.mdx?\/*$/.test(target)) return m;
         // A page of this version: a relative file link, which Docusaurus resolves within the version.
@@ -147,10 +150,13 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
         return asStatic ? `${pre}/${opts.route}/${encodePath(statics.place(key!, asStatic, v.version).slice('static/'.length))}${post}` : m;
       }).replace(URL_ATTR, (m, pre: string, url: string, post: string) => {
         // Attributes need a URL: the file goes to static/, served under the product's route.
-        const [target, anchor] = [safeDecode(url.split('#')[0]!), url.includes('#') ? url.slice(url.indexOf('#')) : ''];
-        if (!target?.startsWith(`/${v.route}/`)) return m;
+        const [decoded, anchor] = [safeDecode(url.split('#')[0]!), url.includes('#') ? url.slice(url.indexOf('#')) : ''];
+        if (!decoded || /^[a-z][a-z0-9+.-]*:/i.test(decoded) || decoded.startsWith('//')) return m;
+        const target = resolveUrl(decoded);
+        if (!target.startsWith(`/${v.route}/`)) return m;
         const key = target.slice(v.route.length + 2);
-        const file = fileIn(v.staticDir, key);
+        // A file copied with the pages (docs folder) or one only in the version's static files.
+        const file = fileIn(v.docsDir, key) ?? fileIn(v.staticDir, key);
         if (!file) return m;
         return `${pre}/${opts.route}/${encodePath(statics.place(key, file, v.version).slice('static/'.length))}${anchor}${post}`;
       }));

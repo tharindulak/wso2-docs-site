@@ -134,3 +134,15 @@ test('the same input gives the same tree; a rerun replaces only a tree this writ
   assert.throws(() => writeDocusaurusTree(versions, other, { route: 'p' }), /not a tree written by wso2-docs/);
   assert.equal(fs.readFileSync(path.join(other, 'keep.txt'), 'utf8'), 'mine');
 });
+
+test('relative URLs in attributes resolve against the page URL, like a browser, and their files go to static/', () => {
+  const { versions, out, read } = twoVersions({
+    'docs/index.md': page('Home', '# Home\n'),
+    'docs/apis/users-rest-api.md': page('Users API', '<ApiReference spec="../../apis/restapis/users.yaml" />\n'),
+    'docs/apis/restapis/users.yaml': 'SPEC',
+  }, { 'docs/index.md': page('Home', '# Old\n') });
+  versions[0]!.sidebar = sidebar(['index']);
+  writeDocusaurusTree(versions, out, { route: 'p' });
+  assert.match(read('docs/apis/users-rest-api.md'), /spec="\/p\/apis\/restapis\/users\.yaml"/);
+  assert.equal(read('static/apis/restapis/users.yaml'), 'SPEC');
+});
