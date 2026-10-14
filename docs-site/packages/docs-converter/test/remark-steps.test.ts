@@ -46,7 +46,19 @@ test('runs are per heading level; deeper headings stay inside the step', async (
   const js = await jsx('## Step 1: A\n\n### Step 1.1: Sub\n\na\n\n### Details\n\nb\n\n## Step 2: B\n\nc');
   assert.equal(count(js, /className="steps"/), 1);
   assert.equal(count(js, /className="steps__step"/), 2);
-  assert.match(js, /\{"Step 1.1: Sub"\}/, 'a Step N.M sub-step heading is left as written');
+});
+
+test('a Step N.M sub-step inside a step gets a number badge; its "Step N.M:" prefix is hidden like a step\'s', async () => {
+  const js = await jsx('## Step 1: A\n\n### Step 1.1: Create a key vault\n\na\n\n### Step 1.2 - Set policies\n\nb\n\n## Step 2: B\n\nc');
+  assert.match(js, /<_components\.h3 className="steps__substep" data-substep="1\.1"><_components\.span className="steps__prefix">\{"Step 1\.1: "\}<\/_components\.span>\{"Create a key vault"\}<\/_components\.h3>/);
+  assert.match(js, /data-substep="1\.2"><_components\.span className="steps__prefix">\{"Step 1\.2 - "\}/);
+  assert.equal((js.match(/className="steps__step"/g) ?? []).length, 2, 'sub-steps do not become steps');
+});
+
+test('a sub-step heading outside a stepper stays as written', async () => {
+  const js = await jsx('## Step 1: Only\n\n### Step 1.1: Sub\n\na\n\n## Other\n\nb');
+  assert.doesNotMatch(js, /steps__substep/);
+  assert.match(js, /\{"Step 1\.1: Sub"\}/);
 });
 
 test('a lone Step heading, or a run broken by another heading, is not wrapped', async () => {

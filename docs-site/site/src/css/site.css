@@ -35,6 +35,11 @@
 .steps__step:last-child::after { display: none; }
 .steps__step > :first-child { margin-top: 0; line-height: 2rem; }
 .steps__prefix { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+/* A sub-step (Step 1.1) inside a step: its number as a filled badge before the title. */
+.steps__substep::before {
+  content: attr(data-substep); display: inline-block; margin-right: 0.55rem; padding: 0.05rem 0.45rem; border-radius: 6px;
+  background: var(--ifm-color-primary); color: #fff; font-size: 0.78em; font-weight: 700; line-height: 1.5; vertical-align: 0.12em;
+}
 @media (max-width: 996px) {
   .steps__step { padding-left: 2.5rem; }
   .steps__step::before { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
