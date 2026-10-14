@@ -51,9 +51,10 @@ test('a page\'s own edit link is kept; pages without one get the content source\
 });
 
 test('in strict mode a page that does not compile as MDX fails instead of falling back to CommonMark', async () => {
-  const broken = { 'docusaurus/docs/broken.md': '---\ntitle: Broken\n---\n\n# Broken\n\n<div>\n\nunclosed\n' };
+  const broken = { 'docusaurus/docs/broken.md': '---\ntitle: Broken\n---\n\n# Broken\n\n<div>\n\nunclosed\n\n## Step 1: A\n\na\n\n## Step 2: B\n\nb\n' };
   const lenient = await prepare(migrated(broken), 'docusaurus/docs');
   assert.match(lenient.read('broken.md'), /format: md/);
+  assert.match(lenient.read('broken.md'), /## Step 1: A/, 'a CommonMark page gets no components');
   const strict = await prepare(migrated(broken), 'docusaurus/docs', { strict: true });
   assert.deepEqual(strict.result.report.failures.map((f) => [f.page, f.kind]), [['broken.md', 'compile']]);
   assert.ok(!fs.existsSync(path.join(strict.out, 'broken.md')));
@@ -80,4 +81,21 @@ test('partials (files under a _ name) are copied without front matter: Docusauru
   const root = migrated({ 'docusaurus/docs/_partials/db/config.mdx': 'Set the **datasource**.\n' });
   const { read } = await prepare(root, 'docusaurus/docs', { editUrl: () => 'https://github.com/o/r/blob/x/f.md' });
   assert.equal(read('_partials/db/config.md'), 'Set the **datasource**.\n');
+});
+
+test('until the tree is rewritten, convention-written pages and partials get the explicit components; explicit ones and opt-outs stay as written', async () => {
+  const steps = '## Step 1: Install\n\na\n\n## Step 2: Run\n\nb\n';
+  const root = migrated({
+    'docusaurus/docs/old.md': `---\ntitle: Old\n---\n\n# Old\n\n:::note[Before you begin]\nNeed a.\n:::\n\n${steps}`,
+    'docusaurus/docs/_partial.mdx': steps,
+    'docusaurus/docs/new.mdx': '---\ntitle: New\n---\n\n<Steps>\n\n## Install {/* #step-1-install */}\n\na\n\n</Steps>\n',
+    'docusaurus/docs/out.md': `---\ntitle: Out\nstepper: false\n---\n\n${steps}`,
+    'docusaurus/docs/plain.md': `---\ntitle: Plain\nmdx:\n  format: md\n---\n\n${steps}`,
+  });
+  const { read } = await prepare(root, 'docusaurus/docs');
+  assert.match(read('old.md'), /<Prerequisites title="Before you begin">\n\nNeed a\.\n\n<\/Prerequisites>\n\n<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}/);
+  assert.match(read('_partial.md'), /^<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}/);
+  assert.match(read('new.md'), /<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}\n\na\n\n<\/Steps>\n$/);
+  assert.match(read('out.md'), /## Step 1: Install/);
+  assert.match(read('plain.md'), /## Step 1: Install/, 'a CommonMark page cannot hold components');
 });

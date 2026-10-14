@@ -12,7 +12,7 @@ const ADMONITION: Record<string, string> = {
 
 /** Tags MDX may keep as JSX. Anything else that looks like a tag is escaped as text. */
 export const JSX_TAGS: readonly string[] = [
-  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect', 'ApiReference',
+  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect', 'ApiReference', 'Steps', 'Prerequisites', 'LinkCards',
   'a', 'abbr', 'b', 'blockquote', 'br', 'button', 'caption', 'code', 'col', 'colgroup', 'dd', 'del', 'details', 'div',
   'dl', 'dt', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input',
   'ins', 'kbd', 'label', 'li', 'mark', 'ol', 'p', 'pre', 's', 'small', 'source', 'span', 'strong', 'sub', 'summary',

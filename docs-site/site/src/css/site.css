@@ -23,8 +23,8 @@
 .applies--hybrid { --c: var(--deployment-hybrid); }
 .applies--self-hosted { --c: var(--deployment-self-hosted); }
 
-/* Steps (remark-steps): runs of `Step N` headings as numbered circles joined by a line (Cloudflare style). The circle
-   shows the author's number; the "Step N:" prefix stays in the heading for anchors and screen readers. */
+/* Steps (<Steps>, remark-components): steps as numbered circles joined by a line (Cloudflare style). The circle
+   shows the step's number; a hidden "Step N:" prefix in the heading is read by screen readers. */
 .steps { margin: 1.5rem 0; }
 .steps__step { position: relative; padding: 0 0 1rem 3rem; }
 .steps__step::before {
@@ -46,8 +46,8 @@
   .steps__step::after { left: calc(0.875rem - 1px); }
 }
 
-/* Prerequisites (remark-prerequisites): a panel where the block is written, with a primary left border, a light tint and
-   a ✓ circle before the author's title (a heading, which keeps its anchor, or an admonition's title). */
+/* Prerequisites (<Prerequisites>, remark-components): a panel where it is written, with a primary left border, a light
+   tint and a ✓ circle before the writer's title (a heading, which keeps its anchor, or the `title` attribute). */
 .prerequisites {
   margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid var(--ifm-toc-border-color);
   border-left: 4px solid var(--ifm-color-primary); border-radius: 10px;
@@ -64,7 +64,7 @@
   .prerequisites { padding: 0.85rem 1rem; }
 }
 
-/* Closing sections (remark-link-cards, components/LinkCards): a list of links as a responsive grid of cards; the
+/* Link cards (<LinkCards>, remark-components, components/LinkCards): a list of links as a responsive grid of cards; the
    author's link text as the title in the primary colour (→ internal, ↗ external), the description clamped to 3 lines. */
 .link-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.75rem; margin-bottom: var(--ifm-leading); }
 .link-card {

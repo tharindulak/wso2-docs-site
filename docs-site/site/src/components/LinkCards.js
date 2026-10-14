@@ -1,8 +1,9 @@
-// Closing sections that are a list of links, as cards (remark-link-cards in the site build places this around the
-// author's list and passes the items). Descriptions come from lib/link-cards.mjs, using the doc metadata Docusaurus
-// already ships to every doc page, so the cards are in the server-rendered HTML. useDocById is not used: it throws on
-// a link to a page outside this version. The author's list (children) renders instead when anything is missing, and
-// when the page opts out with `link_cards: false` (which also covers sections in partials it imports).
+// <LinkCards> around a list of links, as cards (remark-components in the site build passes the list's items; the
+// converter writes <LinkCards> around closing sections that are such a list). Descriptions come from
+// lib/link-cards.mjs, using the doc metadata Docusaurus already ships to every doc page, so the cards are in the
+// server-rendered HTML. useDocById is not used: it throws on a link to a page outside this version. The writer's list
+// (children) renders instead when anything is missing, and when the page opts out with `link_cards: false` (which also
+// covers sections in partials it imports).
 import React from 'react';
 import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';

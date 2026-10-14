@@ -1,4 +1,4 @@
-// What each card of a closing section shows (remark-link-cards passes the items; components/LinkCards renders them).
+// What each card of a closing section shows (remark-components passes the items; components/LinkCards renders them).
 // Description, first found: the author's text after the link; for an internal link, the linked doc's description
 // (front matter, else Docusaurus's first-line excerpt, as in <meta name="description">); for an external link, its
 // host; else none. Internal links are matched to a doc by path, ignoring a trailing slash, query and anchor.

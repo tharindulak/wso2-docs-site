@@ -124,3 +124,26 @@ test('a nested <html> block left as written loses its wrapper, not its tabs or c
   assert.doesNotMatch(mdx, /&lt;\/?html|<\/?html>/);
   assert.match(mdx, /```java\n {8}wscat -c "ws:\/\/localhost:9104\/x\?access_token=\[accesstoken\]"\n {8}```/);
 });
+
+test('a page following the conventions gets the explicit components: steps, prerequisites, link cards', async () => {
+  const src = '# Set up\n\n!!! note "Before you begin"\n    Get an account.\n\n## Step 1: Install\n\nDo a.\n\n## Step 2: Run\n\nDo b.\n\n## See also\n\n- [Users](users.md) - Manage users.\n';
+  const { mdx } = await convertRendered(src, { deploymentOptions: ['Self-hosted'] });
+  assert.match(mdx, /<Prerequisites title="Before you begin">\n\nGet an account\.\n\n<\/Prerequisites>/);
+  assert.match(mdx, /<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}\n\nDo a\.\n\n## Run \{\/\* #step-2-run \*\/\}\n\nDo b\.\n\n<\/Steps>/);
+  assert.match(mdx, /<LinkCards>\n\n- \[Users\]\(users\.md\) - Manage users\.\n\n<\/LinkCards>/);
+  assert.doesNotMatch(mdx, /^import /m, 'the components are registered on the site, not imported');
+});
+
+test('the opt-outs in front matter keep a convention as written', async () => {
+  const { mdx } = await convertRendered('---\nstepper: false\n---\n## Step 1: Install\n\na\n\n## Step 2: Run\n\nb\n', { deploymentOptions: [] });
+  assert.match(mdx, /## Step 1: Install/);
+  assert.doesNotMatch(mdx, /<Steps>/);
+});
+
+test('a CommonMark fallback page gets no components: it could not render them', async () => {
+  const src = '# Odd\n\nText with {braces and <!DOCTYPE stray> markup <b>bold</i>.\n\n## Step 1: A\n\na\n\n## Step 2: B\n\nb\n';
+  const { mdx, stats } = await convertRendered(src, { deploymentOptions: [] });
+  assert.equal(stats.format, 'md');
+  assert.match(mdx, /## Step 1: A/);
+  assert.doesNotMatch(mdx, /<Steps>/);
+});

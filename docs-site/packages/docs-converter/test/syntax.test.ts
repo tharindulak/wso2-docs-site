@@ -110,3 +110,12 @@ test('joined and encoded targets compile as links', async () => {
   assert.match(js, /src="a%20b\.png" alt="y" title="T"/);
   assert.match(js, /href="mailto:A%20B-c@d\.com"/);
 });
+
+test('the explicit content components a source writes stay JSX', () => {
+  const { body } = toMdx('<Steps start="2">\n\n## A\n\n</Steps>\n\n<Prerequisites title="Before you begin">\n\nx\n\n</Prerequisites>\n\n<LinkCards>\n\n- [a](a.md)\n\n</LinkCards>\n');
+  assert.match(body, /^<Steps start="2">$/m);
+  assert.match(body, /^<\/Steps>$/m);
+  assert.match(body, /^<Prerequisites title="Before you begin">$/m);
+  assert.match(body, /^<LinkCards>$/m);
+  assert.doesNotMatch(body, /&lt;/);
+});

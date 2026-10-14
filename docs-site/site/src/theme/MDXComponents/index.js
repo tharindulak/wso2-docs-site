@@ -8,7 +8,8 @@ import Applies from '@site/src/components/Applies';
 import DeploymentValue from '@site/src/components/DeploymentValue';
 import ApiReference from '@site/src/components/ApiReference';
 import Redirect from '@site/src/components/Redirect';
-import LinkCards from '@site/src/components/LinkCards'; // placed by remark-link-cards, not by authors
+// <Steps> and <Prerequisites> need no component: the site's remark-components renders them (and passes <LinkCards> its items).
+import LinkCards from '@site/src/components/LinkCards';
 import DeprecationNotice from '@site/src/components/DeprecationNotice';
 
 // A deprecated page whose title is its own h1: the deprecation notice goes under it (DocItem/Content otherwise).

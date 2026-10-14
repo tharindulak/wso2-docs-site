@@ -9,6 +9,7 @@ import { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements, type Polic
 import { htmlBlocksToJsx } from './html-blocks.js';
 import { isHomeLayout, nameIconLinks } from './home-layout.js';
 import { toMdx, outsideCode, type SyntaxStats } from './syntax.js';
+import { writeComponents } from './conventions.js';
 import type { DeploymentOption } from './types.js';
 import { loadFrontMatter, type PageData } from './render.js';
 import { applyLifecycle, lifecycleBadge, withoutDeprecatedSuffix, BY_OPTION, LIFECYCLE_FIELDS, type CheckOptions } from './lifecycle.js';
@@ -115,11 +116,13 @@ async function assemble(
 ): Promise<Omit<ConvertResult, 'yamlErrors'>> {
   const { body: converted, usesTabs, stats } = toMdx(text);
   const md = format === 'md';
-  // CommonMark pages carry raw HTML, not JSX: keep HTML attribute names.
-  const mdxBody = md ? withoutImports(restore(converted)).replace(/(<[a-zA-Z][^>]*?)\bclassName=/g, '$1class=') : restore(converted);
+  const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
+  // CommonMark pages carry raw HTML, not JSX: keep HTML attribute names. They cannot hold components either; MDX pages
+  // get the explicit components where they follow a convention (conventions.ts).
+  const mdxBody = md ? withoutImports(restore(converted)).replace(/(<[a-zA-Z][^>]*?)\bclassName=/g, '$1class=')
+    : writeComponents(restore(converted), { frontMatter: source }).text;
 
   const front: Record<string, unknown> = {};
-  const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
   for (const k of KEEP_FRONT_MATTER) if (source[k] !== undefined) front[k] = source[k];
   front.title ??= firstHeading(body);
   const spec = mdxBody.match(/<ApiReference spec="([^"]+)"/)?.[1];
