@@ -1,0 +1,7 @@
+{
+  "name": "authoring-prototype",
+  "description": "PROTOTYPE, throwaway: writing with explicit WSO2 content components, and what the check says.",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node serve.ts", "check": "node check.ts pages/*.mdx" }
+}

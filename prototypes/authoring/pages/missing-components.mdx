@@ -1,0 +1,65 @@
+---
+# PROTOTYPE, throwaway: a short realistic page written the old way, so the check has something to flag.
+title: Add email OTP login
+deployment_options:
+  - WSO2 Cloud
+  - Self-hosted
+mdx:
+  format: md
+---
+
+# Add email OTP login
+
+Email OTP sends a one-time password to the user's verified email address as a second authentication factor.
+
+## Prerequisites
+
+- An application registered in the WSO2 Identity Platform Console.
+- A user account with a verified email address.
+
+:::note[Before you begin]
+
+Configure an email provider so that the OTP emails can be delivered. See [Configure the email provider](../../guides/notification-channels/configure-email-provider.md).
+
+:::
+
+## Step 1: Enable email OTP
+
+1. On the Console, go to **Connections** and select **Email OTP**.
+2. Set the OTP length and expiry time, and click **Update**.
+
+<Foo kind="video" src="https://example.com/email-otp.mp4" />
+
+## Step 2: Add email OTP to the login flow
+
+1. Go to **Applications** and select your application.
+2. In the **Login Flow** tab, click **+ Add Sign In Option** on the second step and select **Email OTP**.
+
+<Tabs>
+<TabItem value="visual" label="Visual Editor">
+
+Drag **Email OTP** onto the second step.
+
+</TabItem>
+<TabItem value="classic" label="Classic Editor">
+
+Click **Add Authentication** and select **Email OTP**.
+
+</TabItem>
+</Tabs>
+
+## Step 3: Try it out
+
+Sign in to the application. After entering the password, you receive an email with a one-time password.
+
+:::warning[Deprecated: legacy email OTP authenticator]
+
+The legacy `EmailOTP` authenticator (configured in `deployment.toml`) is deprecated. Use the **Email OTP** connection instead.
+
+:::
+
+## What's next?
+
+- [Add SMS OTP login](add-sms-otp-login.md) - send the one-time password by SMS instead.
+- [Add TOTP login](add-totp-login.md) - use an authenticator app.
+- [Add conditional authentication](conditional-auth/index.md)

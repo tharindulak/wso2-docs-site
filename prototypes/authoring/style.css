@@ -1,0 +1,113 @@
+/* PROTOTYPE, throwaway. Minimal Infima-like base plus the component rules copied from the docs site
+   (.claude/worktrees/docs-is-migrate/docs-site/site/src/css/site.css: Applies, Steps, Prerequisites, Link cards,
+   deprecated admonition). The prototype's own chrome (source view, check output) is at the end. */
+:root {
+  --ifm-color-primary: #b25000; --ifm-font-color-base: #1c1e21; --ifm-background-color: #fff; --ifm-toc-border-color: #dadde1;
+  --ifm-color-emphasis-700: #525860; --ifm-hover-overlay: rgba(0,0,0,0.05); --ifm-leading: 1.25rem;
+  --deployment-cloud: #2563eb; --deployment-hybrid: #7c3aed; --deployment-self-hosted: #0f766e;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ifm-font-color-base); background: var(--ifm-background-color); }
+a { color: var(--ifm-color-primary); text-decoration: none; } a:hover { text-decoration: underline; }
+.doc { max-width: 52rem; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
+.doc h1 { font-size: 2.2rem; line-height: 1.2; } .doc h2 { font-size: 1.6rem; margin-top: 2.2rem; } .doc h3 { font-size: 1.25rem; margin-top: 1.8rem; }
+.doc img { max-width: 100%; border: 1px solid var(--ifm-toc-border-color); border-radius: 6px; }
+.doc code { background: #f2f3f5; border-radius: 4px; padding: 0.1rem 0.3rem; font-size: 0.88em; }
+.doc pre { background: #f6f7f8; padding: 0.9rem 1rem; border-radius: 8px; overflow: auto; } .doc pre code { background: none; padding: 0; }
+.doc table { border-collapse: collapse; margin: 1rem 0; } .doc th, .doc td { border: 1px solid var(--ifm-toc-border-color); padding: 0.4rem 0.7rem; text-align: left; vertical-align: top; }
+.alert { border: 1px solid; border-left-width: 5px; border-radius: 8px; padding: 0.8rem 1rem; margin: 1rem 0; --a: #8b8f96; border-color: color-mix(in srgb, var(--a) 40%, transparent); border-left-color: var(--a); background: color-mix(in srgb, var(--a) 9%, transparent); }
+.alert--success { --a: #00a400; } .alert--info { --a: #3578e5; } .alert--warning { --a: #e6a700; } .alert--danger { --a: #fa383e; }
+.admonition__heading { font-weight: 700; text-transform: none; margin-bottom: 0.3rem; } .admonition__content > :last-child { margin-bottom: 0; }
+.tabs { display: flex; gap: 0.25rem; list-style: none; padding: 0; margin: 0 0 0.75rem; border-bottom: 1px solid var(--ifm-toc-border-color); }
+.tabs__item { padding: 0.4rem 0.9rem; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 600; color: var(--ifm-color-emphasis-700); }
+.tabs__item--active { color: var(--ifm-color-primary); border-bottom-color: var(--ifm-color-primary); }
+.unknown-component { border: 2px dashed #fa383e; color: #b91c1c; padding: 0.6rem 1rem; border-radius: 8px; margin: 1rem 0; font-family: ui-monospace, monospace; font-size: 0.9rem; }
+
+/* ---- copied from site.css ---- */
+.deployment-box { border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1.25rem; }
+.applies { border-left: 4px solid var(--c); background: color-mix(in srgb, var(--c) 8%, transparent); padding: 0.45rem 1rem 0.1rem; margin: 1rem 0; border-radius: 6px; }
+.applies__label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--c); margin-bottom: 0.2rem; }
+.applies--cloud { --c: var(--deployment-cloud); }
+.applies--hybrid { --c: var(--deployment-hybrid); }
+/* Steps (remark-steps): runs of `Step N` headings as numbered circles joined by a line (Cloudflare style). The circle
+   shows the author's number; the "Step N:" prefix stays in the heading for anchors and screen readers. */
+.steps { margin: 1.5rem 0; }
+.steps__step { position: relative; padding: 0 0 1rem 3rem; }
+.steps__step::before {
+  content: attr(data-step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700; font-size: 0.95rem; color: #fff; background: var(--ifm-color-primary);
+}
+.steps__step::after { content: ""; position: absolute; left: calc(1rem - 1px); top: 2.4rem; bottom: 0.3rem; width: 2px; background: var(--ifm-toc-border-color); }
+.steps__step:last-child::after { display: none; }
+.steps__step > :first-child { margin-top: 0; line-height: 2rem; }
+.steps__prefix { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+/* A sub-step (Step 1.1) inside a step: its number as a filled badge before the title. */
+.steps__substep::before {
+  content: attr(data-substep); display: inline-block; margin-right: 0.55rem; padding: 0.05rem 0.45rem; border-radius: 6px;
+  background: var(--ifm-color-primary); color: #fff; font-size: 0.78em; font-weight: 700; line-height: 1.5; vertical-align: 0.12em;
+}
+@media (max-width: 996px) {
+  .steps__step { padding-left: 2.5rem; }
+  .steps__step::before { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
+  .steps__step::after { left: calc(0.875rem - 1px); }
+}
+
+/* Prerequisites (remark-prerequisites): a panel where the block is written, with a primary left border, a light tint and
+   a ✓ circle before the author's title (a heading, which keeps its anchor, or an admonition's title). */
+.prerequisites {
+  margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid var(--ifm-toc-border-color);
+  border-left: 4px solid var(--ifm-color-primary); border-radius: 10px;
+  background: color-mix(in srgb, var(--ifm-color-primary) 5%, transparent);
+}
+.prerequisites__head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+.prerequisites__head::before {
+  content: "✓"; display: grid; place-items: center; flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  font-weight: 700; font-size: 0.85rem; color: #fff; background: var(--ifm-color-primary);
+}
+.prerequisites__head > * { margin: 0; font-size: 1.15rem; font-weight: 700; }
+.prerequisites__body > :last-child { margin-bottom: 0; }
+@media (max-width: 996px) {
+  .prerequisites { padding: 0.85rem 1rem; }
+}
+
+/* Closing sections (remark-link-cards, components/LinkCards): a list of links as a responsive grid of cards; the
+   author's link text as the title in the primary colour (→ internal, ↗ external), the description clamped to 3 lines. */
+.link-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.75rem; margin-bottom: var(--ifm-leading); }
+.link-card {
+  display: flex; flex-direction: column; gap: 0.35rem; padding: 0.9rem 1rem; border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 10px; color: inherit; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.link-card:hover { border-color: var(--ifm-color-primary); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12); color: inherit; text-decoration: none; }
+.link-card__title { color: var(--ifm-color-primary); }
+.link-card__title::after { content: " →"; }
+.link-card--external .link-card__title::after { content: " ↗"; font-weight: 400; }
+.link-card__text {
+  font-size: 0.88rem; color: var(--ifm-color-emphasis-700);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.deprecation-notice, .admonition-deprecated, .deprecation-table { --dp: #b45309; }
+.deprecation-tag {
+  display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; background: var(--dp, #b45309); color: #fff;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; vertical-align: middle;
+}
+.deprecation-tag--small { font-size: 0.62rem; margin-right: 0.4rem; }
+.alert.admonition-deprecated { border-left-color: var(--dp); background: color-mix(in srgb, var(--dp) 9%, transparent); }
+.deprecation-scope { margin: 0.5rem 0 0; font-size: 0.82rem; opacity: 0.85; }
+/* ---- end of copy ---- */
+.steps--sub { margin: 0.5rem 0 1rem; }
+
+/* Prototype chrome. */
+.bar { position: sticky; top: 0; z-index: 5; background: #111827; color: #e5e7eb; padding: 0.45rem 1rem; font-size: 0.85rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.bar a { color: #fdba74; } .bar strong { color: #fff; }
+.src { margin: 0; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; counter-reset: ln; background: #fbfbfc; }
+.src .l { display: block; white-space: pre-wrap; padding-left: 4.2rem; position: relative; min-height: 1.55em; }
+.src .l::before { counter-increment: ln; content: counter(ln); position: absolute; left: 0; width: 3.4rem; text-align: right; color: #9ca3af; }
+.src .l.err { background: #fee2e2; box-shadow: inset 4px 0 #dc2626; }
+.src .note { display: block; white-space: pre-wrap; margin: 0.15rem 0 0.35rem 4.2rem; padding: 0.35rem 0.6rem; background: #fff1f2; border: 1px solid #fecaca; border-radius: 6px; color: #991b1b; font-family: system-ui, sans-serif; font-size: 12.5px; }
+.src .note b { color: #7f1d1d; }
+.t-fm { color: #6b7280; } .t-h { color: #1d4ed8; font-weight: 700; } .t-jsx { color: #7c3aed; font-weight: 600; } .t-dir { color: #c2410c; font-weight: 600; } .t-id { color: #059669; } .t-code { color: #6b7280; }
+.split { display: grid; grid-template-columns: 1fr 1fr; height: calc(100vh - 2.2rem); }
+.split > * { overflow: auto; border: 0; width: 100%; height: 100%; } .split > iframe { border-left: 1px solid #d1d5db; }
+.checkout { margin: 0; padding: 1.2rem 1.5rem; font: 13.5px/1.6 ui-monospace, Menlo, monospace; white-space: pre-wrap; background: #0b1020; color: #e5e7eb; min-height: calc(100vh - 2.2rem); }
+.checkout .ok { color: #86efac; } .checkout .e { color: #fca5a5; font-weight: 700; } .checkout .fix { color: #93c5fd; } .checkout .rule { color: #9ca3af; }
+.index { max-width: 60rem; margin: 2rem auto; padding: 0 1.5rem; } .index table { border-collapse: collapse; width: 100%; } .index td, .index th { border-bottom: 1px solid #e5e7eb; padding: 0.6rem; text-align: left; }
