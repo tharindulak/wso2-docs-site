@@ -158,3 +158,48 @@ export function withoutDeprecatedLabels<T extends SidebarItem | Record<string, u
     return next as T;
   });
 }
+
+/**
+ * Whether an admonition is a section deprecation notice: the `deprecated` type, or a warning titled "Deprecated …"
+ * (sources written before the type existed). The title is plain text (code marks removed).
+ */
+export const isDeprecatedAdmonition = (type: string, title: string | undefined): boolean =>
+  type === 'deprecated' || (type === 'warning' && /^deprecated\b/i.test((title ?? '').replace(/`/g, '').trim()));
+
+/** One deployment option's deprecation: since when, and the replacement and removal as written (`option` "" when the page names none). */
+export interface OptionDeprecation { option: string; since?: string; replacement?: string; removal?: string }
+
+/** A page's deprecation per deployment option, from flat fields or the per-option map; null when it is not deprecated. */
+export function deprecationOf(front: Record<string, unknown>): OptionDeprecation[] | null {
+  const options = Array.isArray(front.deployment_options) ? (front.deployment_options as unknown[]).filter((o): o is string => typeof o === 'string') : [];
+  const map = front[BY_OPTION];
+  const entries: [string, Record<string, unknown>][] = map && typeof map === 'object' && !Array.isArray(map)
+    ? Object.entries(map as Record<string, unknown>).filter((e): e is [string, Record<string, unknown>] => Boolean(e[1]) && typeof e[1] === 'object')
+    : map === undefined || map === null ? (options.length ? options : ['']).map((o) => [o, front]) : [];
+  const out = entries.filter(([, f]) => f.status === 'deprecated').map(([option, f]) => {
+    const d: OptionDeprecation = { option };
+    for (const [k, field] of [['since', 'deprecated_since'], ['replacement', 'replacement'], ['removal', 'removal']] as const) {
+      if (typeof f[field] === 'string' && (f[field] as string).trim()) d[k] = (f[field] as string).trim();
+    }
+    return d;
+  });
+  return out.length ? out : null;
+}
+
+/** The doc id a relative `.md` replacement names, resolved against the page's doc id, and its anchor; null for a URL or site path. */
+export function replacementDocId(pageId: string, replacement: string): { id: string; hash: string } | null {
+  const [file = '', ...rest] = replacement.split('#');
+  if (/^[a-z][a-z0-9+.-]*:|^\//i.test(file) || !/\.mdx?$/.test(file)) return null;
+  const parts = pageId.split('/').slice(0, -1);
+  for (const part of file.replace(/\.mdx?$/, '').split('/')) {
+    if (part === '..') { if (!parts.length) return null; parts.pop(); } else if (part && part !== '.') parts.push(part);
+  }
+  return { id: parts.join('/'), hash: rest.length ? `#${rest.join('#')}` : '' };
+}
+
+/** A replacement's title as shown; when it reads the same as the deprecated page's, the version in its file name ("-v2-") is added. */
+export function replacementTitle(title: string, docId: string, pageTitle: string): string {
+  if (title.trim().toLowerCase() !== pageTitle.trim().toLowerCase()) return title;
+  const version = docId.split('/').pop()!.match(/(?:^|-)v(\d+)(?:-|$)/i)?.[1];
+  return version ? `${title} V${version}` : title;
+}

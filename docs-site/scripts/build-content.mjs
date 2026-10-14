@@ -5,12 +5,14 @@
 //              (first onboarding only; afterwards the list may only shrink).
 //   --prune    remove pages that now convert from their exclude list.
 //   --partials merged sections write shared includes as _partials/*.mdx (for a migration; see migrate-docusaurus.mjs).
+//   --source-tree converting for a source's Docusaurus tree (migrate-docusaurus.mjs): no site-made pages (Deprecations).
 import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import {
   convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, githubEditUrl, emptyReport, walk,
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile,
+  deprecationIndex, readDeprecationsList, deprecationsPage, withDeprecationsEntry, DEPRECATIONS_ID,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
 import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, pagePath, outsideLinks, formerRouteRedirects } from './versions.mjs';
@@ -19,6 +21,7 @@ const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
 const prune = args.includes('--prune');
 const partials = args.includes('--partials');
+const sourceTree = args.includes('--source-tree');
 const only = new Set(args.filter((a) => !a.startsWith('--')));
 
 const write = (file, text) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
@@ -111,6 +114,54 @@ function fillTemplatePages(product, section, outDir, sidebarFile) {
 function urlOfId(docsDir, id) {
   const file = [`${id}.md`, `${id}/index.md`].map((f) => path.join(docsDir, f)).find((f) => fs.existsSync(f));
   return file ? pagePath(path.relative(docsDir, file), fs.readFileSync(file, 'utf8')) : `${id.replace(/(^|\/)index$/, '$1')}/`.replace(/^\/$/, '');
+}
+
+/**
+ * Hand-kept deprecations without a page: a `deprecations.yml` beside each MkDocs site's mkdocs.yml (a merged version
+ * reads both, each for its own deployment option), or at the root of a Docusaurus source's docs folder.
+ */
+function deprecationLists(v) {
+  const at = (repo, sha, rel, options) => ({ file: containedFile(checkoutDir(repo, sha), rel), options });
+  const beside = (src, options) => at(src.repo, src.sha, path.posix.join(path.posix.dirname(src.mkdocs), 'deprecations.yml'), options);
+  if (v.kind === 'mkdocs-merge') return [beside(v.cloud, ['WSO2 Cloud']), beside(v.self_hosted, ['Self-hosted'])];
+  if (v.kind === 'mkdocs') return [beside(v, v.deployment_options ?? [])];
+  return [at(v.repo, v.sha, path.posix.join(v.docs, 'deprecations.yml'), v.deployment_options ?? [])];
+}
+
+/**
+ * The version's Deprecations index (generated/deprecations/<versionId>.json) and the page rendering it at
+ * /<route>/deprecations/, listed in the sidebar after the Feature deprecation reference; none when nothing is deprecated.
+ */
+function writeDeprecations(v, docsDir) {
+  const indexFile = path.join(GENERATED, 'deprecations', `${v.id}.json`);
+  fs.rmSync(indexFile, { force: true });
+  const pages = walk(docsDir, (r) => /\.mdx?$/.test(r) && !r.split('/').some((part) => part.startsWith('_'))).sort().flatMap((rel) => {
+    const text = fs.readFileSync(path.join(docsDir, rel), 'utf8');
+    return text.includes("from '@site/src/components/Redirect'") ? [] : [{ id: rel.replace(/\.mdx?$/, ''), url: `/${v.route}/${pagePath(rel.replace(/\.mdx$/, '.md'), text)}`, text }];
+  });
+  const listed = [];
+  for (const { file, options } of deprecationLists(v)) {
+    if (!file) continue;
+    const r = readDeprecationsList(fs.readFileSync(file, 'utf8'), options);
+    listed.push(...r.listed);
+    for (const p of r.problems) console.warn(`[WARNING] ${v.id}: ${p}`);
+  }
+  const sidebarFile = sidebarsOf(v.id);
+  const sidebars = fs.existsSync(sidebarFile) ? JSON.parse(fs.readFileSync(sidebarFile, 'utf8')) : null;
+  const { entries, problems } = deprecationIndex({ pages, listed, sidebar: sidebars ? Object.values(sidebars)[0] : [] });
+  for (const p of problems) console.warn(`[WARNING] ${v.id}: deprecations: ${p}`);
+  if (!entries.length) return 0;
+  if (pages.some((p) => p.id === DEPRECATIONS_ID)) {
+    console.warn(`[WARNING] ${v.id}: the source has a ${DEPRECATIONS_ID} page; no Deprecations page made`);
+    return 0;
+  }
+  write(indexFile, JSON.stringify({ version: v.version, entries }, null, 2));
+  write(path.join(docsDir, `${DEPRECATIONS_ID}.md`), deprecationsPage(path.relative(docsDir, indexFile).split(path.sep).join('/')));
+  if (sidebars) {
+    const [sidebarId, items] = Object.entries(sidebars)[0];
+    write(sidebarFile, JSON.stringify({ ...sidebars, [sidebarId]: withDeprecationsEntry(items) }, null, 2));
+  } else console.warn(`[WARNING] ${v.id}: no JSON sidebar; the Deprecations page is not listed in it`);
+  return entries.length;
 }
 
 /** Where a version's static files go (Latest: generated/static; others: their own static-versions folder). */
@@ -243,6 +294,7 @@ for (const product of lock.products) {
         for (const f of fs.readdirSync(sidebarsDir)) if (f.startsWith(`${v.id}.`) && !f.endsWith('.json')) fs.rmSync(path.join(sidebarsDir, f));
         if (sidebar) write(sidebarsOf(v.id), JSON.stringify({ docs: sidebar.length ? sidebar : [{ type: 'autogenerated', dirName: '.' }] }, null, 2));
         fillTemplatePages(product, v, outDir, sidebarsOf(v.id));
+        const deprecations = sourceTree ? 0 : writeDeprecations(v, outDir);
 
         let list = v.exclude ?? [];
         const known = new Set(list);
@@ -266,7 +318,7 @@ for (const product of lock.products) {
         report.fresh = fresh.length;
         report.seconds = Math.round((Date.now() - started) / 1000);
         reports.push(report);
-        console.log(`${v.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  ${report.seconds}s`);
+        console.log(`${v.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  deprecations ${deprecations}  ${report.seconds}s`);
         // Front matter left out (invalid YAML, bad lifecycle stage values): the pages build; `wso2-docs check` fails on stage values.
         for (const p of report.frontMatter) console.warn(`[WARNING] ${v.id}: ${p.page}: ${p.kind === 'yaml' ? '' : 'lifecycle '}${p.error}`);
       }

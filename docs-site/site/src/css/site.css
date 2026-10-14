@@ -219,3 +219,33 @@
 @media (max-width: 996px) {
   .lifecycle-pill--title { float: none; margin: 0 0 0.75rem; }
 }
+
+/* Deprecation notices and the Deprecations page (planning ticket "How deprecation notices and the Deprecations page
+   look", variant A). Amber, as the Deprecated badge. */
+.deprecation-notice, .admonition-deprecated, .deprecation-table { --dp: #b45309; }
+.deprecation-tag {
+  display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; background: var(--dp, #b45309); color: #fff;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; vertical-align: middle;
+}
+.deprecation-tag--small { font-size: 0.62rem; margin-right: 0.4rem; }
+.deprecation-notice {
+  margin: 0 0 1.5rem; padding: 0.9rem 1.1rem; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--dp) 45%, transparent);
+  border-left: 5px solid var(--dp); background: color-mix(in srgb, var(--dp) 9%, transparent);
+}
+.deprecation-notice__head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; font-weight: 600; }
+.deprecation-notice__line { margin: 0.45rem 0 0.6rem; }
+.deprecation-notice__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.deprecation-button {
+  display: inline-block; padding: 0.35rem 0.8rem; border-radius: 8px; background: var(--ifm-color-primary); color: #fff;
+  font-weight: 600; font-size: 0.9rem;
+}
+.deprecation-button:hover { color: #fff; text-decoration: none; filter: brightness(1.1); }
+.deprecation-notice__policy { font-size: 0.85rem; }
+.alert.admonition-deprecated { border-left-color: var(--dp); background: color-mix(in srgb, var(--dp) 9%, transparent); }
+.deprecation-scope { margin: 0.5rem 0 0; font-size: 0.82rem; opacity: 0.85; }
+.deprecation-versions { display: flex; gap: 0.25rem; margin: 1rem 0 1.5rem; flex-wrap: wrap; }
+.deprecation-versions a { padding: 0.25rem 0.7rem; border-radius: 8px; border: 1px solid var(--ifm-toc-border-color); color: inherit; font-size: 0.9rem; }
+.deprecation-versions a.deprecation-versions__active { background: var(--ifm-color-primary); border-color: var(--ifm-color-primary); color: #fff; }
+.deprecation-table { display: table; width: 100%; font-size: 0.92rem; }
+.deprecation-table__page { font-size: 0.8rem; opacity: 0.75; }
+.deprecation-table__muted { color: var(--ifm-color-emphasis-700); }

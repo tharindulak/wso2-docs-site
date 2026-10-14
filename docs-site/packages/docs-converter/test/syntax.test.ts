@@ -2,9 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { toMdx } from '../src/syntax.js';
 
-test('a deprecated admonition keeps its title and shows as a warning until deprecation notices render it', () => {
+test('a deprecated admonition stays a deprecated admonition (the site renders it as a section deprecation notice), keeping its title', () => {
   const { body } = toMdx('!!! deprecated "Deprecated feature"\n    Use the root organization name.\n');
-  assert.match(body, /^:::warning\[Deprecated feature\]\n\nUse the root organization name\.\n\n:::/m);
+  assert.match(body, /^:::deprecated\[Deprecated feature\]\n\nUse the root organization name\.\n\n:::/m);
+  assert.match(toMdx('!!! deprecated\n    Old.\n').body, /^:::deprecated\n\nOld\.\n\n:::/m);
 });
 
 test('admonitions, including titled and nested in lists', () => {

@@ -8,6 +8,7 @@ import remarkSteps from '@wso2/docs-converter/remark-steps';
 import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
 import remarkPrerequisites from '@wso2/docs-converter/remark-prerequisites';
 import remarkLinkCards from '@wso2/docs-converter/remark-link-cards';
+import remarkDeprecatedSections from '@wso2/docs-converter/remark-deprecated-sections';
 import { withLifecycleSidebar } from './src/lib/lifecycle.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -44,7 +45,10 @@ const docsPlugins = included.map(({ section, v }) => [
     // Runs of `Step N` headings render as a stepper (after heading ids and the TOC); Tabs blocks offering the same
     // choices switch together; prerequisites blocks render as a panel (after remark-steps: a stepper ends the block);
     // closing sections that are a list of links render as cards (last: it sees sections inside steps and panels).
-    remarkPlugins: [remarkSteps, remarkLinkedTabs, remarkPrerequisites, remarkLinkCards],
+    // Deprecated sections (the `deprecated` admonition type, or a warning titled "Deprecated …") render as section
+    // deprecation notices (theme/Admonition/Types); before remark-prerequisites, which turns some admonitions into panels.
+    remarkPlugins: [remarkSteps, remarkLinkedTabs, remarkDeprecatedSections, remarkPrerequisites, remarkLinkCards],
+    admonitions: { keywords: ['deprecated'] },
     rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
     ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),

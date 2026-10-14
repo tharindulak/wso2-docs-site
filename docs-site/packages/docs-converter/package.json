@@ -38,6 +38,11 @@
       "import": "./dist/src/remark-link-cards.js",
       "default": "./dist/src/remark-link-cards.js"
     },
+    "./remark-deprecated-sections": {
+      "types": "./dist/src/remark-deprecated-sections.d.ts",
+      "import": "./dist/src/remark-deprecated-sections.js",
+      "default": "./dist/src/remark-deprecated-sections.js"
+    },
     "./lifecycle": {
       "types": "./dist/src/lifecycle.d.ts",
       "import": "./dist/src/lifecycle.js",

@@ -1,6 +1,7 @@
 // Write the Docusaurus tree a content source keeps once it migrates (docs-is: docusaurus/), from its pinned commit.
 // Usage: node scripts/migrate-docusaurus.mjs <sectionId> <outDir> [--edit-branch <branch>]
-//   Converts every version of the section with build-content.mjs (Latest with --partials), then writes the tree with
+//   Converts every version of the section with build-content.mjs (Latest with --partials; no site-made pages such as
+//   Deprecations, which the site builds from the tree), then writes the tree with
 //   @wso2/docs-converter's writeDocusaurusTree. Until cutover the tree is generated only: rerun this, never hand-edit.
 //   outDir must be empty, missing, or a tree this script wrote earlier (it is replaced). Honours DOCS_SITE_LOCK.
 import { execFileSync } from 'node:child_process';
@@ -25,7 +26,7 @@ if (!section) throw new Error(`No section ${sectionId} in the lock file`);
 const versions = sectionVersions(section, liveWindow(lock));
 
 // Convert: Latest by section id, older versions by version id (build-content skips snapshots it is not named).
-execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'build-content.mjs'), '--partials', ...versions.map((v) => v.id)], { stdio: 'inherit' });
+execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'build-content.mjs'), '--partials', '--source-tree', ...versions.map((v) => v.id)], { stdio: 'inherit' });
 
 /** MkDocs redirect_maps of the version's site(s); for a merged version the cloud site's entry wins. */
 function redirectsOf(v) {

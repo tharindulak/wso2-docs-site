@@ -7,6 +7,7 @@ import path from 'node:path';
 import { convertRendered, splitFrontMatter } from '../src/page.js';
 import { convertMkdocsSite, convertMergedSites } from '../src/site.js';
 import { tempSource } from './helpers.js';
+import { deprecationOf, replacementDocId, replacementTitle } from '../src/lifecycle.js';
 
 const front = (mdx: string) => splitFrontMatter(mdx).data;
 
@@ -169,4 +170,38 @@ test('a Docusaurus source (the migrated tree) is held to the same checks, and it
     ['apis/share.md', 'lifecycle.Self-hosted: replacement names no page: share-v3.md'],
   ]);
   assert.deepEqual(sidebar.map((i) => (i as { label?: string }).label), ['V1', 'Creds API (deprecated)', 'Odd', 'V2']);
+});
+
+test('a page\'s deprecation, per deployment option, from flat fields or the per-option map', () => {
+  assert.deepEqual(deprecationOf({ deployment_options: ['Self-hosted'], status: 'deprecated', deprecated_since: '7.0.0', replacement: 'roles-v2-rest-api.md' }),
+    [{ option: 'Self-hosted', since: '7.0.0', replacement: 'roles-v2-rest-api.md' }]);
+  assert.deepEqual(deprecationOf({ deployment_options: ['WSO2 Cloud', 'Self-hosted'], lifecycle: {
+    'WSO2 Cloud': { status: 'deprecated', deprecated_since: '2026-03', replacement: 'v2.md' },
+    'Self-hosted': { status: 'deprecated', deprecated_since: '7.3.0', replacement: 'v2.md', removal: '7.5.0' },
+  } }), [{ option: 'WSO2 Cloud', since: '2026-03', replacement: 'v2.md' }, { option: 'Self-hosted', since: '7.3.0', replacement: 'v2.md', removal: '7.5.0' }]);
+  assert.deepEqual(deprecationOf({ deployment_options: ['WSO2 Cloud', 'Self-hosted'], lifecycle: { 'WSO2 Cloud': { status: 'deprecated', deprecated_since: '2026-06' }, 'Self-hosted': { status: 'beta' } } }),
+    [{ option: 'WSO2 Cloud', since: '2026-06' }], 'only the options marked deprecated');
+  assert.deepEqual(deprecationOf({ status: 'deprecated', deprecated_since: '1.0' }), [{ option: '', since: '1.0' }], 'a page without deployment options');
+});
+
+test('a page that is not deprecated has no deprecation', () => {
+  assert.equal(deprecationOf({ deployment_options: ['Self-hosted'] }), null);
+  assert.equal(deprecationOf({ deployment_options: ['Self-hosted'], status: 'beta' }), null);
+  assert.equal(deprecationOf({ lifecycle: 'nonsense' }), null);
+});
+
+test('a relative .md replacement names a doc id resolved against the page\'s; URLs and site paths name none', () => {
+  assert.deepEqual(replacementDocId('apis/role-management/roles-v1-rest-api', 'roles-v2-rest-api.md'), { id: 'apis/role-management/roles-v2-rest-api', hash: '' });
+  assert.deepEqual(replacementDocId('apis/a/b', '../c/index.md#part'), { id: 'apis/c/index', hash: '#part' });
+  assert.deepEqual(replacementDocId('top', './other.mdx'), { id: 'other', hash: '' });
+  assert.equal(replacementDocId('apis/a', '../../../outside.md'), null, 'above the docs root');
+  assert.equal(replacementDocId('apis/a', 'https://example.com/x'), null);
+  assert.equal(replacementDocId('apis/a', '/identity/apis/x/'), null);
+});
+
+test('a replacement titled the same as the deprecated page is told apart by the version in its file name', () => {
+  assert.equal(replacementTitle('User Account Recovery API', 'apis/user-account-recovery-v2-rest-api', 'User Account Recovery API'), 'User Account Recovery API V2');
+  assert.equal(replacementTitle('Roles API', 'apis/roles-v2', 'roles api'), 'Roles API V2');
+  assert.equal(replacementTitle('SCIM 2.0 Roles V2 API', 'apis/role-management/roles-v2-rest-api', 'SCIM 2.0 Roles V1 API'), 'SCIM 2.0 Roles V2 API', 'different titles stay');
+  assert.equal(replacementTitle('Same API', 'apis/new-rest-api', 'Same API'), 'Same API', 'no version in the file name');
 });
