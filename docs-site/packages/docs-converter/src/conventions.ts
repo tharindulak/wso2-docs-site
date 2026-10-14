@@ -3,7 +3,8 @@
 //   - a run of `Step N:` headings (two or more at one level, each number above the last) is wrapped in <Steps>
 //     (`start` when the first number is not 1); each heading loses its "Step N:" prefix (also written `**Step 1**:`) and
 //     keeps its old anchor as an explicit id: `## Configure Azure {/* #step-1-configure-azure */}`. `Step N.M` (or `Step Na`)
-//     headings inside a step become a nested <Steps> (sub-steps), closed at the next heading that is not a sub-step.
+//     headings inside a step become a nested <Steps> (sub-steps), closed at the next heading that is not a sub-step; so
+//     does a run of plain `Step N` headings inside a step.
 //   - an h2/h3 "Prerequisites" or "Before you begin" heading and its block (to the next heading at its level or above,
 //     or a stepper) is wrapped in <Prerequisites>; an admonition with that title becomes <Prerequisites title="…">.
 //   - a closing section ("What's next", "See also", …) that is one list of links (after at most one intro paragraph)
@@ -18,10 +19,10 @@ import remarkDirective from 'remark-directive';
 import type { Heading, List, Parent, PhrasingContent, Root, RootContent } from 'mdast';
 import { cardsOfList } from './link-cards.js';
 
-/** `Step 1:`, `Step 1 -`, `Step 1 –`, `Step 1.` or `Step 1 Title`; not the `Step 1.1` sub-step form. */
-const STEP = /^Step\s+(\d+)(?!\.\d)\s*[:.\-–]?\s+/i;
+/** `Step 1:`, `Step 1 -`, `Step 1 –`, `Step 1 —`, `Step 1.` or `Step 1 Title`; not the `Step 1.1` sub-step form. */
+const STEP = /^Step\s+(\d+)(?!\.\d)\s*[:.\-–—]?\s+/i;
 /** A sub-step inside a step: `Step 1.1:` or `Step 1a:` (a letter is its place: a is 1), and the same separators. */
-const SUB_STEP = /^Step\s+(\d+)(?:\.(\d+)|([a-z])(?![a-z]))\s*[:.\-–]?\s+/i;
+const SUB_STEP = /^Step\s+(\d+)(?:\.(\d+)|([a-z])(?![a-z]))\s*[:.\-–—]?\s+/i;
 const subStepNumber = (m: RegExpExecArray): number => (m[2] ? Number(m[2]) : m[3].toLowerCase().charCodeAt(0) - 96);
 /** "Prerequisites" or "Before you begin", in any case; a trailing "!" too (88 docs-is admonitions write one). */
 const PREREQUISITES = /^(prerequisites|before you begin)!?$/i;
@@ -167,16 +168,19 @@ function subSteps(w: Writer, body: RootContent[], depth: number, step: number): 
     group = null;
   };
   for (const node of body) {
-    const m = node.type === 'heading' && node.depth > depth ? SUB_STEP.exec(text(node)) : null;
-    if (m) {
+    const deeper = node.type === 'heading' && node.depth > depth;
+    const m = deeper ? SUB_STEP.exec(text(node)) : null;
+    // A plain `Step N` run inside a step numbers its sub-steps on its own (multi-DC: Step 1 to 7 under Step 2).
+    const plain = deeper && !m ? STEP.exec(text(node)) : null;
+    if (m || plain) {
       const heading = node as Heading;
       if (group && group.depth !== heading.depth) close();
-      const [n, sub] = [Number(m[1]), subStepNumber(m)];
+      const [n, sub] = m ? [Number(m[1]), subStepNumber(m)] : [step, Number(plain![1])];
       if (!group) group = { depth: heading.depth, first: node, last: node, start: sub, count: 0 };
       if (n !== step || sub !== group.start + group.count) w.written.renumbered++;
       group.count++;
       group.last = node;
-      w.rewriteHeading(heading, SUB_STEP);
+      w.rewriteHeading(heading, m ? SUB_STEP : STEP);
       continue;
     }
     if (group && depthOf(node) && depthOf(node) <= group.depth) close();

@@ -28,6 +28,22 @@ test('Step Na headings inside a step are sub-steps too, the letter read as its p
   assert.deepEqual(written, { steps: 2, subSteps: 2, prerequisites: 0, linkCards: 0, renumbered: 0 });
 });
 
+test('an em dash separates a step number from its title too', () => {
+  assert.equal(
+    write('### Step 1 — Install tools\n\na\n\n### Step 2 — Deploy\n\nb\n'),
+    '<Steps>\n\n### Install tools {/* #step-1--install-tools */}\n\na\n\n### Deploy {/* #step-2--deploy */}\n\nb\n\n</Steps>\n',
+  );
+});
+
+test('a run of Step N headings inside a step becomes its sub-steps', () => {
+  const { text, written } = writeComponents('## Step 1: Prepare\n\np\n\n## Step 2: Configure\n\n### Step 1 - Install\n\na\n\n### Step 2 - Start\n\nb\n');
+  assert.equal(
+    text,
+    '<Steps>\n\n## Prepare {/* #step-1-prepare */}\n\np\n\n## Configure {/* #step-2-configure */}\n\n<Steps>\n\n### Install {/* #step-1---install */}\n\na\n\n### Start {/* #step-2---start */}\n\nb\n\n</Steps>\n\n</Steps>\n',
+  );
+  assert.deepEqual(written, { steps: 2, subSteps: 2, prerequisites: 0, linkCards: 0, renumbered: 0 });
+});
+
 test('a run that does not start at 1 gets start; skipped numbers are renumbered and counted', () => {
   const { text, written } = writeComponents('### Step 0: Prepare\n\na\n\n### Step 1: Go\n\nb\n\n### Step 3: Skip\n\nc\n');
   assert.match(text, /^<Steps start=\{0\}>\n\n### Prepare \{\/\* #step-0-prepare \*\/\}/);
