@@ -1,0 +1,35 @@
+/* PROTOTYPE, throwaway. Lifecycle badge variants. Stage colours: Beta violet, Preview cyan, Deprecated amber. */
+.lc--beta { --lc: #7c3aed; }
+.lc--preview { --lc: #0e7490; }
+.lc--deprecated { --lc: #b45309; }
+
+.lc-pill { display: inline-block; padding: .1rem .55rem; border-radius: 999px; background: var(--lc); color: #fff; font-size: .8rem; font-weight: 700; letter-spacing: .02em; vertical-align: middle; white-space: nowrap; cursor: help; }
+.lc-pill--small { font-size: .65rem; padding: 0 .4rem; margin-left: .25rem; }
+
+/* A. Pill beside the title. */
+.lc-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; margin-bottom: var(--ifm-h1-vertical-rhythm-bottom, 1.25rem); }
+.lc-title-row > h1 { margin: 0; }
+.lc-title-row > .lc-pill { font-size: .9rem; padding: .2rem .7rem; }
+
+/* B. Strip above the title. */
+.lc-strip { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .75rem; margin: 0 0 1rem; padding: .55rem .9rem; border-radius: 8px;
+  border-left: 4px solid var(--lc); background: color-mix(in srgb, var(--lc) 14%, transparent); font-size: .92rem; }
+.lc-strip__label { color: var(--lc); text-transform: uppercase; letter-spacing: .05em; font-size: .78rem; }
+[data-theme="dark"] .lc-strip__label { color: color-mix(in srgb, var(--lc) 55%, white); }
+.lc-dot { display: inline-block; width: .5rem; height: .5rem; margin-right: .4rem; border-radius: 50%; background: var(--lc); vertical-align: middle; }
+
+/* C. Row in the Deployment options box. */
+.lc-box-row { margin-top: .4rem; padding-top: .4rem; border-top: 1px solid var(--ifm-toc-border-color); font-size: .92rem; }
+.lc-suffix { font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--lc); margin-left: .3rem; }
+[data-theme="dark"] .lc-suffix { color: color-mix(in srgb, var(--lc) 55%, white); }
+
+.lc-line { color: var(--ifm-color-emphasis-800); }
+
+/* Prototype bar: not part of the design being judged. */
+.lc-bar { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 1000; max-width: min(92vw, 60rem);
+  background: #111; color: #eee; border-radius: 14px; padding: .5rem .75rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .35); font: 13px/1.4 system-ui, sans-serif; }
+.lc-bar__row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.lc-bar button { background: #333; color: #fff; border: 0; border-radius: 8px; padding: .2rem .6rem; cursor: pointer; font-size: 14px; }
+.lc-bar strong { background: #fff; color: #111; border-radius: 6px; padding: 0 .45rem; }
+.lc-bar select { max-width: 24rem; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; padding: .15rem; }
+.lc-bar__state { margin: .4rem 0 0; padding: .35rem .5rem; background: #1d1d1d; color: #9fe39f; border-radius: 8px; font-size: 11.5px; white-space: pre-wrap; }

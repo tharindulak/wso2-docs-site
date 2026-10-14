@@ -1,0 +1,43 @@
+/* PROTOTYPE, throwaway. Deprecation notice and Deprecations page variants. Deprecated is amber, as on the badge. */
+:root { --dp: #b45309; }
+.dp-tag { display: inline-block; padding: .05rem .5rem; border-radius: 999px; background: var(--dp); color: #fff; font-size: .75rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; vertical-align: middle; }
+.dp-tag--small { font-size: .62rem; margin: 0 .4rem; }
+.dp-muted { color: var(--ifm-color-emphasis-700); }
+
+/* A. Notice box under the title; C. the same content as a banner above the page. */
+.dp-notice, .dp-banner { margin: 0 0 1.5rem; padding: .9rem 1.1rem; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--dp) 45%, transparent);
+  border-left: 5px solid var(--dp); background: color-mix(in srgb, var(--dp) 9%, transparent); }
+.dp-banner { border-radius: 0 0 10px 10px; border-left-width: 1px; border-top: 5px solid var(--dp); margin-top: -0.5rem; }
+.dp-notice__head { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; font-weight: 600; }
+.dp-line { margin: .45rem 0 .6rem; }
+.dp-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .5rem; }
+.dp-button { display: inline-block; padding: .35rem .8rem; border-radius: 8px; background: var(--ifm-color-primary); color: #fff; font-weight: 600; font-size: .9rem; }
+.dp-button:hover { color: #fff; text-decoration: none; filter: brightness(1.1); }
+.dp-policy { font-size: .85rem; }
+
+/* B. One line under the title. */
+.dp-inline { margin: -.5rem 0 1.25rem; font-size: .95rem; }
+
+/* Sections: the existing admonition, marked as a deprecation. */
+.dp-section--A, .dp-section--C { border-left-color: var(--dp) !important; background: color-mix(in srgb, var(--dp) 9%, transparent) !important; }
+.dp-section__scope { margin: .5rem 0 0; font-size: .82rem; opacity: .85; }
+
+/* Deprecations page. */
+.dp-versions { display: flex; gap: .25rem; margin: 1rem 0 1.5rem; flex-wrap: wrap; }
+.dp-versions a { padding: .25rem .7rem; border-radius: 8px; border: 1px solid var(--ifm-toc-border-color); color: inherit; font-size: .9rem; }
+.dp-versions a.dp-versions__active { background: var(--ifm-color-primary); border-color: var(--ifm-color-primary); color: #fff; }
+.dp-table { width: 100%; display: table; font-size: .92rem; }
+.dp-kind { margin-left: .4rem; font-size: .7rem; text-transform: uppercase; letter-spacing: .04em; opacity: .7; }
+.dp-list li { margin-bottom: .35rem; }
+.dp-timeline__item { position: relative; padding: 0 0 1rem 1.5rem; border-left: 2px solid var(--ifm-toc-border-color); }
+.dp-timeline__item::before { content: ""; position: absolute; left: -.4rem; top: .3rem; width: .7rem; height: .7rem; border-radius: 50%; background: var(--dp); }
+.dp-timeline__when { font-weight: 700; margin-bottom: .3rem; }
+
+/* Prototype bar: not part of the design being judged. */
+.dp-bar { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 1000; max-width: min(92vw, 60rem);
+  background: #111; color: #eee; border-radius: 14px; padding: .5rem .75rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .35); font: 13px/1.4 system-ui, sans-serif; }
+.dp-bar__row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.dp-bar button { background: #333; color: #fff; border: 0; border-radius: 8px; padding: .2rem .6rem; cursor: pointer; font-size: 14px; }
+.dp-bar strong { background: #fff; color: #111; border-radius: 6px; padding: 0 .45rem; }
+.dp-bar select { max-width: 24rem; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; padding: .15rem; }
+.dp-bar__state { margin: .4rem 0 0; padding: .35rem .5rem; background: #1d1d1d; color: #9fe39f; border-radius: 8px; font-size: 11.5px; white-space: pre-wrap; }
