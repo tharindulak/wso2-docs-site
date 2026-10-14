@@ -42,10 +42,23 @@ export function expandMarkers(text: string, fromFile: string, source: Source, de
     .replace(/\{\{#([A-Za-z_]\w*)#\}\}/g, '{{ $1 }}');
 }
 
+/**
+ * Parse a front-matter block. A YAML error, or YAML that is not a mapping, gives no fields (as before) and the error,
+ * for the caller to report.
+ */
+export function loadFrontMatter(block: string): { data: Record<string, unknown>; error?: string } {
+  let data: unknown;
+  try { data = yaml.load(block, { schema: yaml.JSON_SCHEMA }) ?? {}; } catch (e) {
+    return { data: {}, error: `front matter is not valid YAML: ${String((e as Error).message).split('\n')[0]!.slice(0, 160)}` };
+  }
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return { data: {}, error: 'front matter is not a YAML mapping' };
+  return { data: data as Record<string, unknown> };
+}
+
 const FRONT_MATTER = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/;
 const QUICK_START_META = /<script>\s*(?:const|let|var)\s+meta\s*=\s*([\s\S]*?);?\s*<\/script>\s*/;
 
-export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown }
+export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown; /** Why the front matter gave no fields (invalid YAML). */ error?: string }
 
 /**
  * Page data that lives outside the content: YAML front matter (for example `template:`) and the quick-start
@@ -54,11 +67,12 @@ export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown
  */
 export function splitPageData(text: string): PageData & { body: string } {
   let body = text;
-  let frontMatter: unknown = {};
+  let frontMatter: Record<string, unknown> = {};
+  let error: string | undefined;
   let meta: unknown;
   const fm = body.match(FRONT_MATTER);
   if (fm) {
-    try { frontMatter = yaml.load(fm[1]!, { schema: yaml.JSON_SCHEMA }) ?? {}; } catch { frontMatter = {}; }
+    ({ data: frontMatter, error } = loadFrontMatter(fm[1]!));
     body = body.slice(fm[0].length);
   }
   const m = body.match(QUICK_START_META);
@@ -68,13 +82,13 @@ export function splitPageData(text: string): PageData & { body: string } {
     }
     body = body.replace(m[0], '');
   }
-  return { frontMatter: frontMatter && typeof frontMatter === 'object' ? frontMatter as Record<string, unknown> : {}, meta, body };
+  return { frontMatter, meta, body, ...(error ? { error } : {}) };
 }
 
 /** Front matter and quick-start metadata of a page file. */
 export function readPageData(file: string, source: Source): PageData {
-  const { frontMatter, meta } = splitPageData(readInside(source, file));
-  return { frontMatter, meta };
+  const { frontMatter, meta, error } = splitPageData(readInside(source, file));
+  return { frontMatter, meta, ...(error ? { error } : {}) };
 }
 
 /** Parse a file after marker expansion, without its page data (front matter, quick-start meta). */

@@ -8,6 +8,7 @@ import remarkSteps from '@wso2/docs-converter/remark-steps';
 import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
 import remarkPrerequisites from '@wso2/docs-converter/remark-prerequisites';
 import remarkLinkCards from '@wso2/docs-converter/remark-link-cards';
+import { withLifecycleSidebar } from './src/lib/lifecycle.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -78,7 +79,15 @@ export default {
   trailingSlash: true,
   onBrokenLinks: 'warn',
   onBrokenAnchors: 'warn',
-  markdown: { format: 'mdx', mermaid: true, hooks: { onBrokenMarkdownLinks: 'warn', onBrokenMarkdownImages: 'warn' } },
+  markdown: {
+    format: 'mdx', mermaid: true, hooks: { onBrokenMarkdownLinks: 'warn', onBrokenMarkdownImages: 'warn' },
+    // A page's lifecycle stage (status, or lifecycle per deployment option) marks its sidebar entry: a class the
+    // sidebar pill is drawn from (site.css) and custom props. Documented hook; the default parser does the parsing.
+    parseFrontMatter: async (params) => {
+      const result = await params.defaultParseFrontMatter(params);
+      return { ...result, frontMatter: withLifecycleSidebar(result.frontMatter) };
+    },
+  },
   future: { v4: false }, // Faster bundler broke on near-identical versioned MDX in docs-agent-platform; re-test before enabling.
   // The last entry serves redoc.standalone.js for API pages (src/components/ApiReference.js).
   // A snapshot build serves only its own version's files: generated/static (every live product) stays with the live build.

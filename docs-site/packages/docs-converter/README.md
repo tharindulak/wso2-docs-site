@@ -26,7 +26,9 @@ npx wso2-docs convert --out dist    # write dist/docs/, dist/sidebar.json, dist/
 
 The release check is a warning on stderr (`warning: release v7.4.0 has no folder en/identity-server/7.4.0`) and never changes the exit code. Release conventions: `docs-site/CONTENT-RELEASES.md`.
 
-Exit codes: `0` every page converts or is on the exclude list, `1` new failures, `2` usage or config error.
+Exit codes: `0` every page converts or is on the exclude list, `1` new failures or bad lifecycle stage values, `2` usage or config error. Front matter that is not valid YAML is reported as a warning (the page converts without it, as before).
+
+Lifecycle stage front matter: `status: beta | preview | deprecated` (none: generally available); with `deprecated`, `deprecated_since` (required, quoted: `"7.3.0"` or `"2026-09"`), `replacement` (optional: a relative `.md` page link, which must name a page, an `http(s)` URL or a site path) and `removal` (optional, once approved). Bad values are reported and left out. On a merged cloud + self-hosted page each copy keeps its own stage: the fields stay flat when both copies carry the same ones, else they go per deployment option under `lifecycle:` (`lifecycle: { WSO2 Cloud: { status: deprecated, deprecated_since: "2026-03" } }`; an option missing there is generally available). Where the page's badge shows Deprecated, "(deprecated)" is removed from its title, first heading and sidebar label.
 
 ### `wso2-docs.yaml`
 
@@ -72,6 +74,7 @@ const { sidebar, report } = await convertMkdocsSite(
 `@wso2/docs-converter/remark-steps` does the same for the remark plugin that renders runs of `Step N` headings as a stepper; a page opts out with `stepper: false` in front matter.
 `@wso2/docs-converter/remark-linked-tabs` is the remark plugin for linked tabs: `<Tabs>` blocks offering the same choices (labels compared ignoring case, spaces, Markdown formatting and order; Linux and macOS/Linux forms are one choice) switch together, and the choice is remembered. Blocks with an author-set `groupId`, value or `defaultValue`, a single tab, or two labels naming one choice are left as written.
 `@wso2/docs-converter/remark-prerequisites` renders prerequisites blocks as a panel where they are written: an `h2`/`h3` titled "Prerequisites" or "Before you begin" (up to the next heading at its level or above, or a stepper; run it after `remark-steps`), or an admonition of any type with that title; a page opts out with `prerequisites: false` in front matter.
+`@wso2/docs-converter/lifecycle` holds the lifecycle stage rules without Node imports: the docs site reads which badge a page shows (`lifecycleBadge`: Preview wins, then Deprecated, then Beta; the scope lists the options it covers when not all) in its config and in the browser.
 `@wso2/docs-converter/remark-link-cards` renders closing sections as cards: an `h2`/`h3` titled "What's next", "Next steps", "See also", "Learn more", "Related topics", "Related links" or "Further reading" whose content (up to the next heading at its level or above) is exactly one list of items that each start with a link and hold no nested list. The list is wrapped in `<LinkCards items>` (link, link text and the author's text after it) and kept as the fallback; the site's `LinkCards` component adds the linked doc's description, or an external link's host, when the author wrote none. Other closing sections stay as written; a page opts out with `link_cards: false` in front matter.
 
 The docs site uses the same functions, passing a `fallback` that writes a redirect page for excluded or failing pages; the CLI writes none.

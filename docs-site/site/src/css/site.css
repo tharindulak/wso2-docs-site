@@ -197,3 +197,25 @@
 .markdown .card .title { margin: 0 0 0.35rem; font-weight: 600; color: var(--ifm-link-color); }
 .markdown .card .hint { margin: 0; color: var(--ifm-color-emphasis-700); font-size: 0.95rem; }
 .markdown iframe { max-width: 100%; }
+
+/* Lifecycle stage (Beta, Preview, Deprecated): a pill beside the page title (LifecyclePill, hover text explains the
+   stage) and a small pill after the sidebar label (sidebar_class_name from markdown.parseFrontMatter). */
+.lifecycle--beta, .lifecycle-entry--beta { --lc: #7c3aed; }
+.lifecycle--preview, .lifecycle-entry--preview { --lc: #0e7490; }
+.lifecycle--deprecated, .lifecycle-entry--deprecated { --lc: #b45309; }
+.lifecycle-pill {
+  display: inline-block; padding: 0.2rem 0.7rem; border-radius: 999px; background: var(--lc); color: #fff;
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; cursor: help;
+}
+/* Floated beside the title that follows it (the heading inside the page content), so the heading text is unchanged. */
+.lifecycle-pill--title { float: right; margin: 0.55rem 0 0.5rem 1rem; }
+.lifecycle-entry > .menu__link::after {
+  flex: none; margin-left: 0.4rem; padding: 0 0.4rem; border-radius: 999px; background: var(--lc); color: #fff;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1.5;
+}
+.lifecycle-entry--beta > .menu__link::after { content: "Beta"; }
+.lifecycle-entry--preview > .menu__link::after { content: "Preview"; }
+.lifecycle-entry--deprecated > .menu__link::after { content: "Deprecated"; }
+@media (max-width: 996px) {
+  .lifecycle-pill--title { float: none; margin: 0 0 0.75rem; }
+}

@@ -267,6 +267,8 @@ for (const product of lock.products) {
         report.seconds = Math.round((Date.now() - started) / 1000);
         reports.push(report);
         console.log(`${v.id.padEnd(40)} ok ${String(report.ok).padStart(4)}  redirected ${String(report.redirected).padStart(3)}  new failures ${String(fresh.length).padStart(3)}  now passing ${report.nowPassing.length}  nav dropped ${report.droppedNav.length}  ${report.seconds}s`);
+        // Front matter left out (invalid YAML, bad lifecycle stage values): the pages build; `wso2-docs check` fails on stage values.
+        for (const p of report.frontMatter) console.warn(`[WARNING] ${v.id}: ${p.page}: ${p.kind === 'yaml' ? '' : 'lifecycle '}${p.error}`);
       }
     }
     const versionEntries = versions.map((v) => ({

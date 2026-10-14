@@ -24,7 +24,8 @@ check     converts every page in memory and reports pages that would not reach t
           with --release-tag and --version-folder it also warns when the release's version has no folder
 convert   writes dist/docs/ (pages and images), dist/sidebar.json and dist/manifest.json
 
-Exit codes: 0 all pages convert (or are on the exclude list), 1 new failures, 2 usage or config error.`;
+Exit codes: 0 all pages convert (or are on the exclude list), 1 new failures or bad lifecycle stage values in front matter,
+            2 usage or config error. Front matter that is not valid YAML is a warning.`;
 
 interface Args { command?: string; config: string; root: string; out: string; format: 'text' | 'github' | 'json'; releaseTag?: string; versionFolder?: string }
 
@@ -63,26 +64,36 @@ function sourceFileOf(cfg: SourceConfig, root: string, page: string): string {
 function report(r: SiteReport, cfg: SourceConfig, root: string, excluded: string[], format: Args['format']): number {
   const known = new Set(excluded);
   const fresh = r.failures.filter((f) => !known.has(f.page));
+  // Bad lifecycle stage values fail the check (the page itself still converts); invalid front-matter YAML warns.
+  const lifecycle = (r.frontMatter ?? []).filter((p) => p.kind === 'lifecycle');
+  const yamlWarnings = (r.frontMatter ?? []).filter((p) => p.kind === 'yaml');
+  const failed = fresh.length + lifecycle.length > 0;
   if (format === 'json') {
-    process.stdout.write(`${JSON.stringify({ ok: r.ok, failures: r.failures, newFailures: fresh.length, nowPassing: r.nowPassing, droppedNav: r.droppedNav }, null, 2)}\n`);
-    return fresh.length ? 1 : 0;
+    process.stdout.write(`${JSON.stringify({ ok: r.ok, failures: r.failures, newFailures: fresh.length, nowPassing: r.nowPassing, droppedNav: r.droppedNav, frontMatter: r.frontMatter ?? [] }, null, 2)}\n`);
+    return failed ? 1 : 0;
   }
-  for (const f of fresh) {
-    const file = sourceFileOf(cfg, root, f.page);
-    const line = f.error.match(/\(line (\d+)\)/)?.[1];
+  const print = (level: 'error' | 'warning', page: string, kind: string, error: string): void => {
+    const file = sourceFileOf(cfg, root, page);
+    const line = error.match(/\(line (\d+)\)/)?.[1];
     if (format === 'github') {
-      const message = `${f.kind}: ${f.error}`.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
-      process.stdout.write(`::error file=${file}${line ? `,line=${line}` : ''},title=wso2-docs ${f.kind}::${message}\n`);
+      const message = `${kind}: ${error}`.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+      process.stdout.write(`::${level} file=${file}${line ? `,line=${line}` : ''},title=wso2-docs ${kind}::${message}\n`);
     } else {
-      process.stdout.write(`✖ ${file}${line ? `:${line}` : ''}\n    ${f.kind.padEnd(8)} ${f.error}\n`);
+      process.stdout.write(`${level === 'error' ? '✖' : '⚠'} ${file}${line ? `:${line}` : ''}\n    ${kind.padEnd(8)} ${error}\n`);
     }
-  }
-  const summary = `${r.ok} pages convert · ${fresh.length} new failure${fresh.length === 1 ? '' : 's'}`
+  };
+  for (const f of fresh) print('error', f.page, f.kind, f.error);
+  for (const p of lifecycle) print('error', p.page, p.kind, p.error);
+  for (const p of yamlWarnings) print('warning', p.page, p.kind, p.error);
+  const plural = (n: number, word: string): string => `${n} ${word}${n === 1 ? '' : 's'}`;
+  const summary = `${r.ok} pages convert · ${plural(fresh.length, 'new failure')}`
+    + (lifecycle.length ? ` · ${plural(lifecycle.length, 'lifecycle problem')}` : '')
+    + (yamlWarnings.length ? ` · ${plural(yamlWarnings.length, 'front matter warning')}` : '')
     + (excluded.length ? ` · ${excluded.length} on the exclude list` : '')
     + (r.nowPassing.length ? ` · ${r.nowPassing.length} excluded page${r.nowPassing.length === 1 ? '' : 's'} now convert: remove from the list` : '')
     + (r.droppedNav.length ? ` · ${r.droppedNav.length} nav entries point at missing pages` : '');
-  process.stdout.write(`${format === 'github' && fresh.length ? '' : fresh.length ? '' : '✔ '}${summary}\n`);
-  return fresh.length ? 1 : 0;
+  process.stdout.write(`${failed ? '' : '✔ '}${summary}\n`);
+  return failed ? 1 : 0;
 }
 
 /** Warn (never fail) when a docs release tag names a version whose folder is missing from the source. */

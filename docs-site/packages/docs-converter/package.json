@@ -37,6 +37,11 @@
       "types": "./dist/src/remark-link-cards.d.ts",
       "import": "./dist/src/remark-link-cards.js",
       "default": "./dist/src/remark-link-cards.js"
+    },
+    "./lifecycle": {
+      "types": "./dist/src/lifecycle.d.ts",
+      "import": "./dist/src/lifecycle.js",
+      "default": "./dist/src/lifecycle.js"
     }
   },
   "bin": {

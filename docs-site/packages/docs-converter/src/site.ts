@@ -10,7 +10,8 @@ import { loadPage, loadPlain, renderSingle, readPageData, inlining } from './ren
 import { mergePage, renderMergedInclude, finishMerged, CLOUD, SELF_HOSTED } from './merge.js';
 import { PartialPlan, insertPartials, type RenderMode } from './partials.js';
 import { outsideCode } from './syntax.js';
-import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type PageErrorKind } from './page.js';
+import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type ConvertResult, type PageErrorKind } from './page.js';
+import { applyLifecycle, checkLifecycle, lifecycleBadge, lifecycleFrontMatter, withoutDeprecatedLabels, BY_OPTION, LIFECYCLE_FIELDS, type Lifecycle, type Stage } from './lifecycle.js';
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
 import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem, Source } from './types.js';
@@ -19,6 +20,13 @@ import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem, Source } f
 const BASE = '@@BASE@@';
 
 export interface PageFailure { page: string; kind: PageErrorKind; error: string }
+
+/**
+ * A page that converts with part of its front matter left out: invalid YAML (`yaml`, the page gets no fields from it,
+ * as before) or a bad lifecycle stage value (`lifecycle`, see lifecycle.ts). `wso2-docs check` fails on `lifecycle`;
+ * the docs site's build warns on both.
+ */
+export interface FrontMatterProblem { page: string; kind: 'yaml' | 'lifecycle'; error: string }
 
 export interface SiteReport {
   ok: number;
@@ -31,9 +39,29 @@ export interface SiteReport {
   merge: { splitBlocks: number; diverged: number };
   /** Partials written, and shared includes inlined because their partial failed to convert (with the reason). */
   partials?: { written: number; inlined: string[] };
+  frontMatter: FrontMatterProblem[];
 }
 
-export const emptyReport = (): SiteReport => ({ ok: 0, redirected: 0, failures: [], nowPassing: [], droppedNav: [], merge: { splitBlocks: 0, diverged: 0 } });
+export const emptyReport = (): SiteReport => ({ ok: 0, redirected: 0, failures: [], nowPassing: [], droppedNav: [], merge: { splitBlocks: 0, diverged: 0 }, frontMatter: [] });
+
+/** Record a converted page's front-matter problems (see FrontMatterProblem). */
+function noteFrontMatter(report: SiteReport, page: string, result: Pick<ConvertResult, 'problems' | 'yamlErrors'>): void {
+  report.frontMatter ??= [];
+  for (const error of result.yamlErrors) report.frontMatter.push({ page, kind: 'yaml', error });
+  for (const error of result.problems) report.frontMatter.push({ page, kind: 'lifecycle', error });
+}
+
+/** Whether a page link written in `file` (relative to it) names a file inside `docsDir`. */
+const pageNear = (docsDir: string, file: string) => (target: string): boolean => {
+  const decoded = safeDecode(target);
+  return decoded !== undefined && containedFile(docsDir, path.relative(docsDir, path.resolve(path.dirname(file), decoded))) !== null;
+};
+
+/** The stage a written page's badge shows (lifecycle.ts), from its front matter; for the sidebar labels. */
+const shownStage = (pageFile: string): Stage | undefined => {
+  if (!fs.existsSync(pageFile)) return undefined;
+  return lifecycleBadge(splitFrontMatter(fs.readFileSync(pageFile, 'utf8')).data)?.stage;
+};
 
 /** What to write for a page that is excluded or fails: the docs site writes a redirect; the CLI writes nothing. */
 export interface FallbackInfo { rel: string; title: string; to: string; deploymentOptions: DeploymentOption[] }
@@ -423,8 +451,9 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
       const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route, host);
       const result = await convertRendered(rendered, {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
-        specInfo: specInfoFor([pages], route, rel), fallbackTitle,
+        specInfo: specInfoFor([pages], route, rel), fallbackTitle, replacementExists: pageNear(site.docsDir, file),
       });
+      noteFrontMatter(report, withPrefix(rel), result);
       const mdx = src.docsRoot || src.linkOutside ? rewriteOutsideRefs(result.mdx, {
         rel: withPrefix(rel), pageSrc: `${docsRoot ?? ''}${rel.replace(/\\/g, '/')}`, docsDir: site.docsDir, route: out.route,
         outDir: out.outDir, staticDir: out.staticDir, inside, linkOutside: src.linkOutside,
@@ -447,7 +476,8 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   }
   copyAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
   const nav = selectNav(site.nav, { ...src.nav, ...(docsRoot ? { strip: docsRoot, outside: src.linkOutside } : {}) });
-  const items = navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav);
+  const items = withoutDeprecatedLabels(navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav),
+    (id) => shownStage(path.join(out.outDir, `${withPrefix(id)}.md`)));
   return { sidebar: prefix ? prefixIds(items, prefix) : items, report };
 }
 
@@ -564,7 +594,21 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
       // Page data: the cloud wrapper's front matter and quick-start meta win; self-hosted fills gaps.
       const cData = inC ? readPageData(path.join(c.site.docsDir, rel), c.source) : undefined;
       const sData = inS ? readPageData(path.join(s.site.docsDir, rel), s.source) : undefined;
-      const pageData = { frontMatter: { ...(sData?.frontMatter ?? {}), ...(cData?.frontMatter ?? {}) }, meta: cData?.meta ?? sData?.meta };
+      // Lifecycle stages are each deployment option's own: checked per side, then merged (lifecycle.ts).
+      const sides: [string, typeof c, typeof cData][] = [[CLOUD, c, cData], [SELF_HOSTED, s, sData]];
+      const byOption: Record<string, Lifecycle | undefined> = {};
+      const sideProblems: string[] = [];
+      for (const [option, x, data] of sides) {
+        if (!data) continue;
+        const checked = checkLifecycle(data.frontMatter, { replacementExists: pageNear(x.site.docsDir, path.join(x.site.docsDir, rel)) });
+        byOption[option] = checked.lifecycle;
+        sideProblems.push(...checked.problems.map((p) => `${option}: ${p}`));
+      }
+      const others = (fm: Record<string, unknown> | undefined) => Object.fromEntries(Object.entries(fm ?? {}).filter(([k]) => !(LIFECYCLE_FIELDS as readonly string[]).includes(k) && k !== BY_OPTION));
+      const pageData = {
+        frontMatter: { ...others(sData?.frontMatter), ...others(cData?.frontMatter), ...lifecycleFrontMatter(byOption, deploymentOptions) },
+        meta: cData?.meta ?? sData?.meta, error: [cData?.error, sData?.error].filter(Boolean).join('; ') || undefined,
+      };
       const convert = (t: string) => convertRendered(resolveBase(t, out.route), {
         deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts,
         specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel), fallbackTitle,
@@ -577,6 +621,7 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
         used = [];
         result = await convert(text);
       }
+      noteFrontMatter(report, rel, { ...result, problems: [...sideProblems, ...result.problems] });
       const mdx = relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
       return insertPartials(mdx, path.join(out.prefix ?? '', rel).split(path.sep).join('/'), used);
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), fallbackTitle), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions },
@@ -590,7 +635,8 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
   copyAssets(c.site.docsDir, out.outDir);
   copyAssets(s.site.docsDir, out.outDir);
   const known = (id: string): boolean => fs.existsSync(path.join(out.outDir, `${id}.md`));
-  return { sidebar: mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav)), report };
+  const sidebar = mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav));
+  return { sidebar: withoutDeprecatedLabels(sidebar, (id) => shownStage(path.join(out.outDir, `${id}.md`))), report };
 }
 
 // ---- Existing Docusaurus docs ----
@@ -674,7 +720,7 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
     await emit(out, report, rel, async () => {
-      const { data, body } = splitFrontMatter(raw);
+      const { data, body, error } = splitFrontMatter(raw);
       let text = body;
       for (const [from, to] of Object.entries(src.shims ?? {})) text = text.replaceAll(`'${from}'`, `'${to}'`).replaceAll(`"${from}"`, `"${to}"`);
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${out.route}/$2/`);
@@ -682,9 +728,13 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
       if (src.treeRoot) text = treeRefs(text, rel, docsDir, path.join(src.root, src.treeRoot), out.outDir);
       const edit = src.editUrl?.(file);
-      const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit && !data.custom_edit_url ? { custom_edit_url: edit } : {}) };
       // A partial (any _ name) is no page: Docusaurus ignores front matter there and warns, so it gets none.
       const partial = rel.split('/').some((part) => part.startsWith('_'));
+      // Lifecycle stage fields are checked as on converted pages (lifecycle.ts); bad values are reported and left out.
+      const lifecycle = applyLifecycle({ ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit && !data.custom_edit_url ? { custom_edit_url: edit } : {}) },
+        { replacementExists: pageNear(docsDir, file) });
+      const front = lifecycle.front;
+      if (!partial) noteFrontMatter(report, rel, { problems: lifecycle.problems, yamlErrors: error ? [error] : [] });
       const mdx = partial ? text : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       const declared = (data.mdx as { format?: unknown } | undefined)?.format;
       try {
@@ -718,5 +768,5 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
   }
   const sidebars = loadSidebarFile(path.join(src.root, src.sidebar));
   const [sidebarId, items] = Object.entries(sidebars)[0] ?? ['docs', []];
-  return { sidebarId, sidebar: items, report };
+  return { sidebarId, sidebar: withoutDeprecatedLabels(items, (id) => shownStage(path.join(out.outDir, `${id}.md`))), report };
 }

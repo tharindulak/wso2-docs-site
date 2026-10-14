@@ -68,6 +68,14 @@ test('pageRecords: one page record, one per h2/h3, chrome left out', () => {
   assert.equal(new Set(records.map((r) => r.id)).size, 3);
 });
 
+test('pageRecords: the lifecycle pill beside the title is page chrome, not content', () => {
+  const where = { ...versionIndex(manifest).get('integration-mi'), versionId: 'integration-mi' };
+  const html = page({ body: '<header><h1>Roles v1 API</h1></header><p>Old roles.</p>' })
+    .replace('<div class="theme-doc-markdown', '<span class="lifecycle-pill lifecycle-pill--title lifecycle--deprecated" title="Still works">Deprecated</span><div class="theme-doc-markdown');
+  const [p] = pageRecords(html, '/identity/apis/roles-v1/', where);
+  assert.equal(p.content, 'Old roles.');
+});
+
 test('pageRecords prefers the wso2:deployment meta and drops unknown options', () => {
   const where = { ...versionIndex(manifest).get('integration-mi'), versionId: 'integration-mi' };
   const [r] = pageRecords(page({ meta: '<meta data-rh="true" name="wso2:deployment" content="Self-hosted,Other">', body: '<h1>T</h1><p>x</p>' }), '/a/', where);
