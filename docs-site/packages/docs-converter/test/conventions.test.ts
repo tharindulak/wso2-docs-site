@@ -61,3 +61,10 @@ test('stepper: false, prerequisites: false and link_cards: false leave their con
   assert.doesNotMatch(write(md, { link_cards: false }), /<LinkCards>/);
   assert.match(write(md, { stepper: false }), /<Prerequisites>[\s\S]*<LinkCards>/);
 });
+
+// docs-is 5.x setup/setting-up-separate-databases-for-clustering.md as converted before nested admonitions got longer
+// fences: the tip is left open, so a panel written around it would not parse.
+test('a convention whose components would not parse is left as written', () => {
+  const src = ':::warning[H2]\n\nNot for production.\n\n:::tip[Before you begin]\n\nOptional.\n\n:::\n\n:::\n\nAfter.\n';
+  assert.equal(writeComponents(src).text, src);
+});

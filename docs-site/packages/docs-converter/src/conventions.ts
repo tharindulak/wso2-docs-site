@@ -10,8 +10,8 @@
 //     gets the list wrapped in <LinkCards>.
 // Opt-outs in front matter: `stepper: false`, `prerequisites: false`, `link_cards: false`. Content already inside an
 // explicit component is left alone, so the step can run again on its own output. Used for MkDocs sources on every
-// conversion (page.ts) and, until the Identity tree is rewritten to explicit components, for Docusaurus-kind sources
-// (site.ts prepareDocusaurusDocs); also the basis of the one-off rewrite of the Identity tree.
+// conversion (page.ts) and by the tree writer (tree.ts), which wrote the Identity tree's explicit components once.
+// Docusaurus-kind sources are taken as written (site.ts prepareDocusaurusDocs).
 import { createProcessor } from '@mdx-js/mdx';
 import remarkGfm from 'remark-gfm';
 import remarkDirective from 'remark-directive';
@@ -325,8 +325,31 @@ export function writeComponents(source: string, { frontMatter = {} }: { frontMat
   const sorted = [...w.edits].sort((a, b) => b.from - a.from || place(b) - place(a));
   let text = source;
   for (const e of sorted) text = text.slice(0, e.from) + e.insert + text.slice(e.to);
+  // Malformed source (an admonition left open) can put a closing tag where MDX cannot read it: then nothing is written.
+  try { parser.parse(text); } catch { return { text: source, written: none }; }
   return { text, written: w.written };
 }
 
 /** Where a change ends up among the changes at its offset (see Edit). */
 const place = (e: Edit): number => (e.kind === 'edit' ? 0 : e.kind === 'close' ? 1e9 + e.span : 3e9 - e.span);
+
+/**
+ * Lines (1-based) of each nested `</Steps>` whose last sub-step is followed by text before it: the rewrite closes a
+ * nested <Steps> at the next heading, so such text may belong to the parent step. For a writer to review.
+ */
+export function subStepReview(source: string): number[] {
+  let tree: Root;
+  try { tree = parser.parse(source) as Root; } catch { return []; }
+  const lines: number[] = [];
+  const isSteps = (n: Node): n is Extract<RootContent, { type: 'mdxJsxFlowElement' }> => n.type === 'mdxJsxFlowElement' && n.name === 'Steps';
+  const visit = (node: Node, inSteps: boolean): void => {
+    if (isSteps(node) && inSteps) {
+      const kids = node.children as RootContent[];
+      const last = kids.map((k) => k.type).lastIndexOf('heading');
+      if (last >= 0 && kids.slice(last + 1).some((k) => k.type !== 'heading' && !silent(k))) lines.push(node.position!.end.line);
+    }
+    if ('children' in node) for (const child of node.children as RootContent[]) visit(child, inSteps || isSteps(node));
+  };
+  visit(tree, false);
+  return lines;
+}

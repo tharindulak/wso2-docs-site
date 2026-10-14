@@ -83,19 +83,16 @@ test('partials (files under a _ name) are copied without front matter: Docusauru
   assert.equal(read('_partials/db/config.md'), 'Set the **datasource**.\n');
 });
 
-test('until the tree is rewritten, convention-written pages and partials get the explicit components; explicit ones and opt-outs stay as written', async () => {
+test('a Docusaurus tree is taken as written: explicit components stay, convention-written pages get none (one rendering path)', async () => {
   const steps = '## Step 1: Install\n\na\n\n## Step 2: Run\n\nb\n';
   const root = migrated({
-    'docusaurus/docs/old.md': `---\ntitle: Old\n---\n\n# Old\n\n:::note[Before you begin]\nNeed a.\n:::\n\n${steps}`,
+    'docusaurus/docs/old.mdx': `---\ntitle: Old\n---\n\n# Old\n\n:::note[Before you begin]\nNeed a.\n:::\n\n${steps}`,
     'docusaurus/docs/_partial.mdx': steps,
     'docusaurus/docs/new.mdx': '---\ntitle: New\n---\n\n<Steps>\n\n## Install {/* #step-1-install */}\n\na\n\n</Steps>\n',
-    'docusaurus/docs/out.md': `---\ntitle: Out\nstepper: false\n---\n\n${steps}`,
-    'docusaurus/docs/plain.md': `---\ntitle: Plain\nmdx:\n  format: md\n---\n\n${steps}`,
   });
   const { read } = await prepare(root, 'docusaurus/docs');
-  assert.match(read('old.md'), /<Prerequisites title="Before you begin">\n\nNeed a\.\n\n<\/Prerequisites>\n\n<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}/);
-  assert.match(read('_partial.md'), /^<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}/);
+  assert.match(read('old.md'), /:::note\[Before you begin\]\nNeed a\.\n:::\n\n## Step 1: Install/);
+  assert.doesNotMatch(read('old.md'), /<Steps>|<Prerequisites/);
+  assert.equal(read('_partial.md'), steps);
   assert.match(read('new.md'), /<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}\n\na\n\n<\/Steps>\n$/);
-  assert.match(read('out.md'), /## Step 1: Install/);
-  assert.match(read('plain.md'), /## Step 1: Install/, 'a CommonMark page cannot hold components');
 });

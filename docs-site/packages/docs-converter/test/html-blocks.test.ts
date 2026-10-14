@@ -210,3 +210,21 @@ test('a nested block holding block Markdown after a blank line (tabs, fenced cod
   const pj = (await convertRendered(privatejet, { deploymentOptions: ['Self-hosted'] })).mdx;
   assert.match(pj, /```json\n {4}\[ContainerMgtConfig\]\n {4}<Environment-type> = "<class-name>"\n {4}```/);
 });
+
+// docs-is guides/account-configurations/account-recovery/password-recovery.md: a nested <table> whose </table> is
+// written <table>. Python-Markdown reads a nested block one blank-line chunk at a time, and the browser closes it.
+test('a nested block that is never closed ends at its blank line, as Python-Markdown reads it', async () => {
+  const src = '5. Configure.\n    <table>\n        <tr><td>A</td></tr>\n    <table>\n        <tr><td>B</td></tr>\n    </table>\n\n6. Next.\n\n    <table>\n        <tr><td>C</td></tr>\n    </table>\n';
+  const { text, blocks } = htmlBlocksToJsx(src);
+  assert.equal(blocks, 2);
+  assert.match(text, /^ {4}<table><tbody><tr><td>\{"A"\}<\/td><\/tr><\/tbody><\/table><table><tbody><tr><td>\{"B"\}<\/td><\/tr><\/tbody><\/table>$/m);
+  assert.match(text, /^6\. Next\.$/m);
+  await compileCheck(`---\n---\n${text}`);
+});
+
+// docs-is asgardeo bot-detection.md: a tip ends the page with a <ul> never closed.
+test('a nested block never closed ends with its container or the page', () => {
+  const { text, blocks } = htmlBlocksToJsx('Text.\n\n    Flows:\n    <ul>\n    <li>SSO</li>\n    <li>Recovery</li>\nOutside.\n');
+  assert.equal(blocks, 1);
+  assert.match(text, /^ {4}<ul><li>\{"SSO"\}<\/li><li>\{"Recovery"\}<\/li><\/ul>\nOutside\.$/m);
+});

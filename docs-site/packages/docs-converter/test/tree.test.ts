@@ -25,8 +25,8 @@ test('Latest goes to docs/, older versions to versioned_docs/ with their sidebar
     { 'docs/index.md': page('Home', '# Old home\n') },
   );
   writeDocusaurusTree(versions, out, { route: 'p' });
-  assert.match(read('docs/guides/setup.md'), /# Setup/);
-  assert.match(read('versioned_docs/version-7.2.0/index.md'), /# Old home/);
+  assert.match(read('docs/guides/setup.mdx'), /# Setup/);
+  assert.match(read('versioned_docs/version-7.2.0/index.mdx'), /# Old home/);
   assert.deepEqual(JSON.parse(read('sidebars.json')), sidebar(['index', 'guides/setup']));
   assert.deepEqual(JSON.parse(read('versioned_sidebars/version-7.2.0-sidebars.json')), sidebar(['index']));
   assert.deepEqual(JSON.parse(read('versions.json')), ['7.2.0']);
@@ -45,12 +45,13 @@ test('images are stored once by file path; a version whose copy differs keeps it
   assert.equal(read('assets/img/same.png'), 'SAME');
   assert.equal(read('assets/img/changed.png'), 'NEW');
   assert.equal(read('assets/_versions/7.2.0/img/changed.png'), 'OLD');
-  assert.match(read('docs/index.md'), /!\[Same\]\(\.\.\/assets\/img\/same\.png\)/);
-  assert.match(read('docs/guides/setup.md'), /!\[Same\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
-  assert.match(read('docs/guides/setup.md'), /!\[Spaced\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
-  assert.match(read('versioned_docs/version-7.2.0/index.md'), /!\[Same\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
-  assert.match(read('versioned_docs/version-7.2.0/index.md'), /!\[Changed\]\(\.\.\/\.\.\/assets\/_versions\/7\.2\.0\/img\/changed\.png\)/);
+  assert.match(read('docs/index.mdx'), /!\[Same\]\(\.\.\/assets\/img\/same\.png\)/);
+  assert.match(read('docs/guides/setup.mdx'), /!\[Same\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
+  assert.match(read('docs/guides/setup.mdx'), /!\[Spaced\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
+  assert.match(read('versioned_docs/version-7.2.0/index.mdx'), /!\[Same\]\(\.\.\/\.\.\/assets\/img\/same\.png\)/);
+  assert.match(read('versioned_docs/version-7.2.0/index.mdx'), /!\[Changed\]\(\.\.\/\.\.\/assets\/_versions\/7\.2\.0\/img\/changed\.png\)/);
   assert.ok(!fs.existsSync(path.join(out, 'docs/convert_links.sh')) && !fs.existsSync(path.join(out, 'docs/assets')));
+  assert.ok(!fs.existsSync(path.join(out, 'docs/index.md')), 'pages are .mdx only');
 });
 
 test('files referenced by URL in attributes are shared by path in static/, served under the product route', () => {
@@ -65,9 +66,9 @@ test('files referenced by URL in attributes are shared by path in static/, serve
   writeDocusaurusTree(versions, out, { route: 'p' });
   assert.equal(read('static/assets/logo.svg'), 'LOGO');
   assert.equal(read('static/_versions/7.2.0/apis/users.yaml'), 'OLD');
-  assert.match(read('docs/guides/setup.md'), /spec="\/p\/apis\/users\.yaml"/);
-  assert.match(read('docs/guides/setup.md'), /\[Download the spec\]\(\/p\/apis\/users\.yaml\)/);
-  const old = read('versioned_docs/version-7.2.0/index.md');
+  assert.match(read('docs/guides/setup.mdx'), /spec="\/p\/apis\/users\.yaml"/);
+  assert.match(read('docs/guides/setup.mdx'), /\[Download the spec\]\(\/p\/apis\/users\.yaml\)/);
+  const old = read('versioned_docs/version-7.2.0/index.mdx');
   assert.match(old, /src="\/p\/assets\/logo\.svg"/);
   assert.doesNotMatch(old, /\/p\/7\.2\.0\/assets\/logo\.svg/);
   assert.match(old, /spec="\/p\/_versions\/7\.2\.0\/apis\/users\.yaml"/);
@@ -85,17 +86,17 @@ test('links to pages of the same version become relative .md links; other versio
     'docs/index.md': page('Home', '# Old\n\n[Latest home](/p/) and [self](/p/7.2.0/).\n'),
   });
   writeDocusaurusTree(versions, out, { route: 'p' });
-  const home = read('docs/index.md');
-  assert.match(home, /\[setup\]\(guides\/setup\.md#ports\)/);
-  assert.match(home, /\[guides\]\(guides\/index\.md\)/);
+  const home = read('docs/index.mdx');
+  assert.match(home, /\[setup\]\(guides\/setup\.mdx#ports\)/);
+  assert.match(home, /\[guides\]\(guides\/index\.mdx\)/);
   assert.match(home, /\[old\]\(\/p\/7\.2\.0\/\)/);
   assert.match(home, /\[gone\]\(\/p\/nowhere\/\)/);
   assert.match(home, /curl \/p\/guides\/setup\//);
-  assert.match(read('docs/guides/index.md'), /\[home\]\(\.\.\/index\.md\)/);
-  assert.match(read('docs/guides/index.md'), /\[link\]\(setup\.md\/\)/);
+  assert.match(read('docs/guides/index.mdx'), /\[home\]\(\.\.\/index\.mdx\)/);
+  assert.match(read('docs/guides/index.mdx'), /\[link\]\(setup\.md\/\)/);
   assert.ok(!fs.existsSync(path.join(out, 'assets')), 'pages are never copied as assets');
-  assert.match(read('docs/guides/sso/sso.md'), /\[Setup\]\(\.\.\/setup\.md\)/);
-  assert.match(read('versioned_docs/version-7.2.0/index.md'), /\[Latest home\]\(\/p\/\) and \[self\]\(index\.md\)/);
+  assert.match(read('docs/guides/sso/sso.mdx'), /\[Setup\]\(\.\.\/setup\.mdx\)/);
+  assert.match(read('versioned_docs/version-7.2.0/index.mdx'), /\[Latest home\]\(\/p\/\) and \[self\]\(index\.mdx\)/);
 });
 
 test('component imports are removed (the docs site registers components globally); partial imports stay', () => {
@@ -104,7 +105,7 @@ test('component imports are removed (the docs site registers components globally
     'docs/_partials/sign-in.mdx': "import Applies from '@site/src/components/Applies';\n\n<Applies to=\"WSO2 Cloud\">\n\nConsole.\n\n</Applies>\n",
   }, { 'docs/index.md': page('Home', '# Old\n') });
   writeDocusaurusTree(versions, out, { route: 'p' });
-  const home = read('docs/index.md');
+  const home = read('docs/index.mdx');
   assert.equal(home, "---\ntitle: Home\n---\n\nimport SignIn from './_partials/sign-in.mdx';\n\n# Home\n\n<SignIn />\n\n```js\nimport x from '@site/src/keep-in-code';\n```\n");
   assert.equal(read('docs/_partials/sign-in.mdx'), '<Applies to="WSO2 Cloud">\n\nConsole.\n\n</Applies>\n');
 });
@@ -117,7 +118,7 @@ test('MkDocs redirect maps go to redirects.json; edit links open the MkDocs sour
   versions[1]!.redirects = { 'x.md': 'y.md' };
   writeDocusaurusTree(versions, out, { route: 'p', editBranch: 'master' });
   assert.equal(read('redirects.json'), JSON.stringify({ current: { 'old/a.md': 'guides/a.md', 'old/b.md': 'guides/b.md' }, '7.2.0': { 'x.md': 'y.md' } }, null, 2) + '\n');
-  assert.match(read('docs/index.md'), /https:\/\/github\.com\/wso2\/docs-is\/edit\/master\/en\/asgardeo\/docs\/index\.md/);
+  assert.match(read('docs/index.mdx'), /https:\/\/github\.com\/wso2\/docs-is\/edit\/master\/en\/asgardeo\/docs\/index\.md/);
 });
 
 test('the same input gives the same tree; a rerun replaces only a tree this writer made', () => {
@@ -128,7 +129,7 @@ test('the same input gives the same tree; a rerun replaces only a tree this writ
     .filter((e) => e.isFile()).map((e) => path.relative(dir, path.join(e.parentPath, e.name))).sort().map((f) => [f, fs.readFileSync(path.join(dir, f), 'utf8')]));
   writeDocusaurusTree(versions, out, { route: 'p' });
   const first = snapshot(out);
-  fs.writeFileSync(path.join(out, 'docs/stale.md'), 'old');
+  fs.writeFileSync(path.join(out, 'docs/stale.mdx'), 'old');
   writeDocusaurusTree(versions, out, { route: 'p' });
   assert.deepEqual(snapshot(out), first);
   const other = fs.mkdtempSync(path.join(path.dirname(out), 'not-a-tree-'));
@@ -145,7 +146,7 @@ test('relative URLs in attributes resolve against the page URL, like a browser, 
   }, { 'docs/index.md': page('Home', '# Old\n') });
   versions[0]!.sidebar = sidebar(['index']);
   writeDocusaurusTree(versions, out, { route: 'p' });
-  assert.match(read('docs/apis/users-rest-api.md'), /spec="\/p\/apis\/restapis\/users\.yaml"/);
+  assert.match(read('docs/apis/users-rest-api.mdx'), /spec="\/p\/apis\/restapis\/users\.yaml"/);
   assert.equal(read('static/apis/restapis/users.yaml'), 'SPEC');
 });
 
@@ -156,7 +157,7 @@ test('a Markdown link written relative to the page URL (as MkDocs pages often ar
     'docs/assets/attachments/admin.wsdl': 'WSDL', 'docs/assets/img/a.png': 'A',
   });
   writeDocusaurusTree(versions, out, { route: 'p' });
-  const text = read('versioned_docs/version-7.2.0/develop/admin-services.md');
+  const text = read('versioned_docs/version-7.2.0/develop/admin-services.mdx');
   assert.match(text, /\[WSDL\]\(\.\.\/\.\.\/\.\.\/assets\/attachments\/admin\.wsdl\)/);
   assert.match(text, /\[Shot\]\(\.\.\/\.\.\/\.\.\/assets\/img\/a\.png\)/);
   assert.equal(read('assets/attachments/admin.wsdl'), 'WSDL');
@@ -169,7 +170,7 @@ test('a link target on the line after `](` still finds its file', () => {
     'docs/assets/img/config.png': 'PNG',
   });
   writeDocusaurusTree(versions, out, { route: 'p' });
-  assert.match(read('versioned_docs/version-7.2.0/learn/self-registration.md'), /!\[config\]\(\.\.\/\.\.\/\.\.\/assets\/img\/config\.png\)/);
+  assert.match(read('versioned_docs/version-7.2.0/learn/self-registration.mdx'), /!\[config\]\(\.\.\/\.\.\/\.\.\/assets\/img\/config\.png\)/);
 });
 
 test('a linked .html file, which Docusaurus never bundles, goes to static/ and is linked by URL under the route', () => {
@@ -179,6 +180,51 @@ test('a linked .html file, which Docusaurus never bundles, goes to static/ and i
     'docs/assets/attachments/template.html': '<html></html>',
   });
   writeDocusaurusTree(versions, out, { route: 'p' });
-  assert.match(read('versioned_docs/version-7.2.0/develop/sso-page.md'), /\[here\]\(\/p\/assets\/attachments\/template\.html\)/);
+  assert.match(read('versioned_docs/version-7.2.0/develop/sso-page.mdx'), /\[here\]\(\/p\/assets\/attachments\/template\.html\)/);
   assert.equal(read('static/assets/attachments/template.html'), '<html></html>');
+});
+
+test('every page is written as .mdx; links between pages, lifecycle replacements and partial imports follow; sidebars keep their ids', () => {
+  const { versions, out, read } = twoVersions({
+    'docs/index.md': page('Home', '# Home\n\nSee [setup](guides/setup.md#run) and [spec](guides/setup.md/).\n\nimport Note from \'./_partials/note.mdx\';\n\n<Note />\n'),
+    'docs/guides/setup.md': '---\ntitle: Setup\nstatus: deprecated\nreplacement: ../index.md#start\nby_option:\n  Self-hosted:\n    replacement: ../index.md\n---\n\n# Setup\n',
+    'docs/_partials/note.mdx': 'Note [home](../index.md).\n',
+  }, { 'docs/index.md': page('Home', '# Old\n\n[Self](index.md)\n') });
+  writeDocusaurusTree(versions, out, { route: 'p' });
+  assert.match(read('docs/index.mdx'), /\[setup\]\(guides\/setup\.mdx#run\) and \[spec\]\(guides\/setup\.md\/\)/);
+  assert.match(read('docs/index.mdx'), /import Note from '\.\/_partials\/note\.mdx';/);
+  assert.match(read('docs/guides/setup.mdx'), /^replacement: \.\.\/index\.mdx#start$/m);
+  assert.match(read('docs/guides/setup.mdx'), /^ {4}replacement: \.\.\/index\.mdx$/m);
+  assert.equal(read('docs/_partials/note.mdx'), 'Note [home](../index.mdx).\n');
+  assert.match(read('versioned_docs/version-7.2.0/index.mdx'), /\[Self\]\(index\.mdx\)/);
+  assert.deepEqual(JSON.parse(read('sidebars.json')), sidebar(['index', 'guides/setup']));
+  for (const old of ['docs/index.md', 'docs/guides/setup.md', 'versioned_docs/version-7.2.0/index.md']) assert.ok(!fs.existsSync(path.join(out, old)), old);
+});
+
+test('pages and partials that follow the conventions get the explicit components in every version', () => {
+  const steps = '## Step 1: Install\n\nDo a.\n\n## Step 2: Run\n\nDo b.\n';
+  const { versions, out, read } = twoVersions({
+    'docs/index.md': page('Home', `# Home\n\n${steps}`),
+    'docs/_partials/run.mdx': steps,
+    'docs/guides/setup.md': '---\ntitle: Setup\nstepper: false\n---\n\n' + steps,
+  }, { 'docs/index.md': page('Home', `# Old\n\n${steps}`) });
+  writeDocusaurusTree(versions, out, { route: 'p' });
+  for (const f of ['docs/index.mdx', 'docs/_partials/run.mdx', 'versioned_docs/version-7.2.0/index.mdx']) {
+    assert.match(read(f), /<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}/, f);
+  }
+  assert.match(read('docs/index.mdx'), /^---\ntitle: Home\n/, 'front matter kept');
+  assert.match(read('docs/guides/setup.mdx'), /## Step 1: Install/, 'the opt-out holds');
+});
+
+test('the tree run lists nested Steps whose last sub-step is followed by text, with file and line, for review', () => {
+  const nested = '## Step 1: Configure\n\nIntro.\n\n### Step 1.1: A\n\na\n\n### Step 1.2: B\n\nb\n\nThen save.\n\n## Step 2: Run\n\nr\n';
+  const clean = '## Step 1: Configure\n\n### Step 1.1: A\n\n### Step 1.2: B\n\n## Step 2: Run\n\nr\n';
+  const { versions, out, read } = twoVersions({ 'docs/index.md': page('Home', `# Home\n\n${nested}`), 'docs/clean.md': page('Clean', clean) },
+    { 'docs/index.md': page('Home', '# Old\n') });
+  const { review } = writeDocusaurusTree(versions, out, { route: 'p' });
+  assert.equal(review.length, 1);
+  assert.equal(review[0]!.file, 'docs/index.mdx');
+  const lines = read('docs/index.mdx').split('\n');
+  assert.equal(lines[review[0]!.line - 1], '</Steps>', 'the line of the nested </Steps>, after the text');
+  assert.equal(lines[review[0]!.line - 3], 'Then save.');
 });

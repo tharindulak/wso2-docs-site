@@ -22,6 +22,7 @@ export { convertSource, CONTRACT_VERSION } from './source.js';
 export { writeDocusaurusTree, withoutComponentImports, TREE_MARKER, type TreeVersion, type TreeOptions } from './tree.js';
 export { redirectMaps } from './redirects.js';
 export { STAGES, BY_OPTION, LIFECYCLE_FIELDS, checkLifecycle, checkPageLifecycle, applyLifecycle, lifecycleBadge, lifecycleFrontMatter, withoutDeprecatedSuffix, withoutDeprecatedLabels, deprecationOf, replacementDocId, replacementTitle, isDeprecatedAdmonition, type Stage, type Lifecycle, type OptionDeprecation } from './lifecycle.js';
-export { writeComponents, headingIds, type ComponentsResult, type WrittenComponents } from './conventions.js';
+export { repairMdx } from './mdx-repair.js';
+export { writeComponents, subStepReview, headingIds, type ComponentsResult, type WrittenComponents } from './conventions.js';
 export { cardOf, cardsOfList, type LinkCard } from './link-cards.js';
 export { deprecatedSections, deprecationIndex, readDeprecationsList, deprecationsPage, withDeprecationsEntry, DEPRECATIONS_ID, type DeprecationEntry, type ListedDeprecation, type IndexPage } from './deprecations.js';

@@ -55,7 +55,10 @@ function blocks(md: string, stats: SyntaxStats): string {
       const inner = reindent(blocks(body, stats), ws);
       if (kind === '!!!') {
         stats.admonitions++;
-        out.push(`${ws}:::${ADMONITION[type.toLowerCase()] ?? 'note'}${title ? `[${title.replace(/[[\]]/g, '')}]` : ''}`, '', inner, '', `${ws}:::`);
+        // An admonition holding admonitions takes a longer fence than theirs, so its own closes it (Docusaurus nesting).
+        const innerFence = Math.max(2, ...[...inner.matchAll(/^[ \t]*(:{3,})[a-z]/gm)].map((f) => f[1]!.length));
+        const fence = ':'.repeat(innerFence + 1);
+        out.push(`${ws}${fence}${ADMONITION[type.toLowerCase()] ?? 'note'}${title ? `[${title.replace(/[[\]]/g, '')}]` : ''}`, '', inner, '', `${ws}${fence}`);
       } else {
         stats.collapsibles++;
         out.push(`${ws}<details${kind.endsWith('+') ? ' open' : ''}>`, `${ws}<summary>${title || type}</summary>`, '', inner, '', `${ws}</details>`);
@@ -235,8 +238,19 @@ export function linkTargets(text: string): string {
   return last ? out + text.slice(last) : text;
 }
 
+/** In a table row, a `|` inside a code span is escaped: GFM would end the cell there; Python-Markdown does not. */
+function tablePipes(text: string): string {
+  let fence: string | null = null;
+  return text.split('\n').map((line) => {
+    const f = line.match(/^\s*(`{3,}|~{3,})/);
+    if (f && (!fence || (f[1]![0] === fence[0] && f[1]!.length >= fence.length))) { fence = fence ? null : f[1]!; return line; }
+    if (fence || !/^[ \t]*\|.*\|[ \t]*$/.test(line)) return line;
+    return line.replace(/(`+)([^`]+?)\1(?!`)/g, (_, ticks: string, code: string) => `${ticks}${code.replace(/(?<!\\)\|/g, '\\|')}${ticks}`);
+  }).join('\n');
+}
+
 function inline(text: string, stats: SyntaxStats): string {
-  return outsideCode(placeholderHostLinks(text), (t) => {
+  return outsideCode(placeholderHostLinks(tablePipes(text)), (t) => {
     let s = redocToApiReference(t).text;
     s = linkTargets(s);
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g,
@@ -261,9 +275,37 @@ function inline(text: string, stats: SyntaxStats): string {
   });
 }
 
+/**
+ * HTML comments that open a line outside code and hold a code fence, removed whole: a browser hides them, fences and
+ * all, while read fence by fence their last fence (often "``` -->") never closes. Other comments go later (inline).
+ */
+function fencedComments(md: string): string {
+  const lines = md.split('\n');
+  const out: string[] = [];
+  let fence: string | null = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!;
+    const f = line.match(/^\s*(`{3,}|~{3,})/);
+    if (f && (!fence || (f[1]![0] === fence[0] && f[1]!.length >= fence.length))) { fence = fence ? null : f[1]!; out.push(line); continue; }
+    if (!fence && /^\s*<!--/.test(line) && !line.includes('-->')) {
+      let j = i + 1;
+      while (j < lines.length && !lines[j]!.includes('-->')) j++;
+      const inside = lines.slice(i + 1, j);
+      if (j < lines.length && inside.concat(lines[j]!).some((l) => /^\s*(`{3,}|~{3,})/.test(l))) {
+        const after = lines[j]!.slice(lines[j]!.indexOf('-->') + 3);
+        if (after.trim()) out.push(after);
+        i = j;
+        continue;
+      }
+    }
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
 /** Convert MkDocs Markdown to MDX. Returns the body and whether it needs the Tabs imports. */
 export function toMdx(md: string): { body: string; usesTabs: boolean; stats: SyntaxStats } {
   const stats: SyntaxStats = { admonitions: 0, collapsibles: 0, tabs: 0, attrLists: 0 };
-  const body = inline(blocks(md, stats), stats);
+  const body = inline(blocks(fencedComments(md), stats), stats);
   return { body, usesTabs: /<Tabs>/.test(body), stats };
 }

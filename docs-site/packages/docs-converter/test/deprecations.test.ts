@@ -114,3 +114,7 @@ test('the sidebar lists the Deprecations page after the Feature deprecation refe
   assert.deepEqual(withDeprecationsEntry(placed), placed, 'already listed');
   assert.deepEqual(withDeprecationsEntry([{ type: 'doc', id: 'intro' }]), [{ type: 'doc', id: 'intro' }, { type: 'doc', id: 'deprecations', label: 'Deprecations' }]);
 });
+
+test('a deprecated section holding an admonition (a longer fence) is still a deprecation notice', () => {
+  assert.deepEqual(deprecatedSections('::::deprecated[Old API]\n\nGone.\n\n:::note\n\nx\n\n:::\n\n::::\n'), [{ title: 'Old API' }]);
+});

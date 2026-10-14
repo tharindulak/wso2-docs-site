@@ -29,7 +29,7 @@ export interface DeprecationEntry {
 export interface ListedDeprecation { title: string; options: string[]; since: string; replacement?: string; removal?: string; link?: string }
 
 const FENCE = /^[ \t]*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^[ \t]*\1[ \t]*$/gm;
-const OPEN = /^[ \t]*:::([A-Za-z]+)(?:\[(.*)\])?[ \t]*$/;
+const OPEN = /^[ \t]*:{3,}([A-Za-z]+)(?:\[(.*)\])?[ \t]*$/;
 const APPLIES_OPEN = /^[ \t]*<Applies to="([^"]+)">[ \t]*$/;
 const APPLIES_CLOSE = /^[ \t]*<\/Applies>[ \t]*$/;
 

@@ -223,6 +223,12 @@ export function htmlBlocksToJsx(text: string, { protect = (jsx: string) => jsx, 
       depth += (lines[j]!.match(open) ?? []).length - (lines[j]!.match(close) ?? []).length;
       if (depth <= 0) { end = j; break; }
     }
+    // A nested block never closed is one blank-line chunk of Python-Markdown text (ended by its container or the page
+    // too), which the browser closes.
+    if (end < 0 && nested) {
+      const stop = lines.findIndex((l, k) => k > i && (!l.trim() || width(l.match(/^[ \t]*/)![0]) < width(start[1]!)));
+      end = (stop < 0 ? lines.length : stop) - 1;
+    }
     if (end <= i || (html && !nested)) { out.push(line); continue; } // one line, never closed, or raw in CommonMark: as written
     // Python-Markdown renders each blank-line chunk of a nested block on its own, so a code fence, tab set or
     // admonition after a blank line is block Markdown, which one line of JSX cannot hold: leave the block as written

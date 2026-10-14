@@ -10,6 +10,7 @@ import { htmlBlocksToJsx } from './html-blocks.js';
 import { isHomeLayout, nameIconLinks } from './home-layout.js';
 import { toMdx, outsideCode, type SyntaxStats } from './syntax.js';
 import { writeComponents } from './conventions.js';
+import { repairMdx } from './mdx-repair.js';
 import type { DeploymentOption } from './types.js';
 import { loadFrontMatter, type PageData } from './render.js';
 import { applyLifecycle, lifecycleBadge, withoutDeprecatedSuffix, BY_OPTION, LIFECYCLE_FIELDS, type CheckOptions } from './lifecycle.js';
@@ -58,13 +59,20 @@ export interface ConvertOptions {
   replacementExists?: CheckOptions['replacementExists'];
 }
 
-export type PageStats = SyntaxStats & { removed?: string[]; htmlBlocks?: number; format?: 'md' };
+export type PageStats = SyntaxStats & { removed?: string[]; htmlBlocks?: number; format?: 'md'; repairs?: number };
 
 /**
  * What a converted page carries besides its MDX: `problems` with its lifecycle fields (left out of the front matter)
  * and `yamlErrors` in its front matter (which then gives no fields, as before). Callers report both.
  */
 export interface ConvertResult { mdx: string; stats: PageStats; problems: string[]; yamlErrors: string[] }
+
+/** Tabs in the indentation of each line expanded to the next multiple of 4 columns (Python-Markdown's tab_length). */
+export const expandTabs = (text: string): string => text.replace(/^[ \t]*\t[ \t]*/gm, (ws) => {
+  let col = 0;
+  for (const c of ws) col = c === '\t' ? col + 4 - (col % 4) : col + 1;
+  return ' '.repeat(col);
+});
 
 /** Convert rendered Markdown into Docusaurus MDX with front matter. Throws PageError when the page cannot be kept. */
 export async function convertRendered(rendered: string, opts: ConvertOptions): Promise<ConvertResult> {
@@ -98,6 +106,21 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
       return withRemoved({ ...result, stats: { ...result.stats, htmlBlocks: rewritten.blocks } });
     } catch (e) { compileFailure(e); }
   }
+  // Then with the spots MDX cannot read repaired as a browser shows them (see mdx-repair.ts), HTML blocks rewritten
+  // first; then the same with tab indentation expanded to 4 columns, as Python-Markdown reads it.
+  const expanded = expandTabs(policy.text);
+  for (const source of expanded === policy.text ? [policy.text] : [policy.text, expanded]) {
+    const kept: string[] = [];
+    const blocks = htmlBlocksToJsx(source, { protect: (jsx) => `MDXHTMLBLOCK${kept.push(jsx) - 1}X` });
+    const restore = (mdx: string) => mdx.replace(/MDXHTMLBLOCK(\d+)X/g, (_, i: string) => kept[Number(i)]!);
+    const variants: Array<[string, ((mdx: string) => string) | undefined, number]> = [...(blocks.blocks ? [[blocks.text, restore, blocks.blocks] as [string, (mdx: string) => string, number]] : []), [source, undefined, 0]];
+    for (const [text, restoreBlocks, count] of variants) {
+      try {
+        const result = await assemble(text, data, body, policy, opts, { restore: restoreBlocks, repair: true });
+        return withRemoved(count ? { ...result, stats: { ...result.stats, htmlBlocks: count } } : result);
+      } catch (e) { compileFailure(e); }
+    }
+  }
   // Last resort: CommonMark (Docusaurus `mdx.format: md`), where raw HTML is parsed leniently, as browsers do.
   // The page stays on the site; JSX components (tabs, deployment blocks) show as plain content. HTML blocks nested in
   // a container become one line of HTML with their inline Markdown rendered, as Python-Markdown renders it.
@@ -112,9 +135,17 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
 
 async function assemble(
   text: string, data: Record<string, unknown>, body: string, policy: PolicyResult, opts: ConvertOptions,
-  { restore = (mdx: string) => mdx, format = 'mdx' }: { restore?: (mdx: string) => string; format?: 'mdx' | 'md' } = {},
+  { restore = (mdx: string) => mdx, format = 'mdx', repair = false }: { restore?: (mdx: string) => string; format?: 'mdx' | 'md'; repair?: boolean } = {},
 ): Promise<Omit<ConvertResult, 'yamlErrors'>> {
-  const { body: converted, usesTabs, stats } = toMdx(text);
+  const { body: toMdxBody, usesTabs, stats: syntaxStats } = toMdx(text);
+  let converted = toMdxBody;
+  let stats: PageStats = syntaxStats;
+  if (repair) {
+    const repaired = await repairMdx(restore(converted));
+    if (repaired.error) throw new PageError('compile', `${repaired.error.slice(0, 160)} (after ${repaired.repairs} repairs)`);
+    [converted, restore] = [repaired.text, (mdx: string) => mdx];
+    stats = { ...stats, repairs: repaired.repairs };
+  }
   const md = format === 'md';
   const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
   // CommonMark pages carry raw HTML, not JSX: keep HTML attribute names. They cannot hold components either; MDX pages

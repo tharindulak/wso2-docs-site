@@ -14,6 +14,13 @@ test('admonitions, including titled and nested in lists', () => {
   assert.match(body, /^ {4}:::note\n\n {4}Inside\.\n\n {4}:::/m);
 });
 
+// docs-is 5.x setup/setting-up-separate-databases-for-clustering.md: a tip nested in a warning. With equal fences the
+// first ::: closes the warning, the tip is left open and a stray ::: prints; Docusaurus wants the outer fence longer.
+test('an admonition holding an admonition gets the longer fence', () => {
+  const { body } = toMdx('!!! warning "H2"\n    Not for production.\n\n    !!! tip "Before you begin"\n        Optional.\n\nAfter.\n');
+  assert.match(body, /^::::warning\[H2\]\n\nNot for production\.\n\n:::tip\[Before you begin\]\n\nOptional\.\n\n:::\n\n::::\n\nAfter\./m);
+});
+
 test('collapsibles and tabs', () => {
   const { body, usesTabs } = toMdx('??? tip "More"\n    Hidden.\n\n=== "Java"\n    ```java\n    a();\n    ```\n\n=== "Go"\n    b\n');
   assert.match(body, /<details>\n<summary>More<\/summary>/);
@@ -118,4 +125,25 @@ test('the explicit content components a source writes stay JSX', () => {
   assert.match(body, /^<Prerequisites title="Before you begin">$/m);
   assert.match(body, /^<LinkCards>$/m);
   assert.doesNotMatch(body, /&lt;/);
+});
+
+// docs-is sdks/nextjs/middleware/asgardeo-middleware.md: Python-Markdown's tables keep a `|` inside a code span in the
+// cell; GFM splits the cell there unless the pipe is escaped (and then shows it unescaped in the code).
+test('a pipe inside a code span in a table row is escaped, so the cell keeps it', () => {
+  const { body } = toMdx('| Property | Type |\n|---|---|\n| `getSession` | `() => Promise<T | undefined>` |\n\nText `a | b` stays.\n');
+  assert.match(body, /^\| `getSession` \| `\(\) => Promise<T \\\| undefined>` \|$/m);
+  assert.match(body, /Text `a \| b` stays\./);
+});
+
+test('a table row inside fenced code keeps its pipes', () => {
+  assert.match(toMdx('```\n| `a | b` |\n```\n').body, /^\| `a \| b` \|$/m);
+});
+
+// docs-is asgardeo guides/account-configurations/login-security/bot-detection.md: a section commented out with its
+// code blocks. A browser hides the whole comment; read fence by fence, its last fence ("``` -->") never closes.
+test('an HTML comment holding code blocks is removed whole; comments inside code stay', () => {
+  const { body } = toMdx('Intro.\n\n<!-- ## Old\n\n```toml\n[a]\n```\n\nText.\n``` -->\n\nKept.\n\n```xml\n<!-- in code -->\n<a/>\n```\n');
+  assert.doesNotMatch(body, /Old|\[a\]|Text\./);
+  assert.match(body, /Intro\.\n+Kept\./);
+  assert.match(body, /```xml\n<!-- in code -->\n<a\/>\n```/);
 });

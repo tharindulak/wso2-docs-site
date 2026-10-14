@@ -4,6 +4,7 @@
 //   Deprecations, which the site builds from the tree), then writes the tree with
 //   @wso2/docs-converter's writeDocusaurusTree. Until cutover the tree is generated only: rerun this, never hand-edit.
 //   outDir must be empty, missing, or a tree this script wrote earlier (it is replaced). Honours DOCS_SITE_LOCK.
+//   Writes generated/tree-review.txt beside the content report: nested Steps a writer should review (file:line).
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -48,5 +49,13 @@ const tree = versions.map((v) => ({
   sidebar: JSON.parse(fs.readFileSync(path.join(GENERATED, 'sidebars', `${v.id}.json`), 'utf8')),
   redirects: redirectsOf(v),
 }));
-writeDocusaurusTree(tree, path.resolve(outDir), { route: section.route, editBranch: editBranch ?? (section.cloud?.track ?? section.track) });
+const { review } = writeDocusaurusTree(tree, path.resolve(outDir), { route: section.route, editBranch: editBranch ?? (section.cloud?.track ?? section.track) });
 console.log(`Wrote ${path.resolve(outDir)}: Latest ${versions[0].version} and ${versions.length - 1} older version(s).`);
+// Not in the tree: the tree holds pages only.
+const reviewFile = path.join(GENERATED, 'tree-review.txt');
+fs.writeFileSync(reviewFile, [
+  `# ${sectionId}: nested <Steps> whose last sub-step is followed by text (the rewrite closed the nested </Steps> at the`,
+  '# next heading). Check whether the text before </Steps> at each line belongs to the parent step; if so, move </Steps> up.',
+  ...review.map((r) => `${r.file}:${r.line}`), '',
+].join('\n'));
+console.log(`Sub-step review: ${review.length} nested <Steps> listed in ${path.relative(process.cwd(), reviewFile)}.`);

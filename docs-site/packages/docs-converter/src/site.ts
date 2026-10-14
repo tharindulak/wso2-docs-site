@@ -15,7 +15,6 @@ import { applyLifecycle, checkLifecycle, lifecycleBadge, lifecycleFrontMatter, w
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
 import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem, Source } from './types.js';
-import { writeComponents } from './conventions.js';
 
 /** `{{ base_path }}` renders as this marker, then maps to the section's route. */
 const BASE = '@@BASE@@';
@@ -737,11 +736,8 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
       const front = lifecycle.front;
       if (!partial) noteFrontMatter(report, rel, { problems: lifecycle.problems, yamlErrors: error ? [error] : [] });
       const declared = (data.mdx as { format?: unknown } | undefined)?.format;
-      // TEMPORARY, until the tree is rewritten to explicit components (the one-off rewrite): pages that follow a
-      // convention get the components here, as MkDocs pages do on conversion, since the site renders only explicit
-      // components. Pages already explicit are left as they are. Remove this line once the tree is rewritten.
-      const written = declared === 'md' ? text : writeComponents(text, { frontMatter: data }).text;
-      const mdx = partial ? written : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${written}`;
+      // A Docusaurus tree is taken as written: its writers place the explicit components (no conventions recognised).
+      const mdx = partial ? text : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       try {
         // A page may declare CommonMark itself (Docusaurus's mdx.format front matter): compile it as it says.
         await compileCheck(mdx, declared === 'md' ? { format: 'md' } : undefined);

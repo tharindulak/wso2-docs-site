@@ -1,10 +1,15 @@
 // The Docusaurus tree a content source keeps once it migrates (docs-is: `docusaurus/`), written from the converted
-// output of each of its versions: Latest in docs/, older versions in versioned_docs/ with their sidebars.
+// output of each of its versions: Latest in docs/, older versions in versioned_docs/ with their sidebars. Every page
+// is an .mdx file holding the explicit content components (conventions.ts writes them where a page still follows a
+// convention); links between pages and lifecycle replacements name the .mdx files. Doc ids, URLs and sidebars do not
+// change.
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { walk, encodePath } from './site.js';
 import { outsideCode } from './syntax.js';
+import { splitFrontMatter } from './page.js';
+import { subStepReview, writeComponents } from './conventions.js';
 
 export interface TreeVersion {
   /** Release, three segments (7.3.0). */
@@ -20,6 +25,9 @@ export interface TreeVersion {
   /** MkDocs `redirect_maps` of the version: old page -> new page or URL. */
   redirects?: Record<string, string>;
 }
+
+/** What a tree run leaves for a writer: nested Steps to review (file under the tree root, line of the nested </Steps>). */
+export interface TreeResult { review: Array<{ file: string; line: number }> }
 
 export interface TreeOptions {
   /** URL base of the product's Latest pages (`identity`). */
@@ -94,6 +102,25 @@ function editOnBranch(text: string, branch: string): string {
 
 const withSlash = (p: string): string => (p.endsWith('/') ? p : `${p}/`);
 
+/** A page's file name in the tree: every page is .mdx (partials already are). */
+const asMdx = (rel: string): string => rel.replace(/\.md$/, '.mdx');
+
+/** Lifecycle `replacement:` values in front matter naming a page of the version (relative `.md`): the page's .mdx. */
+function mdxReplacements(text: string, pageDir: string, isPage: (rel: string) => boolean): string {
+  const fm = text.match(/^---\n[\s\S]*?\n---\n/)?.[0];
+  if (!fm) return text;
+  return fm.replace(/^([ \t]*replacement:[ \t]*)(\S+?\.md)((?:#\S*)?)[ \t]*$/gm, (m, key: string, file: string, hash: string) =>
+    (!/^[a-z][a-z0-9+.-]*:|^\//i.test(file) && isPage(path.posix.join(pageDir, file)) ? `${key}${asMdx(file)}${hash}` : m)) + text.slice(fm.length);
+}
+
+/** The explicit components written into a page's body (front matter kept; CommonMark pages cannot hold them). */
+function withComponents(text: string): string {
+  const fm = text.match(/^---\n[\s\S]*?\n---\n/)?.[0] ?? '';
+  const { data } = splitFrontMatter(text);
+  if ((data.mdx as { format?: unknown } | undefined)?.format === 'md') return text;
+  return fm + writeComponents(text.slice(fm.length), { frontMatter: data }).text;
+}
+
 const write = (file: string, text: string): void => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
 const json = (value: unknown): string => `${JSON.stringify(value, null, 2)}\n`;
 
@@ -113,7 +140,8 @@ function prepareOut(outRoot: string): void {
  * Write the tree for `versions`, newest first (the first is Latest), into `outRoot`. The output depends only on the
  * input: pages and versions are visited in a fixed order, so the same input gives the same tree.
  */
-export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, opts: TreeOptions): void {
+export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, opts: TreeOptions): TreeResult {
+  const review: TreeResult['review'] = [];
   if (opts.editBranch !== undefined && !/^[A-Za-z0-9._\/-]+$/.test(opts.editBranch)) throw new Error(`Invalid edit branch: ${opts.editBranch}`);
   prepareOut(outRoot);
   const assets = new SharedFiles(outRoot, 'assets');
@@ -123,8 +151,9 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
     const pagesRoot = latest ? 'docs' : `versioned_docs/version-${v.version}`;
     const pageFiles = walk(v.docsDir, (r) => /\.mdx?$/.test(r)).sort();
     const pageAt = new Map<string, string>();
+    const pages = new Set<string>();
     for (const rel of pageFiles) {
-      if (!rel.startsWith('_partials/')) pageAt.set(pageUrl(rel, fs.readFileSync(path.join(v.docsDir, rel), 'utf8')), rel);
+      if (!rel.startsWith('_partials/')) { pageAt.set(pageUrl(rel, fs.readFileSync(path.join(v.docsDir, rel), 'utf8')), rel); pages.add(rel); }
     }
     for (const rel of pageFiles) {
       const pageDir = path.posix.dirname(rel);
@@ -135,10 +164,14 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
       // Markdown link and image targets naming a file the version holds: point them at the shared copy.
       const text = outsideCode(withoutComponentImports(raw), (t) => t.replace(MD_TARGET, (m, pre: string, url: string, post: string) => {
         const target = safeDecode(url.split('#')[0]!);
-        if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target) || /\.mdx?\/*$/.test(target)) return m;
+        if (!target || /^[a-z][a-z0-9+.-]*:/i.test(target)) return m;
+        if (/\.mdx?\/*$/.test(target)) {
+          // A relative link to a page file of this version: its .mdx name.
+          return target.endsWith('.md') && !target.startsWith('/') && pages.has(path.posix.join(pageDir, target)) ? m.replace(/\.md(?=[#)\s"])/, '.mdx') : m;
+        }
         // A page of this version: a relative file link, which Docusaurus resolves within the version.
         const linked = target === `/${v.route}` || target.startsWith(`/${v.route}/`) ? pageAt.get(withSlash(`/${target.slice(v.route.length + 2)}`)) : undefined;
-        if (linked) return `${pre}${encodePath(path.posix.relative(pageDir, linked))}${url.includes('#') ? url.slice(url.indexOf('#')) : ''}${post}`;
+        if (linked) return `${pre}${encodePath(path.posix.relative(pageDir, asMdx(linked)))}${url.includes('#') ? url.slice(url.indexOf('#')) : ''}${post}`;
         let fromDocs = target.startsWith(`/${v.route}/`) ? target.slice(v.route.length + 2) : target.startsWith('/') ? undefined : path.posix.join(pageDir, target);
         let file = fromDocs !== undefined ? fileIn(v.docsDir, fromDocs) : undefined;
         if (!file && !target.startsWith('/')) {
@@ -171,7 +204,12 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
         if (!file) return m;
         return `${pre}/${opts.route}/${encodePath(statics.place(key, file, v.version).slice('static/'.length))}${anchor}${post}`;
       }));
-      write(path.join(outRoot, pagesRoot, rel), opts.editBranch ? editOnBranch(text, opts.editBranch) : text);
+      const outRel = asMdx(rel);
+      const final = withComponents(mdxReplacements(opts.editBranch ? editOnBranch(text, opts.editBranch) : text, pageDir, (p) => pages.has(p)));
+      write(path.join(outRoot, pagesRoot, outRel), final);
+      const fm = final.match(/^---\n[\s\S]*?\n---\n/)?.[0] ?? '';
+      const fmLines = fm.split('\n').length - 1;
+      for (const line of subStepReview(final.slice(fm.length))) review.push({ file: path.posix.join(pagesRoot, outRel), line: line + fmLines });
     }
     write(path.join(outRoot, latest ? 'sidebars.json' : `versioned_sidebars/version-${v.version}-sidebars.json`), json(v.sidebar));
   }
@@ -179,4 +217,5 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
   const redirects = Object.fromEntries(versions.flatMap((v, i) => (v.redirects && Object.keys(v.redirects).length
     ? [[i === 0 ? 'current' : v.version, Object.fromEntries(Object.entries(v.redirects).sort(([a], [b]) => a.localeCompare(b)))]] : [])));
   if (Object.keys(redirects).length) write(path.join(outRoot, 'redirects.json'), json(redirects));
+  return { review };
 }

@@ -92,7 +92,7 @@ test('a shared include that reads a page\'s own values stays inlined, since one 
 
 test('a page that only converts as CommonMark inlines its partials, and later pages still import theirs', async () => {
   const root = pair({
-    'cloud/docs/a.md': '# A\n\n<table><tr><td>x</td></tr></tr></table>\n\n{% include "../../includes/shared.md" %}\n',
+    'cloud/docs/a.md': '# A\n\nText <b>left open.\n\n{% include "../../includes/shared.md" %}\n',
     'cloud/docs/b.md': '# B\n\n{% include "../../includes/shared.md" %}\n',
     'cloud/docs/c.md': '# C\n\n{% include "../../includes/shared.md" %}\n',
     'includes/shared.md': 'Shared words.\n',
