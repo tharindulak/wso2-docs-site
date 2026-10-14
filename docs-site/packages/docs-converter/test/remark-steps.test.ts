@@ -61,6 +61,19 @@ test('a sub-step heading outside a stepper stays as written', async () => {
   assert.match(js, /\{"Step 1\.1: Sub"\}/);
 });
 
+test('a bold step number ("**Step 1**: Scan") is hidden like a plain one, for steps and sub-steps', async () => {
+  const js = await jsx('### **Step 1**: Scan the QR code\n\na\n\n#### **Step 1.1** - Read it\n\nb\n\n### **Step 2**: Generate a key\n\nc');
+  assert.equal((js.match(/className="steps__step"/g) ?? []).length, 2);
+  assert.match(js, /<_components\.h3><_components\.span className="steps__prefix">\{"Step 1: "\}<\/_components\.span>\{"Scan the QR code"\}<\/_components\.h3>/);
+  assert.match(js, /data-substep="1\.1"><_components\.span className="steps__prefix">\{"Step 1\.1 - "\}<\/_components\.span>\{"Read it"\}/);
+  assert.doesNotMatch(js, /<_components\.strong>\{"Step/);
+});
+
+test('bold text that goes past the step number keeps its formatting', async () => {
+  const js = await jsx('## **Step 1: Install** it\n\na\n\n## Step 2: Run\n\nb');
+  assert.match(js, /<_components\.strong>\{"Step 1: Install"\}<\/_components\.strong>/);
+});
+
 test('a lone Step heading, or a run broken by another heading, is not wrapped', async () => {
   assert.doesNotMatch(await jsx('## Step 1: Only\n\na\n\n## Other\n\nb'), /steps/);
   assert.doesNotMatch(await jsx('## Step 1: A\n\na\n\n## Note\n\nb\n\n## Step 2: B\n\nc'), /steps/);

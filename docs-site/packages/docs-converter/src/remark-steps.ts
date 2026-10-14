@@ -30,8 +30,24 @@ const stepNumber = (node: RootContent): number | null => {
 const block = (className: string, children: RootContent[], props: Record<string, string> = {}): RootContent =>
   ({ type: 'steps', children, data: { hName: 'div', hProperties: { className: [className], ...props } } }) as unknown as RootContent;
 
+/**
+ * `**Step 1**: Scan` (16 headings write the number in bold): when leading bold or italic text lies inside the prefix,
+ * it becomes plain text joined to the text after it, so the whole prefix can be hidden. Bold that runs past the prefix
+ * (`**Step 1: Install** it`) stays.
+ */
+function unwrapBoldNumber(heading: Heading, prefix: RegExp): void {
+  const [first, second, ...rest] = heading.children;
+  if ((first?.type !== 'strong' && first?.type !== 'emphasis') || !first.children.every((c) => c.type === 'text')) return;
+  const inner = text(first);
+  const after = second?.type === 'text' ? second.value : '';
+  const m = prefix.exec(inner + after);
+  if (!m || inner.length > m[0].length) return;
+  heading.children = [{ type: 'text', value: inner + after }, ...(second?.type === 'text' ? [] : second ? [second] : []), ...rest];
+}
+
 /** Moves the "Step N: " prefix of a heading's leading text into a span the site hides visually. */
 function hidePrefix(heading: Heading, prefix: RegExp = STEP): void {
+  unwrapBoldNumber(heading, prefix);
   const [first, ...rest] = heading.children;
   if (first?.type !== 'text') return;
   const m = prefix.exec(first.value);
