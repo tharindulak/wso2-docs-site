@@ -5,6 +5,8 @@ const ADMONITION: Record<string, string> = {
   info: 'info', todo: 'info', question: 'info', help: 'info', faq: 'info',
   tip: 'tip', hint: 'tip', success: 'tip', check: 'tip', done: 'tip',
   important: 'warning', warning: 'warning', caution: 'warning', attention: 'warning',
+  // Lifecycle stage marking (Deprecation notice): a warning until the site renders the notice itself.
+  deprecated: 'warning',
   danger: 'danger', error: 'danger', failure: 'danger', fail: 'danger', missing: 'danger', bug: 'danger',
 };
 
