@@ -1,0 +1,35 @@
+/* PROTOTYPE, throwaway. Sub-step looks inside the stepper, switched by .ss--<variant> on the heading. */
+.ss::before { content: attr(data-substep); }
+
+/* A. Filled badge before the title. */
+.ss--A::before { display: inline-block; margin-right: .55rem; padding: .05rem .45rem; border-radius: 6px; background: var(--ifm-color-primary); color: #fff;
+  font-size: .78em; font-weight: 700; line-height: 1.5; vertical-align: .12em; }
+
+/* B. Outlined badge before the title. */
+.ss--B::before { display: inline-block; margin-right: .55rem; padding: 0 .4rem; border-radius: 6px; border: 1.5px solid var(--ifm-color-primary);
+  color: var(--ifm-color-primary); font-size: .78em; font-weight: 700; line-height: 1.5; vertical-align: .12em; }
+
+/* C. Mini-stepper: each sub-step block sits beside a small circle, joined to the next by a thin line. */
+.ss-block { position: relative; padding-left: 2.6rem; padding-bottom: .5rem; }
+.ss-block > .ss--C, .ss-block > .ss--E { position: static; }
+.ss--C::before { position: absolute; left: 0; top: .1rem; width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  display: grid; place-items: center; border: 2px solid var(--ifm-color-primary); color: var(--ifm-color-primary);
+  background: var(--ifm-background-color); font-size: .72rem; font-weight: 700; }
+.ss-block:has(+ .ss-block)::after { content: ""; position: absolute; left: calc(.95rem - 1px); top: 2.2rem; bottom: 0; width: 1px;
+  background: var(--ifm-color-primary); opacity: .35; }
+
+/* E. Mini-stepper, filled: the step circle's look, smaller (shares C's block, gutter and line). */
+.ss--E::before { position: absolute; left: .1rem; top: .15rem; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  display: grid; place-items: center; background: var(--ifm-color-primary); color: #fff; font-size: .68rem; font-weight: 700; }
+
+/* D. Number in the primary colour, no box. */
+.ss--D::before { margin-right: .5rem; color: var(--ifm-color-primary); font-weight: 800; }
+
+/* Prototype bar: not part of the design being judged. */
+.ss-bar { position: fixed; left: 50%; bottom: 1rem; transform: translateX(-50%); z-index: 1000; max-width: min(92vw, 56rem);
+  background: #111; color: #eee; border-radius: 14px; padding: .5rem .75rem; box-shadow: 0 6px 24px rgba(0, 0, 0, .35); font: 13px/1.4 system-ui, sans-serif; }
+.ss-bar__row { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.ss-bar button { background: #333; color: #fff; border: 0; border-radius: 8px; padding: .2rem .6rem; cursor: pointer; font-size: 14px; }
+.ss-bar strong { background: #fff; color: #111; border-radius: 6px; padding: 0 .45rem; }
+.ss-bar select { max-width: 22rem; background: #222; color: #eee; border: 1px solid #444; border-radius: 6px; padding: .15rem; }
+.ss-bar__state { margin: .4rem 0 0; padding: .35rem .5rem; background: #1d1d1d; color: #9fe39f; border-radius: 8px; font-size: 11.5px; white-space: pre-wrap; }
