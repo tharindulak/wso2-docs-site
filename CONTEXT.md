@@ -48,6 +48,18 @@ _Avoid_: Shared topic, common docs
 A product team's own docs repository, which the team owns and from which the docs site draws that product's pages.
 _Avoid_: Docs repo (when ambiguous with the docs site's own repository), upstream
 
+**Lifecycle stage**:
+Where a feature stands for readers: Beta (available to everyone, may change), Preview (switched on in the Console's Feature Preview first) or Deprecated (still works, not recommended); generally available when none applies. It may differ by deployment option.
+_Avoid_: Release stage, launch stage, status (too vague)
+
+**Deprecation notice**:
+What a deprecated page or section tells readers: since when the feature is deprecated, what to use instead, and, once the product owner has approved it, when it will be removed.
+_Avoid_: Deprecation warning, EOL notice
+
+**Deprecations page**:
+The one page per docs version that lists everything deprecated in that version, including deprecations that have no page of their own.
+_Avoid_: Deprecation list, changelog (release notes are separate)
+
 **Linked tabs**:
 Tab sets anywhere on the docs site that offer the same choices and switch together when a reader picks one, remembering that choice on later pages.
 _Avoid_: Synced tabs, tab groups
