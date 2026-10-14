@@ -2,8 +2,8 @@
 // (remark-components.ts). Runs on MDX text and changes only what it wraps, so the rest of the page stays as written:
 //   - a run of `Step N:` headings (two or more at one level, each number above the last) is wrapped in <Steps>
 //     (`start` when the first number is not 1); each heading loses its "Step N:" prefix (also written `**Step 1**:`) and
-//     keeps its old anchor as an explicit id: `## Configure Azure {/* #step-1-configure-azure */}`. `Step N.M` headings
-//     inside a step become a nested <Steps> (sub-steps), closed at the next heading that is not a sub-step.
+//     keeps its old anchor as an explicit id: `## Configure Azure {/* #step-1-configure-azure */}`. `Step N.M` (or `Step Na`)
+//     headings inside a step become a nested <Steps> (sub-steps), closed at the next heading that is not a sub-step.
 //   - an h2/h3 "Prerequisites" or "Before you begin" heading and its block (to the next heading at its level or above,
 //     or a stepper) is wrapped in <Prerequisites>; an admonition with that title becomes <Prerequisites title="…">.
 //   - a closing section ("What's next", "See also", …) that is one list of links (after at most one intro paragraph)
@@ -20,8 +20,9 @@ import { cardsOfList } from './link-cards.js';
 
 /** `Step 1:`, `Step 1 -`, `Step 1 –`, `Step 1.` or `Step 1 Title`; not the `Step 1.1` sub-step form. */
 const STEP = /^Step\s+(\d+)(?!\.\d)\s*[:.\-–]?\s+/i;
-/** A sub-step inside a step: `Step 1.1:` and the same separators. */
-const SUB_STEP = /^Step\s+(\d+)\.(\d+)\s*[:.\-–]?\s+/i;
+/** A sub-step inside a step: `Step 1.1:` or `Step 1a:` (a letter is its place: a is 1), and the same separators. */
+const SUB_STEP = /^Step\s+(\d+)(?:\.(\d+)|([a-z])(?![a-z]))\s*[:.\-–]?\s+/i;
+const subStepNumber = (m: RegExpExecArray): number => (m[2] ? Number(m[2]) : m[3].toLowerCase().charCodeAt(0) - 96);
 /** "Prerequisites" or "Before you begin", in any case; a trailing "!" too (88 docs-is admonitions write one). */
 const PREREQUISITES = /^(prerequisites|before you begin)!?$/i;
 /** "What's next" (with or without "?", straight or curly apostrophe) and the other closing titles, in any case. */
@@ -170,7 +171,7 @@ function subSteps(w: Writer, body: RootContent[], depth: number, step: number): 
     if (m) {
       const heading = node as Heading;
       if (group && group.depth !== heading.depth) close();
-      const [n, sub] = [Number(m[1]), Number(m[2])];
+      const [n, sub] = [Number(m[1]), subStepNumber(m)];
       if (!group) group = { depth: heading.depth, first: node, last: node, start: sub, count: 0 };
       if (n !== step || sub !== group.start + group.count) w.written.renumbered++;
       group.count++;

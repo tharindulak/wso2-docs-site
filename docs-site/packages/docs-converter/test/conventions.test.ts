@@ -19,6 +19,15 @@ test('Step N.M headings inside a step become a nested <Steps>, closed at the nex
   );
 });
 
+test('Step Na headings inside a step are sub-steps too, the letter read as its place (a is 1)', () => {
+  const { text, written } = writeComponents('## Step 7: TLS\n\n### Step 7a: Generate a CA\n\na\n\n### Step 7b - Sign\n\nb\n\n## Step 8: Done\n\nc\n');
+  assert.equal(
+    text,
+    '<Steps start={7}>\n\n## TLS {/* #step-7-tls */}\n\n<Steps>\n\n### Generate a CA {/* #step-7a-generate-a-ca */}\n\na\n\n### Sign {/* #step-7b---sign */}\n\nb\n\n</Steps>\n\n## Done {/* #step-8-done */}\n\nc\n\n</Steps>\n',
+  );
+  assert.deepEqual(written, { steps: 2, subSteps: 2, prerequisites: 0, linkCards: 0, renumbered: 0 });
+});
+
 test('a run that does not start at 1 gets start; skipped numbers are renumbered and counted', () => {
   const { text, written } = writeComponents('### Step 0: Prepare\n\na\n\n### Step 1: Go\n\nb\n\n### Step 3: Skip\n\nc\n');
   assert.match(text, /^<Steps start=\{0\}>\n\n### Prepare \{\/\* #step-0-prepare \*\/\}/);
