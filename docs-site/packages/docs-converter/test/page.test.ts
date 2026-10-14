@@ -35,6 +35,15 @@ test('a page that fails only on a raw HTML table converts once the table is rewr
   assert.match(fine.mdx, /<tr><td>ok<\/td><\/tr>/);
 });
 
+// docs-is 7.2.0 deploy/deployment-guide.md: a TODO comment holding an <ol> with an image of a file the version lacks.
+test('an HTML block inside an HTML comment stays hidden when the page\'s HTML blocks are rewritten', async () => {
+  const src = '# Guide\n\n<table>\n  <tr>\n    <td>A\n\n    B</td>\n  </tr>\n</table>\n\n<!-- TODO check it,\n\n<ol>\n    <li><p><img src="/x/assets/a.png" alt="A"></p></li>\n</ol> -->\n\nAfter.\n';
+  const { mdx, stats } = await convertRendered(src, { deploymentOptions: [] });
+  assert.equal(stats.htmlBlocks, 1, 'only the table is rewritten');
+  assert.doesNotMatch(mdx, /TODO|a\.png|-->|--&gt;/);
+  assert.match(mdx, /<table><tbody><tr><td>\{"A B"\}<\/td><\/tr><\/tbody><\/table>\n+After\.\n$/);
+});
+
 test('a page MDX cannot read falls back to CommonMark, with scripts removed, and stays a real page', async () => {
   const opts = { deploymentOptions: ['Self-hosted'] };
   const src = '# Odd\n\nText with {braces and <!DOCTYPE stray> markup <b>bold</i>.\n\n<script>track()</script>\n\n!!! note\n    Kept.\n';

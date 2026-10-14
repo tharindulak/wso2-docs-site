@@ -45,6 +45,11 @@ const HTML_TAG = /<\/?html\b[^>]*>/gi;
 const NESTED = 4;
 /** Width of an indentation, a tab reaching the next multiple of 4 (Python-Markdown's tab_length). */
 const width = (indent: string): number => [...indent].reduce((w, c) => (c === '\t' ? w + 4 - (w % 4) : w + 1), 0);
+/** Whether an HTML comment is open after `line`, given whether one was open before it. */
+const commentOpenAfter = (line: string, open: boolean): boolean => {
+  for (const [mark] of line.matchAll(/<!--|-->/g)) open = mark === '<!--';
+  return open;
+};
 
 /**
  * What a block is written as: one line of JSX for MDX, or (CommonMark pages, `mdx.format: md`) one line of HTML,
@@ -204,15 +209,21 @@ export function htmlBlocksToJsx(text: string, { protect = (jsx: string) => jsx, 
   let blocks = 0;
   let fence: number | null = null; // indentation of the open code fence
   let unwrap = -1; // the line closing an <html> wrapper left as written
+  let comment = false; // inside an HTML comment, which a browser hides: its blocks stay as written, for it to go whole
   for (let i = 0; i < lines.length; i++) {
     const line = i === unwrap ? lines[i]!.replace(HTML_TAG, '') : lines[i]!;
+    if (comment) { comment = commentOpenAfter(line, true); out.push(line); continue; }
     const indent = width(line.match(/^[ \t]*/)![0]);
     // A fence left open ends with its container (a less indented line other than a closing fence), as in
     // Python-Markdown and CommonMark.
     if (FENCE.test(line)) fence = fence === null ? indent : null;
     else if (fence !== null && line.trim() && indent < fence) fence = null;
     const start = fence === null ? line.match(START) : null;
-    if (!start) { out.push(line); continue; }
+    if (!start) {
+      if (fence === null) comment = commentOpenAfter(line, false);
+      out.push(line);
+      continue;
+    }
     const tag = start[2]!.toLowerCase();
     const nested = width(start[1]!) >= NESTED;
     const open = new RegExp(`<${tag}\\b`, 'gi');
