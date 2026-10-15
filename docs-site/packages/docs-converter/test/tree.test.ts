@@ -121,6 +121,15 @@ test('MkDocs redirect maps go to redirects.json; edit links open the MkDocs sour
   assert.match(read('docs/index.mdx'), /https:\/\/github\.com\/wso2\/docs-is\/edit\/master\/en\/asgardeo\/docs\/index\.md/);
 });
 
+test('a version kept on its own branch opens that branch to edit', () => {
+  const pinned = (v: string) => `---\ntitle: Home\ncustom_edit_url: https://github.com/wso2/docs-apim/blob/${'b'.repeat(40)}/en/docs/index.md\n---\n\n# ${v}\n`;
+  const { versions, out, read } = twoVersions({ 'docs/index.md': pinned('New') }, { 'docs/index.md': pinned('Old') });
+  versions[1]!.editBranch = '7.2.0';
+  writeDocusaurusTree(versions, out, { route: 'p', editBranch: 'master' });
+  assert.match(read('docs/index.mdx'), /docs-apim\/edit\/master\/en\/docs\/index\.md/);
+  assert.match(read('versioned_docs/version-7.2.0/index.mdx'), /docs-apim\/edit\/7\.2\.0\/en\/docs\/index\.md/);
+});
+
 test('the same input gives the same tree; a rerun replaces only a tree this writer made', () => {
   const { versions, out } = twoVersions({
     'docs/index.md': page('Home', '# Home\n\n![a](assets/a.png) [b](/p/guides/setup/)\n'), 'docs/guides/setup.md': page('Setup', '# S\n'), 'docs/assets/a.png': 'A',

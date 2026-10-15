@@ -54,6 +54,8 @@ const tree = versions.map((v) => ({
   staticDir: staticDirOf(v),
   sidebar: JSON.parse(fs.readFileSync(path.join(GENERATED, 'sidebars', `${v.id}.json`), 'utf8')),
   redirects: redirectsOf(v),
+  // A version kept on its own branch (API Manager 4.6.0) is edited there; versions sharing one branch get the same.
+  editBranch: typeof v.ref === 'string' && /^[A-Za-z0-9._\/-]+$/.test(v.ref) ? v.ref : undefined,
 }));
 const { review } = writeDocusaurusTree(tree, path.resolve(outDir), { route: section.route, editBranch: editBranch ?? editBranchOf(section, versions) });
 console.log(`Wrote ${path.resolve(outDir)}: Latest ${versions[0].version} and ${versions.length - 1} older version(s).`);

@@ -24,6 +24,8 @@ export interface TreeVersion {
   sidebar: Record<string, unknown>;
   /** MkDocs `redirect_maps` of the version: old page -> new page or URL. */
   redirects?: Record<string, string>;
+  /** Branch "Edit this page" opens for this version (one kept on its own branch); unset: the tree's editBranch. */
+  editBranch?: string;
 }
 
 /** What a tree run leaves for a writer: nested Steps to review (file under the tree root, line of the nested </Steps>). */
@@ -142,7 +144,9 @@ function prepareOut(outRoot: string): void {
  */
 export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, opts: TreeOptions): TreeResult {
   const review: TreeResult['review'] = [];
-  if (opts.editBranch !== undefined && !/^[A-Za-z0-9._\/-]+$/.test(opts.editBranch)) throw new Error(`Invalid edit branch: ${opts.editBranch}`);
+  for (const b of [opts.editBranch, ...versions.map((v) => v.editBranch)]) {
+    if (b !== undefined && !/^[A-Za-z0-9._\/-]+$/.test(b)) throw new Error(`Invalid edit branch: ${b}`);
+  }
   prepareOut(outRoot);
   const assets = new SharedFiles(outRoot, 'assets');
   const statics = new SharedFiles(outRoot, 'static');
@@ -205,7 +209,8 @@ export function writeDocusaurusTree(versions: TreeVersion[], outRoot: string, op
         return `${pre}/${opts.route}/${encodePath(statics.place(key, file, v.version).slice('static/'.length))}${anchor}${post}`;
       }));
       const outRel = asMdx(rel);
-      const final = withComponents(mdxReplacements(opts.editBranch ? editOnBranch(text, opts.editBranch) : text, pageDir, (p) => pages.has(p)));
+      const branch = v.editBranch ?? opts.editBranch;
+      const final = withComponents(mdxReplacements(branch ? editOnBranch(text, branch) : text, pageDir, (p) => pages.has(p)));
       write(path.join(outRoot, pagesRoot, outRel), final);
       const fm = final.match(/^---\n[\s\S]*?\n---\n/)?.[0] ?? '';
       const fmLines = fm.split('\n').length - 1;
