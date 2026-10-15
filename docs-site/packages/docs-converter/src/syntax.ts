@@ -35,10 +35,29 @@ function takeBlock(lines: string[], start: number, ind: number): { body: string;
 }
 const reindent = (text: string, ws: string): string => text.split('\n').map((l) => (l ? ws + l : l)).join('\n');
 
+const LIST_ITEM = /^ {0,3}(?:[-*+]|\d+\.)\s/;
+const MKDOCS_BLOCK = /^\s*(?:`{3,}|~{3,}|!!!|\?\?\?|===)/;
+
+/**
+ * An indented code block (a blank line, then lines indented 4 or more, outside a list), fenced: MDX reads no
+ * indented code, so its lines would show as paragraphs. A tab or admonition body starting with one is the common case.
+ */
+function indentedCode(lines: string[], i: number, inList: boolean): { fenced: string[]; next: number } | null {
+  if (inList || indentOf(lines[i]!) < 4 || !lines[i]!.trim() || (i > 0 && lines[i - 1]!.trim())) return null;
+  let prev = i - 1;
+  while (prev >= 0 && !lines[prev]!.trim()) prev--;
+  // After an HTML line or a MkDocs block header left unconverted (`??? "Title"`), the indent is not code's.
+  if (prev >= 0 && (indentOf(lines[prev]!) >= 4 || /^\s*(?:<|!!!|\?\?\?|===)/.test(lines[prev]!))) return null;
+  const { body, next } = takeBlock(lines, i, 0);
+  if (body.split('\n').some((l) => MKDOCS_BLOCK.test(l))) return null;
+  return { fenced: ['```', body, '```'], next };
+}
+
 function blocks(md: string, stats: SyntaxStats): string {
   const lines = md.split('\n');
   const out: string[] = [];
   let fence: string | null = null;
+  let inList = false;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]!;
     const f = line.match(/^(\s*)(`{3,}|~{3,})(.*)$/);
@@ -47,6 +66,11 @@ function blocks(md: string, stats: SyntaxStats): string {
       continue;
     }
     if (fence) { out.push(line); continue; }
+
+    if (LIST_ITEM.test(line)) inList = true;
+    else if (line.trim() && indentOf(line) === 0 && !lines[i - 1]?.trim()) inList = false;
+    const code = indentedCode(lines, i, inList);
+    if (code) { out.push(...code.fenced); i = code.next - 1; continue; }
 
     let m = line.match(/^(\s*)(!!!|\?\?\?\+?)\s+([\w-]+)(?:\s+"([^"]*)")?\s*$/);
     if (m) {
@@ -303,9 +327,20 @@ function fencedComments(md: string): string {
   return out.join('\n');
 }
 
+/** Tabs in a line's indentation as spaces, to 4-column stops (Python-Markdown's tab_length); code fences kept as written. */
+function expandIndentTabs(md: string): string {
+  let fence: string | null = null;
+  return md.split('\n').map((line) => {
+    const f = line.match(/^\s*(`{3,}|~{3,})/);
+    if (f && (!fence || (f[1]![0] === fence[0] && f[1]!.length >= fence.length))) { fence = fence ? null : f[1]!; return line; }
+    if (fence) return line;
+    return line.replace(/^[ \t]*\t[ \t]*/, (ws) => ws.split('').reduce((acc, c) => (c === '\t' ? acc + ' '.repeat(4 - (acc.length % 4)) : acc + c), ''));
+  }).join('\n');
+}
+
 /** Convert MkDocs Markdown to MDX. Returns the body and whether it needs the Tabs imports. */
 export function toMdx(md: string): { body: string; usesTabs: boolean; stats: SyntaxStats } {
   const stats: SyntaxStats = { admonitions: 0, collapsibles: 0, tabs: 0, attrLists: 0 };
-  const body = inline(blocks(fencedComments(md), stats), stats);
+  const body = inline(blocks(expandIndentTabs(fencedComments(md)), stats), stats);
   return { body, usesTabs: /<Tabs>/.test(body), stats };
 }

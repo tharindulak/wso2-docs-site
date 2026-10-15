@@ -59,15 +59,20 @@ export const pagePath = (file) => `/${file.replace(/(^|\/)index\.html$/, '$1').r
 
 const meta = (doc, name) => DomUtils.findOne((e) => e.name === 'meta' && (e.attribs.name === name || e.attribs['http-equiv'] === name), doc.children)?.attribs.content;
 
-/** Index of version id -> { product, productName, section, sectionLabel, version, latest } from the manifest. */
+/**
+ * Index of version id -> { product, productName, section, sectionLabel, version, latest } from the manifest. Products
+ * (and the hub) hidden from navigation are marked hidden: their pages are built but not searchable.
+ */
 export function versionIndex(manifest) {
-  const index = new Map([[HUB, { product: HUB, productName: HUB_NAME, section: HUB, sectionLabel: HUB_NAME, version: '', latest: true }]]);
+  const hidden = new Set(manifest.hiddenFromNavigation ?? []);
+  const mark = (id) => (hidden.has(id) ? { hidden: true } : {});
+  const index = new Map([[HUB, { product: HUB, productName: HUB_NAME, section: HUB, sectionLabel: HUB_NAME, version: '', latest: true, ...mark(HUB) }]]);
   for (const p of manifest.products) {
     for (const s of p.sections) {
       for (const ver of s.versions) {
         if (ver.status === 'confluence') continue;
         // A single-section product's section label ("Docs") says nothing next to the product name.
-        index.set(ver.id, { product: p.id, productName: p.name, section: s.id, sectionLabel: p.sections.length > 1 ? s.label : '', version: ver.version ?? '', latest: ver.status === 'latest' });
+        index.set(ver.id, { product: p.id, productName: p.name, section: s.id, sectionLabel: p.sections.length > 1 ? s.label : '', version: ver.version ?? '', latest: ver.status === 'latest', ...mark(p.id) });
       }
     }
   }
@@ -161,6 +166,7 @@ export function* buildRecords(buildDir, manifest, warn = console.warn) {
     if (!tag) continue; // home page, 404, search page, redirects
     const where = index.get(tag);
     if (!where) { unknown.set(tag, (unknown.get(tag) ?? 0) + 1); continue; }
+    if (where.hidden) continue;
     yield* pageRecords(html, pagePath(file), { ...where, versionId: tag });
   }
   for (const [tag, n] of unknown) warn(`skipped ${n} pages of unknown version id ${tag}`);

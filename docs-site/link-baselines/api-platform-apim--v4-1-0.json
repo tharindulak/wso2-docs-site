@@ -1,63 +1,11 @@
 [
  {
-  "page": "api-platform/api-manager/4.1.0/administer/key-managers/configure-custom-connector/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/extending-key-management/extending-key-validation/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/key-managers/configure-custom-connector/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/extending-key-management/extending-the-key-manager-interface/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-permissions/index.html",
   "link": "/api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-permissions/``https://localhost:9443/carbon``/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-permissions/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-permissions/#adding-role-based-permissions"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/introduction-to-userstores/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/overview/#api-gateway"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/overview/#api-publisher"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/overview/#developer-portal"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/#setting-up-an-e-mail-login"
- },
- {
   "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-stores/understanding-the-user-realm/index.html",
   "link": "/api-platform/api-manager/4.1.0/assets/attachments/126562314/126562315.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-user-stores/writing-a-custom-user-store-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/administer/managing-users-and-roles/managing-users/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
  },
  {
   "page": "api-platform/api-manager/4.1.0/administer/multitenancy/adding-new-tenants/index.html",
@@ -72,72 +20,36 @@
   "link": "/api-platform/api-manager/4.1.0/assets/attachments/126562777/126562782.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/administer/updating-wso2-api-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-configurations/common-runtime-and-configuration-artifacts/"
+  "page": "api-platform/api-manager/4.1.0/api-analytics/on-prem/elk-installation-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/analytics/cloud/add-new-sp.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/api-analytics/viewing/analytics-pages-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/api-analytics/viewing/analytics-pages-errors/"
+  "page": "api-platform/api-manager/4.1.0/api-analytics/on-prem/elk-installation-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/analytics/cloud/claim-config.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/api-analytics/viewing/analytics-pages-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/api-analytics/viewing/analytics-pages-latency/"
+  "page": "api-platform/api-manager/4.1.0/api-analytics/on-prem/elk-installation-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/analytics/cloud/export.ndjson"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/api-analytics/viewing/analytics-pages-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/api-analytics/viewing/analytics-pages-traffic/"
+  "page": "api-platform/api-manager/4.1.0/api-analytics/on-prem/elk-installation-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/analytics/cloud/inbound-auth-config.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/api-analytics/on-prem/elk-installation-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/analytics/cloud/service-providers.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/api-analytics/on-prem/elk-installation-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/analytics/cloud/update-settings.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/consume/customizations/adding-internationalization/index.html",
   "link": "/api-platform/api-manager/4.1.0/consume/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/#uploading-via-the-admin-portal-tenants-only"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/consume/generating-sdks/write-a-client-application-using-the-sdk/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/consume-api/manage-application/generate-keys/obtain-access-token/changing-the-default-token-expiration-time/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/consume/manage-application/advanced-topics/adding-an-application-key-generation-workflow-using-bps/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/api-gateway/scaling-the-gateway/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-configurations/configuring-caching/#key-cache"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/concepts/cc-rate-limiting/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/quick-start-guide/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/endpoints/load-balanced-endpoints/index.html",
-  "link": "/api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/getting-started/deploy/cc-on-docker-with-api-controller/#step-1-download-and-setup-choreo-connect-distribution-zip-and-apictl-command-line-tool"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/migration-guide-from-ballerina-api-microgateway/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-wso2-api-manager/320-to-410/upgrading-from-320-to-410/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/observability/distributed-tracing/index.html",
   "link": "/api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/getting-started/quick-start-guide/quick-start-guide-docker-with-apim/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/api-authentication/oauth2-access-tokens/index.html",
-  "link": "/api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/importing-certificates-to-the-choreo-connect-truststore/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/api-authorization/subscription-validation/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/consume-api/manage-subscription/subscribe-to-an-api/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/tls/mutual-tls-between-gateway-and-backend/index.html",
-  "link": "/api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/tls/transport-security/#adding-certificates-to-specific-clusters"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/tls/mutual-tls-between-gateway-and-backend/index.html",
-  "link": "/api-platform/api-manager/4.1.0/deploy-and-publish/deploy-on-gateway/choreo-connect/security/tls/transport-security/#configuration"
  },
  {
   "page": "api-platform/api-manager/4.1.0/design/advanced-topics/adding-an-api-state-change-workflow-using-bps/index.html",
@@ -145,115 +57,27 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/design/advanced-topics/adding-an-api-state-change-workflow-using-bps/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/key-concepts/#api-lifecycle"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/adding-an-api-state-change-workflow-using-bps/index.html",
   "link": "/api-platform/api-manager/4.1.0/reference/extending-the-api-manager/extendingh-workflows/invoking-the-api-manager-from-the-bpel-engine/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/block-subscription-to-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/key-concepts/#access-token"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/block-subscription-to-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/key-concepts/#application"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/block-subscription-to-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/key-concepts/#rate-limits"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/block-subscription-to-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/overview/#api-gateway"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/control-api-visibility-and-subscription-availability-in-developer-portal/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/product-apis/restful-apis/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/advanced-topics/enable-publisher-access-control-in-api-publisher-portal/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/product-apis/restful-apis/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/api-policies/regular-gateway-policies/adding-dynamic-endpoints/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/api-gateway/message-mediation/changing-the-default-mediation-flow-of-api-requests/#creating-and-uploading-manually-in-api-publisher"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/api-policies/regular-gateway-policies/adding-dynamic-endpoints/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/design-api/endpoints/endpoint-types/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/design/api-policies/regular-gateway-policies/mapping-the-parameters-of-your-backend-urls-with-the-api-publisher-urls/index.html",
-  "link": "/assets/attachments/learn/APIGateway/MessageMediation/Response_API.xml"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/api-security/authorization/role-based-access-control-using-xacml/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/"
+  "link": "/api-platform/api-manager/4.1.0/assets/attachments/learn/APIGateway/MessageMediation/Response_API.xml"
  },
  {
   "page": "api-platform/api-manager/4.1.0/design/api-security/configuring-api-security-audit/index.html",
   "link": "auditreports"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/design/api-security/oauth2/encrypting-oauth2-tokens/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/api-security/oauth2/encrypting-oauth2-tokens/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/api-security/oauth2/grant-types/client-credentials-grant/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/api-security/oauth2/grant-types/refresh-token-grant/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/design/api-security/oauth2/grant-types/kerberos-oauth2-grant/index.html",
   "link": "/api-platform/api-manager/4.1.0/assets/img/learn/learnoauth-sp-clientid-clientsecret.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/design/api-security/oauth2/grant-types/password-grant/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/basic-architecture/#api-gateway"
+  "page": "api-platform/api-manager/4.1.0/design/api-security/opa-validation/overview/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/design/security/opa/configure-opa-policy.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/design/api-security/oauth2/grant-types/saml-extension-grant/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/saml2-sso/configuring-single-sign-on-with-saml2/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/adding-custom-properties-to-apis/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/product-apis/restful-apis/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-a-websocket-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/observe/api-manager-analytics/overview-of-api-analytics/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-rest-api/expose-a-soap-service-as-a-rest-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/design/create-api/generate-rest-api-from-soap-backend/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-streaming-api/create-a-sse-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-streaming-api/create-a-websocket-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-streaming-api/create-a-websub-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-streaming-api/streaming-api-overview/index.html",
-  "link": "../../../../get-started/architecture/#api-publisher"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/design/create-api/create-streaming-api/streaming-api-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
+  "page": "api-platform/api-manager/4.1.0/design/api-security/opa-validation/overview/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/design/security/opa/opa-policy-selection.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/design/endpoints/endpoint-security/digest-auth/index.html",
@@ -264,12 +88,8 @@
   "link": "/api-platform/api-manager/4.1.0/assets/img/learn/endpoint-security-symbol.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/installing-siddhi-extensions/index.html",
-  "link": "/api-platform/api-manager/4.1.0/streaming/connectors/writing-custom-siddhi-extensions/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/streaming-integrator-studio-overview/index.html",
-  "link": "/assets/img/streaming/handling-requests-with-errors/replay-error.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/handling-requests-with-errors/replay-error.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/testing-a-siddhi-application/index.html",
@@ -277,271 +97,87 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming//working-with-the design-view/source-configuration.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the%20design-view/Connect-Siddhi-Components.gif"
  },
  {
   "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming//working-with-the design-view/stream-icon.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the%20design-view/Drag-And-Drop-Siddhi-Component.gif"
  },
  {
   "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/aggregation-configuration-form.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the%20design-view/design-view.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/aggregation-icon.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the%20design-view/open-design-view.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/filter-query-configuration-form.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/api-create.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/filter-query-icon.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/api-publisher-home.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/function-configuration-form.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/apim-qsg-diagram.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/function-icon.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/design-new-rest-api.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/generate-stream-form.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/dev-portal-landing-page.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/generate-stream-with-externally-defined-datasource.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/expanded-get-resource.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/generate-stream-with-inline-datasource-configuration.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/key-gen-wizard-1.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/generate-stream.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/key-gen-wizard-2.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/join-query-configuration-form.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/key-gen-wizard-3.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/join-query-icon.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/key-gen-wizard-4.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/partition-configuration.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/key-gen-wizard-5.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/partition-query-icon.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/key-gen-wizard.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/pattern-query-configuration.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/subscriptions-menu.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/pattern-query-icon.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/test-api.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/projection-query-configuration-form.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/try-api.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/projection-query-icon.png"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/try-it-success.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/select-file-type.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/sequence-query-configuration.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/sequence-query-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/sink-configuration-form.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/sink-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/source-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/stream-configuration.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/table-configuration-form.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/table-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/trigger-configuration-form.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/trigger-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/window-configuration-form.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/window-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/working-with-the design-view/window-query-icon.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/assets/img/streaming/working-with-the%20design-view/Connect-Siddhi-Components.gif"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/assets/img/streaming/working-with-the%20design-view/Drag-And-Drop-Siddhi-Component.gif"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/assets/img/streaming/working-with-the%20design-view/design-view.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/develop/streaming-apps/working-with-the-design-view/index.html",
-  "link": "/assets/img/streaming/working-with-the%20design-view/open-design-view.png"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/get-started/about-this-release/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/overview/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/get-started/overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/architecture/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/get-started/overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/integration-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/get-started/overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/quick-start-guide/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/get-started/overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/get-started/overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/observe/api-manager-analytics/overview-of-api-analytics/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/includes/design/create-streaming-api/create-a-sse-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/includes/design/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/includes/design/create-streaming-api/create-a-websocket-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/includes/design/create-streaming-api/create-a-websub-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/includes/design/create-streaming-api/streaming-api-overview/index.html",
-  "link": "../../../../get-started/architecture/#api-publisher"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/includes/design/create-streaming-api/streaming-api-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/architecture"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/observability/setting-up-classic-observability-deployment"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.1.0"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.1.1"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.2.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.3.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.4.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.5.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-6.6.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-7.0.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-from-wso2-ei/upgrading-from-ei-7.1.x"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-wso2-api-manager/260-to-410/upgrading-from-260-to-410"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-wso2-api-manager/300-to-410/upgrading-from-300-to-410"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-wso2-api-manager/310-to-410/upgrading-from-310-to-410"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-wso2-api-manager/320-to-410/upgrading-from-320-to-410"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install-and-setup-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/upgrading-wso2-api-manager/400-to-410/upgrading-from-400-to-410"
+  "page": "api-platform/api-manager/4.1.0/get-started/api-manager-quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/get_started/try-out.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-api-m-analytics-as-a-windows-service/index.html",
@@ -560,52 +196,12 @@
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/ProductCompatibility/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-api-m-runtime/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-api-m-runtime/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-mi-dashboard/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-mi-dashboard/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-mi/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-mi/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-si-as-windows-service/index.html",
   "link": "/api-platform/api-manager/4.1.0/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-si-as-windows-service/index.html",
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/ProductCompatibility/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-si/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/install/installing-the-product/installing-si/index.html",
-  "link": "/api-platform/api-manager/4.1.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/api-controller/ci-cd-with-wso2-api-management/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/api-controller/cicd-using-cli/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach/"
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/configuring-the-gateway-in-a-distributed-environment-with-rsync/index.html",
@@ -622,26 +218,6 @@
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/configuring-the-gateway-in-a-distributed-environment-with-rsync/index.html",
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/working-with-hazelcast-clustering/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-the-primary-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-a-single-node/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-an-active-active-deployment/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup-with-tm-separated/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/databases/setting-up-ibm-db2/index.html",
@@ -682,54 +258,6 @@
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/user_stores/setting_up_a_userstore/index.html",
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/setup/security/importing_ssl_certificate"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/reference/supported-cipher-suites/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-security/configuring-transport-level-security/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/security/enabling-hostname-verification/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/security/enabling-java-security-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-security/configuring-keystores/keystore-basics/about-asymetric-cryptography/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/security/logins-and-passwords/maintaining-logins-and-passwords/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/customizations/log-in-to-the-dev-portal-using-social-media/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-security/logins-and-passwords/carbon-secure-vault-implementation/#elements-of-the-secure-vault-implementation"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-security/logins-and-passwords/set-passwords-using-vars-and-sys-props/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-ibm-db2/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-mssql/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-mysql/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-oracle-rac/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-oracle/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-postgresql/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/setting-up-databases/working-with-the-resgistry/admin-searching-the-registry/index.html",
@@ -852,30 +380,6 @@
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/si-setup/defining-tables-for-physical-stores/_Configuring_Datasources_/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/all-in-one-deployment-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-a-single-node/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/all-in-one-deployment-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-an-active-active-deployment/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/single-node/deploying-api-manager-using-single-node-instances/index.html",
   "link": "/api-platform/api-manager/4.1.0/assets/attachments/103334465/103334466.png"
  },
@@ -885,7 +389,7 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/sso/configuring-identity-server-as-external-idp-using-saml/index.html",
-  "link": "/assets/img/setup-and-install/upload-certificate-in-SP-for-saml2-sso.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/setup-and-install/upload-certificate-in-SP-for-saml2-sso.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/integrate/develop/advanced-development/extend-role-based-filtering-for-ds/index.html",
@@ -984,18 +488,6 @@
   "link": "/api-platform/api-manager/4.1.0/integrate/develop/deploy-and-run/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/mi-analytics/setting-up-mi-analytics/index.html",
-  "link": "/api-platform/api-manager/4.1.0/observe/mi-observe/using-the-analytics-dashboard/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/mi-analytics/using-the-analytics-dashboard/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/observability/setting-up-classic-observability-deployment/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/observe/api-manager-analytics/general-data-protection-regulation-gdpr-for-wso2-api-manager-analytics/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-security/general-data-protection-regulation-gdpr-for-wso2-api-manager/#configuring-the-master-configuration-file"
- },
- {
   "page": "api-platform/api-manager/4.1.0/observe/si-observe/viewing-on-demand-query-statistics/index.html",
   "link": "/api-platform/api-manager/4.1.0/observe/si-observe/streaming-integrator-grafana-dashboard/on-demand-query-statistics.png"
  },
@@ -1061,15 +553,11 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/amazonsqs-connector/amazonsqs-inbound-endpoint-example/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/integration-qsg/#start-the-micro-integrator"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/connectors/amazonsqs-connector/amazonsqs-inbound-endpoint-example/index.html",
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/installation/run_in_containers/"
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/bigquery-connector/bigquery-connector-configuration/index.html",
-  "link": "/assets/img/integrate/connectors/biguery-authorization-redirect-URI.png"
+  "link": "/api-platform/api-manager/4.1.0/assets/img/integrate/connectors/biguery-authorization-redirect-URI.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/bigquery-connector/bigquery-connector-example/index.html",
@@ -1168,6 +656,10 @@
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/installation/run_in_containers/"
  },
  {
+  "page": "api-platform/api-manager/4.1.0/reference/connectors/salesforce-connectors/sf-overview/index.html",
+  "link": "/api-platform/api-manager/4.1.0/includes/reference/connectors/salesforce-connectors/sf-access-token-generation/"
+ },
+ {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/salesforce-connectors/sf-rest-connector-example/index.html",
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/installation/run_in_containers/"
  },
@@ -1217,10 +709,6 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/smpp-connector/smpp-inbound-endpoint-example/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/integration-qsg/#start-the-micro-integrator"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/connectors/smpp-connector/smpp-inbound-endpoint-example/index.html",
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/installation/run_in_containers/"
  },
  {
@@ -1236,72 +724,16 @@
   "link": "/api-platform/api-manager/4.1.0/reference/guides/changing-the-default-ports-with-offset/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/customizations/customizing-the-developer-portal/customize-api-listing/api-category-based-grouping/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/customizations/customizing-the-developer-portal/customize-api-listing/api-category-based-grouping/#add-an-api-category-using-the-admin-portal-ui"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/customizations/adding-a-user-signup-workflow/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/customizations/advanced-ui-customization/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/customizations/log-in-to-the-dev-portal-using-social-media/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/customizations/overriding-the-publisher-portal-theme/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/customizations/advanced-ui-customization/"
+  "page": "api-platform/api-manager/4.1.0/reference/customize-product/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/develop/customizations/per-tenant-sp-creation-config.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/index.html",
   "link": "/api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/{base_path}/learn/design-api/create-api/adding-custom-properties-to-apis/"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/extending-key-management/extending-key-validation/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/extending-key-management/extending-scope-validation/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-external-idp-through-identity-server-for-sso/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-single-sign-on-with-saml2/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/saml2-sso/configuring-external-idp-through-identity-server-for-sso/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-single-sign-on-with-saml2/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/customize-product/extending-api-manager/saml2-sso/multi-factor-authentication-mfa-for-publisher-and-developer-portals/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/"
- },
- {
   "page": "api-platform/api-manager/4.1.0/reference/faq/index.html",
   "link": "/api-platform/api-manager/4.1.0/consume/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/faq/index.html",
-  "link": "/api-platform/api-manager/4.1.0/develop/customizations/adding-a-user-signup-workflow/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/faq/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/key-concepts/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/faq/index.html",
-  "link": "/api-platform/api-manager/4.1.0/getting-started/overview/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/faq/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setup/deployment-patterns/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/reference/faq/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/design-api/publish-api/publish-through-multiple-api-gateways/"
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/mediators/enrich-mediator/index.html",
@@ -1368,115 +800,31 @@
   "link": "/api-platform/api-manager/4.1.0/install-and-setup/transport_configurations/configuring-transports/#configuring-the-mqtt-transport"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/reference/vendor-extensions-catalog/index.html",
-  "link": "/api-platform/api-manager/4.1.0/learn/api-security/oauth2/oauth2-scopes/fine-grained-access-control-with-oauth-scopes/#fine-grained-access-control-with-oauth-scopes"
+  "page": "api-platform/api-manager/4.1.0/tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/tutorials/service-endpoint-dropdown.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/design/create-api/generate-rest-api-from-soap-backend/"
+  "page": "api-platform/api-manager/4.1.0/use-cases/examples/streaming-examples/cdc-with-listening-mode/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/amazon-s3-sink-sample/start.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/create-streaming-api/create-a-sse-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
+  "page": "api-platform/api-manager/4.1.0/use-cases/examples/streaming-examples/cdc-with-listening-mode/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/cdc-with-listening-mode-sample/insert-log.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/create-streaming-api/create-a-streaming-api-from-an-asyncapi-definition/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
+  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/extracting-data-from-static-sources-in-real-time/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/extracting-data-from-static-sources/cloud-storages.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/create-streaming-api/create-a-websocket-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
+  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/extracting-data-from-static-sources-in-real-time/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/extracting-data-from-static-sources/file-content-processing.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/create-streaming-api/create-a-websub-streaming-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
+  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/extracting-data-from-static-sources-in-real-time/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/extracting-data-from-static-sources/file-events-processing.png"
  },
  {
-  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/create-streaming-api/streaming-api-overview/index.html",
-  "link": "../../../../get-started/architecture/#api-publisher"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/create-streaming-api/streaming-api-overview/index.html",
-  "link": "/api-platform/api-manager/4.1.0/get-started/quick-start-guide/streaming-qsg/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/changing-to-embedded-h2/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/updating-wso2-api-manager/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/changing-to-embedded-h2/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-embedded-h2/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/changing-to-ibm-informix/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/changing-to-remote-h2/index.html",
-  "link": "/api-platform/api-manager/4.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/distributed-deployment-of-api-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/distributed-deployment-of-api-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/#understanding-the-distributed-deployment"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/deleted-pages/distributed-deployment-of-api-manager/index.html",
-  "link": "/api-platform/api-manager/4.1.0/install-and-setup/deploying-wso2-api-manager/single-node/all-in-one-deployment-overview/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Add_SSL_Certificates_for_Endpoints_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Adding_Mediation_Extensions_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Configuring_Caching_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Create_a_Mock_API_with_an_Inline_Script_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Create_a_WebSocket_API_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Create_and_Publish_a_SOAP_API_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Create_and_Publish_an_API_from_a_Swagger_Definition_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Deploy_and_Test_Mock_APIs_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Enabling_CORS_for_APIs_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Key_Concepts_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/_Rate_Limiting_/"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "_Endpoints_"
- },
- {
-  "page": "api-platform/api-manager/4.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "_Invoke_an_API_using_the_Integrated_API_Console_"
+  "page": "api-platform/api-manager/4.1.0/use-cases/streaming-usecase/extracting-data-from-static-sources-in-real-time/index.html",
+  "link": "/api-platform/api-manager/4.1.0/assets/img/streaming/extracting-data-from-static-sources/play.png"
  }
 ]

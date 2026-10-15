@@ -132,6 +132,10 @@
   "link": "/api-platform/api-manager/3.0.0/assets/attachments/administer/TestSSLServer.jar"
  },
  {
+  "page": "api-platform/api-manager/3.0.0/administer/product-security/identity-management-for-the-api-dev-portal/index.html",
+  "link": "/api-platform/api-manager/3.0.0/assets/img/administer/product-security/identity-management-for-the-api-dev-portal/password-recovery-form.png"
+ },
+ {
   "page": "api-platform/api-manager/3.0.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/index.html",
   "link": "/api-platform/api-manager/3.0.0/learn/consume-api/customizations/log-in-to-the-api-store-using-social-media/"
  },
@@ -250,14 +254,6 @@
  {
   "page": "api-platform/api-manager/3.0.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-on-windows/index.html",
   "link": "/api-platform/api-manager/3.0.0/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
- },
- {
-  "page": "api-platform/api-manager/3.0.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-on-windows/index.html",
-  "link": "/api-platform/api-manager/3.0.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/3.0.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-on-windows/index.html",
-  "link": "/api-platform/api-manager/3.0.0/assets/attachments/thumbnails/26838941/27042154"
  },
  {
   "page": "api-platform/api-manager/3.0.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-on-windows/index.html",
@@ -464,6 +460,14 @@
   "link": "/api-platform/api-manager/3.0.0/learn/consume-api/customizations/adding-a-user-signup-workflow/`https://localhost:9443/admin`/"
  },
  {
+  "page": "api-platform/api-manager/3.0.0/learn/consume-api/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/3.0.0/assets/img/learn/customizations/per-tenant-sp-creation-config.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/consume-api/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/3.0.0/assets/img/learn/customizations/tenant-conf.png"
+ },
+ {
   "page": "api-platform/api-manager/3.0.0/learn/consume-api/generating-sdks/write-a-client-application-using-the-sdk/index.html",
   "link": "/api-platform/api-manager/3.0.0/GettingStarted/quick-start-guide/"
  },
@@ -490,6 +494,10 @@
  {
   "page": "api-platform/api-manager/3.0.0/learn/design-api/create-api/create-a-graphql-api/index.html",
   "link": "/api-platform/api-manager/3.0.0/administer/product-administration/managing-users-and-roles/adding-users/"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/create-api/create-a-rest-api-from-a-swagger-definition/index.html",
+  "link": "../../../assets/img/learn/add-bussiness-plans-for-pet-store-api.jpg"
  },
  {
   "page": "api-platform/api-manager/3.0.0/learn/design-api/create-api/create-a-rest-api-from-a-swagger-definition/index.html",
