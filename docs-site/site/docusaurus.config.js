@@ -2,8 +2,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-// Subpath import: the plugin alone, without loading the converter (and its ES-module-only dependencies) into the config.
+// Subpath imports: the plugins alone, without loading the converter (and its ES-module-only dependencies) into the config.
 import rehypeValidElements from '@wso2/docs-converter/rehype-valid-elements';
+import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
+import remarkDeprecatedSections from '@wso2/docs-converter/remark-deprecated-sections';
+import remarkComponents from '@wso2/docs-converter/remark-components';
+import { withLifecycleSidebar } from './src/lib/lifecycle.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -36,6 +40,12 @@ const docsPlugins = included.map(({ section, v }) => [
     routeBasePath: v.route,
     sidebarPath: path.join(generated, 'sidebars', v.sidebar),
     sidebarCollapsed: true,
+    // Tabs blocks offering the same choices switch together; deprecated sections (the `deprecated` admonition type,
+    // or a warning titled "Deprecated …") render as section deprecation notices (theme/Admonition/Types); the explicit
+    // content components (<Steps>, <Prerequisites>, <LinkCards>) render after heading ids and the TOC are set. The site
+    // recognises no writing conventions: the converter writes the components for pages that follow them.
+    remarkPlugins: [remarkLinkedTabs, remarkDeprecatedSections, remarkComponents],
+    admonitions: { keywords: ['deprecated'] },
     rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only Docusaurus doc sets expect them stripped.
     ...(section.kind === 'docusaurus' ? {} : { numberPrefixParser: false }),
@@ -70,7 +80,15 @@ export default {
   trailingSlash: true,
   onBrokenLinks: 'warn',
   onBrokenAnchors: 'warn',
-  markdown: { format: 'mdx', mermaid: true, hooks: { onBrokenMarkdownLinks: 'warn', onBrokenMarkdownImages: 'warn' } },
+  markdown: {
+    format: 'mdx', mermaid: true, hooks: { onBrokenMarkdownLinks: 'warn', onBrokenMarkdownImages: 'warn' },
+    // A page's lifecycle stage (status, or lifecycle per deployment option) marks its sidebar entry: a class the
+    // sidebar pill is drawn from (site.css) and custom props. Documented hook; the default parser does the parsing.
+    parseFrontMatter: async (params) => {
+      const result = await params.defaultParseFrontMatter(params);
+      return { ...result, frontMatter: withLifecycleSidebar(result.frontMatter) };
+    },
+  },
   future: { v4: false }, // Faster bundler broke on near-identical versioned MDX in docs-agent-platform; re-test before enabling.
   // The last entry serves redoc.standalone.js for API pages (src/components/ApiReference.js).
   // A snapshot build serves only its own version's files: generated/static (every live product) stays with the live build.

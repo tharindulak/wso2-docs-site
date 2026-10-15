@@ -405,6 +405,17 @@ test('a host-only base_path followed by /en/<version>/ becomes the full former-s
   assert.match(fs.readFileSync(path.join(out2, 'index.md'), 'utf8'), /\[x\]\(\/m\/en\/4\.4\.0\/x\/\)/, 'a base_path with a path keeps mapping to the route');
 });
 
+test('{{ base_path }}//assets (a doubled slash) finds the file, as the former site served it with slashes merged', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: D\nplugins:\n  - markdownextradata\nextra:\n  base_path: /d/docs\n',
+    'en/docs/guides/a/b.md': '# B\n\n![i]({{base_path}}//assets/i.png)\n',
+    'en/docs/assets/i.png': 'PNG',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: [] }, { outDir: out, route: 'd' });
+  assert.match(fs.readFileSync(path.join(out, 'guides/a/b.md'), 'utf8'), /!\[i\]\(\.\.\/\.\.\/assets\/i\.png\)/);
+});
+
 test('a README.md is its folder index (no index.md beside it); otherwise it stays pinned', async () => {
   const root = tempSource({
     'en/mkdocs.yml': 'site_name: R\n',
@@ -448,4 +459,20 @@ test('copyReferencedAssets never copies a symbolic link that points outside the 
   assert.equal(copyReferencedAssets(path.join(root, 'docs'), path.join(root, 'pages'), to, 'demo'), 1);
   assert.ok(fs.existsSync(path.join(to, 'assets/a.png')));
   assert.ok(!fs.existsSync(path.join(to, 'assets/link.png')));
+});
+
+test('pages the MkDocs exclude plugin leaves out by glob are not converted; its regex patterns are not run', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\nplugins:\n  - search\n  - exclude:\n      glob:\n        - wip/*\n        - "*.tmp.md"\n      regex:\n        - "^drafts/"\n',
+    'en/docs/index.md': '# Home\n',
+    'en/docs/wip/a.md': '# A\n',
+    'en/docs/wip/deep/b.md': '# B\n',
+    'en/docs/notes.tmp.md': '# Tmp\n',
+    'en/docs/drafts/c.md': '# C\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'] }, { outDir: out, route: 'p' });
+  assert.ok(fs.existsSync(path.join(out, 'index.md')));
+  for (const gone of ['wip/a.md', 'wip/deep/b.md', 'notes.tmp.md']) assert.ok(!fs.existsSync(path.join(out, gone)), gone);
+  assert.ok(fs.existsSync(path.join(out, 'drafts/c.md')), 'regex patterns are ignored');
 });

@@ -8,19 +8,21 @@ import rehypeValidElements from './rehype-valid-elements.js';
 import { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements, type PolicyResult } from './html-policy.js';
 import { htmlBlocksToJsx } from './html-blocks.js';
 import { isHomeLayout, nameIconLinks } from './home-layout.js';
-import { toMdx, type SyntaxStats } from './syntax.js';
+import { toMdx, outsideCode, type SyntaxStats } from './syntax.js';
+import { writeComponents } from './conventions.js';
+import { repairMdx } from './mdx-repair.js';
 import type { DeploymentOption } from './types.js';
-import type { PageData } from './render.js';
+import { loadFrontMatter, type PageData } from './render.js';
+import { applyLifecycle, lifecycleBadge, withoutDeprecatedSuffix, BY_OPTION, LIFECYCLE_FIELDS, type CheckOptions } from './lifecycle.js';
 
 const KEEP_FRONT_MATTER = ['title', 'description', 'keywords', 'sidebar_label', 'sidebar_position', 'slug', 'tags', 'image'];
 
 /** Split leading YAML front matter from Markdown. */
-export function splitFrontMatter(text: string): { data: Record<string, unknown>; body: string } {
+export function splitFrontMatter(text: string): { data: Record<string, unknown>; body: string; error?: string } {
   const m = text.match(/^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/);
   if (!m) return { data: {}, body: text };
-  let data: unknown = {};
-  try { data = yaml.load(m[1]!, { schema: yaml.JSON_SCHEMA }) ?? {}; } catch { data = {}; }
-  return { data: data && typeof data === 'object' ? data as Record<string, unknown> : {}, body: text.slice(m[0].length) };
+  const { data, error } = loadFrontMatter(m[1]!);
+  return { data, body: text.slice(m[0].length), ...(error ? { error } : {}) };
 }
 
 export type PageErrorKind = 'template' | 'policy' | 'include' | 'compile';
@@ -53,13 +55,29 @@ export interface ConvertOptions {
    * the file name). Without it Docusaurus shows the file id.
    */
   fallbackTitle?: string;
+  /** Whether a relative `.md` lifecycle `replacement` names a page (see lifecycle.ts); unset: not checked. */
+  replacementExists?: CheckOptions['replacementExists'];
 }
 
-export type PageStats = SyntaxStats & { removed?: string[]; htmlBlocks?: number; format?: 'md' };
+export type PageStats = SyntaxStats & { removed?: string[]; htmlBlocks?: number; format?: 'md'; repairs?: number };
+
+/**
+ * What a converted page carries besides its MDX: `problems` with its lifecycle fields (left out of the front matter)
+ * and `yamlErrors` in its front matter (which then gives no fields, as before). Callers report both.
+ */
+export interface ConvertResult { mdx: string; stats: PageStats; problems: string[]; yamlErrors: string[] }
+
+/** Tabs in the indentation of each line expanded to the next multiple of 4 columns (Python-Markdown's tab_length). */
+export const expandTabs = (text: string): string => text.replace(/^[ \t]*\t[ \t]*/gm, (ws) => {
+  let col = 0;
+  for (const c of ws) col = c === '\t' ? col + 4 - (col % 4) : col + 1;
+  return ' '.repeat(col);
+});
 
 /** Convert rendered Markdown into Docusaurus MDX with front matter. Throws PageError when the page cannot be kept. */
-export async function convertRendered(rendered: string, opts: ConvertOptions): Promise<{ mdx: string; stats: PageStats }> {
-  const { data, body } = splitFrontMatter(rendered);
+export async function convertRendered(rendered: string, opts: ConvertOptions): Promise<ConvertResult> {
+  const { data, body, error } = splitFrontMatter(rendered);
+  const yamlErrors = [opts.pageData?.error, error].filter((e): e is string => !!e);
   const markers = unexpandedMarkers(body);
   if (markers.length) throw new PageError('include', `Unexpanded include: ${markers[0]}`);
   let policy: PolicyResult = applyHtmlPolicy(body, { iframeHosts: opts.iframeHosts });
@@ -74,7 +92,7 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
   }
   // Icon-only and empty links get visible text before any rewrite (see home-layout.ts).
   policy = { ...policy, text: nameIconLinks(policy.text) };
-  const withRemoved = (result: { mdx: string; stats: PageStats }) => (removed.length ? { ...result, stats: { ...result.stats, removed } } : result);
+  const withRemoved = (result: Omit<ConvertResult, 'yamlErrors'>): ConvertResult => ({ ...(removed.length ? { ...result, stats: { ...result.stats, removed } } : result), yamlErrors });
   const compileFailure = (e: unknown): void => { if (!(e instanceof PageError) || e.kind !== 'compile') throw e; };
   try {
     return withRemoved(await assemble(policy.text, data, body, policy, opts));
@@ -87,6 +105,21 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
       const result = await assemble(rewritten.text, data, body, policy, opts, { restore: (mdx) => mdx.replace(/MDXHTMLBLOCK(\d+)X/g, (_, i: string) => saved[Number(i)]!) });
       return withRemoved({ ...result, stats: { ...result.stats, htmlBlocks: rewritten.blocks } });
     } catch (e) { compileFailure(e); }
+  }
+  // Then with the spots MDX cannot read repaired as a browser shows them (see mdx-repair.ts), HTML blocks rewritten
+  // first; then the same with tab indentation expanded to 4 columns, as Python-Markdown reads it.
+  const expanded = expandTabs(policy.text);
+  for (const source of expanded === policy.text ? [policy.text] : [policy.text, expanded]) {
+    const kept: string[] = [];
+    const blocks = htmlBlocksToJsx(source, { protect: (jsx) => `MDXHTMLBLOCK${kept.push(jsx) - 1}X` });
+    const restore = (mdx: string) => mdx.replace(/MDXHTMLBLOCK(\d+)X/g, (_, i: string) => kept[Number(i)]!);
+    const variants: Array<[string, ((mdx: string) => string) | undefined, number]> = [...(blocks.blocks ? [[blocks.text, restore, blocks.blocks] as [string, (mdx: string) => string, number]] : []), [source, undefined, 0]];
+    for (const [text, restoreBlocks, count] of variants) {
+      try {
+        const result = await assemble(text, data, body, policy, opts, { restore: restoreBlocks, repair: true });
+        return withRemoved(count ? { ...result, stats: { ...result.stats, htmlBlocks: count } } : result);
+      } catch (e) { compileFailure(e); }
+    }
   }
   // Last resort: CommonMark (Docusaurus `mdx.format: md`), where raw HTML is parsed leniently, as browsers do.
   // The page stays on the site; JSX components (tabs, deployment blocks) show as plain content. HTML blocks nested in
@@ -102,15 +135,25 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
 
 async function assemble(
   text: string, data: Record<string, unknown>, body: string, policy: PolicyResult, opts: ConvertOptions,
-  { restore = (mdx: string) => mdx, format = 'mdx' }: { restore?: (mdx: string) => string; format?: 'mdx' | 'md' } = {},
-): Promise<{ mdx: string; stats: PageStats }> {
-  const { body: converted, usesTabs, stats } = toMdx(text);
+  { restore = (mdx: string) => mdx, format = 'mdx', repair = false }: { restore?: (mdx: string) => string; format?: 'mdx' | 'md'; repair?: boolean } = {},
+): Promise<Omit<ConvertResult, 'yamlErrors'>> {
+  const { body: toMdxBody, usesTabs, stats: syntaxStats } = toMdx(text);
+  let converted = toMdxBody;
+  let stats: PageStats = syntaxStats;
+  if (repair) {
+    const repaired = await repairMdx(restore(converted));
+    if (repaired.error) throw new PageError('compile', `${repaired.error.slice(0, 160)} (after ${repaired.repairs} repairs)`);
+    [converted, restore] = [repaired.text, (mdx: string) => mdx];
+    stats = { ...stats, repairs: repaired.repairs };
+  }
   const md = format === 'md';
-  // CommonMark pages carry raw HTML, not JSX: keep HTML attribute names.
-  const mdxBody = md ? withoutImports(restore(converted)).replace(/(<[a-zA-Z][^>]*?)\bclassName=/g, '$1class=') : restore(converted);
+  const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
+  // CommonMark pages carry raw HTML, not JSX: keep HTML attribute names. They cannot hold components either; MDX pages
+  // get the explicit components where they follow a convention (conventions.ts).
+  const mdxBody = md ? withoutImports(restore(converted)).replace(/(<[a-zA-Z][^>]*?)\bclassName=/g, '$1class=')
+    : writeComponents(restore(converted), { frontMatter: source }).text;
 
   const front: Record<string, unknown> = {};
-  const source = { ...(opts.pageData?.frontMatter ?? {}), ...data };
   for (const k of KEEP_FRONT_MATTER) if (source[k] !== undefined) front[k] = source[k];
   front.title ??= firstHeading(body);
   const spec = mdxBody.match(/<ApiReference spec="([^"]+)"/)?.[1];
@@ -134,6 +177,18 @@ async function assemble(
   const meta = opts.pageData?.meta ?? policy.meta;
   if (meta) front.quick_start = meta;
   if (md) front.mdx = { format: 'md' };
+  for (const k of [...LIFECYCLE_FIELDS, BY_OPTION]) if (source[k] !== undefined) front[k] = source[k];
+  const lifecycle = applyLifecycle(front, { replacementExists: opts.replacementExists });
+  // The badge says Deprecated: the page's own heading loses the suffix too, as its title does.
+  let shownBody = mdxBody;
+  if (lifecycleBadge(lifecycle.front)?.stage === 'deprecated') {
+    let done = false;
+    shownBody = outsideCode(mdxBody, (t) => t.replace(/^(#[ \t]+)(.+?)([ \t]+#+)?[ \t]*$/m, (m, hash: string, text: string) => {
+      if (done) return m;
+      done = true;
+      return hash + withoutDeprecatedSuffix(text);
+    }));
+  }
 
   const imports = md ? '' : [
     /<Applies\b/.test(mdxBody) && "import Applies from '@site/src/components/Applies';",
@@ -142,9 +197,9 @@ async function assemble(
     usesTabs && !/import Tabs from/.test(mdxBody) && "import Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';",
   ].filter(Boolean).join('\n');
 
-  const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n\n${imports ? `${imports}\n\n` : ''}${mdxBody.trim()}\n`;
+  const mdx = `---\n${yaml.dump(lifecycle.front, { lineWidth: -1 })}---\n\n${imports ? `${imports}\n\n` : ''}${shownBody.trim()}\n`;
   await compileCheck(mdx, { format });
-  return { mdx, stats };
+  return { mdx, stats, problems: lifecycle.problems };
 }
 
 interface MdastLike { type: string; url?: string; children?: MdastLike[] }

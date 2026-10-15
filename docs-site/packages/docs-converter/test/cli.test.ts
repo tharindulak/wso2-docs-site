@@ -83,3 +83,22 @@ test('check --release-tag is quiet when the folder exists, reads component tags 
   assert.equal(run(root, 'check', '--release-tag', 'release-1', '--version-folder', 'x/{version}').status, 2);
   assert.equal(run(root, 'check', '--release-tag', 'v1.0.0').status, 2);
 });
+
+test('check fails on a bad lifecycle stage value and warns on invalid front-matter YAML', () => {
+  const root = tempSource({
+    'wso2-docs.yaml': 'kind: mkdocs\nmkdocs: en/mkdocs.yml\nroute: demo\ndeployment_options: [Self-hosted]\n',
+    'en/mkdocs.yml': 'site_name: Demo\nnav:\n  - Home: index.md\n  - Old: old.md\n',
+    'en/docs/index.md': '---\ntitle: [x\n---\n# Demo\n',
+    'en/docs/old.md': '---\nstatus: deprecated\n---\n# Old\n',
+  });
+  const r = run(root, 'check');
+  assert.equal(r.status, 1, r.stdout + r.stderr);
+  assert.match(r.stdout, /✖ en\/docs\/old\.md\n {4}lifecycle status: deprecated needs deprecated_since/);
+  assert.match(r.stdout, /⚠ en\/docs\/index\.md\n {4}yaml {5}front matter is not valid YAML/);
+  assert.match(r.stdout, /2 pages convert · 0 new failures · 1 lifecycle problem · 1 front matter warning/);
+  const gh = run(root, 'check', '--format', 'github');
+  assert.match(gh.stdout, /^::error file=en\/docs\/old\.md,title=wso2-docs lifecycle::/m);
+  assert.match(gh.stdout, /^::warning file=en\/docs\/index\.md,title=wso2-docs yaml::/m);
+  fs.writeFileSync(path.join(root, 'en/docs/old.md'), '---\nstatus: deprecated\ndeprecated_since: "7.0.0"\n---\n# Old\n');
+  assert.equal(run(root, 'check').status, 0, 'a YAML warning alone does not fail the check');
+});

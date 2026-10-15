@@ -31,7 +31,7 @@ export function readLock() {
       }
       const pr = s.product_repo ?? s.self_hosted?.product_repo;
       if (pr && !repoOk(pr)) throw new Error(`${s.id}: product_repo must be wso2/<name>, got ${pr}`);
-      for (const rel of [...(s.sparse ?? []), ...(s.cloud_companion?.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs, s.cloud_companion?.mkdocs, s.cloud_companion?.path_prefix].filter(Boolean)) {
+      for (const rel of [...(s.sparse ?? []), ...(s.cloud_companion?.sparse ?? []), s.mkdocs, s.docs, s.sidebar, s.cloud?.mkdocs, s.self_hosted?.mkdocs, s.cloud_companion?.mkdocs, s.cloud_companion?.path_prefix, s.tree_root, s.tree_static, s.tree_redirects].filter(Boolean)) {
         if (!REL.test(rel)) throw new Error(`${s.id}: path must be relative and inside the repo: ${rel}`);
       }
       if (!/^[a-z0-9/-]+$/.test(s.route)) throw new Error(`${s.id}: invalid route ${s.route}`);

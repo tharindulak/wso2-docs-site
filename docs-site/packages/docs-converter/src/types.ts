@@ -10,7 +10,17 @@ export type Env = Record<string, unknown>;
 export interface Source {
   root: string;
   includeBases: string[];
+  /** Decides what an include standing as a block of its own becomes (see partials.ts); absent, includes are inlined. */
+  partials?: PartialHook;
+  /** The same for a markdown-include `{!file!}` marker on a line of its own (one MkDocs site, convertMkdocsSite). */
+  markerPartials?: PartialHook;
 }
+
+/**
+ * Called for an include that fills its own lines, outside code and links. `render` gives the text inlining
+ * would write; the hook returns that text or a stand-in for it.
+ */
+export type PartialHook = (target: string, render: () => string) => string;
 
 export interface Branch {
   cond: string;

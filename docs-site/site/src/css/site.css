@@ -23,6 +23,73 @@
 .applies--hybrid { --c: var(--deployment-hybrid); }
 .applies--self-hosted { --c: var(--deployment-self-hosted); }
 
+/* Steps (<Steps>, remark-components): steps as numbered circles joined by a line (Cloudflare style). The circle
+   shows the step's number; a hidden "Step N:" prefix in the heading is read by screen readers. */
+.steps { margin: 1.5rem 0; }
+.steps__step { position: relative; padding: 0 0 1rem 3rem; }
+.steps__step::before {
+  content: attr(data-step); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700; font-size: 0.95rem; color: #fff; background: var(--ifm-color-primary);
+}
+.steps__step::after { content: ""; position: absolute; left: calc(1rem - 1px); top: 2.4rem; bottom: 0.3rem; width: 2px; background: var(--ifm-toc-border-color); }
+.steps__step:last-child::after { display: none; }
+.steps__step > :first-child { margin-top: 0; line-height: 2rem; }
+.steps__prefix { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+/* A sub-step (Step 1.1) inside a step: its number as a filled badge before the title. */
+.steps__substep::before {
+  content: attr(data-substep); display: inline-block; margin-right: 0.55rem; padding: 0.05rem 0.45rem; border-radius: 6px;
+  background: var(--ifm-color-primary); color: #fff; font-size: 0.78em; font-weight: 700; line-height: 1.5; vertical-align: 0.12em;
+}
+/* A partial's steps inside a step (.steps__nested names the step in steps-parent): shown as that step's sub-steps. */
+.steps__nested .steps { margin: 0; counter-reset: steps-sub; }
+.steps__nested .steps__step { padding: 0; counter-increment: steps-sub; }
+.steps__nested .steps__step::before, .steps__nested .steps__step::after { display: none; }
+.steps__nested .steps__step > :first-child { line-height: inherit; }
+.steps__nested .steps__step > :first-child::before {
+  content: counter(steps-parent) "." counter(steps-sub); display: inline-block; margin-right: 0.55rem; padding: 0.05rem 0.45rem;
+  border-radius: 6px; background: var(--ifm-color-primary); color: #fff; font-size: 0.78em; font-weight: 700; line-height: 1.5;
+  vertical-align: 0.12em;
+}
+@media (max-width: 996px) {
+  .steps__step { padding-left: 2.5rem; }
+  .steps__step::before { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }
+  .steps__step::after { left: calc(0.875rem - 1px); }
+}
+
+/* Prerequisites (<Prerequisites>, remark-components): a panel where it is written, with a primary left border, a light
+   tint and a ✓ circle before the writer's title (a heading, which keeps its anchor, or the `title` attribute). */
+.prerequisites {
+  margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid var(--ifm-toc-border-color);
+  border-left: 4px solid var(--ifm-color-primary); border-radius: 10px;
+  background: color-mix(in srgb, var(--ifm-color-primary) 5%, transparent);
+}
+.prerequisites__head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+.prerequisites__head::before {
+  content: "✓"; display: grid; place-items: center; flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  font-weight: 700; font-size: 0.85rem; color: #fff; background: var(--ifm-color-primary);
+}
+.prerequisites__head > * { margin: 0; font-size: 1.15rem; font-weight: 700; }
+.prerequisites__body > :last-child { margin-bottom: 0; }
+@media (max-width: 996px) {
+  .prerequisites { padding: 0.85rem 1rem; }
+}
+
+/* Link cards (<LinkCards>, remark-components, components/LinkCards): a list of links as a responsive grid of cards; the
+   author's link text as the title in the primary colour (→ internal, ↗ external), the description clamped to 3 lines. */
+.link-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.75rem; margin-bottom: var(--ifm-leading); }
+.link-card {
+  display: flex; flex-direction: column; gap: 0.35rem; padding: 0.9rem 1rem; border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 10px; color: inherit; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.link-card:hover { border-color: var(--ifm-color-primary); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12); color: inherit; text-decoration: none; }
+.link-card__title { color: var(--ifm-color-primary); }
+.link-card__title::after { content: " →"; }
+.link-card--external .link-card__title::after { content: " ↗"; font-weight: 400; }
+.link-card__text {
+  font-size: 0.88rem; color: var(--ifm-color-emphasis-700);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
 /* Search: global-bar button, dialog (native <dialog>) and results page. */
 .search-button {
   display: flex; align-items: center; gap: 0.5rem; min-width: 14rem; padding: 0.3rem 0.75rem; cursor: pointer;
@@ -145,3 +212,55 @@
 .markdown .card .title { margin: 0 0 0.35rem; font-weight: 600; color: var(--ifm-link-color); }
 .markdown .card .hint { margin: 0; color: var(--ifm-color-emphasis-700); font-size: 0.95rem; }
 .markdown iframe { max-width: 100%; }
+
+/* Lifecycle stage (Beta, Preview, Deprecated): a pill beside the page title (LifecyclePill, hover text explains the
+   stage) and a small pill after the sidebar label (sidebar_class_name from markdown.parseFrontMatter). */
+.lifecycle--beta, .lifecycle-entry--beta { --lc: #7c3aed; }
+.lifecycle--preview, .lifecycle-entry--preview { --lc: #0e7490; }
+.lifecycle--deprecated, .lifecycle-entry--deprecated { --lc: #b45309; }
+.lifecycle-pill {
+  display: inline-block; padding: 0.2rem 0.7rem; border-radius: 999px; background: var(--lc); color: #fff;
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; cursor: help;
+}
+/* Floated beside the title that follows it (the heading inside the page content), so the heading text is unchanged. */
+.lifecycle-pill--title { float: right; margin: 0.55rem 0 0.5rem 1rem; }
+.lifecycle-entry > .menu__link::after {
+  flex: none; margin-left: 0.4rem; padding: 0 0.4rem; border-radius: 999px; background: var(--lc); color: #fff;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1.5;
+}
+.lifecycle-entry--beta > .menu__link::after { content: "Beta"; }
+.lifecycle-entry--preview > .menu__link::after { content: "Preview"; }
+.lifecycle-entry--deprecated > .menu__link::after { content: "Deprecated"; }
+@media (max-width: 996px) {
+  .lifecycle-pill--title { float: none; margin: 0 0 0.75rem; }
+}
+
+/* Deprecation notices and the Deprecations page (planning ticket "How deprecation notices and the Deprecations page
+   look", variant A). Amber, as the Deprecated badge. */
+.deprecation-notice, .admonition-deprecated, .deprecation-table { --dp: #b45309; }
+.deprecation-tag {
+  display: inline-block; padding: 0.05rem 0.5rem; border-radius: 999px; background: var(--dp, #b45309); color: #fff;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; vertical-align: middle;
+}
+.deprecation-tag--small { font-size: 0.62rem; margin-right: 0.4rem; }
+.deprecation-notice {
+  margin: 0 0 1.5rem; padding: 0.9rem 1.1rem; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--dp) 45%, transparent);
+  border-left: 5px solid var(--dp); background: color-mix(in srgb, var(--dp) 9%, transparent);
+}
+.deprecation-notice__head { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; font-weight: 600; }
+.deprecation-notice__line { margin: 0.45rem 0 0.6rem; }
+.deprecation-notice__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.deprecation-button {
+  display: inline-block; padding: 0.35rem 0.8rem; border-radius: 8px; background: var(--ifm-color-primary); color: #fff;
+  font-weight: 600; font-size: 0.9rem;
+}
+.deprecation-button:hover { color: #fff; text-decoration: none; filter: brightness(1.1); }
+.deprecation-notice__policy { font-size: 0.85rem; }
+.alert.admonition-deprecated { border-left-color: var(--dp); background: color-mix(in srgb, var(--dp) 9%, transparent); }
+.deprecation-scope { margin: 0.5rem 0 0; font-size: 0.82rem; opacity: 0.85; }
+.deprecation-versions { display: flex; gap: 0.25rem; margin: 1rem 0 1.5rem; flex-wrap: wrap; }
+.deprecation-versions a { padding: 0.25rem 0.7rem; border-radius: 8px; border: 1px solid var(--ifm-toc-border-color); color: inherit; font-size: 0.9rem; }
+.deprecation-versions a.deprecation-versions__active { background: var(--ifm-color-primary); border-color: var(--ifm-color-primary); color: #fff; }
+.deprecation-table { display: table; width: 100%; font-size: 0.92rem; }
+.deprecation-table__page { font-size: 0.8rem; opacity: 0.75; }
+.deprecation-table__muted { color: var(--ifm-color-emphasis-700); }

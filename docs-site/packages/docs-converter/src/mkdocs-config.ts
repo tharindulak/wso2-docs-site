@@ -22,6 +22,8 @@ export interface MkdocsSite {
   includeBases: string[];
   /** Whether MkDocs renders Jinja in pages (markdownextradata or macros plugin). */
   templating: boolean;
+  /** Whether the exclude plugin leaves this docs_dir path out of the build. */
+  excluded: (docsPath: string) => boolean;
 }
 
 function sanitize(raw: string): string {
@@ -53,6 +55,20 @@ function extensionOptions(config: MkdocsConfig, name: string): Record<string, un
 
 const TEMPLATING_PLUGINS = ['markdownextradata', 'macros'];
 
+/**
+ * Pages the mkdocs-exclude plugin leaves out of the build: its `glob` patterns (fnmatch: `*` also crosses `/`), matched
+ * against the path under docs_dir. Its `regex` patterns are not run: a content source's regex could stall the build.
+ */
+export function excludedDocs(config: MkdocsConfig): (docsPath: string) => boolean {
+  const plugins = Array.isArray(config.plugins) ? config.plugins : [];
+  const entry = plugins.find((p): p is Record<string, unknown> => p !== null && typeof p === 'object' && 'exclude' in p);
+  const opts = (entry?.exclude ?? {}) as { glob?: unknown };
+  const list = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : typeof v === 'string' ? [v] : []);
+  const fromGlob = (g: string): RegExp => new RegExp(`^${g.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*').replace(/\?/g, '.')}$`);
+  const patterns = list(opts.glob).map(fromGlob);
+  return (docsPath) => patterns.some((re) => re.test(docsPath.replace(/\\/g, '/')));
+}
+
 /** MkDocs renders {{ }} and {% %} in pages only through a templating plugin; without one they are text. */
 export function usesTemplating(config: MkdocsConfig): boolean {
   const plugins = Array.isArray(config.plugins) ? config.plugins : [];
@@ -67,5 +83,5 @@ export function mkdocsSite(ymlFile: string): MkdocsSite {
   const docsDir = path.resolve(dir, config.docs_dir ?? 'docs');
   const bases = [extensionOptions(config, 'markdown_include.include')?.base_path, extensionOptions(config, 'pymdownx.snippets')?.base_path]
     .flat().filter((b): b is string => typeof b === 'string' && Boolean(b)).map((b) => path.resolve(dir, b));
-  return { config, docsDir, extra: config.extra ?? {}, nav: config.nav, includeBases: [...bases, docsDir, dir], templating: usesTemplating(config) };
+  return { config, docsDir, extra: config.extra ?? {}, nav: config.nav, includeBases: [...bases, docsDir, dir], templating: usesTemplating(config), excluded: excludedDocs(config) };
 }

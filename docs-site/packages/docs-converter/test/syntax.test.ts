@@ -2,10 +2,23 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { toMdx } from '../src/syntax.js';
 
+test('a deprecated admonition stays a deprecated admonition (the site renders it as a section deprecation notice), keeping its title', () => {
+  const { body } = toMdx('!!! deprecated "Deprecated feature"\n    Use the root organization name.\n');
+  assert.match(body, /^:::deprecated\[Deprecated feature\]\n\nUse the root organization name\.\n\n:::/m);
+  assert.match(toMdx('!!! deprecated\n    Old.\n').body, /^:::deprecated\n\nOld\.\n\n:::/m);
+});
+
 test('admonitions, including titled and nested in lists', () => {
   const { body } = toMdx('!!! warning "Before you start"\n    Read this.\n\n1. Step\n\n    !!! note\n        Inside.\n');
   assert.match(body, /^:::warning\[Before you start\]\n\nRead this\.\n\n:::/m);
   assert.match(body, /^ {4}:::note\n\n {4}Inside\.\n\n {4}:::/m);
+});
+
+// docs-is 5.x setup/setting-up-separate-databases-for-clustering.md: a tip nested in a warning. With equal fences the
+// first ::: closes the warning, the tip is left open and a stray ::: prints; Docusaurus wants the outer fence longer.
+test('an admonition holding an admonition gets the longer fence', () => {
+  const { body } = toMdx('!!! warning "H2"\n    Not for production.\n\n    !!! tip "Before you begin"\n        Optional.\n\nAfter.\n');
+  assert.match(body, /^::::warning\[H2\]\n\nNot for production\.\n\n:::tip\[Before you begin\]\n\nOptional\.\n\n:::\n\n::::\n\nAfter\./m);
 });
 
 test('collapsibles and tabs', () => {
@@ -103,4 +116,34 @@ test('joined and encoded targets compile as links', async () => {
   assert.match(js, /href="https:\/\/github\.com\/a"/);
   assert.match(js, /src="a%20b\.png" alt="y" title="T"/);
   assert.match(js, /href="mailto:A%20B-c@d\.com"/);
+});
+
+test('the explicit content components a source writes stay JSX', () => {
+  const { body } = toMdx('<Steps start="2">\n\n## A\n\n</Steps>\n\n<Prerequisites title="Before you begin">\n\nx\n\n</Prerequisites>\n\n<LinkCards>\n\n- [a](a.md)\n\n</LinkCards>\n');
+  assert.match(body, /^<Steps start="2">$/m);
+  assert.match(body, /^<\/Steps>$/m);
+  assert.match(body, /^<Prerequisites title="Before you begin">$/m);
+  assert.match(body, /^<LinkCards>$/m);
+  assert.doesNotMatch(body, /&lt;/);
+});
+
+// docs-is sdks/nextjs/middleware/asgardeo-middleware.md: Python-Markdown's tables keep a `|` inside a code span in the
+// cell; GFM splits the cell there unless the pipe is escaped (and then shows it unescaped in the code).
+test('a pipe inside a code span in a table row is escaped, so the cell keeps it', () => {
+  const { body } = toMdx('| Property | Type |\n|---|---|\n| `getSession` | `() => Promise<T | undefined>` |\n\nText `a | b` stays.\n');
+  assert.match(body, /^\| `getSession` \| `\(\) => Promise<T \\\| undefined>` \|$/m);
+  assert.match(body, /Text `a \| b` stays\./);
+});
+
+test('a table row inside fenced code keeps its pipes', () => {
+  assert.match(toMdx('```\n| `a | b` |\n```\n').body, /^\| `a \| b` \|$/m);
+});
+
+// docs-is asgardeo guides/account-configurations/login-security/bot-detection.md: a section commented out with its
+// code blocks. A browser hides the whole comment; read fence by fence, its last fence ("``` -->") never closes.
+test('an HTML comment holding code blocks is removed whole; comments inside code stay', () => {
+  const { body } = toMdx('Intro.\n\n<!-- ## Old\n\n```toml\n[a]\n```\n\nText.\n``` -->\n\nKept.\n\n```xml\n<!-- in code -->\n<a/>\n```\n');
+  assert.doesNotMatch(body, /Old|\[a\]|Text\./);
+  assert.match(body, /Intro\.\n+Kept\./);
+  assert.match(body, /```xml\n<!-- in code -->\n<a\/>\n```/);
 });

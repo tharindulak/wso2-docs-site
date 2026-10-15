@@ -6,18 +6,27 @@ import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
 import { redirectMaps, writeRedirectPages } from './redirects.js';
-import { loadPage, loadPlain, renderSingle, readPageData } from './render.js';
-import { mergePage, CLOUD, SELF_HOSTED } from './merge.js';
+import { expandMarkers, loadPage, loadPlain, renderSingle, readPageData, inlining } from './render.js';
+import { mergePage, renderMergedInclude, finishMerged, CLOUD, SELF_HOSTED } from './merge.js';
+import { PartialPlan, insertPartials, type RenderMode } from './partials.js';
 import { outsideCode } from './syntax.js';
-import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type PageErrorKind } from './page.js';
+import { convertRendered, compileCheck, splitFrontMatter, PageError, withoutImports, type ConvertResult, type PageErrorKind } from './page.js';
+import { applyLifecycle, checkLifecycle, lifecycleBadge, lifecycleFrontMatter, withoutDeprecatedLabels, BY_OPTION, LIFECYCLE_FIELDS, type Lifecycle, type Stage } from './lifecycle.js';
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
-import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem } from './types.js';
+import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem, Source } from './types.js';
 
 /** `{{ base_path }}` renders as this marker, then maps to the section's route. */
 const BASE = '@@BASE@@';
 
 export interface PageFailure { page: string; kind: PageErrorKind; error: string }
+
+/**
+ * A page that converts with part of its front matter left out: invalid YAML (`yaml`, the page gets no fields from it,
+ * as before) or a bad lifecycle stage value (`lifecycle`, see lifecycle.ts). `wso2-docs check` fails on `lifecycle`;
+ * the docs site's build warns on both.
+ */
+export interface FrontMatterProblem { page: string; kind: 'yaml' | 'lifecycle'; error: string }
 
 export interface SiteReport {
   ok: number;
@@ -28,9 +37,31 @@ export interface SiteReport {
   /** nav: entries pointing at pages that are not generated. */
   droppedNav: string[];
   merge: { splitBlocks: number; diverged: number };
+  /** Partials written, and shared includes inlined because their partial failed to convert (with the reason). */
+  partials?: { written: number; inlined: string[] };
+  frontMatter: FrontMatterProblem[];
 }
 
-export const emptyReport = (): SiteReport => ({ ok: 0, redirected: 0, failures: [], nowPassing: [], droppedNav: [], merge: { splitBlocks: 0, diverged: 0 } });
+export const emptyReport = (): SiteReport => ({ ok: 0, redirected: 0, failures: [], nowPassing: [], droppedNav: [], merge: { splitBlocks: 0, diverged: 0 }, frontMatter: [] });
+
+/** Record a converted page's front-matter problems (see FrontMatterProblem). */
+function noteFrontMatter(report: SiteReport, page: string, result: Pick<ConvertResult, 'problems' | 'yamlErrors'>): void {
+  report.frontMatter ??= [];
+  for (const error of result.yamlErrors) report.frontMatter.push({ page, kind: 'yaml', error });
+  for (const error of result.problems) report.frontMatter.push({ page, kind: 'lifecycle', error });
+}
+
+/** Whether a page link written in `file` (relative to it) names a file inside `docsDir`. */
+const pageNear = (docsDir: string, file: string) => (target: string): boolean => {
+  const decoded = safeDecode(target);
+  return decoded !== undefined && containedFile(docsDir, path.relative(docsDir, path.resolve(path.dirname(file), decoded))) !== null;
+};
+
+/** The stage a written page's badge shows (lifecycle.ts), from its front matter; for the sidebar labels. */
+const shownStage = (pageFile: string): Stage | undefined => {
+  if (!fs.existsSync(pageFile)) return undefined;
+  return lifecycleBadge(splitFrontMatter(fs.readFileSync(pageFile, 'utf8')).data)?.stage;
+};
 
 /** What to write for a page that is excluded or fails: the docs site writes a redirect; the CLI writes nothing. */
 export interface FallbackInfo { rel: string; title: string; to: string; deploymentOptions: DeploymentOption[] }
@@ -68,8 +99,8 @@ const isPage = (rel: string): boolean => /\.mdx?$/.test(rel);
 const write = (file: string, text: string): void => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); };
 
 /** Copy non-page files (images, attachments) keeping their paths; existing files are kept. */
-export function copyAssets(fromDir: string, toDir: string, skip: string[] = []): void {
-  for (const rel of walk(fromDir, (r) => !isPage(r) && !r.endsWith('.yml') && !skip.some((p) => r.startsWith(p)))) {
+export function copyAssets(fromDir: string, toDir: string, skip: string[] = [], { yml = false } = {}): void {
+  for (const rel of walk(fromDir, (r) => !isPage(r) && (yml || !r.endsWith('.yml')) && !skip.some((p) => r.startsWith(p)))) {
     const to = path.join(toDir, rel);
     if (fs.existsSync(to)) continue;
     fs.mkdirSync(path.dirname(to), { recursive: true });
@@ -192,9 +223,10 @@ const titleOf = (text: string, fallback: string): string =>
 /**
  * `{{ base_path }}` resolves to the section route. A base_path that is only a host (https://apk.docs.wso2.com) makes
  * `{{ base_path }}/en/<version>/...` a full former-site URL, which the docs site maps to its page like any other.
+ * `{{ base_path }}//x` is `{{ base_path }}/x`: the former sites' servers merged the doubled slash.
  */
 const resolveBase = (text: string, route: string, host?: string): string => (host ? text.replace(new RegExp(`${BASE}(?=/en/[^/\\s"')]+/)`, 'g'), host) : text)
-  .replaceAll(`${BASE}/`, `/${route}/`).replaceAll(BASE, `/${route}`);
+  .replace(new RegExp(`${BASE}/+`, 'g'), `/${route}/`).replaceAll(BASE, `/${route}`);
 
 /** The origin of a base_path that is a host only (no path), else undefined. */
 export function hostOnly(basePath: unknown): string | undefined {
@@ -308,6 +340,11 @@ export interface MkdocsSiteOptions extends DeploymentDefaults {
    * the link as written. Files outside docsRoot that pages reference are copied into the section's _shared/ folder.
    */
   linkOutside?: (docsPath: string) => string | null;
+  /**
+   * Write `{!file!}` includes that several pages share as `_partials/*.mdx` imported by those pages (migration);
+   * `every`: also those one page uses.
+   */
+  partials?: boolean | 'every';
 }
 
 /** The folder pages are read from: docs_dir, or docsRoot inside it (then never outside the repository checkout). */
@@ -395,11 +432,12 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   const report = out.report ?? emptyReport();
   const site = mkdocsSite(path.join(src.root, src.mkdocs));
   const pages = pagesDir(src.root, site.docsDir, src.docsRoot);
-  const source = { root: src.root, includeBases: site.includeBases };
+  const source: Source = { root: src.root, includeBases: site.includeBases };
   const prefix = out.prefix ?? '';
   const route = prefix ? `${out.route}/${prefix}` : out.route;
   const withPrefix = (rel: string): string => (prefix ? `${prefix}/${rel}` : rel);
-  const wanted = (r: string): boolean => r.endsWith('.md') && (!src.only || r.startsWith(src.only)) && !(src.skip ?? []).some((p) => r.startsWith(p));
+  const wanted = (r: string): boolean => r.endsWith('.md') && (!src.only || r.startsWith(src.only)) && !(src.skip ?? []).some((p) => r.startsWith(p))
+    && !site.excluded(`${docsRoot ?? ''}${r.replace(/\\/g, '/')}`);
   const docsRoot = src.docsRoot?.replace(/\\/g, '/').replace(/\/?$/, '/');
   // A docs_dir path the section takes: under docsRoot (its own filters apply below it), else a page it keeps or an asset it copies.
   const inside = (docsPath: string, page: boolean): boolean => {
@@ -409,25 +447,58 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   };
   const labels = navLabels(site.nav);
   const host = hostOnly(site.extra.base_path);
-  for (const rel of walk(pages, wanted)) {
+  const env = () => ({ ...site.extra, config: site.config, base_path: BASE });
+  const renderFile = (file: string, from: Source): string => renderSingle((site.templating ? loadPage : loadPlain)(file, from), env(), file, from);
+  const pageFiles = walk(pages, wanted);
+  // Shared includes as partials (Latest of a migrating source): pass 1 records each stand-alone {!file!} include.
+  const plan = src.partials ? new PartialPlan() : undefined;
+  const partials = plan ? chooseMarkerPartials(plan, pageFiles, (rel) => renderFile(path.join(pages, rel), source), source, src.root, src.partials === 'every' ? 1 : 2) : [];
+  if (plan) report.partials ??= { written: 0, inlined: [] };
+  for (const p of partials) {
+    const rel = withPrefix(`_partials/${p.name}`);
+    try {
+      plan!.begin(rel, p.mode);
+      const text = outdentContinuation(expandMarkers(fs.readFileSync(p.target, 'utf8'), p.target, source));
+      const nested = plan!.pagePartials;
+      const result = await convertRendered(resolveBase(text, route, host), { deploymentOptions: [], iframeHosts: src.iframeHosts, fallbackTitle: p.name });
+      if (result.stats.format === 'md') throw new PageError('compile', 'does not compile as MDX');
+      const body = splitFrontMatter(result.mdx).body.replace(/^\n+/, '');
+      const mdx = relativeImages(body, rel, out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
+      write(path.join(out.outDir, rel), insertPartials(mdx, rel, nested));
+      report.partials!.written++;
+    } catch (e) {
+      plan!.drop(p.target);
+      report.partials!.inlined.push(`${rel}: ${(e as Error).message.slice(0, 200)}`);
+    }
+  }
+  for (const rel of pageFiles) {
     const file = path.join(pages, rel);
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
     const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(`${docsRoot ?? ''}${rel}`)));
     await emit(out, report, withPrefix(rel), async () => {
-      const env = { ...site.extra, config: site.config, base_path: BASE };
-      const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route, host);
-      const result = await convertRendered(rendered, {
+      plan?.begin(withPrefix(rel), 'self');
+      const convert = (from: Source) => convertRendered(resolveBase(renderFile(file, from), route, host), {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
-        specInfo: specInfoFor([pages], route, rel), fallbackTitle,
+        specInfo: specInfoFor([pages], route, rel), fallbackTitle, replacementExists: pageNear(site.docsDir, file),
       });
+      let result = await convert(source);
+      let used = plan?.pagePartials ?? [];
+      if (used.length && result.stats.format === 'md') {
+        // A CommonMark page cannot import: inline its partials.
+        result = await convert({ root: source.root, includeBases: source.includeBases });
+        used = [];
+      }
+      noteFrontMatter(report, withPrefix(rel), result);
       const mdx = src.docsRoot || src.linkOutside ? rewriteOutsideRefs(result.mdx, {
         rel: withPrefix(rel), pageSrc: `${docsRoot ?? ''}${rel.replace(/\\/g, '/')}`, docsDir: site.docsDir, route: out.route,
         outDir: out.outDir, staticDir: out.staticDir, inside, linkOutside: src.linkOutside,
       }) : result.mdx;
-      return relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
+      const withImages = relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
+      return insertPartials(withImages, withPrefix(rel).split(path.sep).join('/'), used);
     }, { title: titleOf(raw, fallbackTitle), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions }, { readmeIndex: readmeIsIndex(rel, [pages]) });
   }
+  delete source.markerPartials;
   if (out.staticDir) copyReferencedAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
   // Old page URLs from the MkDocs redirects plugin keep answering, as they did on the former site.
   if (out.staticDir) {
@@ -443,8 +514,46 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   }
   copyAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, src.skip);
   const nav = selectNav(site.nav, { ...src.nav, ...(docsRoot ? { strip: docsRoot, outside: src.linkOutside } : {}) });
-  const items = navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav);
+  const items = withoutDeprecatedLabels(navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav),
+    (id) => shownStage(path.join(out.outDir, `${withPrefix(id)}.md`)));
   return { sidebar: prefix ? prefixIds(items, prefix) : items, report };
+}
+
+/**
+ * An include written to start a list item (`1.  {!file!}`): its first line is unindented and the rest indented to
+ * continue the item. On its own, as a partial, those lines are outdented by their common indentation.
+ */
+export function outdentContinuation(text: string): string {
+  const lines = text.split('\n');
+  const first = lines.findIndex((l) => l.trim());
+  if (first < 0 || /^[ \t]/.test(lines[first]!)) return text;
+  const rest = lines.slice(first + 1).filter((l) => l.trim());
+  const by = rest.length ? Math.min(...rest.map((l) => /^ */.exec(l)![0].length)) : 0;
+  return by ? lines.map((l, i) => (i > first && l.trim() ? l.slice(by) : l.trim() ? l : '')).join('\n') : text;
+}
+
+/** A relative Markdown link or image: MkDocs resolves it against the including page, so a shared partial would break it. */
+const RELATIVE_LINK = /\]\((?!\s*(?:[a-z][a-z0-9+.-]*:|\/|#|\{\{|<))/i;
+
+/**
+ * Pass 1 for one MkDocs site: render every page with `{!file!}` includes inlined, recording each stand-alone one; then
+ * keep those several pages share, unchanged by the page around them and free of relative links. Sets the pass 2 hook.
+ */
+function chooseMarkerPartials(plan: PartialPlan, pages: string[], renderPage: (rel: string) => string, source: Source, root: string, minPages: number) {
+  source.markerPartials = plan.collect;
+  plan.mode = 'self';
+  for (const rel of pages) {
+    plan.page = rel;
+    try { renderPage(rel); } catch { /* the page fails again in pass 2, where it is reported */ }
+  }
+  const plain: Source = { root: source.root, includeBases: source.includeBases };
+  const partials = plan.choose(root, (target) => {
+    const text = expandMarkers(fs.readFileSync(target, 'utf8'), target, plain);
+    if (RELATIVE_LINK.test(text)) throw new Error('relative links resolve against the including page');
+    return text;
+  }, minPages);
+  source.markerPartials = plan.emit;
+  return partials;
 }
 
 // ---- Cloud + self-hosted merge ----
@@ -457,6 +566,39 @@ export interface MergedSitesOptions {
   /** Text for a variable that differs but sits in shared text (product_name -> "WSO2 Identity Platform"). */
   sharedNames?: Record<string, string>;
   iframeHosts?: readonly string[];
+  /** Write includes that several pages share as `_partials/*.mdx` imported by those pages (migration to Docusaurus). */
+  partials?: boolean;
+}
+
+interface WithSource { source: Source }
+
+/** Set `hook` to decide the stand-alone includes of both sides (undefined: inline them). */
+function setPartialHook(c: WithSource, s: WithSource, hook: Source['partials']): void {
+  for (const x of [c, s]) { if (hook) x.source.partials = hook; else delete x.source.partials; }
+}
+
+/** Run `fn` with `hook` in place, then put back the hook that was there. */
+function withPartialHook<T>(c: WithSource, s: WithSource, hook: Source['partials'], fn: () => T): T {
+  const before = c.source.partials;
+  setPartialHook(c, s, hook);
+  try { return fn(); } finally { setPartialHook(c, s, before); }
+}
+
+/** Pass 1: render every page with includes inlined, recording each stand-alone include; then pick the partials. */
+function choosePartials(
+  plan: PartialPlan, pages: string[], modeOf: (rel: string) => RenderMode, renderPage: (rel: string, count: boolean) => string,
+  standalone: (target: string, mode: RenderMode) => string, sides: [WithSource, WithSource], root: string,
+) {
+  withPartialHook(sides[0], sides[1], plan.collect, () => {
+    for (const rel of pages) {
+      plan.page = rel;
+      plan.mode = modeOf(rel);
+      try { renderPage(rel, false); } catch { /* the page fails again in pass 2, where it is reported */ }
+    }
+  });
+  const partials = plan.choose(root, standalone);
+  setPartialHook(sides[0], sides[1], plan.emit);
+  return partials;
 }
 
 /** Convert a cloud and a self-hosted MkDocs site that share templates into one set of pages. */
@@ -470,7 +612,51 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
   const s = side(opts.self);
   const envOf = (x: ReturnType<typeof side>) => ({ ...x.site.extra, config: x.site.config, base_path: BASE });
   const labels = navLabels(s.site.nav, navLabels(c.site.nav));
-  for (const rel of [...new Set([...c.pages, ...s.pages])].sort()) {
+  const pages = [...new Set([...c.pages, ...s.pages])].sort();
+  const modeOf = (rel: string): RenderMode => (c.pages.has(rel) && s.pages.has(rel) ? 'merged' : c.pages.has(rel) ? 'cloud' : 'self');
+  const sidesOf = (src: (x: ReturnType<typeof side>) => Source) => ({ cloud: { env: envOf(c), source: src(c) }, self: { env: envOf(s), source: src(s) } });
+  /** The page rendered for its deployment options; counts merge statistics when `count` is set. */
+  const renderPage = (rel: string, count: boolean): string => {
+    const mode = modeOf(rel);
+    if (mode === 'merged') {
+      const merged = mergePage(path.join(c.site.docsDir, rel), path.join(s.site.docsDir, rel), sidesOf((x) => x.source), opts.sharedNames ?? {});
+      if (count) {
+        report.merge.splitBlocks += merged.stats.splitBlocks;
+        if (merged.stats.diverged) report.merge.diverged++;
+      }
+      return merged.text;
+    }
+    const primary = mode === 'cloud' ? c : s;
+    const file = path.join(primary.site.docsDir, rel);
+    return renderSingle(loadPage(file, primary.source), envOf(primary), file, primary.source);
+  };
+  const plan = opts.partials ? new PartialPlan() : undefined;
+  const partials = plan ? choosePartials(plan, pages, modeOf, renderPage, (target, mode) => (mode === 'merged'
+    ? renderMergedInclude(target, sidesOf((x) => inlining(x.source)), opts.sharedNames ?? {})
+    : renderSingle(loadPage(target, (mode === 'cloud' ? c : s).source), envOf(mode === 'cloud' ? c : s), target, inlining((mode === 'cloud' ? c : s).source))), [c, s], opts.cloud.root) : [];
+  // Partials first: one that fails to convert is inlined on its pages instead.
+  if (plan) report.partials ??= { written: 0, inlined: [] };
+  for (const p of partials) {
+    const rel = `_partials/${p.name}`;
+    try {
+      plan!.begin(rel, p.mode);
+      const side = p.mode === 'self' ? s : c;
+      const text = p.mode === 'merged'
+        ? finishMerged(renderMergedInclude(p.target, sidesOf((x) => x.source), opts.sharedNames ?? {}))
+        : renderSingle(loadPage(p.target, side.source), envOf(side), p.target, side.source);
+      const nested = plan!.pagePartials;
+      const result = await convertRendered(resolveBase(text, out.route), { deploymentOptions: [], iframeHosts: opts.iframeHosts, fallbackTitle: p.name });
+      if (result.stats.format === 'md') throw new PageError('compile', 'does not compile as MDX');
+      const body = splitFrontMatter(result.mdx).body.replace(/^\n+/, '');
+      const mdx = relativeImages(body, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
+      write(path.join(out.outDir, out.prefix ?? '', rel), insertPartials(mdx, rel, nested));
+      report.partials!.written++;
+    } catch (e) {
+      plan!.drop(p.target);
+      report.partials!.inlined.push(`${rel}: ${(e as Error).message.slice(0, 200)}`);
+    }
+  }
+  for (const rel of pages) {
     const inC = c.pages.has(rel);
     const inS = s.pages.has(rel);
     const deploymentOptions = inC && inS ? [CLOUD, SELF_HOSTED] : inC ? [CLOUD] : [SELF_HOSTED];
@@ -478,28 +664,45 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
     const file = path.join(primary.site.docsDir, rel);
     const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(rel)));
     await emit(out, report, rel, async () => {
-      let text: string;
-      if (inC && inS) {
-        const merged = mergePage(path.join(c.site.docsDir, rel), path.join(s.site.docsDir, rel),
-          { cloud: { env: envOf(c), source: c.source }, self: { env: envOf(s), source: s.source } }, opts.sharedNames ?? {});
-        text = merged.text;
-        report.merge.splitBlocks += merged.stats.splitBlocks;
-        if (merged.stats.diverged) report.merge.diverged++;
-      } else {
-        text = renderSingle(loadPage(file, primary.source), envOf(primary), file, primary.source);
-      }
+      plan?.begin(rel, modeOf(rel));
+      let text = renderPage(rel, true);
       // Page data: the cloud wrapper's front matter and quick-start meta win; self-hosted fills gaps.
       const cData = inC ? readPageData(path.join(c.site.docsDir, rel), c.source) : undefined;
       const sData = inS ? readPageData(path.join(s.site.docsDir, rel), s.source) : undefined;
-      const pageData = { frontMatter: { ...(sData?.frontMatter ?? {}), ...(cData?.frontMatter ?? {}) }, meta: cData?.meta ?? sData?.meta };
-      const result = await convertRendered(resolveBase(text, out.route), {
+      // Lifecycle stages are each deployment option's own: checked per side, then merged (lifecycle.ts).
+      const sides: [string, typeof c, typeof cData][] = [[CLOUD, c, cData], [SELF_HOSTED, s, sData]];
+      const byOption: Record<string, Lifecycle | undefined> = {};
+      const sideProblems: string[] = [];
+      for (const [option, x, data] of sides) {
+        if (!data) continue;
+        const checked = checkLifecycle(data.frontMatter, { replacementExists: pageNear(x.site.docsDir, path.join(x.site.docsDir, rel)) });
+        byOption[option] = checked.lifecycle;
+        sideProblems.push(...checked.problems.map((p) => `${option}: ${p}`));
+      }
+      const others = (fm: Record<string, unknown> | undefined) => Object.fromEntries(Object.entries(fm ?? {}).filter(([k]) => !(LIFECYCLE_FIELDS as readonly string[]).includes(k) && k !== BY_OPTION));
+      const pageData = {
+        frontMatter: { ...others(sData?.frontMatter), ...others(cData?.frontMatter), ...lifecycleFrontMatter(byOption, deploymentOptions) },
+        meta: cData?.meta ?? sData?.meta, error: [cData?.error, sData?.error].filter(Boolean).join('; ') || undefined,
+      };
+      const convert = (t: string) => convertRendered(resolveBase(t, out.route), {
         deploymentOptions, editUrl: primary.o.editUrl?.(file), pageData, iframeHosts: opts.iframeHosts,
         specInfo: specInfoFor([c.site.docsDir, s.site.docsDir], out.route, rel), fallbackTitle,
       });
-      return relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
+      let used = plan?.pagePartials ?? [];
+      let result = await convert(text);
+      if (used.length && result.stats.format === 'md') {
+        // A CommonMark page cannot import: inline its partials.
+        text = withPartialHook(c, s, undefined, () => renderPage(rel, false));
+        used = [];
+        result = await convert(text);
+      }
+      noteFrontMatter(report, rel, { ...result, problems: [...sideProblems, ...result.problems] });
+      const mdx = relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
+      return insertPartials(mdx, path.join(out.prefix ?? '', rel).split(path.sep).join('/'), used);
     }, { title: titleOf(fs.readFileSync(file, 'utf8'), fallbackTitle), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions },
     { readmeIndex: readmeIsIndex(rel, [c.site.docsDir, s.site.docsDir]) });
   }
+  setPartialHook(c, s, undefined);
   if (out.staticDir) {
     copyReferencedAssets(c.site.docsDir, out.outDir, out.staticDir, out.route);
     copyReferencedAssets(s.site.docsDir, out.outDir, out.staticDir, out.route);
@@ -507,7 +710,8 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
   copyAssets(c.site.docsDir, out.outDir);
   copyAssets(s.site.docsDir, out.outDir);
   const known = (id: string): boolean => fs.existsSync(path.join(out.outDir, `${id}.md`));
-  return { sidebar: mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav)), report };
+  const sidebar = mergeSidebars(navToSidebar(c.site.nav, known, report.droppedNav), navToSidebar(s.site.nav, known, report.droppedNav));
+  return { sidebar: withoutDeprecatedLabels(sidebar, (id) => shownStage(path.join(out.outDir, `${id}.md`))), report };
 }
 
 // ---- Existing Docusaurus docs ----
@@ -535,6 +739,47 @@ export interface DocusaurusDocsOptions extends DeploymentDefaults {
   editUrl?: EditUrl;
   /** Component imports to replace, for example the source site's own components with site stand-ins. */
   shims?: Record<string, string>;
+  /**
+   * Folder inside root holding a migrated source's whole tree (docs-is: `docusaurus`). Files that pages reference
+   * outside their docs folder but inside the tree (shared `assets/`) are copied to `<outDir>/_tree/`.
+   */
+  treeRoot?: string;
+  /** A static folder inside root (`from`) copied to the folder that serves the product's route (`to`). */
+  static?: { from: string; to: string };
+  /** A page that does not compile as MDX fails (an owned, checked tree) instead of falling back to CommonMark. */
+  strict?: boolean;
+  /** The tree's redirects file (inside root) and this version's key in it (`current` for Latest, else the release). */
+  redirects?: { file: string; version: string };
+}
+
+/** One version's old page -> new page entries from a tree's redirects.json. */
+function treeRedirects(root: string, file: string, version: string): Array<[string, string]> {
+  const found = containedFile(root, file);
+  if (!found) return [];
+  const all = JSON.parse(fs.readFileSync(found, 'utf8')) as Record<string, Record<string, unknown>>;
+  return Object.entries(all[version] ?? {}).filter((e): e is [string, string] => typeof e[1] === 'string');
+}
+
+const TREE = '_tree';
+
+/** Markdown targets leaving the docs folder for a file elsewhere in the tree: copy the file under _tree/ and point there. */
+function treeRefs(text: string, rel: string, docsDir: string, treeDir: string, outDir: string): string {
+  const realTree = fs.realpathSync(treeDir) + path.sep;
+  const realDocs = fs.realpathSync(docsDir) + path.sep;
+  return outsideCode(text, (t) => t.replace(/(\]\()([^)\s]+)((?:\s+"[^"]*")?\))/g, (m, pre: string, url: string, post: string) => {
+    const [, p = '', suffix = ''] = url.match(/^([^?#]*)(.*)$/) ?? [];
+    const decoded = safeDecode(p);
+    if (!decoded || decoded.startsWith('/') || /^[a-z][a-z0-9+.-]*:/i.test(decoded)) return m;
+    const file = path.resolve(docsDir, path.dirname(rel), decoded);
+    const stat = fs.statSync(file, { throwIfNoEntry: false });
+    if (!stat?.isFile()) return m;
+    const real = fs.realpathSync(file);
+    if (real.startsWith(realDocs) || !real.startsWith(realTree)) return m;
+    const inTree = path.relative(treeDir, file).split(path.sep).join('/');
+    const to = path.join(outDir, TREE, inTree);
+    if (!fs.existsSync(to)) { fs.mkdirSync(path.dirname(to), { recursive: true }); fs.copyFileSync(file, to); }
+    return `${pre}${encodePath(path.posix.relative(path.posix.dirname(rel), `${TREE}/${inTree}`))}${suffix}${post}`;
+  }));
 }
 
 /**
@@ -550,20 +795,30 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
     await emit(out, report, rel, async () => {
-      const { data, body } = splitFrontMatter(raw);
+      const { data, body, error } = splitFrontMatter(raw);
       let text = body;
       for (const [from, to] of Object.entries(src.shims ?? {})) text = text.replaceAll(`'${from}'`, `'${to}'`).replaceAll(`"${from}"`, `"${to}"`);
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${out.route}/$2/`);
       text = text.replace(/(\]\((?!https?:)[^)\s]*?)\.mdx(?=[)#])/g, '$1.md'); // pages are written as .md
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
+      if (src.treeRoot) text = treeRefs(text, rel, docsDir, path.join(src.root, src.treeRoot), out.outDir);
       const edit = src.editUrl?.(file);
-      const front = { ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit ? { custom_edit_url: edit } : {}) };
-      const mdx = `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
+      // A partial (any _ name) is no page: Docusaurus ignores front matter there and warns, so it gets none.
+      const partial = rel.split('/').some((part) => part.startsWith('_'));
+      // Lifecycle stage fields are checked as on converted pages (lifecycle.ts); bad values are reported and left out.
+      const lifecycle = applyLifecycle({ ...data, deployment_options: data.deployment_options ?? deploymentOptions, ...(edit && !data.custom_edit_url ? { custom_edit_url: edit } : {}) },
+        { replacementExists: pageNear(docsDir, file) });
+      const front = lifecycle.front;
+      if (!partial) noteFrontMatter(report, rel, { problems: lifecycle.problems, yamlErrors: error ? [error] : [] });
+      const declared = (data.mdx as { format?: unknown } | undefined)?.format;
+      // A Docusaurus tree is taken as written: its writers place the explicit components (no conventions recognised).
+      const mdx = partial ? text : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
       try {
-        await compileCheck(mdx);
+        // A page may declare CommonMark itself (Docusaurus's mdx.format front matter): compile it as it says.
+        await compileCheck(mdx, declared === 'md' ? { format: 'md' } : undefined);
         return mdx;
       } catch (e) {
-        if (!(e instanceof PageError) || e.kind !== 'compile') throw e;
+        if (!(e instanceof PageError) || e.kind !== 'compile' || src.strict) throw e;
         // Same last resort as MkDocs pages: CommonMark keeps the page on the site, components show as plain content.
         const md = `---\n${yaml.dump({ ...front, mdx: { format: 'md' } }, { lineWidth: -1 })}---\n${withoutImports(text)}`;
         await compileCheck(md, { format: 'md' });
@@ -575,7 +830,19 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
   copyAssets(docsDir, out.outDir);
   const staticSrc = path.join(src.root, path.dirname(src.docs) === '.' ? 'static' : path.join(path.dirname(src.docs), 'static'));
   if (out.staticDir) copyAssets(staticSrc, out.staticDir);
+  // Old page URLs keep answering, as the MkDocs redirects plugin made them do (pages already written above).
+  if (src.redirects && out.staticDir) {
+    writeRedirectPages(treeRedirects(src.root, src.redirects.file, src.redirects.version), out.staticDir, {
+      route: out.route, currentSite: src.currentSite, toSection: (docsPath) => docsPath,
+      hostedUrl: (rel) => (fs.existsSync(path.join(out.outDir, rel)) ? mkdocsUrl(rel) : null),
+    });
+  }
+  if (src.static) {
+    const from = path.resolve(src.root, src.static.from);
+    if (!from.startsWith(path.resolve(src.root) + path.sep)) throw new Error(`static folder outside the content source: ${src.static.from}`);
+    copyAssets(from, src.static.to, [], { yml: true }); // a static folder holds no mkdocs.yml; its .yml files are specs
+  }
   const sidebars = loadSidebarFile(path.join(src.root, src.sidebar));
   const [sidebarId, items] = Object.entries(sidebars)[0] ?? ['docs', []];
-  return { sidebarId, sidebar: items, report };
+  return { sidebarId, sidebar: withoutDeprecatedLabels(items, (id) => shownStage(path.join(out.outDir, `${id}.md`))), report };
 }
