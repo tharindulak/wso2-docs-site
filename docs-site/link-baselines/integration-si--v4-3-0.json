@@ -72,136 +72,104 @@
   "link": "/integration/streaming-integrator/4.3.0/images/images/working-with-the%20design-view/Open_Design_View.png"
  },
  {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Aggregation_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Aggregation_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Filter_Query_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Filter_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Function_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Function_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Generate-Stream.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Join_Query_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Join_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Partition_Configuration.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Partition_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Pattern_Query_Configuration.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Pattern_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Projection_QueryConfiguration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Projection_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sequence_Query_Configuration.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sequence_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sink_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Sink_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Source-Configuration.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Source_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Stream_Configuration.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Stream_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Table_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Table_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Trigger_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Trigger_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Window_Configuration_Form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Window_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/Window_Query_Icon.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/generate-stream-form.png"
- },
- {
-  "page": "integration/streaming-integrator/4.3.0/develop/working-with-the-Design-View/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/images/working-with-the design-view/generate-stream-with-externally-defined-datasource.png"
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/examples/connectors/downloading-and-Installing-Siddhi-Extensions/"
  },
  {
   "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
-  "link": "/integration/streaming-integrator/4.3.0/examples/connectors/downloading-and-Installing-Siddhi-Extensions/"
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/add-a-new-server.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/add-attribute-to-function-expression.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/click-selected-function.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/complete-function-configuration.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/configure-function-parameters.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/configure-output-event-schema.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/configure-output-mapping.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/configure-schema.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/deploy-etl-app-to-worker.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/etl-task-flow.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/group-by.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/joined-attributes.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/matched-attributes.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/open-new-etl-flow.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/remove-matching.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-atributes.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-attribute-for-function.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-attribute.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-function.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-name-attribute.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-siddhi-app-and-server.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/select-source-mapper-type.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/sink-transport-properties.png"
+ },
+ {
+  "page": "integration/streaming-integrator/4.3.0/examples/creating-etl-application-via-tooling/index.html",
+  "link": "/integration/streaming-integrator/4.3.0/images/create-etl-application-via-tooling/source-transport-properties.png"
  },
  {
   "page": "integration/streaming-integrator/4.3.0/examples/triggering-integrations-via-micro-integrator/index.html",

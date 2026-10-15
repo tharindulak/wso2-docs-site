@@ -1,33 +1,5 @@
 [
  {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/logging/managing-log-growth/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/setting-up-logging/#configuring-carbon-logs"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/logging/monitoring-audit-logs/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/managing-log-growth/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/logging/monitoring-http-access-logs/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/logging/setting-up-logging/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/managing-log-growth/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/logging/setting-up-logging/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/monitoring-audit-logs/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/logging/setting-up-logging/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/monitoring-http-access-logs/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/monitoring/jmx-based-monitoring/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-roles/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/administer/logging-and-monitoring/monitoring/jmx-based-monitoring/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/perfromance-tuning-and-test-results/tuning-performance/"
  },
@@ -61,10 +33,6 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-permissions/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-permissions/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-the-system-administrator/"
  },
  {
@@ -73,55 +41,19 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-roles/#update-before-the-first-startup-recommended"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-the-system-administrator/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-roles/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/introduction-to-userstores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/properties-used-in-a-read-only-ldap-user-store-managers/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/#setting-up-an-e-mail-login"
- },
- {
   "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-active-directory-user-store/index.html",
   "link": "/api-platform/api-manager/3.1.0/product-security/UsingAsymmetricEncryption/creating-new-keystores/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/#setting-up-an-e-mail-login"
- },
- {
   "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/understanding-the-user-realm/index.html",
   "link": "/api-platform/api-manager/3.1.0/assets/attachments/126562314/126562315.png"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-user-stores/writing-a-custom-user-store-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-users/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-roles/#create-user-roles"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-users/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configuring-secondary-user-stores/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/administer/managing-users-and-roles/managing-users/index.html",
@@ -144,10 +76,6 @@
   "link": "/api-platform/api-manager/3.1.0/learn/consume-api/manage-subscription/subscribe-to-an-api.md/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/administer/updating-wso2-api-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-configurations/common-runtime-and-configuration-artifacts/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/develop/customizations/adding-a-user-signup-workflow/index.html",
   "link": "/api-platform/api-manager/3.1.0/develop/customizations/adding-a-user-signup-workflow/`https://localhost:9443/admin`/"
  },
@@ -156,24 +84,12 @@
   "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/#uploading-via-the-admin-portal-tenants-only"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/develop/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/#add-an-api-category-using-the-admin-portal-ui"
+  "page": "api-platform/api-manager/3.1.0/develop/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/3.1.0/assets/img/develop/customizations/per-tenant-sp-creation-config.png"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/develop/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/#add-an-api-category-using-the-admin-rest-api"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/develop/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/tagwise-based-grouping/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/develop/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/tagwise-based-grouping/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/develop/customizations/log-in-to-the-dev-portal-using-social-media/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/"
+  "page": "api-platform/api-manager/3.1.0/develop/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/3.1.0/assets/img/develop/customizations/tenant-conf.png"
  },
  {
   "page": "api-platform/api-manager/3.1.0/develop/extending-api-manager/extending-gateway/customizing-api-template-for-gateway/index.html",
@@ -216,24 +132,8 @@
   "link": "/api-platform/api-manager/3.1.0/learn/extensions/saml2-sso/configuring-identity-server-as-idp-for-sso/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-permissions/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/develop/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/introduction-to-userstores/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/develop/extending-api-manager/saml2-sso/multi-factor-authentication-mfa-for-publisher-and-developer-portals/index.html",
   "link": "/api-platform/api-manager/3.1.0/learn/extensions/saml2-sso/configuring-identity-server-as-idp-for-sso/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/develop/product-apis/getting-started/guide-devportal-v0.16/index.html",
-  "link": "/api-platform/api-manager/3.1.0/develop/product-apis/devportal-apis/devportal-v1/guide/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/develop/product-apis/getting-started/guide-publisher-v0.16/index.html",
-  "link": "/api-platform/api-manager/3.1.0/develop/product-apis/publisher-apis/publisher-v1/guide/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/develop/product-apis/token-api/index.html",
@@ -257,10 +157,6 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/getting-started/about-this-release/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installation-prerequisites/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/about-this-release/index.html",
   "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/adding-internationalization/#changing-the-layout-direction"
  },
  {
@@ -268,40 +164,12 @@
   "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/adding-internationalization/#enabling-the-language-switch"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/getting-started/about-this-release/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/customize-api-listing/categorizing-and-grouping-apis/api-category-based-grouping/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-configurations/configuring-caching/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
   "link": "/api-platform/api-manager/3.1.0/assets/attachments/103327648/126556775.png"
  },
  {
   "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configure-a-third-party-key-manager/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/product-profiles/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
   "link": "/api-platform/api-manager/3.1.0/learn/analytics/configuring-apim-analytics.md/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/getting-started/quick-start-guide/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-on-linux-or-os-x/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/index.html",
@@ -314,14 +182,6 @@
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installation-prerequisites/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/ProductCompatibility/#tested-wso2-products"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installation-prerequisites/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installation-prerequisites/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-as-a-linux-service/index.html",
@@ -340,14 +200,6 @@
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/ProductCompatibility/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-linux-or-os-x/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installation-prerequisites/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-linux-or-os-x/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-solaris/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
  },
@@ -356,64 +208,12 @@
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/ProductCompatibility/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-solaris/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-windows/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-windows/index.html",
-  "link": "/api-platform/api-manager/3.1.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-windows/index.html",
-  "link": "/api-platform/api-manager/3.1.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-windows/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/ProductCompatibility/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-windows/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-on-windows/#setting-java95home-temporarily-using-the-windows-command-prompt-cmd"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-the-binary/installing-on-windows/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-via-the-installer/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installation-prerequisites/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/installing-the-product/installing-via-the-installer/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/running-the-product/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-as-a-linux-service/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/install/running-the-product/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installing-the-product/installing-the-binary/installing-as-a-windows-service/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-configurations/default-product-ports/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#stopping-the-server"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/changing-the-hostname/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/keystore-basics/creating-new-keystores/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
@@ -424,80 +224,8 @@
   "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores\n/configuring-secondary-user-stores/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/jmx-based-monitoring/#configuring-jmx-in-a-wso2-product"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-configurations/default-product-ports/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/enabling-hostname-verification/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-hostname"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/product-profiles/#product-profiles"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/production-deployment-guidelines/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/performance-tuning-and-test-results/tuning-performance"
- },
- {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles\n/managing\n-user-stores/configure-primary-user-store/configuring-a-read-only-ldap-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/managing-log-growth/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/monitoring/logging/setting-up-logging/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/keystore-basics/creating-new-keystores"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-transport-level-security/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/logins-and-passwords/maintaining-logins-and-passwords/#changing-the-super-admin-credentials"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/logins-and-passwords/working-with-encrypted-passwords"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#backup-and\n-recovery-recommendations"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#production-deployment-guidelines"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/deployment-best-practices/security-guidelines-for-production-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/product-compatibility/#tested-operating-systems-and-jdks"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configure-apim-analytics/configuring-database-and-the-file-system-state-persistence/index.html",
@@ -521,10 +249,6 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-the-primary-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-security/General/UsingAsymmetricEncryption/admin-creating-new-keystores/#step-3-importing-certificates-to-the-truststore"
  },
  {
@@ -536,58 +260,6 @@
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/ProductCompatibility/#compatible-wso2-identity-server-as-the-key-managers"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/single-node/all-in-one-deployment-overview/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-a-single-node/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-an-active-active-deployment/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/#changing-the-default-databases"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/configuring-keystores-in-wso2-api-manager/#configuring-the-primary-keystore"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/keystore-basics/creating-new-keystores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/configuring-the-proxy-server-and-the-load-balancer/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/configuring-wso2-identity-server-as-a-key-manager/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/reference/default-product-ports/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/setup/reference/default-product-ports/_Changing_the_Default_Ports_with_Offset_/"
  },
@@ -596,100 +268,12 @@
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/setup/security/configuring-transport-level-security/index/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/enabling-hostname-verification/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/enabling-java-security-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/keystore-basics/about-asymetric-cryptography/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/identity-management-for-the-api-dev-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/identity-management-for-the-api-dev-portal/#Password-policies"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/identity-management-for-the-api-dev-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/identity-management-for-the-api-dev-portal/#account-locking"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/identity-management-for-the-api-dev-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/identity-management-for-the-api-dev-portal/#account-locking-by-an-administrative-user"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/identity-management-for-the-api-dev-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/identity-management-for-the-api-dev-portal/#account-locking-by-failed-login-attempts"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/identity-management-for-the-api-dev-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/identity-management-for-the-api-dev-portal/#password-recovery"
+  "link": "/api-platform/api-manager/3.1.0/assets/img/administer/product-security/identity-management-for-the-api-dev-portal/password-recovery-form.png"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/logins-and-passwords/maintaining-logins-and-passwords/index.html",
   "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/log-in-to-the-api-store-using-social-media/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/configuring-keystores-in-wso2-api-manager/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/logins-and-passwords/carbon-secure-vault-implementation/#elements-of-the-secure-vault-implementation"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/security/logins-and-passwords/working-with-encrypted-passwords/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/logins-and-passwords/set-passwords-using-vars-and-sys-props/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-ibm-db2/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-mssql/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-mysql/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-oracle-rac/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-oracle/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/changing-default-databases/changing-to-postgresql/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-ibm-db2/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-mariadb/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-mssql/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-mysql/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-oracle-rac/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-oracle/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-postgresql/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/setting-up-databases/working-with-the-resgistry/admin-searching-the-registry/index.html",
@@ -808,74 +392,6 @@
   "link": "/api-platform/api-manager/3.1.0/assets/attachments/126562770/126562773.png"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/all-in-one-deployment-overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-a-single-node/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/all-in-one-deployment-overview/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/single-node/configuring-an-active-active-deployment/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/configuring-keystores-in-wso2-api-manager/#recommendations-for-setting-up-keystores"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/keystore-basics/creating-new-keystores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/configuring-the-proxy-server-and-the-load-balancer/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-a-single-node/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/configuring-keystores-in-wso2-api-manager/#recommendations-for-setting-up-keystores"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/configuring-keystores/keystore-basics/creating-new-keystores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/configuring-rsync-for-deployment-synchronization/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/configuring-the-proxy-server-and-the-load-balancer/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/production-deployment-guidelines/#common-guidelines-and-checklist"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-an-active-active-deployment/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/single-node/configuring-apim-analytics/index.html",
   "link": "/api-platform/api-manager/3.1.0/administer/product-security/General/UsingAsymmetricEncryption/admin-creating-new-keystores/#step-1-generating-a-ca-signed-certificate"
  },
@@ -893,63 +409,23 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/sso/configuring-sso-for-admin-portal-using-saml/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/introduction-to-userstores/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/sso/configuring-sso-for-admin-portal-using-saml/index.html",
   "link": "stepc"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/analytics/analyzing-apim-statistics-with-batch-analytics/using-geo-location-based-statistics/creating-geo-location-data-set/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/analytics/analyzing-apim-statistics-with-batch-analytics/using-geo-location-based-statistics/configuring-geolocation-based-statistics/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/analytics/analyzing-apim-statistics-with-batch-analytics/viewing-api-statistics/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/analytics/analyzing-apim-statistics-with-batch-analytics/using-geo-location-based-statistics/configuring-geolocation-based-statistics/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/analytics/configuring-apim-analytics/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/install/installation-prerequisites.md/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/learn/analytics/general-data-protection-regulation-gdpr-for-wso2-api-manager-analytics/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-security/general-data-protection-regulation-gdpr-for-wso2-api-manager/#configuring-the-master-configuration-file"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-controller/advanced-topics/creating-custom-users-to-perform-api-controller-operations/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/introduction-to-user-management/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-controller/building-jenkins-ci-cd-pipeline-for-dev-first-approach/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installation-prerequisites/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-controller/ci-cd-with-wso2-api-management/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/installation-prerequisites/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/learn/api-gateway/message-mediation/configuring-message-builders-formatters/index.html",
   "link": "../../../assets/img/setup-and-install/message-builders-formatters.png"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-gateway/message-mediation/configuring-message-builders-formatters/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/api-gateway/message-mediation/mapping-the-parameters-of-your-backend-urls-with-the-api-publisher-urls/index.html",
   "link": "/api-platform/api-manager/3.1.0/assets/attachments/learn/api-gateway/message-mediation/Response_API.xml"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/learn/api-gateway/passing-end-user-attributes-to-the-backend/passing-enduser-attributes-to-the-backend-using-jwt/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/learn/api-gateway/response-caching/index.html",
   "link": "attachments/103333424/103333429.java"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-gateway/scaling-the-gateway/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-configurations/configuring-caching/#key-cache"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/api-monetization/monetizing-an-api/index.html",
@@ -965,87 +441,31 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/api-security/authorization/role-based-access-control-using-xacml/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-read-write-ldap-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/authorization/role-based-access-control-using-xacml/index.html",
   "link": "/api-platform/api-manager/3.1.0/learn/extensions/saml2-sso/configuring-identity-server-as-idp-for-sso.md/#sharing-the-user-store"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/configuring-api-security-audit/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/multitenancy/introduction-to-multitenancy/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/encrypting-oauth2-tokens/index.html",
   "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/ThirdPartyKeyManager/configuring-wso2-identity-server-as-a-key-manager/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/encrypting-oauth2-tokens/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/encrypting-oauth2-tokens/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
- },
- {
   "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/grant-types/client-credentials-grant/index.html",
   "link": "/api-platform/api-manager/3.1.0/api-security/oauth2/grant-types/password-grant/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/grant-types/jwt-grant/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/grant-types/kerberos-oauth2-grant/index.html",
   "link": "/api-platform/api-manager/3.1.0/assets/img/learn/learnoauth-sp-clientid-clientsecret.png"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/grant-types/password-grant/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset/#changing-the-default-ports-with-offset"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/grant-types/password-grant/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/hashing-oauth-keys/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
- },
- {
   "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/oauth2-scopes/fine-grained-access-control-with-oauth-scopes/index.html",
   "link": "../../../.\n./../assets/img/learn/start-creating-scope.png"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/api-security/oauth2/provisioning-out-of-band-oauth-clients/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/#starting-the-server"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/consume-api/generating-sdks/generate-sdks-in-dev-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/installation-guide/running-the-product/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/consume-api/generating-sdks/write-a-client-application-using-the-sdk/index.html",
   "link": "/api-platform/api-manager/3.1.0/GettingStarted/quick-start-guide/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/learn/consume-api/manage-application/advanced-topics/adding-an-application-creation-workflow/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/learn/consume-api/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
   "link": "/api-platform/api-manager/3.1.0/consume-api/manage-application/advanced-topics/adding-an-application-creation-workflow/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/consume-api/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/consume-api/manage-application/advanced-topics/adding-an-application-key-generation-workflow/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/overview/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/consume-api/manage-application/generate-keys/obtain-access-token/changing-the-default-token-expiration-time/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-configurations/configuring-caching/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/design-api/advanced-topics/adding-an-api-state-change-workflow/index.html",
@@ -1053,19 +473,7 @@
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/design-api/advanced-topics/adding-an-api-state-change-workflow/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-default-ports-with-offset/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/design-api/advanced-topics/adding-an-api-state-change-workflow/index.html",
   "link": "/api-platform/api-manager/3.1.0/learn/extensions/managing-workflow-extension/invoking-the-api-manager-from-the-bpel-engine/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/design-api/advanced-topics/enable-publisher-access-control-in-api-publisher-portal/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-roles/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/learn/design-api/api-documentation/search-documentation/add-new-search-keyword/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/product-profiles/"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/design-api/create-api/adding-custom-properties-to-apis/index.html",
@@ -1108,10 +516,6 @@
   "link": "/api-platform/api-manager/3.1.0/assets/img/learn/lifecycle-transition-grid.png&quot;/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/learn/design-api/lifecycle-management/customize-api-life-cycle/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/advanced-customization/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/learn/rate-limiting/enforce-throttling-and-resource-access-policies/index.html",
   "link": "/api-platform/api-manager/3.1.0/design/rate-limiting/setting-throttling-limits/"
  },
@@ -1132,99 +536,11 @@
   "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/adding-users/"
  },
  {
-  "page": "api-platform/api-manager/3.1.0/reference/faq/index.html",
-  "link": "/api-platform/api-manager/3.1.0/learn/consume-api/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/"
- },
- {
   "page": "api-platform/api-manager/3.1.0/reference/samples/api-rate-monetization-sample/index.html",
   "link": "/api-platform/api-manager/3.1.0/assets/attachments/reference-sample-subscription-tiers"
  },
  {
   "page": "api-platform/api-manager/3.1.0/reference/wso2-api-manager-best-practices/index.html",
   "link": "/api-platform/api-manager/3.1.0/reference/wso2-api-manager-best-practices/_Error_Handling_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/troubleshooting/troubleshooting-invalid-callback-error/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/changing-the-hostname/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/changing-to-embedded-h2/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/updating-wso2-api-manager/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/changing-to-embedded-h2/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/setting-up-databases/changing-default-databases/changing-to-embedded-h2/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/changing-to-ibm-informix/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/changing-to-remote-h2/index.html",
-  "link": "/api-platform/api-manager/3.1.0/administer/product-administration/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/distributed-deployment-of-api-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/distributed-deployment-of-api-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/distributed-deployment/understanding-the-distributed-deployment-of-wso2-api-m/#understanding-the-distributed-deployment"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/deleted-pages/distributed-deployment-of-api-manager/index.html",
-  "link": "/api-platform/api-manager/3.1.0/install-and-setup/deploying-wso2-api-manager/single-node/all-in-one-deployment-overview/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Add_SSL_Certificates_for_Endpoints_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Adding_Mediation_Extensions_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Configuring_Caching_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Create_a_Mock_API_with_an_Inline_Script_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Create_a_WebSocket_API_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Create_and_Publish_a_SOAP_API_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Create_and_Publish_an_API_from_a_Swagger_Definition_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Deploy_and_Test_Mock_APIs_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Enabling_CORS_for_APIs_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Key_Concepts_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "/api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/_Rate_Limiting_/"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "_Endpoints_"
- },
- {
-  "page": "api-platform/api-manager/3.1.0/wip/need-to-update/create-and-publish-an-api/index.html",
-  "link": "_Invoke_an_API_using_the_Integrated_API_Console_"
  }
 ]

@@ -1,9 +1,5 @@
 [
  {
-  "page": "integration/micro-integrator/4.2.0/develop/creating-artifacts/adding-connectors/index.html",
-  "link": "/integration/micro-integrator/4.2.0/learn/integration-tutorials/using-the-gmail-connector/#importing-the-email-connector-into-wso2-integration-studio"
- },
- {
   "page": "integration/micro-integrator/4.2.0/develop/creating-artifacts/creating-a-message-store/index.html",
   "link": "/integration/micro-integrator/4.2.0/reference/mediation-sequencess/"
  },
@@ -20,28 +16,16 @@
   "link": "/integration/micro-integrator/4.2.0/assets/attachments/26838941/27042150.png"
  },
  {
-  "page": "integration/micro-integrator/4.2.0/install-and-setup/install/installing-mi-dashboard/index.html",
-  "link": "/integration/micro-integrator/4.2.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "integration/micro-integrator/4.2.0/install-and-setup/install/installing-mi-dashboard/index.html",
-  "link": "/integration/micro-integrator/4.2.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
   "page": "integration/micro-integrator/4.2.0/install-and-setup/install/installing-mi/index.html",
   "link": "/integration/micro-integrator/4.2.0/assets/attachments/26838941/27042150.png"
  },
  {
-  "page": "integration/micro-integrator/4.2.0/install-and-setup/install/installing-mi/index.html",
-  "link": "/integration/micro-integrator/4.2.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "integration/micro-integrator/4.2.0/install-and-setup/install/installing-mi/index.html",
-  "link": "/integration/micro-integrator/4.2.0/assets/attachments/thumbnails/26838941/27042154"
- },
- {
   "page": "integration/micro-integrator/4.2.0/install-and-setup/setup/brokers/configure-with-hornetq/index.html",
   "link": "/integration/micro-integrator/4.2.0/assets/img/assets/img/integrate/broker-configs/hornetq/delete-package.jpg"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/learn/integration-tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/integration/micro-integrator/4.2.0/assets/img/tutorials/service-endpoint-dropdown.png"
  },
  {
   "page": "integration/micro-integrator/4.2.0/observe-and-manage/classic-observability-tcp/message-monitoring-with-tcpmon/index.html",
@@ -110,18 +94,6 @@
  {
   "page": "integration/micro-integrator/4.2.0/reference/connectors/snowflake-connector/snowflake-connector-example/index.html",
   "link": "/integration/micro-integrator/4.2.0/assets/attachments/connectors/snowflake-connector.zip"
- },
- {
-  "page": "integration/micro-integrator/4.2.0/reference/mediation-sequences/index.html",
-  "link": "/integration/micro-integrator/4.2.0/reference/mediation-sequences/_Log_Mediator_/"
- },
- {
-  "page": "integration/micro-integrator/4.2.0/reference/mediation-sequences/index.html",
-  "link": "/integration/micro-integrator/4.2.0/reference/mediation-sequences/_Property_Mediator_/"
- },
- {
-  "page": "integration/micro-integrator/4.2.0/reference/mediation-sequences/index.html",
-  "link": "/integration/micro-integrator/4.2.0/reference/mediation-sequences/_Send_Mediator_/"
  },
  {
   "page": "integration/micro-integrator/4.2.0/reference/synapse-properties/template-properties/index.html",
