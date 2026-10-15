@@ -1,6 +1,7 @@
 // Converter step: where a page follows a writing convention, write the explicit content component the site renders
 // (remark-components.ts). Runs on MDX text and changes only what it wraps, so the rest of the page stays as written:
-//   - a run of `Step N:` headings (two or more at one level, each number above the last) is wrapped in <Steps>
+//   - a run of `Step N:` headings (two or more at one level, each number above the last; or one that continues the
+//     numbering of an earlier stepper on the page) is wrapped in <Steps>
 //     (`start` when the first number is not 1); each heading loses its "Step N:" prefix (also written `**Step 1**:`) and
 //     keeps its old anchor as an explicit id: `## Configure Azure {/* #step-1-configure-azure */}`. `Step N.M` (or `Step Na`)
 //     headings inside a step become a nested <Steps> (sub-steps), closed at the next heading that is not a sub-step; so
@@ -19,10 +20,10 @@ import remarkDirective from 'remark-directive';
 import type { Heading, List, Parent, PhrasingContent, Root, RootContent } from 'mdast';
 import { cardsOfList } from './link-cards.js';
 
-/** `Step 1:`, `Step 1 -`, `Step 1 –`, `Step 1 —`, `Step 1.` or `Step 1 Title`; not the `Step 1.1` sub-step form. */
-const STEP = /^Step\s+(\d+)(?!\.\d)\s*[:.\-–—]?\s+/i;
+/** `Step 1:`, `Step 1 -`, `Step 1 –`, `Step 1—` (a dash needs no spaces), `Step 1.` or `Step 1 Title`; not `Step 1.1`. */
+const STEP = /^Step\s+(\d+)(?!\.\d)\s*(?:[–—]\s*|[:.\-]?\s+)/i;
 /** A sub-step inside a step: `Step 1.1:` or `Step 1a:` (a letter is its place: a is 1), and the same separators. */
-const SUB_STEP = /^Step\s+(\d+)(?:\.(\d+)|([a-z])(?![a-z]))\s*[:.\-–—]?\s+/i;
+const SUB_STEP = /^Step\s+(\d+)(?:\.(\d+)|([a-z])(?![a-z]))\s*(?:[–—]\s*|[:.\-]?\s+)/i;
 const subStepNumber = (m: RegExpExecArray): number => (m[2] ? Number(m[2]) : m[3].toLowerCase().charCodeAt(0) - 96);
 /** "Prerequisites" or "Before you begin", in any case; a trailing "!" too (88 docs-is admonitions write one). */
 const PREREQUISITES = /^(prerequisites|before you begin)!?$/i;
@@ -104,6 +105,8 @@ const isWrapped = (node: Node, kind: Wrapped['kind']): boolean => node.type === 
 class Writer {
   readonly edits: Edit[] = [];
   readonly written: WrittenComponents = { steps: 0, subSteps: 0, prerequisites: 0, linkCards: 0, renumbered: 0 };
+  /** The number of the last step wrapped so far on the page: a lone step that continues it gets a stepper too. */
+  lastStep = -Infinity;
   constructor(readonly source: string, readonly ids: Map<Heading, string>) {}
 
   /** What stands before a node on its line (indentation, `>` of a blockquote), repeated on the lines written. */
@@ -207,7 +210,9 @@ function wrapRuns(w: Writer, children: RootContent[]): RootContent[] {
       previous = n;
       n = i < children.length ? stepNumber(children[i]) : null;
     }
-    if (steps.length < 2) { out.push(...steps[0].nodes); continue; }
+    // A lone step stays as written unless it continues an earlier stepper's numbering (Step 9 in its own section).
+    if (steps.length < 2 && first !== w.lastStep + 1) { out.push(...steps[0].nodes); continue; }
+    w.lastStep = first + steps.length - 1;
     const lastStep = steps.at(-1)!.nodes;
     w.wrap(steps[0].nodes[0], lastStep.at(-1)!, `<Steps${first === 1 ? '' : ` start={${first}}`}>`, 'Steps');
     w.written.steps += steps.length;

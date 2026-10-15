@@ -35,6 +35,16 @@ test('an em dash separates a step number from its title too', () => {
   );
 });
 
+test('an em or en dash needs no spaces around it', () => {
+  assert.match(write('## Step 1—generate values\n\na\n\n## Step 2–start a listener\n\nb\n'), /<Steps>\n\n## generate values \{\/\* #step-1generate-values \*\/\}[\s\S]*## start a listener \{\/\* #step-2start-a-listener \*\/\}/);
+});
+
+test('a lone Step heading that continues the numbering of an earlier stepper on the page gets a stepper of its own', () => {
+  const text = write('## A\n\n### Step 1: X\n\nx\n\n### Step 2: Y\n\ny\n\n## B\n\n### Step 3: Z\n\nz\n\n## C\n\n### Step 5: Skipped\n\ns\n');
+  assert.match(text, /## B\n\n<Steps start=\{3\}>\n\n### Z \{\/\* #step-3-z \*\/\}\n\nz\n\n<\/Steps>/);
+  assert.match(text, /## C\n\n### Step 5: Skipped\n/);
+});
+
 test('a run of Step N headings inside a step becomes its sub-steps', () => {
   const { text, written } = writeComponents('## Step 1: Prepare\n\np\n\n## Step 2: Configure\n\n### Step 1 - Install\n\na\n\n### Step 2 - Start\n\nb\n');
   assert.equal(
