@@ -244,7 +244,7 @@ function rewriteLinksToHostedPages(lock) {
 }
 
 const lock = readLock();
-const manifest = { groups: lock.groups, products: [], linkOut: lock.link_out ?? [] };
+const manifest = { groups: lock.groups, products: [], linkOut: lock.link_out ?? [], hiddenFromNavigation: lock.hide_from_navigation ?? [] };
 const reports = [];
 let blocking = false;
 let lockChanged = false;

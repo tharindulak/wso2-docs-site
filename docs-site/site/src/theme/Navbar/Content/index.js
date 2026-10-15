@@ -7,15 +7,17 @@ import NavbarColorModeToggle from '@theme/Navbar/ColorModeToggle';
 import NavbarMobileSidebarToggle from '@theme/Navbar/MobileSidebar/Toggle';
 import ProductsMenu from '@site/src/components/ProductsMenu.js';
 import SearchButton from '@site/src/components/search/SearchButton.js';
+import { useCatalogue } from '@site/src/components/catalogue.js';
 
 export default function NavbarContent() {
+  const { accountHidden } = useCatalogue();
   return (
     <div className="navbar__inner">
       <div className="navbar__items">
         <NavbarMobileSidebarToggle />
         <NavbarLogo />
         <span className="navbar-products"><ProductsMenu /></span>
-        <Link className="navbar__item navbar__link navbar-account" to="/account/">Account and billing</Link>
+        {!accountHidden && <Link className="navbar__item navbar__link navbar-account" to="/account/">Account and billing</Link>}
       </div>
       <div className="navbar__items navbar__items--right">
         <SearchButton />

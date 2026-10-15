@@ -62,11 +62,17 @@ const versionInfo = Object.fromEntries(entries.filter(({ v }) => !snapshot || v.
   sectionId: section.id, version: v.version, label: v.label, status: v.status, latestPath: `/${section.route}/`, cloud: section.cloud,
 }]));
 
+// Hidden from navigation (lock hide_from_navigation): still built, but left out of menus, home page, search and sitemap.
+// Live build only: a snapshot's key does not cover the list, so a snapshot keeps the menu it was built with.
+const hidden = new Set(snapshot ? [] : manifest.hiddenFromNavigation ?? []);
+const hiddenRoutes = manifest.products.filter((p) => hidden.has(p.id)).flatMap((p) => p.sections.map((s) => s.route));
+
 // Navigation data for the theme: products with their sections, plus link-out entries.
 const catalogue = {
   groups: manifest.groups,
+  accountHidden: hidden.has('account'),
   products: [
-    ...manifest.products.map(({ id, name, group, blurb, sections }) => ({ id, name, group, blurb, sections: sections.map(({ id: sid, label, route, landing }) => ({
+    ...manifest.products.map(({ id, name, group, blurb, sections }) => ({ id, name, group, blurb, ...(hidden.has(id) ? { hidden: true } : {}), sections: sections.map(({ id: sid, label, route, landing }) => ({
       pluginId: sid, label, path: `/${route}/`, landing: `/${route}/${snapshot ? '' : landing ?? ''}`, versionsUrl: `/${route}/versions.json`,
     })) })),
     ...manifest.linkOut.map((p) => ({ ...p, href: p.href })),
@@ -98,7 +104,8 @@ export default {
   staticDirectories: ['static', ...(snapshot ? [] : [path.join(generated, 'static')]), ...versionStatics, path.resolve(here, '../node_modules/redoc/bundles'),
     ...(!snapshot && fs.existsSync(searchPublic) ? [searchPublic] : [])],
   themes: ['@docusaurus/theme-mermaid'],
-  presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css'] } }]],
+  presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css'] },
+    sitemap: { ignorePatterns: [...hiddenRoutes, ...(hidden.has('account') ? ['account'] : [])].flatMap((r) => [`/${r}/`, `/${r}/**`]) } }]],
   plugins: [
     ...docsPlugins,
     ['@docusaurus/plugin-content-docs', { id: 'account', path: path.join(here, 'account'), routeBasePath: 'account', sidebarPath: path.join(here, 'account-sidebars.js') }],

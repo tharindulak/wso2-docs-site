@@ -40,6 +40,8 @@ export function readLock() {
       }
     }
   }
+  const ids = new Set(['account', ...lock.products.map((p) => p.id)]); // account: the Account and billing hub (site/account)
+  for (const id of lock.hide_from_navigation ?? []) if (!ids.has(id)) throw new Error(`hide_from_navigation: no product ${id}`);
   return lock;
 }
 
