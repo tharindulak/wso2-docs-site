@@ -105,20 +105,20 @@ const silent = (node: RootContent): boolean => node.type === 'mdxFlowExpression'
 /** Where a node sits: inside step N (its <Steps> make sub-steps), inside a sub-step (no more numbering), or neither. */
 type Context = { step?: number; sub?: boolean };
 
-function render(node: Node, ctx: Context, prefixes: Map<string, string>): void {
+function render(node: Node, ctx: Context, prefixes: Map<string, string>, partials: Set<string>): void {
   if (!('children' in node)) return;
   const parent = node as Parent;
   const out: RootContent[] = [];
   for (const child of parent.children as RootContent[]) {
     if (isElement(child, 'Steps')) {
       const { before, steps } = split(child);
-      before.forEach((c) => render(c, ctx, prefixes));
+      before.forEach((c) => render(c, ctx, prefixes, partials));
       if (ctx.step === undefined) {
         const items = steps.map((nodes, i) => {
           const n = startOf(child) + i;
           prefix(nodes[0] as Heading, String(n), prefixes);
           const step = block('steps__step', nodes, { dataStep: String(n) });
-          render(step, { step: n }, prefixes);
+          render(step, { step: n }, prefixes, partials);
           return step;
         });
         out.push(block('steps', [...before, ...items]));
@@ -134,12 +134,12 @@ function render(node: Node, ctx: Context, prefixes: Map<string, string>): void {
           props.className = ['steps__substep'];
           props.dataSubstep = label;
           const holder = { type: 'root', children: nodes } as Root;
-          render(holder, { ...ctx, sub: true }, prefixes);
+          render(holder, { ...ctx, sub: true }, prefixes, partials);
           out.push(...(holder.children as RootContent[]));
         });
       } else {
         const holder = { type: 'root', children: child.children } as Root;
-        render(holder, ctx, prefixes);
+        render(holder, ctx, prefixes, partials);
         out.push(...(holder.children as RootContent[]));
       }
       continue;
@@ -151,14 +151,34 @@ function render(node: Node, ctx: Context, prefixes: Map<string, string>): void {
     }
     if (isElement(child, 'Prerequisites')) {
       const panel = prerequisites(child);
-      render(panel, ctx, prefixes);
+      render(panel, ctx, prefixes, partials);
       out.push(panel);
       continue;
     }
-    render(child, ctx, prefixes);
+    const el = child as Node;
+    if (ctx.step !== undefined && !ctx.sub && el.type === 'mdxJsxFlowElement' && partials.has((el as MdxJsxFlowElement).name ?? '')) {
+      // A partial is compiled on its own and cannot know it sits in a step: CSS shows its steps as this step's sub-steps.
+      out.push(block('steps__nested', [child], { dataParent: String(ctx.step), style: `counter-reset: steps-parent ${ctx.step}` }));
+      continue;
+    }
+    render(child, ctx, prefixes, partials);
     out.push(child);
   }
   parent.children = out as never;
+}
+
+/** Components the page imports from a `_partials/` folder (`import Deploy from '../_partials/deploy/steps.mdx'`). */
+function partialNames(tree: Root): Set<string> {
+  type Spec = { type: string; local: { name: string } };
+  const names = new Set<string>();
+  for (const node of tree.children) {
+    if (node.type !== 'mdxjsEsm') continue;
+    for (const s of (node.data?.estree?.body ?? []) as unknown as { type: string; source?: { value?: unknown }; specifiers?: Spec[] }[]) {
+      if (s.type !== 'ImportDeclaration' || typeof s.source?.value !== 'string' || !/(?:^|\/)_partials\//.test(s.source.value)) continue;
+      for (const spec of s.specifiers ?? []) if (spec.type === 'ImportDefaultSpecifier') names.add(spec.local.name);
+    }
+  }
+  return names;
 }
 
 /** Adds each step heading's "Step N: " to its entry in the `toc` export Docusaurus put on the page. */
@@ -190,7 +210,7 @@ function prefixToc(tree: Root, prefixes: Map<string, string>): void {
 export default function remarkComponents() {
   return (tree: Root): void => {
     const prefixes = new Map<string, string>();
-    render(tree, {}, prefixes);
+    render(tree, {}, prefixes, partialNames(tree));
     prefixToc(tree, prefixes);
   };
 }

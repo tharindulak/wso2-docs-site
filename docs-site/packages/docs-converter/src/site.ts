@@ -436,7 +436,8 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   const prefix = out.prefix ?? '';
   const route = prefix ? `${out.route}/${prefix}` : out.route;
   const withPrefix = (rel: string): string => (prefix ? `${prefix}/${rel}` : rel);
-  const wanted = (r: string): boolean => r.endsWith('.md') && (!src.only || r.startsWith(src.only)) && !(src.skip ?? []).some((p) => r.startsWith(p));
+  const wanted = (r: string): boolean => r.endsWith('.md') && (!src.only || r.startsWith(src.only)) && !(src.skip ?? []).some((p) => r.startsWith(p))
+    && !site.excluded(`${docsRoot ?? ''}${r.replace(/\\/g, '/')}`);
   const docsRoot = src.docsRoot?.replace(/\\/g, '/').replace(/\/?$/, '/');
   // A docs_dir path the section takes: under docsRoot (its own filters apply below it), else a page it keeps or an asset it copies.
   const inside = (docsPath: string, page: boolean): boolean => {

@@ -40,6 +40,16 @@
   content: attr(data-substep); display: inline-block; margin-right: 0.55rem; padding: 0.05rem 0.45rem; border-radius: 6px;
   background: var(--ifm-color-primary); color: #fff; font-size: 0.78em; font-weight: 700; line-height: 1.5; vertical-align: 0.12em;
 }
+/* A partial's steps inside a step (.steps__nested names the step in steps-parent): shown as that step's sub-steps. */
+.steps__nested .steps { margin: 0; counter-reset: steps-sub; }
+.steps__nested .steps__step { padding: 0; counter-increment: steps-sub; }
+.steps__nested .steps__step::before, .steps__nested .steps__step::after { display: none; }
+.steps__nested .steps__step > :first-child { line-height: inherit; }
+.steps__nested .steps__step > :first-child::before {
+  content: counter(steps-parent) "." counter(steps-sub); display: inline-block; margin-right: 0.55rem; padding: 0.05rem 0.45rem;
+  border-radius: 6px; background: var(--ifm-color-primary); color: #fff; font-size: 0.78em; font-weight: 700; line-height: 1.5;
+  vertical-align: 0.12em;
+}
 @media (max-width: 996px) {
   .steps__step { padding-left: 2.5rem; }
   .steps__step::before { width: 1.75rem; height: 1.75rem; font-size: 0.85rem; }

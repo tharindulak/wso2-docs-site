@@ -33,6 +33,12 @@ test('a <Steps> inside a step makes sub-steps numbered from the parent, with the
   assert.match(js, /"value": "Step 1\.1: Create a key vault",\s*"id": "create-a-key-vault"/);
 });
 
+test('a partial placed inside a step is held in a block naming the step, so its own steps show as sub-steps', async () => {
+  const js = await jsx("import Deploy from '../_partials/deploy/steps.mdx';\nimport Other from './other.mdx';\n\n<Steps>\n\n## Prepare\n\np\n\n## Configure\n\n<Deploy />\n\n<Other />\n\n</Steps>\n\n<Deploy />");
+  assert.match(js, /<_components\.div className="steps__step" data-step="2">[\s\S]*<_components\.div className="steps__nested" data-parent="2" style=\{\{\s*counterReset: "steps-parent 2"\s*\}\}><Deploy \/><\/_components\.div>/);
+  assert.equal(count(js, /className="steps__nested"/), 1, 'only a partial, only inside a step');
+});
+
 test('a <Steps> nested below a sub-step only groups its content: no more numbers', async () => {
   const js = await jsx('<Steps>\n\n## A\n\n<Steps>\n\n### S\n\n<Steps>\n\n#### Deep\n\nd\n\n</Steps>\n\n</Steps>\n\n</Steps>');
   assert.match(js, /<_components\.h4 id="deep">\{"Deep"\}<\/_components\.h4>/);

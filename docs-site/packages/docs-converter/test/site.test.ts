@@ -460,3 +460,19 @@ test('copyReferencedAssets never copies a symbolic link that points outside the 
   assert.ok(fs.existsSync(path.join(to, 'assets/a.png')));
   assert.ok(!fs.existsSync(path.join(to, 'assets/link.png')));
 });
+
+test('pages the MkDocs exclude plugin leaves out by glob are not converted; its regex patterns are not run', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\nplugins:\n  - search\n  - exclude:\n      glob:\n        - wip/*\n        - "*.tmp.md"\n      regex:\n        - "^drafts/"\n',
+    'en/docs/index.md': '# Home\n',
+    'en/docs/wip/a.md': '# A\n',
+    'en/docs/wip/deep/b.md': '# B\n',
+    'en/docs/notes.tmp.md': '# Tmp\n',
+    'en/docs/drafts/c.md': '# C\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'] }, { outDir: out, route: 'p' });
+  assert.ok(fs.existsSync(path.join(out, 'index.md')));
+  for (const gone of ['wip/a.md', 'wip/deep/b.md', 'notes.tmp.md']) assert.ok(!fs.existsSync(path.join(out, gone)), gone);
+  assert.ok(fs.existsSync(path.join(out, 'drafts/c.md')), 'regex patterns are ignored');
+});
