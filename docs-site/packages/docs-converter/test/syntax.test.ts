@@ -29,6 +29,25 @@ test('collapsibles and tabs', () => {
   assert.equal(usesTabs, true);
 });
 
+// docs-choreo-dev manage-message-brokers/create-choreo-managed-kafka-services.md: a tab holding an indented Go sample.
+// MDX reads no indented code, so unfenced its lines showed as paragraphs with their braces escaped.
+test('an indented code block is fenced, in a tab or at the top level; list continuations and HTML stay as they are', () => {
+  const tab = toMdx('=== "Producer"\n\n\n        package main\n\n        func main() {\n            run()\n        }\n\nAfter.\n').body;
+  assert.match(tab, /<TabItem value="tab-0" label="Producer">\n+```\npackage main\n\nfunc main\(\) \{\n    run\(\)\n\}\n```\n\n<\/TabItem>/);
+  assert.match(toMdx('Run:\n\n    mvn {x}\n\nDone.\n').body, /^```\nmvn \{x\}\n```\n\nDone\./m);
+  assert.match(toMdx('1. Step\n\n    More about the step.\n').body, /^ {4}More about the step\.$/m);
+  assert.match(toMdx('- a\n- b\n\n    Still b.\n\nText.\n').body, /^ {4}Still b\.$/m);
+  assert.match(toMdx('<div>\n\n    Inside.\n\n</div>\n').body, /^ {4}Inside\.$/m);
+  assert.match(toMdx('??? "No type"\n\n    **Bold**\n').body, /^ {4}\*\*Bold\*\*$/m);
+});
+
+// docs-is 7.1.0 deploy/product-compatibility.md: a collapsible body whose first line is indented with a tab.
+test('a tab in the indentation counts to the next 4-column stop, as in Python-Markdown; fenced code keeps its tabs', () => {
+  const { body } = toMdx('??? note "IWA"\n\n\tNot supported.\n\n    Use Kerberos.\n\n```\n\tx\n```\n');
+  assert.match(body, /^<details>\n<summary>IWA<\/summary>\n+Not supported\.\n\nUse Kerberos\.\n\n<\/details>/m);
+  assert.match(body, /^```\n\tx\n```/m);
+});
+
 test('code is never rewritten; fence attributes become Docusaurus metadata', () => {
   const { body } = toMdx('```js hl_lines="1 3" title="a.js"\nconst x = {a: 1}; // <b>\n```\nUse `{x}` and <b>bold</b>.');
   assert.match(body, /```js title="a\.js" \{1,3\}\nconst x = \{a: 1\}; \/\/ <b>\n```/);
@@ -83,8 +102,8 @@ test('a line break in a link target is joined, as Python-Markdown and the browse
   assert.equal(toMdx('1. Item\n\n    see [Updating WSO2 Products](https://is.docs.wso2\n    .com/en/latest/administer/getting-wso2-updates/)\n').body,
     '1. Item\n\n    see [Updating WSO2 Products](https://is.docs.wso2.com/en/latest/administer/getting-wso2-updates/)\n');
   // docs-apim@53584be9c5ba .../configure-worker/active-passive.md:23-24, an image
-  assert.equal(toMdx('    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes\n    .png)').body,
-    '    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes.png)');
+  assert.equal(toMdx('1. Step\n\n    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes\n    .png)').body,
+    '1. Step\n\n    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes.png)');
 });
 
 test('spaces in a link or image target are percent-encoded; a quoted title stays a title', () => {
