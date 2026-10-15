@@ -4,7 +4,9 @@
 //   --onboard  for a section whose exclude list is empty, record today's failing pages as its exclude list
 //              (first onboarding only; afterwards the list may only shrink).
 //   --prune    remove pages that now convert from their exclude list.
-//   --partials merged sections write shared includes as _partials/*.mdx (for a migration; see migrate-docusaurus.mjs).
+//   --partials Latest of a merged or MkDocs section writes shared includes as _partials/*.mdx (for a migration; see
+//              migrate-docusaurus.mjs). Older versions, and cloud companions, inline them.
+//   --every-include with --partials: MkDocs sections also write includes one page uses as partials.
 //   --source-tree converting for a source's Docusaurus tree (migrate-docusaurus.mjs): no site-made pages (Deprecations).
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,6 +23,7 @@ const args = process.argv.slice(2);
 const onboard = args.includes('--onboard');
 const prune = args.includes('--prune');
 const partials = args.includes('--partials');
+const everyInclude = args.includes('--every-include');
 const sourceTree = args.includes('--source-tree');
 const only = new Set(args.filter((a) => !a.startsWith('--')));
 
@@ -60,7 +63,7 @@ async function buildSection(section, outDir, staticDir, sidebarsDir, report) {
   const companion = section.cloud_companion;
   const companionSidebar = async () => (await convertMkdocsSite(mkdocsOptions(companion), { ...out, prefix: companion.path_prefix ?? '' })).sidebar;
   if (section.kind === 'mkdocs') {
-    const { sidebar } = await convertMkdocsSite(mkdocsOptions(section), out);
+    const { sidebar } = await convertMkdocsSite({ ...mkdocsOptions(section), partials: partials && section.status === 'latest' && (everyInclude ? 'every' : true) }, out);
     return companion ? placeCompanion(sidebar, await companionSidebar(), companion) : sidebar;
   }
   if (section.kind === 'mkdocs-merge') {

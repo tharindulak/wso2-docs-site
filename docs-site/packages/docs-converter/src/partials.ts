@@ -60,13 +60,13 @@ export class PartialPlan {
   };
 
   /**
-   * Keep includes used by more than one page whose every use matches the include rendered on its own
+   * Keep includes used by at least `minPages` pages (default: more than one) whose every use matches the include rendered on its own
    * (`standalone`, without the page's own `{% set %}` values) in that use's mode.
    */
-  choose(root: string, standalone: (target: string, mode: RenderMode) => string): Partial[] {
+  choose(root: string, standalone: (target: string, mode: RenderMode) => string, minPages = 2): Partial[] {
     const kept: Omit<Partial, 'token'>[] = [];
     for (const [target, uses] of [...this.uses].sort(([a], [b]) => a.localeCompare(b))) {
-      if (new Set(uses.map((u) => u.page)).size < 2) continue;
+      if (new Set(uses.map((u) => u.page)).size < minPages) continue;
       const modes = new Set(uses.map((u) => u.mode));
       const mode: RenderMode = modes.has('merged') || modes.size > 1 ? 'merged' : [...modes][0]!;
       const expected = new Map<RenderMode, string>();
@@ -111,7 +111,8 @@ export function insertPartials(mdx: string, fileRel: string, partials: Partial[]
     let component = componentName(p.name);
     for (let n = 2; names.has(component); n++) component = `${componentName(p.name)}${n}`;
     names.add(component);
-    const line = new RegExp(`^([ \\t]*)${p.token}[ \\t]*$`, 'gm');
+    // Alone on its line, or starting a list item (an include written as `1.  {!file!}`).
+    const line = new RegExp(`^([ \\t]*(?:(?:[-*+]|\\d+[.)])[ \\t]+)?)${p.token}[ \\t]*$`, 'gm');
     if (!line.test(text)) throw new Error(`Partial ${p.name} lost its place in ${fileRel}`);
     text = text.replace(line, `$1<${component} />`);
     let from = path.posix.relative(path.posix.dirname(fileRel), `_partials/${p.name}`);

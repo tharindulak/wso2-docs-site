@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { convertMergedSites } from '../src/site.js';
+import { convertMergedSites, convertMkdocsSite } from '../src/site.js';
 import { tempSource } from './helpers.js';
 
 /** A cloud + self-hosted pair sharing templates, like docs-is (wrapper pages include files from en/includes). */
@@ -100,4 +100,64 @@ test('a page that only converts as CommonMark inlines its partials, and later pa
   const { read } = await convert(root);
   assert.match(read('a.md'), /Shared words\./);
   for (const page of ['b.md', 'c.md']) assert.match(read(page), /^<Shared \/>$/m);
+});
+
+test('one MkDocs site: an include two pages use becomes a partial; one only one page uses is written into it', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\n',
+    'en/docs/a.md': '# A\n\n{!includes/design/shared.md!}\n\n{!includes/design/single.md!}\n',
+    'en/docs/b.md': '# B\n\nIntro.\n\n{!includes/design/shared.md!}\n\nAfter.\n',
+    'en/docs/includes/design/shared.md': 'Run the **shared** step.\n',
+    'en/docs/includes/design/single.md': 'Only on A.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'], skip: ['includes/'], partials: true }, { outDir: out, route: 'p' });
+  const read = (rel: string) => fs.readFileSync(path.join(out, rel), 'utf8');
+  assert.equal(read('_partials/design/shared.mdx').trim(), 'Run the **shared** step.');
+  assert.match(read('a.md'), /^import Shared from '\.\/_partials\/design\/shared\.mdx';$/m);
+  assert.match(read('a.md'), /^<Shared \/>$/m);
+  assert.match(read('a.md'), /Only on A\./);
+  assert.match(read('b.md'), /Intro\.\n\n<Shared \/>\n\nAfter\./);
+  assert.ok(!fs.existsSync(path.join(out, '_partials/design/single.mdx')));
+});
+
+test('one MkDocs site without partials inlines every include', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\n',
+    'en/docs/a.md': '# A\n\n{!includes/shared.md!}\n',
+    'en/docs/b.md': '# B\n\n{!includes/shared.md!}\n',
+    'en/docs/includes/shared.md': 'Shared.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'], skip: ['includes/'] }, { outDir: out, route: 'p' });
+  assert.ok(!fs.existsSync(path.join(out, '_partials')));
+  assert.match(fs.readFileSync(path.join(out, 'a.md'), 'utf8'), /Shared\./);
+});
+
+test('one MkDocs site, every include: an include only one page uses becomes a partial too', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\n',
+    'en/docs/a.md': '# A\n\n{!includes/note.md!}\n',
+    'en/docs/includes/note.md': 'Only on **A**.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'], skip: ['includes/'], partials: 'every' }, { outDir: out, route: 'p' });
+  assert.equal(fs.readFileSync(path.join(out, '_partials/note.mdx'), 'utf8').trim(), 'Only on **A**.');
+  assert.match(fs.readFileSync(path.join(out, 'a.md'), 'utf8'), /^<Note \/>$/m);
+});
+
+test('an include that starts a list item, its other lines indented to continue it, becomes a partial in the item', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\n',
+    'en/docs/a.md': '# A\n\n1.  {!includes/sign-in.md!}\n\n2.  Next.\n',
+    'en/docs/b.md': '# B\n\n1. {!includes/sign-in.md!}\n',
+    'en/docs/includes/sign-in.md': 'Sign in to the Publisher.\n\n     `https://localhost:9443/publisher`\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'], skip: ['includes/'], partials: true }, { outDir: out, route: 'p' });
+  const read = (rel: string) => fs.readFileSync(path.join(out, rel), 'utf8');
+  assert.equal(read('_partials/sign-in.mdx').trim(), 'Sign in to the Publisher.\n\n`https://localhost:9443/publisher`');
+  assert.match(read('a.md'), /^1\. +<SignIn \/>\n\n2\. +Next\.$/m);
+  assert.doesNotMatch(read('a.md'), /^mdx:/m); // still MDX, not the CommonMark fallback
+  assert.match(read('b.md'), /^1\. +<SignIn \/>$/m);
 });

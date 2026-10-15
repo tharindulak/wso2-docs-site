@@ -12,6 +12,8 @@ export interface Source {
   includeBases: string[];
   /** Decides what an include standing as a block of its own becomes (see partials.ts); absent, includes are inlined. */
   partials?: PartialHook;
+  /** The same for a markdown-include `{!file!}` marker on a line of its own (one MkDocs site, convertMkdocsSite). */
+  markerPartials?: PartialHook;
 }
 
 /**

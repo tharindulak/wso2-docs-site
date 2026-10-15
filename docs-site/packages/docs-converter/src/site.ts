@@ -6,7 +6,7 @@ import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
 import { redirectMaps, writeRedirectPages } from './redirects.js';
-import { loadPage, loadPlain, renderSingle, readPageData, inlining } from './render.js';
+import { expandMarkers, loadPage, loadPlain, renderSingle, readPageData, inlining } from './render.js';
 import { mergePage, renderMergedInclude, finishMerged, CLOUD, SELF_HOSTED } from './merge.js';
 import { PartialPlan, insertPartials, type RenderMode } from './partials.js';
 import { outsideCode } from './syntax.js';
@@ -340,6 +340,11 @@ export interface MkdocsSiteOptions extends DeploymentDefaults {
    * the link as written. Files outside docsRoot that pages reference are copied into the section's _shared/ folder.
    */
   linkOutside?: (docsPath: string) => string | null;
+  /**
+   * Write `{!file!}` includes that several pages share as `_partials/*.mdx` imported by those pages (migration);
+   * `every`: also those one page uses.
+   */
+  partials?: boolean | 'every';
 }
 
 /** The folder pages are read from: docs_dir, or docsRoot inside it (then never outside the repository checkout). */
@@ -427,7 +432,7 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   const report = out.report ?? emptyReport();
   const site = mkdocsSite(path.join(src.root, src.mkdocs));
   const pages = pagesDir(src.root, site.docsDir, src.docsRoot);
-  const source = { root: src.root, includeBases: site.includeBases };
+  const source: Source = { root: src.root, includeBases: site.includeBases };
   const prefix = out.prefix ?? '';
   const route = prefix ? `${out.route}/${prefix}` : out.route;
   const withPrefix = (rel: string): string => (prefix ? `${prefix}/${rel}` : rel);
@@ -441,26 +446,58 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   };
   const labels = navLabels(site.nav);
   const host = hostOnly(site.extra.base_path);
-  for (const rel of walk(pages, wanted)) {
+  const env = () => ({ ...site.extra, config: site.config, base_path: BASE });
+  const renderFile = (file: string, from: Source): string => renderSingle((site.templating ? loadPage : loadPlain)(file, from), env(), file, from);
+  const pageFiles = walk(pages, wanted);
+  // Shared includes as partials (Latest of a migrating source): pass 1 records each stand-alone {!file!} include.
+  const plan = src.partials ? new PartialPlan() : undefined;
+  const partials = plan ? chooseMarkerPartials(plan, pageFiles, (rel) => renderFile(path.join(pages, rel), source), source, src.root, src.partials === 'every' ? 1 : 2) : [];
+  if (plan) report.partials ??= { written: 0, inlined: [] };
+  for (const p of partials) {
+    const rel = withPrefix(`_partials/${p.name}`);
+    try {
+      plan!.begin(rel, p.mode);
+      const text = outdentContinuation(expandMarkers(fs.readFileSync(p.target, 'utf8'), p.target, source));
+      const nested = plan!.pagePartials;
+      const result = await convertRendered(resolveBase(text, route, host), { deploymentOptions: [], iframeHosts: src.iframeHosts, fallbackTitle: p.name });
+      if (result.stats.format === 'md') throw new PageError('compile', 'does not compile as MDX');
+      const body = splitFrontMatter(result.mdx).body.replace(/^\n+/, '');
+      const mdx = relativeImages(body, rel, out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
+      write(path.join(out.outDir, rel), insertPartials(mdx, rel, nested));
+      report.partials!.written++;
+    } catch (e) {
+      plan!.drop(p.target);
+      report.partials!.inlined.push(`${rel}: ${(e as Error).message.slice(0, 200)}`);
+    }
+  }
+  for (const rel of pageFiles) {
     const file = path.join(pages, rel);
     const raw = fs.readFileSync(file, 'utf8');
     const deploymentOptions = optionsFor(src, rel);
     const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(`${docsRoot ?? ''}${rel}`)));
     await emit(out, report, withPrefix(rel), async () => {
-      const env = { ...site.extra, config: site.config, base_path: BASE };
-      const rendered = resolveBase(renderSingle((site.templating ? loadPage : loadPlain)(file, source), env, file, source), route, host);
-      const result = await convertRendered(rendered, {
+      plan?.begin(withPrefix(rel), 'self');
+      const convert = (from: Source) => convertRendered(resolveBase(renderFile(file, from), route, host), {
         deploymentOptions, editUrl: src.editUrl?.(file), pageData: readPageData(file, source), iframeHosts: src.iframeHosts,
         specInfo: specInfoFor([pages], route, rel), fallbackTitle, replacementExists: pageNear(site.docsDir, file),
       });
+      let result = await convert(source);
+      let used = plan?.pagePartials ?? [];
+      if (used.length && result.stats.format === 'md') {
+        // A CommonMark page cannot import: inline its partials.
+        result = await convert({ root: source.root, includeBases: source.includeBases });
+        used = [];
+      }
       noteFrontMatter(report, withPrefix(rel), result);
       const mdx = src.docsRoot || src.linkOutside ? rewriteOutsideRefs(result.mdx, {
         rel: withPrefix(rel), pageSrc: `${docsRoot ?? ''}${rel.replace(/\\/g, '/')}`, docsDir: site.docsDir, route: out.route,
         outDir: out.outDir, staticDir: out.staticDir, inside, linkOutside: src.linkOutside,
       }) : result.mdx;
-      return relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
+      const withImages = relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
+      return insertPartials(withImages, withPrefix(rel).split(path.sep).join('/'), used);
     }, { title: titleOf(raw, fallbackTitle), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions }, { readmeIndex: readmeIsIndex(rel, [pages]) });
   }
+  delete source.markerPartials;
   if (out.staticDir) copyReferencedAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
   // Old page URLs from the MkDocs redirects plugin keep answering, as they did on the former site.
   if (out.staticDir) {
@@ -479,6 +516,43 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   const items = withoutDeprecatedLabels(navToSidebar(nav, (id) => fs.existsSync(path.join(out.outDir, `${withPrefix(id)}.md`)), report.droppedNav),
     (id) => shownStage(path.join(out.outDir, `${withPrefix(id)}.md`)));
   return { sidebar: prefix ? prefixIds(items, prefix) : items, report };
+}
+
+/**
+ * An include written to start a list item (`1.  {!file!}`): its first line is unindented and the rest indented to
+ * continue the item. On its own, as a partial, those lines are outdented by their common indentation.
+ */
+export function outdentContinuation(text: string): string {
+  const lines = text.split('\n');
+  const first = lines.findIndex((l) => l.trim());
+  if (first < 0 || /^[ \t]/.test(lines[first]!)) return text;
+  const rest = lines.slice(first + 1).filter((l) => l.trim());
+  const by = rest.length ? Math.min(...rest.map((l) => /^ */.exec(l)![0].length)) : 0;
+  return by ? lines.map((l, i) => (i > first && l.trim() ? l.slice(by) : l.trim() ? l : '')).join('\n') : text;
+}
+
+/** A relative Markdown link or image: MkDocs resolves it against the including page, so a shared partial would break it. */
+const RELATIVE_LINK = /\]\((?!\s*(?:[a-z][a-z0-9+.-]*:|\/|#|\{\{|<))/i;
+
+/**
+ * Pass 1 for one MkDocs site: render every page with `{!file!}` includes inlined, recording each stand-alone one; then
+ * keep those several pages share, unchanged by the page around them and free of relative links. Sets the pass 2 hook.
+ */
+function chooseMarkerPartials(plan: PartialPlan, pages: string[], renderPage: (rel: string) => string, source: Source, root: string, minPages: number) {
+  source.markerPartials = plan.collect;
+  plan.mode = 'self';
+  for (const rel of pages) {
+    plan.page = rel;
+    try { renderPage(rel); } catch { /* the page fails again in pass 2, where it is reported */ }
+  }
+  const plain: Source = { root: source.root, includeBases: source.includeBases };
+  const partials = plan.choose(root, (target) => {
+    const text = expandMarkers(fs.readFileSync(target, 'utf8'), target, plain);
+    if (RELATIVE_LINK.test(text)) throw new Error('relative links resolve against the including page');
+    return text;
+  }, minPages);
+  source.markerPartials = plan.emit;
+  return partials;
 }
 
 // ---- Cloud + self-hosted merge ----

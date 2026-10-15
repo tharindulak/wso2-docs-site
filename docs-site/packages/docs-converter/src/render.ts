@@ -36,8 +36,13 @@ export function expandMarkers(text: string, fromFile: string, source: Source, de
     const file = findInclude(source, fromFile, target);
     return expandMarkers(readInside(source, file), file, source, depth + 1);
   };
+  const hook = source.markerPartials;
   return text
-    .replace(/\{!\s*([^!\n]+?)\s*!\}/g, (_, target: string) => inline(target))
+    .replace(/\{!\s*([^!\n]+?)\s*!\}/g, (marker: string, target: string, at: number, whole: string) => {
+      if (!hook || !markerStandsAlone(whole, at, marker.length)) return inline(target);
+      const file = findInclude(source, fromFile, target);
+      return hook(file, () => expandMarkers(readInside(source, file), file, source, depth + 1));
+    })
     .replace(/^[ \t]*--8<--[ \t]+["']([^"'\n]+)["'][ \t]*$/gm, (_, target: string) => inline(target))
     .replace(/\{\{#([A-Za-z_]\w*)#\}\}/g, '{{ $1 }}');
 }
@@ -102,6 +107,13 @@ export function loadPlain(file: string, source: Source): TemplateNode[] {
 }
 
 const inFence = (s: string): boolean => (s.match(/^[ \t]*(```|~~~)/gm) ?? []).length % 2 === 1;
+
+/** A `{!file!}` marker alone on its line (indentation or a list item marker before it, nothing after), outside code. */
+function markerStandsAlone(text: string, at: number, length: number): boolean {
+  const lineStart = text.lastIndexOf('\n', at - 1) + 1;
+  const lineEnd = text.indexOf('\n', at + length);
+  return /^[ \t]*(?:(?:[-*+]|\d+[.)])[ \t]+)?$/.test(text.slice(lineStart, at)) && /^[ \t]*\r?$/.test(text.slice(at + length, lineEnd < 0 ? undefined : lineEnd)) && !inFence(text.slice(0, at));
+}
 
 /** An include whose text would fill its own lines (only indentation before it, a line break after), outside code. */
 export function standsAlone(before: string, next: TemplateNode | undefined): boolean {
