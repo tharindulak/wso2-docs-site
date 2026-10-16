@@ -15,6 +15,7 @@ import { applyLifecycle, checkLifecycle, lifecycleBadge, lifecycleFrontMatter, w
 import { navToSidebar, mergeSidebars, selectNav, type NavSelection } from './nav.js';
 import { optionsFor, prefixIds, type DeploymentDefaults } from './sections.js';
 import type { DeploymentOption, MkdocsNav, SidebarInput, SidebarItem, Source } from './types.js';
+import { writeComponents } from './conventions.js';
 
 /** `{{ base_path }}` renders as this marker, then maps to the section's route. */
 const BASE = '@@BASE@@';
@@ -82,11 +83,12 @@ export interface SiteOutput {
   report?: SiteReport;
 }
 
-/** Edit link for a page file, for example https://github.com/wso2/docs-is/blob/<sha>/<path>. */
+/** Edit link for a page file, for example https://github.com/wso2/docs-is/edit/master/<path>. */
 export type EditUrl = (file: string) => string | undefined;
 
-export function githubEditUrl(repo: string, ref: string, root: string): EditUrl {
-  return (file) => `https://github.com/${repo}/blob/${ref}/${path.relative(root, file).replace(/\\/g, '/')}`;
+/** `edit` opens GitHub's editor on a branch (writers' link); `blob` only shows the file at a commit. */
+export function githubEditUrl(repo: string, ref: string, root: string, mode: 'blob' | 'edit' = 'blob'): EditUrl {
+  return (file) => `https://github.com/${repo}/${mode}/${ref}/${path.relative(root, file).replace(/\\/g, '/')}`;
 }
 
 // ---- file helpers ----
@@ -748,6 +750,11 @@ export interface DocusaurusDocsOptions extends DeploymentDefaults {
   static?: { from: string; to: string };
   /** A page that does not compile as MDX fails (an owned, checked tree) instead of falling back to CommonMark. */
   strict?: boolean;
+  /**
+   * Write the explicit components where a page follows a writing convention (conventions.ts), as for MkDocs sources:
+   * for a Docusaurus source whose writers use the conventions but not the components. Off: the tree is taken as written.
+   */
+  conventions?: boolean;
   /** The tree's redirects file (inside root) and this version's key in it (`current` for Latest, else the release). */
   redirects?: { file: string; version: string };
 }
@@ -811,8 +818,10 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
       const front = lifecycle.front;
       if (!partial) noteFrontMatter(report, rel, { problems: lifecycle.problems, yamlErrors: error ? [error] : [] });
       const declared = (data.mdx as { format?: unknown } | undefined)?.format;
-      // A Docusaurus tree is taken as written: its writers place the explicit components (no conventions recognised).
-      const mdx = partial ? text : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${text}`;
+      // A Docusaurus tree is taken as written (its writers place the explicit components), unless it opts in to the
+      // conventions. Page front matter opt-outs (`stepper: false`, …) apply as on converted pages.
+      const written = !partial && src.conventions ? writeComponents(text, { frontMatter: data }).text : text;
+      const mdx = partial ? text : `---\n${yaml.dump(front, { lineWidth: -1 })}---\n${written}`;
       try {
         // A page may declare CommonMark itself (Docusaurus's mdx.format front matter): compile it as it says.
         await compileCheck(mdx, declared === 'md' ? { format: 'md' } : undefined);

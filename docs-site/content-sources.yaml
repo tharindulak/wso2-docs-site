@@ -302,6 +302,7 @@ products:
         sha: 58da5a82a4d1c8eace2aadbafca8d6c2d722de28
         track: main
         docs: versioned_docs/version-v1.0.0
+        conventions: true  # writers use the Prerequisites / Step N conventions, not the components: the build writes them
         sidebar: versioned_sidebars/version-v1.0.0-sidebars.json
         version: v1.0.0
         deployment_options: [Self-hosted]
@@ -331,7 +332,7 @@ products:
         deployment_options: [WSO2 Cloud, Self-hosted]  # confirm
         current_site: https://wso2.com/bijira/docs/
         sparse: [docusaurus]
-        sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+        sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
         track: docusaurus-migration
         docs: docusaurus/platform/docs
         sidebar: docusaurus/platform/sidebars.json
@@ -355,20 +356,20 @@ products:
         versions:
           - version: 1.2.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/api-gateway/docs
             sidebar: docusaurus/api-gateway/sidebars.json
             track: true
             exclude: []
           - version: 1.1.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/api-gateway/versioned_docs/version-1.1.0
             sidebar: docusaurus/api-gateway/versioned_sidebars/version-1.1.0-sidebars.json
             exclude: []
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/api-gateway/versioned_docs/version-1.0.0
             sidebar: docusaurus/api-gateway/versioned_sidebars/version-1.0.0-sidebars.json
             exclude: []
@@ -391,26 +392,26 @@ products:
         versions:
           - version: 2026.09.24
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/ai-gateway/docs
             sidebar: docusaurus/ai-gateway/sidebars.json
             track: true
             exclude: []
           - version: 1.2.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/ai-gateway/versioned_docs/version-1.2.0
             sidebar: docusaurus/ai-gateway/versioned_sidebars/version-1.2.0-sidebars.json
             exclude: []
           - version: 1.1.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/ai-gateway/versioned_docs/version-1.1.0
             sidebar: docusaurus/ai-gateway/versioned_sidebars/version-1.1.0-sidebars.json
             exclude: []
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/ai-gateway/versioned_docs/version-1.0.0
             sidebar: docusaurus/ai-gateway/versioned_sidebars/version-1.0.0-sidebars.json
             exclude: []
@@ -433,7 +434,7 @@ products:
         versions:
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/api-portal/docs
             sidebar: docusaurus/api-portal/sidebars.json
             track: true
@@ -457,7 +458,7 @@ products:
         versions:
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
             docs: docusaurus/ai-workspace/docs
             sidebar: docusaurus/ai-workspace/sidebars.json
             track: true
@@ -561,7 +562,7 @@ products:
         # Bijira (docs-api-platform's Cloud tree) is API Manager's WSO2 Cloud deployment option.
         cloud_companion:
           repo: tharindulak/docs-api-platform
-          sha: a8d2391d901d976ba8b68d30c5037dbcaeb320f9
+          sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
           track: docusaurus-migration
           mkdocs: en/mkdocs.yml
           nav_root: Cloud
@@ -699,6 +700,7 @@ products:
         sha: e2512a02549886d283b52541aa3a8046b24f8980
         track: main
         docs: en/docs
+        conventions: true  # writers use the Prerequisites / Step N conventions, not the components: the build writes them
         sidebar: en/sidebars.js
         deployment_options: [Self-hosted]  # confirm
         current_site: https://healthcare.docs.wso2.com/
