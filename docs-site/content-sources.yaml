@@ -563,6 +563,7 @@ products:
         cloud_companion:
           repo: tharindulak/docs-api-platform
           sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+          edit: { repo: wso2/docs-api-platform, branch: main }  # cloud/ pages are edited upstream, not on the fork
           track: docusaurus-migration
           mkdocs: en/mkdocs.yml
           nav_root: Cloud

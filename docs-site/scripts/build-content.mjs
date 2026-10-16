@@ -49,9 +49,11 @@ const SHIMS = {
 /**
  * Edit links of a source: GitHub's editor on the branch it tracks, for a wso2/ repository (where writers edit); a
  * pinned commit's view when no branch is known. A personal fork gets none: its migrated pages carry their own
- * custom_edit_url to the wso2/ source, and its other pages are generated, not edited.
+ * custom_edit_url to the wso2/ source, and its other pages are generated, not edited. `edit: { repo, branch }` on a
+ * source names where its files are edited when that is not the repository read (a fork of a wso2/ source).
  */
-const editUrlOf = (src, root) => (!src.repo.startsWith('wso2/') ? undefined
+const editUrlOf = (src, root) => (src.edit ? githubEditUrl(src.edit.repo, src.edit.branch, root, 'edit')
+  : !src.repo.startsWith('wso2/') ? undefined
   : src.track ? githubEditUrl(src.repo, src.track, root, 'edit') : githubEditUrl(src.repo, src.sha, root));
 
 /** Lock-file fields of one MkDocs source (a section or its cloud companion) as converter options. */
