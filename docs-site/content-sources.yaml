@@ -42,6 +42,7 @@ products:
         sha: 0420342f8bcd0efb9f458c1317d7c9cad5234368
         track: main
         docs: en/docs
+        conventions: true  # writers use the Prerequisites / Step N conventions, not the components: the build writes them
         sidebar: en/sidebars.ts
         deployment_options: [WSO2 Cloud, Self-hosted]  # confirm with the Integration team
         deployment_overrides:  # WSO2 Integrator's own cloud / self-hosted folders (checked at the pinned commit)

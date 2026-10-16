@@ -806,6 +806,8 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
       let text = body;
       for (const [from, to] of Object.entries(src.shims ?? {})) text = text.replaceAll(`'${from}'`, `'${to}'`).replaceAll(`"${from}"`, `"${to}"`);
       text = text.replace(/(\]\(|src=["'{]?["']?)\/(img|images|assets)\//g, `$1/${out.route}/$2/`);
+      // Root paths in JSX through useBaseUrl (ThemedImage sources): the source site's static root is the section's route here.
+      text = text.replace(/(useBaseUrl\(\s*["'])\/(img|images|assets)\//g, `$1/${out.route}/$2/`);
       text = text.replace(/(\]\((?!https?:)[^)\s]*?)\.mdx(?=[)#])/g, '$1.md'); // pages are written as .md
       text = text.replace(/(from\s+['"]\.{1,2}\/[^'"]*?)\.mdx(['"])/g, '$1.md$2');
       if (src.treeRoot) text = treeRefs(text, rel, docsDir, path.join(src.root, src.treeRoot), out.outDir);

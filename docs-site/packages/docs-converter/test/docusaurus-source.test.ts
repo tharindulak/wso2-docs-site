@@ -116,3 +116,12 @@ test('githubEditUrl links to the editor on a branch, or to a pinned commit\'s vi
   assert.equal(githubEditUrl('wso2/docs-x', 'main', '/r', 'edit')('/r/en/docs/a.md'), 'https://github.com/wso2/docs-x/edit/main/en/docs/a.md');
   assert.equal(githubEditUrl('wso2/docs-x', 'abc123', '/r')('/r/en/docs/a.md'), 'https://github.com/wso2/docs-x/blob/abc123/en/docs/a.md');
 });
+
+// docs-integrator guides: ThemedImage sources written as useBaseUrl('/img/...') pointed at the site root.
+test('static paths given to useBaseUrl move under the section route, like Markdown image paths', async () => {
+  const page = { 'docusaurus/docs/themed.md': "---\ntitle: Themed\n---\n\nimport ThemedImage from '@theme/ThemedImage';\nimport useBaseUrl from '@docusaurus/useBaseUrl';\n\n# Themed\n\n<ThemedImage alt=\"A\" sources={{ light: useBaseUrl('/img/a.png'), dark: useBaseUrl(\"/img/a-dark.png\") }} />\n\n![B](/img/b.png)\n" };
+  const text = (await prepare(migrated(page), 'docusaurus/docs')).read('themed.md');
+  assert.match(text, /useBaseUrl\('\/identity\/img\/a\.png'\)/);
+  assert.match(text, /useBaseUrl\("\/identity\/img\/a-dark\.png"\)/);
+  assert.match(text, /!\[B\]\(\/identity\/img\/b\.png\)/);
+});
