@@ -4,7 +4,7 @@ Parent: [map](../map.md)
 Type: prototype
 Status: open
 Assignee:
-Blocked by: 01, 02, 03
+Blocked by: 01, 02, 03, 09, 10
 
 ## Question
 
