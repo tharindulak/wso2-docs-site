@@ -104,7 +104,7 @@ export default {
   staticDirectories: ['static', ...(snapshot ? [] : [path.join(generated, 'static')]), ...versionStatics, path.resolve(here, '../node_modules/redoc/bundles'),
     ...(!snapshot && fs.existsSync(searchPublic) ? [searchPublic] : [])],
   themes: ['@docusaurus/theme-mermaid'],
-  presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css'] },
+  presets: [['classic', { docs: false, blog: false, theme: { customCss: ['./src/css/oxygen.css', './src/css/site.css', './src/css/new-look.css'] },
     sitemap: { ignorePatterns: [...hiddenRoutes, ...(hidden.has('account') ? ['account'] : [])].flatMap((r) => [`/${r}/`, `/${r}/**`]) } }]],
   plugins: [
     ...docsPlugins,
@@ -118,6 +118,22 @@ export default {
     colorMode: { respectPrefersColorScheme: true },
     navbar: { title: 'WSO2 Docs', items: [] },
     docs: { sidebar: { hideable: true } },
-    footer: { style: 'dark', copyright: `Copyright © ${new Date().getFullYear()} WSO2 LLC.` },
+    // Footer columns from the redesign's footer decision: hub sections and CONTEXT.md product names. Status, Support,
+    // Get started and the legal links wait for their hub pages and confirmed addresses; the console button is held.
+    footer: {
+      style: 'dark',
+      links: [
+        { title: ' ', items: [{ html: '<div class="footer-about"><span class="footer-about__logo">W</span><p>Documentation for WSO2 products: Agent Manager, Identity Platform, API Platform, Integration Platform and API Analytics Platform.</p></div>' }] },
+        { title: 'Docs', items: [{ label: 'Overview', to: '/' }, { label: 'Search', to: '/search/' }] },
+        { title: 'Products', items: [
+          { label: 'Agent Manager', to: '/agent-manager/' },
+          { label: 'Identity Platform', to: '/identity/' },
+          { label: 'API Platform', to: '/api-platform/' },
+          { label: 'Integration Platform', to: '/integration/' },
+          { label: 'API Analytics Platform', href: 'https://www.moesif.com/docs/' },
+        ] },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} WSO2 LLC. All rights reserved.`,
+    },
   },
 };

@@ -1,19 +1,4 @@
-.navbar { border-bottom: 3px solid var(--oxygen-accent); }
 .navbar__inner { gap: 0.75rem; }
-
-/* Product bar: product name, section tabs, version selector (HashiCorp model). */
-.product-bar {
-  position: sticky; top: var(--ifm-navbar-height); z-index: calc(var(--ifm-z-index-fixed) - 1);
-  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-  padding: 0.35rem var(--ifm-navbar-padding-horizontal);
-  background: var(--ifm-background-color); border-bottom: 1px solid var(--ifm-toc-border-color);
-}
-.product-bar__name { font-weight: 700; }
-.product-bar__tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; }
-.product-bar__tab { padding: 0.3rem 0.65rem; border-radius: 8px; color: var(--ifm-font-color-base); }
-.product-bar__tab:hover { background: var(--ifm-hover-overlay); text-decoration: none; }
-.product-bar__tab--active { color: var(--ifm-color-primary); font-weight: 600; box-shadow: inset 0 -2px 0 var(--ifm-color-primary); }
-.product-bar__spacer { flex: 1; }
 
 /* Deployment options (GitLab style). */
 .deployment-box { border: 1px solid var(--ifm-toc-border-color); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1.25rem; }
