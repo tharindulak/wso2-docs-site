@@ -28,6 +28,8 @@ The docs site restyled to the approved design direction ("WSO2 Cloud Docs - Vers
 
 - [What the design file specifies](issues/02-design-file-inventory.md): layout and sizes mostly fit Oxygen; colours, font, heading weight and shadows do not, so the build keeps the layout and takes Oxygen's look; admonition style to pick in the doc page prototype.
 - [Oxygen UI 0.16 in the docs site](issues/01-oxygen-ui-016-in-docusaurus.md): still not tree-shakeable (+422 KB gzip per page for any browser import), no `theme.css`; works as a build-time tokens source at 0 KB per page; no WSO2 blue theme (PaleIndigo closest); security flags on URL themes and bundled agent instructions.
+- [How the site imports Oxygen UI](issues/09-oxygen-import-mode.md): at build time, pinned 0.16.0, generated CSS variables, plain MUI islands (0 KB per page); deliberate upgrades with a reviewed diff; React pin accepted.
+- [Which Oxygen theme styles the docs site](issues/10-oxygen-theme-choice.md): WSO2Theme orange, links #B25000 for contrast; corner radii from the mockups, not the theme's 20.
 
 ## Not yet specified
 
