@@ -108,32 +108,32 @@ products:
         versions:
           - version: 4.6.0
             ref: docusaurus-migration
-            sha: 4065af76bf9e93db41430904a28ae0517f2a1fed
+            sha: 568da19a9b75223666e81ebccdffd3d0c85205b8
             docs: docusaurus/docs
             sidebar: docusaurus/sidebars.json
             track: true
             exclude: []
           - version: 4.5.0
             ref: docusaurus-migration
-            sha: 4065af76bf9e93db41430904a28ae0517f2a1fed
+            sha: 568da19a9b75223666e81ebccdffd3d0c85205b8
             docs: docusaurus/versioned_docs/version-4.5.0
             sidebar: docusaurus/versioned_sidebars/version-4.5.0-sidebars.json
             exclude: []
           - version: 4.4.0
             ref: docusaurus-migration
-            sha: 4065af76bf9e93db41430904a28ae0517f2a1fed
+            sha: 568da19a9b75223666e81ebccdffd3d0c85205b8
             docs: docusaurus/versioned_docs/version-4.4.0
             sidebar: docusaurus/versioned_sidebars/version-4.4.0-sidebars.json
             exclude: []
           - version: 4.3.0
             ref: docusaurus-migration
-            sha: 4065af76bf9e93db41430904a28ae0517f2a1fed
+            sha: 568da19a9b75223666e81ebccdffd3d0c85205b8
             docs: docusaurus/versioned_docs/version-4.3.0
             sidebar: docusaurus/versioned_sidebars/version-4.3.0-sidebars.json
             exclude: []
           - version: 4.2.0
             ref: docusaurus-migration
-            sha: 4065af76bf9e93db41430904a28ae0517f2a1fed
+            sha: 568da19a9b75223666e81ebccdffd3d0c85205b8
             docs: docusaurus/versioned_docs/version-4.2.0
             sidebar: docusaurus/versioned_sidebars/version-4.2.0-sidebars.json
             exclude: []
@@ -152,7 +152,7 @@ products:
         tree_static: docusaurus/static
         tree_redirects: docusaurus/redirects.json
         strict: true
-        sha: 6bd14af570b94f970f9d1be979405d67b1851c96
+        sha: 2a10e0777393ec5e59edf179fb837193f2c3f1cd
         track: docusaurus-migration
         docs: docusaurus/docs
         sidebar: docusaurus/sidebars.json
@@ -224,56 +224,56 @@ products:
         versions:
           - version: 7.3.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/docs
             sidebar: docusaurus/sidebars.json
             track: true
             exclude: []
           - version: 7.2.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-7.2.0
             sidebar: docusaurus/versioned_sidebars/version-7.2.0-sidebars.json
             exclude: []
           - version: 7.1.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-7.1.0
             sidebar: docusaurus/versioned_sidebars/version-7.1.0-sidebars.json
             exclude: []
           - version: 7.0.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-7.0.0
             sidebar: docusaurus/versioned_sidebars/version-7.0.0-sidebars.json
             exclude: []
           - version: 6.1.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-6.1.0
             sidebar: docusaurus/versioned_sidebars/version-6.1.0-sidebars.json
             exclude: []
           - version: 6.0.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-6.0.0
             sidebar: docusaurus/versioned_sidebars/version-6.0.0-sidebars.json
             exclude: []
           - version: 5.11.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-5.11.0
             sidebar: docusaurus/versioned_sidebars/version-5.11.0-sidebars.json
             exclude: []
           - version: 5.10.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-5.10.0
             sidebar: docusaurus/versioned_sidebars/version-5.10.0-sidebars.json
             exclude: []
           - version: 5.9.0
             ref: docusaurus-migration
-            sha: 9be358faba62172de2af2576963a80b8237b77fb
+            sha: 4ed0341372e76e839d5df82f906f3663559a0691
             docs: docusaurus/versioned_docs/version-5.9.0
             sidebar: docusaurus/versioned_sidebars/version-5.9.0-sidebars.json
             exclude: []
@@ -333,7 +333,7 @@ products:
         deployment_options: [WSO2 Cloud, Self-hosted]  # confirm
         current_site: https://wso2.com/bijira/docs/
         sparse: [docusaurus]
-        sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+        sha: 071890896f3c402e03265f79dc32d06c009ec289
         track: docusaurus-migration
         docs: docusaurus/platform/docs
         sidebar: docusaurus/platform/sidebars.json
@@ -357,20 +357,20 @@ products:
         versions:
           - version: 1.2.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/api-gateway/docs
             sidebar: docusaurus/api-gateway/sidebars.json
             track: true
             exclude: []
           - version: 1.1.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/api-gateway/versioned_docs/version-1.1.0
             sidebar: docusaurus/api-gateway/versioned_sidebars/version-1.1.0-sidebars.json
             exclude: []
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/api-gateway/versioned_docs/version-1.0.0
             sidebar: docusaurus/api-gateway/versioned_sidebars/version-1.0.0-sidebars.json
             exclude: []
@@ -393,26 +393,26 @@ products:
         versions:
           - version: 2026.09.24
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/ai-gateway/docs
             sidebar: docusaurus/ai-gateway/sidebars.json
             track: true
             exclude: []
           - version: 1.2.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/ai-gateway/versioned_docs/version-1.2.0
             sidebar: docusaurus/ai-gateway/versioned_sidebars/version-1.2.0-sidebars.json
             exclude: []
           - version: 1.1.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/ai-gateway/versioned_docs/version-1.1.0
             sidebar: docusaurus/ai-gateway/versioned_sidebars/version-1.1.0-sidebars.json
             exclude: []
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/ai-gateway/versioned_docs/version-1.0.0
             sidebar: docusaurus/ai-gateway/versioned_sidebars/version-1.0.0-sidebars.json
             exclude: []
@@ -435,7 +435,7 @@ products:
         versions:
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/api-portal/docs
             sidebar: docusaurus/api-portal/sidebars.json
             track: true
@@ -459,7 +459,7 @@ products:
         versions:
           - version: 1.0.0
             ref: docusaurus-migration
-            sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+            sha: 071890896f3c402e03265f79dc32d06c009ec289
             docs: docusaurus/ai-workspace/docs
             sidebar: docusaurus/ai-workspace/sidebars.json
             track: true
@@ -485,68 +485,68 @@ products:
         versions:
           - version: 4.7.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/docs
             sidebar: docusaurus/sidebars.json
             track: true
             exclude: []
           - version: 4.6.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.6.0
             sidebar: docusaurus/versioned_sidebars/version-4.6.0-sidebars.json
             exclude: []
           - version: 4.5.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.5.0
             sidebar: docusaurus/versioned_sidebars/version-4.5.0-sidebars.json
             exclude: []
           - version: 4.4.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.4.0
             sidebar: docusaurus/versioned_sidebars/version-4.4.0-sidebars.json
             exclude: []
           - version: 4.3.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.3.0
             sidebar: docusaurus/versioned_sidebars/version-4.3.0-sidebars.json
             exclude: []
           - version: 4.2.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.2.0
             sidebar: docusaurus/versioned_sidebars/version-4.2.0-sidebars.json
             exclude: []
           - version: 4.1.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.1.0
             sidebar: docusaurus/versioned_sidebars/version-4.1.0-sidebars.json
             exclude: []
           - version: 4.0.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-4.0.0
             sidebar: docusaurus/versioned_sidebars/version-4.0.0-sidebars.json
             exclude: []
           - version: 3.2.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-3.2.0
             sidebar: docusaurus/versioned_sidebars/version-3.2.0-sidebars.json
             exclude: []
           - version: 3.1.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-3.1.0
             sidebar: docusaurus/versioned_sidebars/version-3.1.0-sidebars.json
             exclude: []
           - version: 3.0.0
             ref: docusaurus-migration
-            sha: 4837c0322cbe98d128e4b6ae707692edbc7ecd8e
+            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
             docs: docusaurus/versioned_docs/version-3.0.0
             sidebar: docusaurus/versioned_sidebars/version-3.0.0-sidebars.json
             exclude: []
@@ -563,7 +563,7 @@ products:
         # Bijira (docs-api-platform's Cloud tree) is API Manager's WSO2 Cloud deployment option.
         cloud_companion:
           repo: tharindulak/docs-api-platform
-          sha: fcca7c31dc49f15f0229a3c6ff13b0ee3453ad21
+          sha: 071890896f3c402e03265f79dc32d06c009ec289
           edit: { repo: wso2/docs-api-platform, branch: main }  # cloud/ pages are edited upstream, not on the fork
           track: docusaurus-migration
           mkdocs: en/mkdocs.yml
@@ -660,7 +660,7 @@ products:
         tree_static: docusaurus/developers/static
         tree_redirects: docusaurus/developers/redirects.json
         strict: true
-        sha: 17b95a1469f4fb485fba2dc7d1b55a3da733ef73
+        sha: 0a65143677c6493497e001d6653066acacfc4fab
         track: docusaurus-migration
         docs: docusaurus/developers/docs
         sidebar: docusaurus/developers/sidebars.json
