@@ -38,6 +38,8 @@
     "redoc": "2.5.4"
   },
   "devDependencies": {
+    "@wso2/oxygen-ui": "0.16.0",
+    "@wso2/oxygen-ui-icons-react": "0.16.0",
     "htmlparser2": "8.0.2",
     "js-yaml": "4.3.2"
   },

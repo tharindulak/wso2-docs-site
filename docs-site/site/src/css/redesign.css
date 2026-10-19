@@ -1,0 +1,116 @@
+/* PROTOTYPE (Docs site redesign, "Doc page in the new look"): the approved mockups' layout on Oxygen UI values.
+   Shared rules are the layout both variants keep; html[data-variant] picks how far the styling leans:
+     a  Mockup on Oxygen   the mockup's bold headings, shadowed cards, tinted active row, accent-bar admonitions
+     b  Oxygen-native      Oxygen's type scale and weights, flat bordered cards, neutral selected row, filled alerts
+   Colours always come from Oxygen (oxygen-tokens.css); radii from the mockups. Values: research 02 (design file). */
+
+:root {
+  --ifm-navbar-height: 64px;
+  --doc-sidebar-width: 300px !important;
+  --rd-sidebar-bg: color-mix(in srgb, var(--oxygen-palette-text-primary) 2.5%, var(--ifm-background-color));
+  --rd-muted: var(--oxygen-palette-text-secondary);
+  --rd-line: var(--oxygen-palette-divider);
+  --rd-tint: color-mix(in srgb, var(--oxygen-palette-primary-main) 12%, transparent);
+}
+[data-theme='dark'] { --rd-sidebar-bg: color-mix(in srgb, #fff 3%, var(--ifm-background-color)); }
+
+/* Header: 64px, translucent white with blur, 1px divider (no orange rule). */
+.navbar { height: var(--ifm-navbar-height); padding: 0 28px; border-bottom: 1px solid var(--rd-line);
+  background: color-mix(in srgb, var(--ifm-background-color) 92%, transparent); backdrop-filter: blur(8px); box-shadow: none; }
+.navbar__brand::before { content: 'W'; display: grid; place-items: center; width: 28px; height: 28px; margin-right: 10px;
+  border-radius: 6px; background: var(--oxygen-palette-text-primary); color: var(--ifm-background-color); font-weight: 700; font-size: 15px; }
+.navbar__title { font-weight: 700; font-size: 17px; }
+.search-button { min-width: 0; width: 460px; height: 36px; border-radius: 8px; background: var(--rd-sidebar-bg); }
+
+/* Product bar under the header (structure kept from the docs-site map): quieter, same divider. */
+.product-bar { border-bottom: 1px solid var(--rd-line); padding: 0.4rem 28px; }
+
+/* Sidebar: 300px, light grey panel. */
+.theme-doc-sidebar-container { background: var(--rd-sidebar-bg); border-right: 1px solid var(--rd-line) !important; }
+.theme-doc-sidebar-menu { padding: 16px 14px; }
+.menu__link { font-size: 14px; padding: 6px 10px; border-radius: 8px; color: var(--ifm-font-color-base); }
+.menu__list .menu__list { margin-left: 12px; padding-left: 8px; border-left: 1px solid var(--rd-line); }
+.menu__list .menu__list .menu__link { font-size: 13.5px; color: var(--rd-muted); }
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link { font-weight: 600; }
+
+/* Content column against the sidebar, not centred: up to 840px of text, 56px side padding; "On this page" 252px. */
+[class*='docMainContainer'] > .container { max-width: none; margin: 0; padding: 32px 56px 48px; }
+[class*='docMainContainer'] > .container > .row { flex-wrap: nowrap; gap: 48px; }
+[class*='docItemCol'] { max-width: 840px !important; flex: 1 1 auto; padding: 0; }
+[class*='docMainContainer'] .col--3 { flex: 0 0 252px; max-width: 252px; padding: 0; }
+.markdown { font-size: 15px; line-height: 1.7; }
+.markdown > p:first-of-type { font-size: 16px; line-height: 1.7; }
+
+/* Breadcrumbs: 13px, slash separators, home icon kept. */
+.breadcrumbs__link { font-size: 13px; padding: 0 2px; background: none !important; color: var(--rd-muted); }
+.breadcrumbs__item:not(:last-child)::after { content: '/'; margin: 0 6px; background: none; color: var(--rd-muted); opacity: 0.6; }
+.breadcrumbs__item--active .breadcrumbs__link { color: var(--ifm-font-color-base); }
+
+/* On this page: uppercase label, 2px left line, primary mark on the active item. */
+.theme-doc-toc-desktop::before { content: 'On this page'; display: block; margin: 4px 0 10px 14px; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--rd-muted); }
+.table-of-contents { border-left: 2px solid var(--rd-line) !important; padding: 0; font-size: 13.5px; }
+.table-of-contents__link { display: block; padding: 3px 0 3px 12px; margin-left: -2px; border-left: 2px solid transparent; color: var(--rd-muted); }
+.table-of-contents__link--active { border-left-color: var(--ifm-color-primary); color: var(--ifm-color-primary); font-weight: 500; }
+
+/* Footer of the page: last updated left, edit right; previous/next as bordered boxes. */
+.theme-doc-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--rd-line); font-size: 13px; color: var(--rd-muted); }
+.theme-edit-this-page { font-weight: 500; }
+.pagination-nav { margin-top: 24px; gap: 12px; }
+.pagination-nav__link { border: 1px solid var(--rd-line); border-radius: 8px; padding: 14px 18px; }
+.pagination-nav__sublabel { font-size: 13px; color: var(--rd-muted); }
+.pagination-nav__label { font-size: 17px; color: var(--ifm-color-primary); }
+
+/* Site footer: Oxygen's dark background (the mockup's navy gives way to Oxygen), about column 2fr then link columns. */
+.footer--dark { --ifm-footer-background-color: #0f172a; padding: 48px 0 24px; }
+.footer .container { max-width: 1180px; }
+.footer__links { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+.footer__links > .footer__col { max-width: none; padding: 0; }
+.footer__title { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+.footer__link-item { font-size: 14px; line-height: 2; }
+.footer-about { display: flex; flex-direction: column; gap: 14px; max-width: 320px; }
+.footer-about p { margin: 0; font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, 0.7); }
+.footer-about__logo { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 6px; background: #fff; color: #0f172a; font-weight: 700; }
+.footer__copyright { margin-top: 32px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.12); font-size: 13px; color: rgba(255, 255, 255, 0.6); }
+
+/* ---------- Variant A: mockup on Oxygen ---------- */
+:where(html:not([data-variant='b'])) .markdown h1 { font-size: 36px; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+:where(html:not([data-variant='b'])) .markdown h2 { font-size: 24px; font-weight: 700; margin-top: 2.2rem; }
+:where(html:not([data-variant='b'])) .markdown h3 { font-size: 18px; font-weight: 600; }
+:where(html:not([data-variant='b'])) .menu__link--active:not(.menu__link--sublist) { background: var(--rd-tint); color: var(--ifm-color-primary); font-weight: 600; }
+:where(html:not([data-variant='b'])) .menu__link--sublist.menu__link--active { color: var(--ifm-color-primary); }
+:where(html:not([data-variant='b'])) .link-card, :where(html:not([data-variant='b'])) .home-card { box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.08); border-radius: 12px; }
+:where(html:not([data-variant='b'])) .theme-admonition { border: 0; border-left: 3px solid var(--rd-alert); border-radius: 8px; padding: 16px 18px;
+  background: color-mix(in srgb, var(--rd-alert) 8%, var(--ifm-background-color)); box-shadow: none; }
+:where(html:not([data-variant='b'])) .prerequisites { border-left-width: 3px; border-radius: 8px; }
+
+/* ---------- Variant B: Oxygen-native ---------- */
+:where(html[data-variant='b']) .markdown { font-size: var(--oxygen-typography-body1-fontSize); line-height: var(--oxygen-typography-body1-lineHeight); }
+:where(html[data-variant='b']) .markdown h1 { font-size: var(--oxygen-typography-h1-fontSize); font-weight: var(--oxygen-typography-h1-fontWeight); line-height: var(--oxygen-typography-h1-lineHeight); }
+:where(html[data-variant='b']) .markdown h2 { font-size: var(--oxygen-typography-h2-fontSize); font-weight: var(--oxygen-typography-h2-fontWeight); line-height: var(--oxygen-typography-h2-lineHeight); margin-top: 2rem; }
+:where(html[data-variant='b']) .markdown h3 { font-size: var(--oxygen-typography-h3-fontSize); font-weight: var(--oxygen-typography-h3-fontWeight); }
+:where(html[data-variant='b']) .menu__link--active:not(.menu__link--sublist) { background: var(--oxygen-palette-action-selected); color: var(--ifm-font-color-base); font-weight: 500; }
+:where(html[data-variant='b']) .menu__link--sublist.menu__link--active { color: var(--ifm-font-color-base); }
+:where(html[data-variant='b']) .link-card, :where(html[data-variant='b']) .home-card { box-shadow: none; border: 1px solid var(--rd-line); border-radius: 12px; }
+:where(html[data-variant='b']) .link-card:hover { box-shadow: none; }
+:where(html[data-variant='b']) .theme-admonition { border: 0; border-radius: 12px; padding: 18px 20px; box-shadow: none;
+  background: color-mix(in srgb, var(--rd-alert) 12%, var(--ifm-background-color)); }
+:where(html[data-variant='b']) .prerequisites { border: 1px solid var(--rd-line); border-radius: 12px; background: var(--rd-sidebar-bg); }
+
+/* Admonition colours from Oxygen's palette (both variants). */
+.theme-admonition { --rd-alert: var(--oxygen-palette-info-main); }
+.alert--success { --rd-alert: var(--oxygen-palette-success-main); }
+.alert--warning { --rd-alert: var(--oxygen-palette-warning-main); }
+.alert--danger { --rd-alert: var(--oxygen-palette-error-main); }
+.alert--secondary { --rd-alert: var(--oxygen-palette-text-secondary); }
+
+@media (max-width: 996px) {
+  .navbar { padding: 0 12px; }
+  .search-button { width: auto; }
+  [class*='docMainContainer'] > .container { padding: 20px 16px 32px; }
+  [class*='docMainContainer'] > .container > .row { gap: 0; }
+  .footer__links { grid-template-columns: 1fr; }
+}
+
+/* The box titles keep their own spacing (beats the variant heading margins above). */
+.markdown .prerequisites__head > * { margin: 0; }
