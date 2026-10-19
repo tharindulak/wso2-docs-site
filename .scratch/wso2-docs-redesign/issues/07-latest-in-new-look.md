@@ -3,7 +3,7 @@
 Parent: [map](../map.md)
 Type: task
 Status: open
-Assignee:
+Assignee: tharinduj
 Blocked by: 05, 06
 
 ## Question
