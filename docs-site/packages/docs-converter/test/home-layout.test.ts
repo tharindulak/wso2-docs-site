@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { isHomeLayout, nameIconLinks } from '../src/home-layout.js';
+import { dropScriptedModals, isHomeLayout, nameIconLinks } from '../src/home-layout.js';
 import { convertRendered } from '../src/page.js';
 
 // As wso2/docs-apk en/docs/index.md (Kubernetes Gateway 1.0.0).
@@ -102,4 +102,48 @@ test('hide_title is set only for a synthesized title on a custom home layout', a
   assert.doesNotMatch(fenced, /hide_title/, 'a layout shown in code is not the page layout');
   const ownTitle = (await convertRendered(`---\ntitle: Docs\n---\n${APK_HOME}`, opts)).mdx;
   assert.doesNotMatch(ownTitle, /hide_title/, 'a page that names itself keeps its title as written');
+});
+
+test('a synthesized title is hidden when the page has its own HTML <h1>, as MkDocs Material does', async () => {
+  const opts = { deploymentOptions: ['Self-hosted' as const], fallbackTitle: 'Home' };
+  const own = (await convertRendered('<div>\n    <header>\n        <h1>Welcome to the docs</h1>\n    </header>\n</div>\n', opts)).mdx;
+  assert.match(own, /^title: Home$/m);
+  assert.match(own, /^hide_title: true$/m);
+  const shown = (await convertRendered('Write `<h1>` tags.\n\n```html\n<h1>x</h1>\n```\n', opts)).mdx;
+  assert.doesNotMatch(shown, /hide_title/, 'an <h1> in code is not the page heading');
+});
+
+test('Material Icons ligature names are not shown as text; an icon-only link still gets a name', () => {
+  assert.equal(nameIconLinks('<div class="card-icon"><i class="material-icons md-36">timer</i></div>'), '<div class="card-icon"><i class="material-icons md-36"></i></div>');
+  assert.equal(nameIconLinks('<a href="/x/" title="Settings"><span class="material-symbols-outlined">settings</span></a>'), '<a href="/x/" title="Settings">Settings</a>');
+  assert.equal(nameIconLinks('Use `<i class="material-icons">timer</i>`.'), 'Use `<i class="material-icons">timer</i>`.', 'code stays');
+});
+
+test('a script-driven image lightbox keeps its image and loses the dialog the theme hid', () => {
+  // As wso2/docs-updates en/docs/updates/overview.md.
+  const page = [
+    'Intro.',
+    '',
+    '<a class="open-modal" data-open="modal1">',
+    '    <img src="../../assets/img/updates/update-model.png">',
+    '</a>',
+    '',
+    '<div class="modal" id="modal1" data-animation="">',
+    '    <div class="modal-dialog">',
+    '        <header class="modal-header">',
+    '            WSO2 Update Model <button class="close-modal" aria-label="close modal" data-close>\u2715</button>',
+    '        </header>',
+    '        <section class="modal-content">',
+    '             <img src="../../assets/img/updates/update-model.png">',
+    '        </section>',
+    '    </div>',
+    '</div>',
+    '',
+    'After.',
+  ].join('\n');
+  assert.equal(dropScriptedModals(page), 'Intro.\n\n<img src="../../assets/img/updates/update-model.png">\n\n\n\nAfter.');
+  const other = '<div class="modal-note">Kept</div>\n<a class="open-modal" href="/x/">Kept link</a>';
+  assert.equal(dropScriptedModals(other), other, 'only a dialog with a close control, and only a trigger without an href');
+  const code = '```html\n<div class="modal"><button data-close>x</button></div>\n```';
+  assert.equal(dropScriptedModals(code), code, 'code stays');
 });

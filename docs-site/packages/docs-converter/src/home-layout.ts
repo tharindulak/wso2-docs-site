@@ -1,6 +1,7 @@
 // Custom MkDocs home layouts (`<div class="homePage">`) and links that only the former site's theme made visible:
 // an anchor holding just a Font Awesome icon, or an empty anchor its CSS filled with a background image.
 // The docs site loads neither, so such a link would be invisible and nameless.
+import { closingTag } from './html-policy.js';
 import { outsideCode } from './syntax.js';
 
 /**
@@ -63,6 +64,16 @@ function htmlBlockEnd(lines: string[], start: number, tag: string): number {
   return i;
 }
 
+/** A page body with its own `<h1>` element outside code (MkDocs Material then shows no title of its own). */
+export function hasHtmlH1(text: string): boolean {
+  let found = false;
+  outsideAllCode(text, (prose) => {
+    found ||= /<h1[\s>]/i.test(prose);
+    return prose;
+  });
+  return found;
+}
+
 /** A page body built on a custom MkDocs home layout (WSO2 themes: `<div class="homePage">`), outside code. */
 export function isHomeLayout(text: string): boolean {
   let found = false;
@@ -78,7 +89,10 @@ const VOID = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input'
 const ATTRS = String.raw`((?:[^>"']|"[^"]*"|'[^']*')*)`;
 // An icon element: an empty <i>, or an empty <span> whose class names an icon. It shows only through an icon font
 // or stylesheet the docs site does not load.
-const ICON = new RegExp(String.raw`<i\b${ATTRS}>\s*</i\s*>|<span\b[^>]*\bclass(?:Name)?=(?:["'][^"']*\b(?:fa[a-z-]*|icon[a-z-]*)\b[^"']*["']|(?:fa|icon)[\w-]*)[^>]*>\s*</span\s*>`, 'gi');
+const ICON = new RegExp(String.raw`<i\b${ATTRS}>\s*</i\s*>|<span\b[^>]*\bclass(?:Name)?=(?:["'][^"']*\b(?:fa[a-z-]*|icon[a-z-]*|material-[a-z-]*)\b[^"']*["']|(?:fa|icon|material-)[\w-]*)[^>]*>\s*</span\s*>`, 'gi');
+// A Material Icons ligature (`<i class="material-icons">timer</i>`): the font draws the name as an icon, and without
+// it the name shows as a word. It keeps the empty element, an icon to the rules below.
+const LIGATURE = /(<(i|span)\b[^>]*\bclass(?:Name)?=["'][^"']*\bmaterial-(?:icons|symbols)[\w-]*\b[^"']*["'][^>]*>)\s*[a-z0-9_]+\s*(<\/\2\s*>)/gi;
 const ANCHOR = new RegExp(String.raw`<a\b${ATTRS}>([\s\S]*?)</a\s*>`, 'gi');
 
 /** An attribute's value, quoted or not (JSX expression values are not read). */
@@ -126,7 +140,7 @@ function hrefName(href: string): string | undefined {
  * keeps the anchor as written. Same-page anchors (`href="#..."`), anchors without an href, and code are left alone.
  */
 export function nameIconLinks(text: string): string {
-  return outsideAllCode(text, (prose) => prose.replace(ANCHOR, (whole, attrs: string, inner: string, offset: number) => {
+  return outsideAllCode(text, (prose) => prose.replace(LIGATURE, '$1$3').replace(ANCHOR, (whole, attrs: string, inner: string, offset: number) => {
     if (/<a\b/i.test(inner)) return whole;
     const href = attr(attrs, 'href');
     if (!href) return whole;
@@ -142,4 +156,35 @@ export function nameIconLinks(text: string): string {
     const target = attrs.match(/(?:^|\s)(?:id|name)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>`{]+)/i)?.[0];
     return target ? `<a ${target.trim()}></a>` : '';
   }));
+}
+
+const OPEN_TAG = (tag: string): RegExp => new RegExp(String.raw`<${tag}\b${ATTRS}>`, 'gi');
+const classes = (attrs: string): string[] => (attr(attrs, 'class') ?? attr(attrs, 'className') ?? '').split(/\s+/);
+
+/**
+ * Image lightboxes the former theme drove with a script (docs-updates): a trigger `<a class="open-modal" data-open>`
+ * around an image, and a `<div class="modal">` dialog with a close control that its CSS hid until opened. Without
+ * that script and CSS the dialog would show inline, close button and all; it repeats the image, so it is dropped and
+ * the trigger keeps only its image. Code is left alone.
+ */
+export function dropScriptedModals(text: string): string {
+  return outsideAllCode(text, (prose) => {
+    let s = prose;
+    for (const [tag, wanted, replace] of [
+      ['div', (a: string, inner: string) => classes(a).includes('modal') && /\bdata-close\b|\bclose-modal\b/.test(inner), () => ''],
+      ['a', (a: string) => classes(a).includes('open-modal') && attr(a, 'href') === undefined, (inner: string) => inner.trim()],
+    ] as const) {
+      const open = OPEN_TAG(tag);
+      for (let m = open.exec(s); m; m = open.exec(s)) {
+        const end = closingTag(s, tag, open.lastIndex);
+        if (!end) continue;
+        const inner = s.slice(open.lastIndex, end.start);
+        if (!wanted(m[1]!, inner)) continue;
+        const kept = replace(inner);
+        s = s.slice(0, m.index) + kept + s.slice(end.end);
+        open.lastIndex = m.index + kept.length;
+      }
+    }
+    return s;
+  });
 }
