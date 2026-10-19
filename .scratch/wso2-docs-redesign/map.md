@@ -26,6 +26,8 @@ The docs site restyled to the approved design direction ("WSO2 Cloud Docs - Vers
 
 <!-- one line per closed ticket -->
 
+- [What the design file specifies](issues/02-design-file-inventory.md): layout and sizes mostly fit Oxygen; colours, font, heading weight and shadows do not, so the build keeps the layout and takes Oxygen's look; admonition style to pick in the doc page prototype.
+
 ## Not yet specified
 
 - Older versions in the new look: rebuilding all 33 snapshots after Latest ships, and whether the build pipeline needs changes to make that routine.
