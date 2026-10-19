@@ -47,3 +47,4 @@ The docs site restyled to the approved design direction ("WSO2 Cloud Docs - Vers
 
 - Structural parts of the design, ruled out by the look-only scope (user decision 2026-10-19): a separate cloud docs site with a "Platform" sidebar group; Labs and Solutions tiers; separate self-hosted product sites with a cloud banner (mockup 3); Cloud/Releases switches (2A, 2B, 2C).
 - Renaming products to the design's names: a decision for product marketing, not this map.
+- Converting pre-site releases documented only on WSO2's former Confluence docs (Identity Platform 5.8.0 and earlier, API Manager 2.6.0 and earlier, Micro Integrator 7.1.0 and 7.0.0, Financial Services 2.0.0 and earlier): not converted and not listed in the version picker (user decision 2026-10-19).
