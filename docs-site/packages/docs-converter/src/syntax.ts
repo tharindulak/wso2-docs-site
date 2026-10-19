@@ -11,13 +11,22 @@ const ADMONITION: Record<string, string> = {
 /** Tags MDX may keep as JSX. Anything else that looks like a tag is escaped as text. */
 export const JSX_TAGS: readonly string[] = [
   'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect', 'ApiReference',
-  'a', 'abbr', 'b', 'blockquote', 'br', 'button', 'caption', 'code', 'col', 'colgroup', 'dd', 'del', 'details', 'div',
-  'dl', 'dt', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img', 'input',
-  'ins', 'kbd', 'label', 'li', 'mark', 'ol', 'p', 'pre', 's', 'small', 'source', 'span', 'strong', 'sub', 'summary',
-  'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u', 'ul', 'video',
+  'a', 'abbr', 'b', 'blockquote', 'br', 'button', 'caption', 'center', 'code', 'col', 'colgroup', 'dd', 'del', 'details',
+  'div', 'dl', 'dt', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img',
+  'input', 'ins', 'kbd', 'label', 'li', 'mark', 'ol', 'p', 'pre', 's', 'small', 'source', 'span', 'strong', 'sub',
+  'summary', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u', 'ul', 'video', 'wbr',
 ];
-const VOID = ['br', 'hr', 'img', 'input', 'col', 'source'];
-const NOT_JSX = new RegExp(`<(?!/?(?:${JSX_TAGS.join('|')})(?=[\\s/>]))`, 'g');
+/**
+ * HTML sectioning tags, kept as JSX only where they lay out a block: at the start of a line, or closing one opened at
+ * the start of the same line. Inline, the same names are XML in prose (Synapse's `<header name="…"/>`) and stay text.
+ */
+export const BLOCK_JSX_TAGS: readonly string[] = ['article', 'aside', 'footer', 'header', 'main', 'nav', 'section'];
+const VOID = ['br', 'hr', 'img', 'input', 'col', 'source', 'wbr'];
+const BLOCK_JSX = BLOCK_JSX_TAGS.map((t) => `(?<=^[ \\t]*<)/?${t}(?=[\\s/>])|(?<=^[ \\t]*<${t}[\\s>][^\\n]*<)/${t}\\s*>`).join('|');
+const NOT_JSX = new RegExp(`<(?!/?(?:${JSX_TAGS.join('|')})(?=[\\s/>])|${BLOCK_JSX})`, 'gm');
+// <html>, <head> and <body> wrapping part of a page (Python-Markdown passes them through; browsers drop them): on a
+// line of their own or next to another tag. In a sentence the name stays text.
+const WRAPPER = /^[ \t]*<\/?(?:html|head|body)\b[^>]*>[ \t]*(?:\n|$)|<\/?(?:html|head|body)\b[^>]*>(?=[ \t]*<)|(?<=>[ \t]*)<\/?(?:html|head|body)\b[^>]*>/gim;
 
 export interface SyntaxStats { admonitions: number; collapsibles: number; tabs: number; attrLists: number }
 
@@ -45,6 +54,9 @@ function blocks(md: string, stats: SyntaxStats): string {
       continue;
     }
     if (fence) { out.push(line); continue; }
+    // Python-Markdown reads `###Title###` as a heading; CommonMark needs a space after the hashes and drops the closing ones.
+    const heading = line.match(/^( {0,3})(#{1,6})([^#\s].*?)[ \t]*#*[ \t]*$/);
+    if (heading) { out.push(`${heading[1]}${heading[2]} ${heading[3]}`); continue; }
 
     let m = line.match(/^(\s*)(!!!|\?\?\?\+?)\s+([\w-]+)(?:\s+"([^"]*)")?\s*$/);
     if (m) {
@@ -245,6 +257,7 @@ function inline(text: string, stats: SyntaxStats): string {
     s = s.replace(/(^|[^\w(\["'=/])(https?):\/\/([^\s<>()[\]"'`]+)/g,
       (m, pre: string, scheme: string, rest: string) => (validUrl(`${scheme}://${rest.replace(/[.,;:!?]+$/, '')}`) ? m : `${pre}${scheme}:&#47;/${rest}`));
     s = s.replace(/<!--[\s\S]*?-->/g, '');
+    s = s.replace(WRAPPER, '');
     s = s.replace(/^[ \t]*\[\/\/\]:?[ \t]*#?[ \t]*\(?STEPS_(START|END)\)?[ \t]*$/gm, ''); // quick-start template step markers
     s = s.replace(/\smarkdown(="1"|=1|="block"|="span")?(?=[\s>])/g, '');
     s = s.replace(new RegExp(`<(${VOID.join('|')})\\b([^>]*?)\\s*/?>`, 'gi'), (_, tag: string, attrs: string) => `<${tag.toLowerCase()}${attrs} />`);

@@ -85,3 +85,16 @@ test('removeForbiddenElements removes every event handler on a tag', () => {
   assert.equal(text, '<img src="a.png" alt="a">');
   assert.deepEqual(removed, ['onerror', 'onload']);
 });
+
+test('removeForbiddenElements turns a navigation-only onclick on a div or span into a link to the same page', () => {
+  const card = '<div class="card" onclick="location.href=\'get-started/quick-start/\';">\n  <div class="card-icon"><div>x</div></div>\n  <p class="title">Quick Start</p>\n</div>\n<div>after</div>';
+  const { text, removed } = removeForbiddenElements(card);
+  assert.equal(text, '<a href="get-started/quick-start/" class="card">\n  <div class="card-icon"><div>x</div></div>\n  <p class="title">Quick Start</p>\n</a>\n<div>after</div>');
+  assert.deepEqual(removed, ['onclick']);
+  assert.deepEqual(applyHtmlPolicy(text).violations, []);
+  const kept = (h: string) => removeForbiddenElements(h).text;
+  assert.equal(kept('<div onclick="window.open(\'https://x.com\', \'_blank\')">x</div>'), '<div>x</div>', 'other handlers are only removed');
+  assert.equal(kept('<div onclick="location.href=\'a/\'"><a href="b/">b</a></div>'), '<div><a href="b/">b</a></div>', 'links never nest');
+  assert.equal(kept('<td onclick="location.href=\'a/\'">x</td>'), '<td>x</td>', 'table structure stays');
+  assert.match(applyHtmlPolicy(kept('<div onclick="location.href=\'javascript:alert(1)\'">x</div>')).violations[0]!, /javascript/i, 'the URL is still checked');
+});

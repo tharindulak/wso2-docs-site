@@ -103,9 +103,48 @@ export function unexpandedMarkers(text: string): string[] {
  */
 export function removeForbiddenElements(text: string): { text: string; removed: string[] } {
   const removed: string[] = [];
-  const cleaned = outsideCode(text, (t) => t
+  const cleaned = outsideCode(text, (t) => navigationLinks(removed, t
     .replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, (_, tag: string) => (removed.push(tag.toLowerCase()), ''))
-    .replace(/<link\b[^>]*>/gi, () => (removed.push('link'), ''))
+    .replace(/<link\b[^>]*>/gi, () => (removed.push('link'), '')))
     .replace(/<[a-zA-Z][\w-]*\b[^>]*>/g, (tag) => tag.replace(/\s(on[a-z]+)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, (_, attr: string) => (removed.push(attr.toLowerCase()), ''))));
   return { text: cleaned, removed };
+}
+
+// An onclick that only opens a page (home page cards: `<div class="card" onclick="location.href='guides/x/';">`).
+const NAV_ONCLICK = /\sonclick\s*=\s*(["'])\s*(?:(?:window|document)\.)?location(?:\.href)?\s*=\s*(?!\1)(["'])([^"'<>]+)\2\s*;?\s*\1/i;
+
+/**
+ * A div or span whose onclick only opens a page becomes a link to that page (the handler goes with it), so the card
+ * still leads somewhere once handlers are removed. Not when it holds a link (links never nest). The URL is then
+ * checked by the policy like any href.
+ */
+function navigationLinks(removed: string[], text: string): string {
+  let out = '';
+  let from = 0;
+  const open = /<(div|span)\b((?:[^>"']|"[^"]*"|'[^']*')*)>/gi;
+  for (let m = open.exec(text); m; m = open.exec(text)) {
+    const nav = m[2]!.match(NAV_ONCLICK);
+    if (!nav) continue;
+    const end = closingTag(text, m[1]!, open.lastIndex);
+    if (!end || /<a\b/i.test(text.slice(open.lastIndex, end.start))) continue;
+    const attrs = m[2]!.replace(nav[0], '');
+    removed.push('onclick');
+    out += `${text.slice(from, m.index)}<a href="${nav[3]}"${attrs}>${text.slice(open.lastIndex, end.start)}</a>`;
+    from = end.end;
+    open.lastIndex = end.end;
+  }
+  return out + text.slice(from);
+}
+
+/** Where the element of `tag` opened just before `at` closes, counting nested elements of the same name. */
+export function closingTag(text: string, tag: string, at: number): { start: number; end: number } | undefined {
+  const re = new RegExp(`<(/?)${tag}\\b[^>]*?(/?)>`, 'gi');
+  re.lastIndex = at;
+  let depth = 1;
+  for (let m = re.exec(text); m; m = re.exec(text)) {
+    if (m[2]) continue;
+    depth += m[1] ? -1 : 1;
+    if (!depth) return { start: m.index, end: re.lastIndex };
+  }
+  return undefined;
 }
