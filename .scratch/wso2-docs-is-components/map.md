@@ -12,6 +12,7 @@ Six content components work on Identity Platform in the `docs-is-migrate` previe
 - This map builds as well as plans (user decision 2026-10-13): decision tickets (prototype, grilling) are HITL; build tickets are AFK and test-first.
 - Follows on from [Site features and content components](../wso2-docs-elements/map.md) (planning only), which keeps the rest of the candidates. Works on branch `docs-is-migrate`, worktree `.claude/worktrees/docs-is-migrate`.
 - Standing decisions for the lifecycle badge and deprecation notices (2026-10-14): unlike the first four, they cannot be recognised from existing writing, so writers mark status in the MkDocs source now (a front-matter field, plus a small section convention), carried through to the site; data is seeded from what exists (3 "(Deprecated)" API titles, 3 `:::warning[Deprecated …]` admonitions) and completed from the Identity Platform team's list.
+- Superseded 2026-10-14: writers of migrated content will place components explicitly and be held to them; that work, and "recognise conventions in the site build" being replaced by one rendering path, is on [Writers author with WSO2 content components](../wso2-docs-authoring-components/map.md).
 - Standing decisions from charting (2026-10-13):
   - Components are built generically and verified on Identity Platform only.
   - Convention-recognised components are remark plugins in the site build (as `remark-steps`), not converter output. The source stays plain Markdown, so Markdown output and llms.txt stay clean, and writers keep the conventions after cutover.
@@ -55,9 +56,10 @@ Six content components work on Identity Platform in the `docs-is-migrate` previe
 - Three tab blocks render as raw HTML instead of Docusaurus tabs (lowercase `tabitem`): a converter bug, likely for the [migration map](../wso2-docs-is-migration/map.md); needs a look at the source markup first.
 - Writing front-matter descriptions for the ~97 pages linked from closing sections, if first-line excerpts read badly in [How closing sections look](issues/03-closing-sections-look.md): content work for the Identity Platform writers; who asks them and how.
 - Required roles: free prose today, not detectable; may become part of the prerequisites block once its look is settled.
-- Explicit MDX tags for convention-recognised components, for writers after cutover who want a component without the convention.
 
 ## Out of scope
+
+- [Contributor guide entries for the six components](issues/08-contributor-guide-entries.md): moved to [Contributor guide: the components chapter](../wso2-docs-authoring-components/issues/09-contributor-guide-components.md), which teaches the explicit forms.
 
 - PRs to `wso2/docs-is`, or cutover itself: owned by the [migration map](../wso2-docs-is-migration/map.md).
 - Verifying the components on products other than Identity Platform (they get them where detection applies, unchecked).

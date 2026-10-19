@@ -42,3 +42,7 @@ Decided with the user, 2026-10-06.
 - Older self-hosted versions need no merge: render each version alone.
 - Open follow-up: [Build-time conversion contract](13-conversion-contract.md).
 - Prototype captured on branch `prototype/content-format` (`prototypes/content-format/`).
+
+## Superseded for Identity Platform (2026-10-13)
+
+The user decided a one-time migration of docs-is to Docusaurus. Build-time conversion still holds for every other product. See [Migrate Identity Platform docs (docs-is) to Docusaurus](../../wso2-docs-is-migration/map.md).

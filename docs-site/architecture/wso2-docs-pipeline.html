@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WSO2 Docs Pipeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one wide diagram that reads left to right (sources → pipeline → site), then the steps and file map. */
+:root {
+  --bg: #f7f6f3;
+  --fg: #1d1f24;
+  --muted: #5d636e;
+  --panel: #ffffff;
+  --line: #c9ccd2;
+  --group: #eceae4;
+  --accent: #a84b00;
+  --warn: #b3261e;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171b; --fg: #e8e9ec; --muted: #a0a6b1; --panel: #1f2228; --line: #3d424c; --group: #1a1d22;
+    --accent: #ff9a4d; --warn: #ff8a80; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171b; --fg: #e8e9ec; --muted: #a0a6b1; --panel: #1f2228; --line: #3d424c; --group: #1a1d22;
+  --accent: #ff9a4d; --warn: #ff8a80; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 32px 56px; display: grid; gap: 28px; }
+h1 { font-size: 1.9rem; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-size: 1.15rem; font-weight: 600; margin: 0 0 10px; }
+.lede { color: var(--muted); max-width: 70ch; margin: 6px 0 0; }
+code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
+figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+.scroll { overflow-x: auto; }
+svg.diagram { display: block; width: 100%; min-width: 900px; height: auto; color: var(--fg); font-family: var(--font-body); }
+figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 10px; max-width: 90ch; }
+
+/* SVG roles, all from tokens so both themes read. */
+.grp { fill: var(--group); stroke: var(--line); stroke-dasharray: 5 4; }
+.bx { fill: var(--panel); stroke: var(--line); }
+.bx-key { fill: var(--panel); stroke: var(--accent); stroke-width: 1.6; }
+.bx-warn { fill: var(--panel); stroke: var(--warn); stroke-dasharray: 4 3; }
+.t-grp { fill: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+.t1 { fill: var(--fg); font-size: 12.5px; font-weight: 600; }
+.t2 { fill: var(--muted); font-size: 11px; }
+.tm { fill: var(--muted); font-size: 11px; font-family: var(--font-mono); }
+.lab { fill: var(--muted); font-size: 10.5px; font-style: italic; }
+.lab-warn { fill: var(--warn); font-size: 10.5px; font-style: italic; }
+.lab-key { fill: var(--accent); font-size: 10.5px; font-style: italic; }
+.arr { stroke: currentColor; stroke-width: 1.3; fill: none; }
+.arr-key { stroke: var(--accent); stroke-width: 1.5; fill: none; }
+.arr-warn { stroke: var(--warn); stroke-width: 1.3; fill: none; stroke-dasharray: 4 3; }
+.head { fill: currentColor; }
+.head-key { fill: var(--accent); }
+.head-warn { fill: var(--warn); }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
+.cols > * { min-width: 0; }
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+ol.steps li::marker { color: var(--accent); font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.gaps { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.gaps li::marker { color: var(--warn); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>WSO2 Docs Pipeline</h1>
+    <p class="lede">How the new docs site turns each product team's own repository into one Docusaurus site with one navigation, where cloud and self-hosted content live together on the same pages.</p>
+  </header>
+
+  <figure>
+    <div class="scroll">
+      <svg class="diagram" viewBox="0 0 1240 720" role="img" aria-label="Product teams' repositories are fetched at pinned commits, converted by build-content (MkDocs lane or Docusaurus lane), assembled into generated docs and sidebars, and built into one Docusaurus site. Failing pages redirect to current sites. Bots keep the pins current through pull requests.">
+        <defs>
+          <marker id="h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="hk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-key" d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="hw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-warn" d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+
+        <!-- Column A: product teams' repositories -->
+        <rect class="grp" x="20" y="40" width="230" height="470" rx="10"/>
+        <text class="t-grp" x="34" y="64">Product teams' repos</text>
+
+        <rect class="bx" x="34" y="80" width="202" height="214" rx="7"/>
+        <text class="t1" x="48" y="102">MkDocs sources (12)</text>
+        <text class="tm" x="48" y="124">docs-is</text>
+        <text class="tm" x="48" y="142">docs-apim · docs-api-platform</text>
+        <text class="tm" x="48" y="160">docs-mi · docs-bi · docs-si</text>
+        <text class="tm" x="48" y="178">docs-devant</text>
+        <text class="tm" x="48" y="196">docs-apk · docs-choreo-dev</text>
+        <text class="tm" x="48" y="214">docs-open-banking</text>
+        <text class="tm" x="48" y="232">docs-updates · docs-security</text>
+        <text class="t2" x="48" y="258">Jinja, includes, admonitions,</text>
+        <text class="t2" x="48" y="274">loose HTML, mkdocs.yml nav</text>
+
+        <rect class="bx" x="34" y="308" width="202" height="104" rx="7"/>
+        <text class="t1" x="48" y="330">Docusaurus sources (3)</text>
+        <text class="tm" x="48" y="352">docs-agent-platform</text>
+        <text class="tm" x="48" y="370">docs-integrator</text>
+        <text class="tm" x="48" y="388">open-healthcare-docs</text>
+
+        <rect class="bx" x="34" y="426" width="202" height="68" rx="7"/>
+        <text class="t1" x="48" y="448">Product repos</text>
+        <text class="t2" x="48" y="466">GA releases, e.g. product-is</text>
+        <text class="t2" x="48" y="482">(drive version promotion)</text>
+
+        <!-- docs-site repository -->
+        <rect class="grp" x="275" y="40" width="950" height="470" rx="10"/>
+        <text class="t-grp" x="290" y="64">docs-site (this repo)</text>
+
+        <!-- Column B: lock, fetch, cache -->
+        <rect class="bx-key" x="330" y="80" width="180" height="84" rx="7"/>
+        <text class="t1" x="344" y="102">content-sources.yaml</text>
+        <text class="t2" x="344" y="122">one pinned commit per source</text>
+        <text class="t2" x="344" y="138">tracked branch, labels,</text>
+        <text class="t2" x="344" y="154">exclude list (only shrinks)</text>
+
+        <rect class="bx" x="330" y="204" width="180" height="62" rx="7"/>
+        <text class="t1" x="344" y="226">fetch-sources</text>
+        <text class="t2" x="344" y="244">sparse, shallow, exact commit,</text>
+        <text class="t2" x="344" y="258">no shell, one run at a time</text>
+
+        <rect class="bx" x="330" y="306" width="180" height="48" rx="7"/>
+        <text class="t1" x="344" y="328">.cache/sources</text>
+        <text class="t2" x="344" y="344">checkouts with images</text>
+
+        <!-- A → fetch -->
+        <polyline class="arr" points="250,235 330,235" marker-end="url(#h)"/>
+        <text class="lab" x="258" y="227">git fetch</text>
+        <!-- lock → fetch → cache -->
+        <polyline class="arr" points="420,164 420,204" marker-end="url(#h)"/>
+        <text class="lab" x="428" y="188">which commits</text>
+        <polyline class="arr" points="420,266 420,306" marker-end="url(#h)"/>
+
+        <!-- Column C: build-content -->
+        <rect class="bx" x="545" y="80" width="380" height="414" rx="9"/>
+        <text class="t1" x="560" y="102">build-content</text>
+        <text class="t2" x="660" y="102">converter/ · unit-tested</text>
+
+        <text class="t-grp" x="560" y="128">MkDocs lane</text>
+        <rect class="bx" x="560" y="138" width="110" height="52" rx="6"/>
+        <text class="t1" x="570" y="158">Render</text>
+        <text class="t2" x="570" y="176">Jinja, includes</text>
+        <rect class="bx-key" x="680" y="138" width="110" height="52" rx="6"/>
+        <text class="t1" x="690" y="158">Merge</text>
+        <text class="t2" x="690" y="176">cloud + self-hosted</text>
+        <rect class="bx" x="800" y="138" width="110" height="52" rx="6"/>
+        <text class="t1" x="810" y="158">HTML allow-list</text>
+        <text class="t2" x="810" y="176">no scripts, handlers</text>
+        <polyline class="arr" points="670,164 680,164" marker-end="url(#h)"/>
+        <polyline class="arr" points="790,164 800,164" marker-end="url(#h)"/>
+
+        <rect class="bx" x="560" y="204" width="110" height="52" rx="6"/>
+        <text class="t1" x="570" y="224">MDX syntax</text>
+        <text class="t2" x="570" y="242">tabs, notes, HTML</text>
+        <rect class="bx" x="680" y="204" width="110" height="52" rx="6"/>
+        <text class="t1" x="690" y="224">Compile check</text>
+        <text class="t2" x="690" y="242">MDX 3, strict</text>
+        <rect class="bx" x="800" y="204" width="110" height="52" rx="6"/>
+        <text class="t1" x="810" y="224">Sidebar</text>
+        <text class="t2" x="810" y="242">from mkdocs nav:</text>
+        <polyline class="arr" points="855,190 855,197 615,197 615,204" marker-end="url(#h)"/>
+        <polyline class="arr" points="670,230 680,230" marker-end="url(#h)"/>
+        <polyline class="arr" points="790,230 800,230" marker-end="url(#h)"/>
+
+        <text class="t-grp" x="560" y="290">Docusaurus lane</text>
+        <rect class="bx" x="560" y="300" width="110" height="58" rx="6"/>
+        <text class="t1" x="570" y="320">Copy page</text>
+        <text class="t2" x="570" y="336">+ labels, edit link,</text>
+        <text class="t2" x="570" y="350">link/image fixes</text>
+        <rect class="bx" x="680" y="300" width="110" height="58" rx="6"/>
+        <text class="t1" x="690" y="320">Evaluate</text>
+        <text class="t2" x="690" y="336">sidebars.ts / .js</text>
+        <text class="t2" x="690" y="350">(runs their code)</text>
+        <rect class="bx-key" x="800" y="300" width="110" height="58" rx="6"/>
+        <text class="t1" x="810" y="320">Place cloud</text>
+        <text class="t2" x="810" y="336">Devant into Integrator,</text>
+        <text class="t2" x="810" y="350">Bijira into API Mgr</text>
+        <polyline class="arr" points="670,329 680,329" marker-end="url(#h)"/>
+        <polyline class="arr" points="790,329 800,329" marker-end="url(#h)"/>
+
+        <rect class="bx-warn" x="560" y="400" width="350" height="76" rx="6"/>
+        <text class="t1" x="574" y="422">Page fails conversion or compile</text>
+        <text class="t2" x="574" y="440">On the exclude list: written as a redirect page.</text>
+        <text class="t2" x="574" y="456">Not on it: the build stops (new failure).</text>
+        <polyline class="arr-warn" points="735,256 735,400" marker-end="url(#hw)"/>
+        <text class="lab-warn" x="742" y="388">fails</text>
+
+        <!-- cache → build -->
+        <polyline class="arr" points="510,330 545,330" marker-end="url(#h)"/>
+
+        <!-- Column D: generated, site, static -->
+        <rect class="bx" x="960" y="80" width="245" height="100" rx="7"/>
+        <text class="t1" x="974" y="102">generated/</text>
+        <text class="t2" x="974" y="122">docs per section (.md, MDX)</text>
+        <text class="t2" x="974" y="138">sidebars (JSON) · images</text>
+        <text class="t2" x="974" y="154">manifest.json (products,</text>
+        <text class="t2" x="974" y="170">sections, versions)</text>
+        <polyline class="arr" points="925,130 960,130" marker-end="url(#h)"/>
+        <text class="lab" x="928" y="122">writes</text>
+
+        <rect class="bx" x="960" y="222" width="245" height="112" rx="7"/>
+        <text class="t1" x="974" y="244">Docusaurus site</text>
+        <text class="t2" x="974" y="264">one docs plugin per section</text>
+        <text class="t2" x="974" y="280">Oxygen look (Infima + MUI)</text>
+        <text class="t2" x="974" y="296">Products menu · product bar</text>
+        <text class="t2" x="974" y="312">version selector</text>
+        <text class="t2" x="974" y="328">"Deployment options" box</text>
+        <polyline class="arr" points="1082,180 1082,222" marker-end="url(#h)"/>
+        <text class="lab" x="1090" y="205">configures</text>
+
+        <rect class="bx" x="960" y="376" width="245" height="56" rx="7"/>
+        <text class="t1" x="974" y="398">Static site</text>
+        <text class="t2" x="974" y="416">npm run build · plain HTML</text>
+        <polyline class="arr" points="1082,334 1082,376" marker-end="url(#h)"/>
+        <text class="lab" x="1090" y="359">builds</text>
+
+        <!-- Outside: readers and current sites -->
+        <rect class="bx" x="1005" y="540" width="200" height="44" rx="7"/>
+        <text class="t1" x="1019" y="567">Readers</text>
+        <polyline class="arr" points="1105,432 1105,540" marker-end="url(#h)"/>
+        <text class="lab" x="1113" y="490">serves</text>
+
+        <rect class="bx-warn" x="745" y="540" width="215" height="44" rx="7"/>
+        <text class="t1" x="759" y="560">Current product sites</text>
+        <text class="t2" x="759" y="576">is.docs.wso2.com, wso2.com/…</text>
+        <polyline class="arr-warn" points="960,404 852,404 852,540" marker-end="url(#hw)"/>
+        <text class="lab-warn" x="860" y="470">excluded pages</text>
+        <text class="lab-warn" x="860" y="484">redirect here</text>
+
+        <!-- Automation band -->
+        <text class="t-grp" x="20" y="612">Keeps it current (GitHub Actions)</text>
+        <rect class="bx" x="20" y="624" width="230" height="78" rx="7"/>
+        <text class="t1" x="34" y="646">Content check Action</text>
+        <text class="t2" x="34" y="664">runs in each team's repo on PRs,</text>
+        <text class="t2" x="34" y="680">same converter as the site</text>
+        <polyline class="arr" points="135,624 135,510" marker-end="url(#h)"/>
+        <text class="lab" x="143" y="556">checks before merge</text>
+
+        <rect class="bx" x="330" y="624" width="195" height="78" rx="7"/>
+        <text class="t1" x="344" y="646">Bump bot · hourly</text>
+        <text class="t2" x="344" y="664">branch head moved? → PR</text>
+        <text class="t2" x="344" y="680">auto-merges on green CI</text>
+
+        <rect class="bx" x="550" y="624" width="210" height="78" rx="7"/>
+        <text class="t1" x="564" y="646">Version promotion · daily</text>
+        <text class="t2" x="564" y="664">new GA release → PR moving</text>
+        <text class="t2" x="564" y="680">Latest; needs docs-team approval</text>
+
+        <polyline class="arr-key" points="427,624 427,612 655,612 655,624"/>
+        <polyline class="arr-key" points="537,612 537,122 510,122" marker-end="url(#hk)"/>
+        <text class="lab-key" transform="translate(531 470) rotate(-90)">PRs edit the pins</text>
+
+        <rect class="bx" x="785" y="624" width="210" height="78" rx="7"/>
+        <text class="t1" x="799" y="646">CI · every PR</text>
+        <text class="t2" x="799" y="664">tests + fetch + full build;</text>
+        <text class="t2" x="799" y="680">the final gate for bump PRs</text>
+      </svg>
+    </div>
+    <figcaption>Content flows left to right: team repositories are fetched at the commits pinned in <span class="mono">content-sources.yaml</span>, converted by one of two lanes, assembled into <span class="mono">generated/</span>, and built into one static site. Nothing reaches the site except through a reviewed or CI-checked change to the pins. Orange marks the parts specific to this design: the lock file, merging cloud with self-hosted, and placing cloud doc sets inside their products.</figcaption>
+  </figure>
+
+  <div class="cols">
+    <section>
+      <h2>What happens on a build</h2>
+      <ol class="steps">
+        <li><strong>Pin.</strong> <span class="mono">content-sources.yaml</span> names every section's repo, the commit it is pinned to, the branch the bot follows, its default deployment options and its exclude list.</li>
+        <li><strong>Fetch.</strong> Only the docs folders of exactly those commits are downloaded into <span class="mono">.cache/sources</span>.</li>
+        <li><strong>Convert.</strong> MkDocs pages are rendered, merged (Identity's Asgardeo and Identity Server pages become one page with labelled differences), checked against the HTML allow-list, rewritten to MDX and compiled. Docusaurus pages are copied with labels and link fixes.</li>
+        <li><strong>Assemble.</strong> Sidebars come from each repo's own navigation. Cloud doc sets are placed inside their product: Devant inside WSO2 Integrator, Bijira inside API Manager.</li>
+        <li><strong>Build.</strong> Docusaurus reads <span class="mono">generated/manifest.json</span>, creates one docs section per product section and renders the Oxygen look, Products menu, product bar and deployment box.</li>
+        <li><strong>Stay current.</strong> The bump bot moves pins hourly through auto-merged PRs; promotions to a new release need approval; teams run the same check on their own PRs.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>Where it lives</h2>
+      <table>
+        <thead><tr><th>Piece</th><th>File</th></tr></thead>
+        <tbody>
+          <tr><td>Lock file</td><td class="mono">docs-site/content-sources.yaml</td></tr>
+          <tr><td>Fetch</td><td class="mono">scripts/fetch-sources.mjs</td></tr>
+          <tr><td>Content build</td><td class="mono">scripts/build-content.mjs</td></tr>
+          <tr><td>Converter</td><td class="mono">converter/*.js (+ test/)</td></tr>
+          <tr><td>Site</td><td class="mono">site/ (config, theme, components)</td></tr>
+          <tr><td>Bump and promotion</td><td class="mono">scripts/bump-sources.mjs</td></tr>
+          <tr><td>Team-side check</td><td class="mono">scripts/check-source.mjs, check-action/</td></tr>
+          <tr><td>Workflows</td><td class="mono">.github/workflows/docs-site-*.yml</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <section>
+    <h2>Known gaps in this picture</h2>
+    <ul class="gaps">
+      <li>The Docusaurus lane skips the HTML allow-list, and evaluating <span class="mono">sidebars.ts</span> runs the content repo's code at build time. Both need a security review before bumps auto-merge.</li>
+      <li>Custom MkDocs page templates (quick-start, complete-guide, SDK) and the 245 API reference pages have no layout in the site yet.</li>
+      <li>Search is a placeholder until the Algolia DocSearch legal review is done.</li>
+      <li>The workflows have not run yet: this repository has no GitHub remote.</li>
+    </ul>
+  </section>
+</div>
+
+</html>
