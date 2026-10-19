@@ -79,7 +79,6 @@
   background: color-mix(in srgb, var(--rd-alert) 8%, var(--ifm-background-color)); box-shadow: none; }
 .prerequisites { border-left-width: 3px; border-radius: 8px; }
 
-  background: color-mix(in srgb, var(--rd-alert) 12%, var(--ifm-background-color)); }
 
 /* Admonition colours from Oxygen's palette. */
 .theme-admonition { --rd-alert: var(--oxygen-palette-info-main); }
