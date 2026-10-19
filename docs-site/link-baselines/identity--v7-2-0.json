@@ -1,27 +1,11 @@
 [
  {
-  "page": "identity/7.2.0/apis/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/"
- },
- {
-  "page": "identity/7.2.0/apis/organization-apis/authentication/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/"
- },
- {
   "page": "identity/7.2.0/apis/organization-apis/index.html",
   "link": "/identity/7.2.0/apis/organization-apis/org-application-mgt/"
  },
  {
   "page": "identity/7.2.0/apis/organization-apis/org-role-v3-mgt/index.html",
   "link": "../../../apis/organization-apis/restapis/role-v3-management.yaml"
- },
- {
-  "page": "identity/7.2.0/apis/scim2-patch-operations/index.html",
-  "link": "/identity/7.2.0/apis/roles-v2-rest-api/#tag/Roles-Endpoint/operation/patchRole"
- },
- {
-  "page": "identity/7.2.0/apis/scim2/scim2-patch-operations/index.html",
-  "link": "/identity/7.2.0/apis/roles-v2-rest-api/#tag/Roles-Endpoint/operation/patchRole"
  },
  {
   "page": "identity/7.2.0/complete-guides/angular/next-steps/index.html",
@@ -56,18 +40,6 @@
   "link": "/identity/7.2.0/guides/connectors/sift/set-up/"
  },
  {
-  "page": "identity/7.2.0/deploy/backup-and-recovery-recommendations/index.html",
-  "link": "/identity/7.2.0/deploy/environment-compatibility/#tested-dbmss"
- },
- {
-  "page": "identity/7.2.0/deploy/change-the-hostname/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/configure-keystores-in-wso2-products/"
- },
- {
-  "page": "identity/7.2.0/deploy/change-the-hostname/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/create-new-keystores/#step-2-import-certificates-to-the-keystore"
- },
- {
   "page": "identity/7.2.0/deploy/compliance/index.html",
   "link": "/identity/7.2.0/deploy/compliance/eidas/"
  },
@@ -76,76 +48,8 @@
   "link": "/identity/7.2.0/guides/tenants/configure-the-tenant-loading-policy/"
  },
  {
-  "page": "identity/7.2.0/deploy/configure/user-stores/secure-userstore-using-pbkdf2/index.html",
-  "link": "/identity/7.2.0/guides/user-self-service/customer-self-service-portal/"
- },
- {
-  "page": "identity/7.2.0/deploy/deployment-guide/index.html",
-  "link": "/identity/7.2.0/deploy/environment-compatibility/#tested-dbmss"
- },
- {
-  "page": "identity/7.2.0/deploy/deployment-guide/index.html",
-  "link": "/identity/7.2.0/deploy/environment-compatibility/#tested-ldaps"
- },
- {
-  "page": "identity/7.2.0/deploy/deployment-guide/index.html",
-  "link": "/identity/7.2.0/deploy/environment-compatibility/#tested-operating-systems-and-jdks"
- },
- {
-  "page": "identity/7.2.0/deploy/deployment-guide/index.html",
-  "link": "/identity/7.2.0/deploy/environment-compatibility/#tested-web-browsers"
- },
- {
-  "page": "identity/7.2.0/deploy/get-started/install/index.html",
-  "link": "/identity/7.2.0/deploy/environment-compatibility"
- },
- {
-  "page": "identity/7.2.0/deploy/monitor/jmx-based-monitoring/index.html",
-  "link": "/identity/7.2.0/guides/identity-lifecycles/manage-roles-overview/"
- },
- {
-  "page": "identity/7.2.0/deploy/security/enable-java-security-manager/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/#about-keystores-and-truststores"
- },
- {
-  "page": "identity/7.2.0/deploy/security/keystores/create-new-keystores/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
- },
- {
-  "page": "identity/7.2.0/deploy/security/keystores/create-new-keystores/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/#recommendations-for-setting-up-keystores"
- },
- {
   "page": "identity/7.2.0/deploy/security/symmetric-encryption/index.html",
   "link": "/identity/7.2.0/deploy/security/symmetric-encryption/use-symmetric-encryption/"
- },
- {
-  "page": "identity/7.2.0/deploy/set-up-separate-databases-for-clustering/index.html",
-  "link": "/identity/7.2.0/deploy/work-with-databases/"
- },
- {
-  "page": "identity/7.2.0/get-started/about-this-release/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/"
- },
- {
-  "page": "identity/7.2.0/get-started/about-this-release/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#:~:text=Attribute%20Data%20Types."
- },
- {
-  "page": "identity/7.2.0/guides/account-configurations/user-onboarding/self-registration/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/"
- },
- {
-  "page": "identity/7.2.0/guides/analytics/elk-analytics/accessing-the-analytics-dashboard/index.html",
-  "link": "/identity/7.2.0/guides/analytics/analyzing-active-sessions/"
- },
- {
-  "page": "identity/7.2.0/guides/analytics/elk-analytics/accessing-the-analytics-dashboard/index.html",
-  "link": "/identity/7.2.0/guides/analytics/analyzing-login-attempts/"
- },
- {
-  "page": "identity/7.2.0/guides/applications/register-machine-to-machine-app/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/"
  },
  {
   "page": "identity/7.2.0/guides/authentication/mfa/add-x509-login/index.html",
@@ -168,42 +72,6 @@
   "link": "/identity/7.2.0/guides/organization-management/shared-user-impersonation/"
  },
  {
-  "page": "identity/7.2.0/guides/authorization/user-impersonation/via-console/index.html",
-  "link": "/identity/7.2.0/guides/organization-management/invite-parent-organization-users/"
- },
- {
-  "page": "identity/7.2.0/guides/branding/customize-email-templates/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/branding/customize-sms-templates/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/flows/build-a-flow/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#configure-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/index.html",
-  "link": "/identity/7.2.0/guides/analytics/"
- },
- {
-  "page": "identity/7.2.0/guides/organization-management/api-authorization-overview/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/"
- },
- {
-  "page": "identity/7.2.0/guides/organization-management/api-authorization-overview/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/#associate-roles-to-the-application"
- },
- {
-  "page": "identity/7.2.0/guides/organization-management/api-authorization-overview/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/#authorize-the-api-resources-for-an-app"
- },
- {
-  "page": "identity/7.2.0/guides/organization-management/api-authorization-overview/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/#register-an-api-resource"
- },
- {
   "page": "identity/7.2.0/guides/organization-management/manage-b2b-administration/index.html",
   "link": "/identity/7.2.0/apis/organization-apis/org-application-management/"
  },
@@ -212,108 +80,12 @@
   "link": "/identity/7.2.0/apis/organization-apis/org-idp/"
  },
  {
-  "page": "identity/7.2.0/guides/organization-management/share-user-profiles/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#configure-attributes"
- },
- {
   "page": "identity/7.2.0/guides/service-extensions/pre-flow-extensions/setting-up-actions/index.html",
   "link": "/identity/7.2.0/guides/service-extensions/pre-flow-extensions/pre-issue-id-token-action/#conditional-invocation-of-pre-issue-id-token-action"
  },
  {
-  "page": "identity/7.2.0/guides/user-self-service/self-register/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/user-self-service/update-profile-info/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/user-self-service/user-password-recovery/index.html",
-  "link": "/identity/7.2.0/guides/user-self-service/customer-self-service-portal/"
- },
- {
-  "page": "identity/7.2.0/guides/user-self-service/user-username-recovery/index.html",
-  "link": "/identity/7.2.0/guides/user-self-service/customer-self-service-portal/"
- },
- {
-  "page": "identity/7.2.0/guides/users/attributes/email-verification-on-update/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#assign-multiple-email-addresses-and-mobile-numbers-to-a-user"
- },
- {
-  "page": "identity/7.2.0/guides/users/attributes/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/"
- },
- {
-  "page": "identity/7.2.0/guides/users/attributes/manage-scopes/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/"
- },
- {
-  "page": "identity/7.2.0/guides/users/attributes/mobile-verification-on-update/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#assign-multiple-email-addresses-and-mobile-numbers-to-a-user"
- },
- {
-  "page": "identity/7.2.0/guides/users/manage-roles/index.html",
-  "link": "/identity/7.2.0/guides/api-authorization/"
- },
- {
-  "page": "identity/7.2.0/guides/users/manage-users/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/"
- },
- {
-  "page": "identity/7.2.0/guides/users/onboard-users/index.html",
-  "link": "/identity/7.2.0/guides/user-self-service/customer-self-service-portal/"
- },
- {
-  "page": "identity/7.2.0/guides/users/onboard-users/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#configure-attributes"
- },
- {
   "page": "identity/7.2.0/guides/users/onboard-users/index.html",
   "link": "/identity/7.2.0/guides/users/user-stores/configure-a-user-store/"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/configure-active-directory-user-stores-for-scim2/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-only-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-only-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#assign-multiple-email-addresses-and-mobile-numbers-to-a-user"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-only-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-write-active-directory-user-store/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#assign-multiple-email-addresses-and-mobile-numbers-to-a-user"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-write-active-directory-user-store/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-write-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#assign-multiple-email-addresses-and-mobile-numbers-to-a-user"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/primary-user-store/configure-a-read-write-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/guides/users/attributes/manage-attributes/#update-attributes"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/user-store-properties/properties-read-only-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/user-store-properties/properties-read-write-active-directory-user-store/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption"
- },
- {
-  "page": "identity/7.2.0/guides/users/user-stores/user-store-properties/properties-read-write-ldap-user-store/index.html",
-  "link": "/identity/7.2.0/deploy/security/asymmetric-encryption/use-asymmetric-encryption/"
  },
  {
   "page": "identity/7.2.0/page-not-found/index.html",

@@ -580,6 +580,14 @@
   "link": "/api-platform/api-manager/4.6.0/reference/customize-product/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso.md/#sharing-the-user-store"
  },
  {
+  "page": "api-platform/api-manager/4.6.0/api-security/runtime/opa-validation/overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/design/security/opa/configure-opa-policy.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-security/runtime/opa-validation/overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/design/security/opa/opa-policy-selection.png"
+ },
+ {
   "page": "api-platform/api-manager/4.6.0/apiops/cli/advanced-topics/configuring-different-endpoint-security-types/index.html",
   "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/api-controller/advanced-topics/configuring-environment-specific-parameters/"
  },
@@ -1036,14 +1044,6 @@
   "link": "/api-platform/api-manager/4.6.0/install-and-setup/setup/deployment-overview/"
  },
  {
-  "page": "api-platform/api-manager/4.6.0/includes/design/invoke-prerelease-api/index.html",
-  "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/deploy-on-gateway/deploy-api/deploy-an-api/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/includes/design/invoke-prerelease-api/index.html",
-  "link": "/api-platform/api-manager/4.6.0/design/create-api/create-rest-api/test-a-rest-api/"
- },
- {
   "page": "api-platform/api-manager/4.6.0/install-and-setup/install-and-setup-overview/index.html",
   "link": "/api-platform/api-manager/4.6.0/administer/managing-users-and-roles/managing-user-stores/configure-primary-user-store/configuring-a-jdbc-user-store"
  },
@@ -1166,14 +1166,6 @@
  {
   "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-as-a-windows-service/index.html",
   "link": "/api-platform/api-manager/4.6.0/install-and-setup/ProductCompatibility/"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-runtime/index.html",
-  "link": "/api-platform/api-manager/4.6.0/assets/attachments/thumbnails/26838941/27042151"
- },
- {
-  "page": "api-platform/api-manager/4.6.0/install-and-setup/install/installing-the-product/installing-api-m-runtime/index.html",
-  "link": "/api-platform/api-manager/4.6.0/assets/attachments/thumbnails/26838941/27042154"
  },
  {
   "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/advance-configurations/configuring-caching/index.html",
@@ -1476,6 +1468,18 @@
   "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-apim-add-role-permissions3.png"
  },
  {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-profile-edit.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-profile-edit2.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/sso/okta-as-an-external-idp-using-saml/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/learn/okta-profile-edit3.png"
+ },
+ {
   "page": "api-platform/api-manager/4.6.0/install-and-setup/setup/updating-wso2-api-manager/index.html",
   "link": "/api-platform/api-manager/4.6.0/administer/product-configurations/common-runtime-and-configuration-artifacts/"
  },
@@ -1542,6 +1546,10 @@
  {
   "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/adding-internationalization/index.html",
   "link": "/api-platform/api-manager/4.6.0/consume/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/#uploading-via-the-admin-portal-tenants-only"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/develop/customizations/per-tenant-sp-creation-config.png"
  },
  {
   "page": "api-platform/api-manager/4.6.0/reference/customize-product/customizations/customizing-the-developer-portal/enabling-or-disabling-self-signup/index.html",
@@ -1689,7 +1697,7 @@
  },
  {
   "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
-  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-a-websocket-api/"
+  "link": "/api-platform/api-manager/4.6.0/manage-apis/design/create-api/create-a-websocket-api"
  },
  {
   "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
@@ -1702,6 +1710,10 @@
  {
   "page": "api-platform/api-manager/4.6.0/tutorials/create-and-publish-websocket-api/index.html",
   "link": "/api-platform/api-manager/4.6.0/manage-apis/design/endpoints/resiliency/prevent-api-suspension/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/api-platform/api-manager/4.6.0/assets/img/tutorials/service-endpoint-dropdown.png"
  },
  {
   "page": "api-platform/api-manager/4.6.0/tutorials/develop-an-integration-with-a-managed-api/index.html",

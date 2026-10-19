@@ -36,16 +36,34 @@ export function expandMarkers(text: string, fromFile: string, source: Source, de
     const file = findInclude(source, fromFile, target);
     return expandMarkers(readInside(source, file), file, source, depth + 1);
   };
+  const hook = source.markerPartials;
   return text
-    .replace(/\{!\s*([^!\n]+?)\s*!\}/g, (_, target: string) => inline(target))
+    .replace(/\{!\s*([^!\n]+?)\s*!\}/g, (marker: string, target: string, at: number, whole: string) => {
+      if (!hook || !markerStandsAlone(whole, at, marker.length)) return inline(target);
+      const file = findInclude(source, fromFile, target);
+      return hook(file, () => expandMarkers(readInside(source, file), file, source, depth + 1));
+    })
     .replace(/^[ \t]*--8<--[ \t]+["']([^"'\n]+)["'][ \t]*$/gm, (_, target: string) => inline(target))
     .replace(/\{\{#([A-Za-z_]\w*)#\}\}/g, '{{ $1 }}');
+}
+
+/**
+ * Parse a front-matter block. A YAML error, or YAML that is not a mapping, gives no fields (as before) and the error,
+ * for the caller to report.
+ */
+export function loadFrontMatter(block: string): { data: Record<string, unknown>; error?: string } {
+  let data: unknown;
+  try { data = yaml.load(block, { schema: yaml.JSON_SCHEMA }) ?? {}; } catch (e) {
+    return { data: {}, error: `front matter is not valid YAML: ${String((e as Error).message).split('\n')[0]!.slice(0, 160)}` };
+  }
+  if (!data || typeof data !== 'object' || Array.isArray(data)) return { data: {}, error: 'front matter is not a YAML mapping' };
+  return { data: data as Record<string, unknown> };
 }
 
 const FRONT_MATTER = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/;
 const QUICK_START_META = /<script>\s*(?:const|let|var)\s+meta\s*=\s*([\s\S]*?);?\s*<\/script>\s*/;
 
-export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown }
+export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown; /** Why the front matter gave no fields (invalid YAML). */ error?: string }
 
 /**
  * Page data that lives outside the content: YAML front matter (for example `template:`) and the quick-start
@@ -54,11 +72,12 @@ export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown
  */
 export function splitPageData(text: string): PageData & { body: string } {
   let body = text;
-  let frontMatter: unknown = {};
+  let frontMatter: Record<string, unknown> = {};
+  let error: string | undefined;
   let meta: unknown;
   const fm = body.match(FRONT_MATTER);
   if (fm) {
-    try { frontMatter = yaml.load(fm[1]!, { schema: yaml.JSON_SCHEMA }) ?? {}; } catch { frontMatter = {}; }
+    ({ data: frontMatter, error } = loadFrontMatter(fm[1]!));
     body = body.slice(fm[0].length);
   }
   const m = body.match(QUICK_START_META);
@@ -68,13 +87,13 @@ export function splitPageData(text: string): PageData & { body: string } {
     }
     body = body.replace(m[0], '');
   }
-  return { frontMatter: frontMatter && typeof frontMatter === 'object' ? frontMatter as Record<string, unknown> : {}, meta, body };
+  return { frontMatter, meta, body, ...(error ? { error } : {}) };
 }
 
 /** Front matter and quick-start metadata of a page file. */
 export function readPageData(file: string, source: Source): PageData {
-  const { frontMatter, meta } = splitPageData(readInside(source, file));
-  return { frontMatter, meta };
+  const { frontMatter, meta, error } = splitPageData(readInside(source, file));
+  return { frontMatter, meta, ...(error ? { error } : {}) };
 }
 
 /** Parse a file after marker expansion, without its page data (front matter, quick-start meta). */
@@ -87,16 +106,34 @@ export function loadPlain(file: string, source: Source): TemplateNode[] {
   return [{ t: 'text', v: expandMarkers(splitPageData(readInside(source, file)).body, file, source) }];
 }
 
+const inFence = (s: string): boolean => (s.match(/^[ \t]*(```|~~~)/gm) ?? []).length % 2 === 1;
+
+/** A `{!file!}` marker alone on its line (indentation or a list item marker before it, nothing after), outside code. */
+function markerStandsAlone(text: string, at: number, length: number): boolean {
+  const lineStart = text.lastIndexOf('\n', at - 1) + 1;
+  const lineEnd = text.indexOf('\n', at + length);
+  return /^[ \t]*(?:(?:[-*+]|\d+[.)])[ \t]+)?$/.test(text.slice(lineStart, at)) && /^[ \t]*\r?$/.test(text.slice(at + length, lineEnd < 0 ? undefined : lineEnd)) && !inFence(text.slice(0, at));
+}
+
+/** An include whose text would fill its own lines (only indentation before it, a line break after), outside code. */
+export function standsAlone(before: string, next: TemplateNode | undefined): boolean {
+  return /(?:^|\n)[ \t]*$/.test(before) && (!next || (next.t === 'text' && /^[ \t]*(?:\r?\n|$)/.test(next.v))) && !inFence(before);
+}
+
+/** The same source with includes always inlined (content rendered for one option inside a merged page). */
+export const inlining = (source: Source): Source => (source.partials ? { root: source.root, includeBases: source.includeBases } : source);
+
 /** Render nodes for one deployment option, the way MkDocs does today. env is mutated by {% set %}. */
 export function renderSingle(nodes: TemplateNode[], env: Env, file: string, source: Source): string {
   let out = '';
-  for (const node of nodes) {
+  for (const [index, node] of nodes.entries()) {
     if (node.t === 'text') out += node.v;
     else if (node.t === 'set') env[node.name] = setValue(node.expr, env, (n, e) => renderSingle(n, e, file, source));
     else if (node.t === 'var') out += String(evaluate(node.expr, env) ?? '');
     else if (node.t === 'include') {
       const target = findInclude(source, file, node.path);
-      out += renderSingle(loadPage(target, source), env, target, source);
+      const render = (): string => renderSingle(loadPage(target, source), env, target, source);
+      out += source.partials && standsAlone(out, nodes[index + 1]) ? source.partials(target, render) : render();
     } else if (node.t === 'if') {
       const b = takenBranch(node, env);
       if (b >= 0) out += renderSingle(node.branches[b]!.kids, env, file, source);

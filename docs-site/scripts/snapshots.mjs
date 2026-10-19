@@ -1,7 +1,9 @@
 // Frozen versions: each is its own Docusaurus build (DOCS_SNAPSHOT), packed as <key>.tgz and merged into the live
 // output under the same URLs. The key covers the version's whole lock entry (source commit, paths, exclude list,
 // inherited section settings), the converter (src and tsconfig), the site chrome (with the fetch script), the
-// navigation catalogue and the Node.js major version; a change rebuilds.
+// navigation catalogue and the Node.js major version; a change rebuilds. Before building, a second key (the output key)
+// replaces the converter code with a hash of what the conversion wrote for the version: when a converter change leaves
+// a version's converted pages as they were, its stored build is reused under the new key instead of rebuilt.
 // A snapshot's output reads nothing else: its pages link only to their own version, and its navigation comes from
 // the lock file (docusaurus.config.js, snapshot mode). The exception, a version folder of a shared MkDocs source
 // (docs_root), links into the sections sharing that source; the lock fields those links read are part of its key.
@@ -16,7 +18,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { readLock, liveWindow, ROOT } from './lib.mjs';
+import { readLock, liveWindow, ROOT, GENERATED } from './lib.mjs';
 import { sectionVersions, outsideLinkInputs } from './versions.mjs';
 import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
@@ -50,6 +52,51 @@ export function snapshotKey(v, { converter, chrome, nav = '', links = null, node
   const source = Object.fromEntries(Object.entries(v).filter(([k]) => !NOT_KEYED.has(k)));
   const input = { source: canonical({ ...source, exclude: [...(v.exclude ?? [])].sort() }), converter, chrome, nav, node, ...(links ? { links: canonical(links) } : {}) };
   return crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex');
+}
+
+/**
+ * Output key of a snapshot: as snapshotKey, but the converter code is replaced by `content`, the hash of the version's
+ * converted output (contentHash). Tagged so it never equals an input key.
+ */
+export function outputKey(v, { content, chrome, nav = '', links = null, node = '' }) {
+  const source = Object.fromEntries(Object.entries(v).filter(([k]) => !NOT_KEYED.has(k)));
+  const input = { kind: 'output', source: canonical({ ...source, exclude: [...(v.exclude ?? [])].sort() }), content, chrome, nav, node, ...(links ? { links: canonical(links) } : {}) };
+  return crypto.createHash('sha256').update(JSON.stringify(input)).digest('hex');
+}
+
+/** Hash of what build-content.mjs wrote for one version: its docs, sidebar, static files and deprecation list. */
+export function contentHash(id, generated = GENERATED) {
+  const hash = crypto.createHash('sha256');
+  for (const rel of [`docs/${id}`, `sidebars/${id}.json`, `static-versions/${id}`, `deprecations/${id}.json`]) {
+    const at = path.join(generated, rel);
+    if (!fs.existsSync(at)) { hash.update(`${rel}\0absent\0`); continue; }
+    const files = fs.statSync(at).isDirectory()
+      ? fs.readdirSync(at, { recursive: true, withFileTypes: true }).filter((e) => e.isFile()).map((e) => path.join(e.parentPath, e.name))
+      : [at];
+    for (const f of files.map((x) => path.relative(generated, x).split(path.sep).join('/')).sort()) {
+      hash.update(`${f}\0`).update(fs.readFileSync(path.join(generated, f))).update('\0');
+    }
+  }
+  return hash.digest('hex');
+}
+
+/** Store a stored snapshot under another key: the same pages, its key file rewritten (assemble checks it). */
+export function rekey(store, from, to, route) {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'snap-'));
+  try {
+    const src = path.join(tmp, `${from}.tgz`);
+    store.get(from, src);
+    checkTarEntries(tar('-tzf', src).split('\n').filter(Boolean), route);
+    checkTarTypes(tar('-tvzf', src).split('\n').filter(Boolean));
+    const dir = path.join(tmp, 'x'); fs.mkdirSync(dir);
+    tar('-xzf', src, '-C', dir, '--no-same-owner');
+    fs.writeFileSync(path.join(dir, KEY_FILE), `${to}\n`);
+    const out = path.join(tmp, `${to}.tgz`);
+    tar('-czf', out, '-C', dir, KEY_FILE, ...[route, 'assets'].filter((p) => fs.existsSync(path.join(dir, p))));
+    store.put(to, out);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
 }
 
 /**
@@ -130,6 +177,13 @@ function build(id, { recordBaseline = false } = {}) {
   const run = (cmd, args, e = env) => { const r = spawnSync(cmd, args, { cwd: ROOT, stdio: 'inherit', env: e }); if (r.status !== 0) throw new Error(`${cmd} ${args.join(' ')} failed`); };
   run(process.execPath, ['scripts/fetch-sources.mjs', id]);
   run(process.execPath, ['scripts/build-content.mjs', id]);
+  const hashes = inputHashes();
+  const oKey = outputKey(v, { ...hashes, content: contentHash(id), links: entry.links });
+  if (!recordBaseline && store.has(oKey)) {
+    rekey(store, oKey, key, v.route);
+    console.log(`reused   ${id} ${key.slice(0, 12)} (converted output unchanged: ${oKey.slice(0, 12)})`);
+    return;
+  }
   const out = path.join(ROOT, 'site', 'build-snapshots', id);
   fs.rmSync(out, { recursive: true, force: true });
   run(path.join(ROOT, 'node_modules/.bin/docusaurus'), ['build', 'site', '--out-dir', path.relative(path.join(ROOT, 'site'), out)], { ...withHeap(env), DOCS_SNAPSHOT: id });
@@ -149,6 +203,7 @@ function build(id, { recordBaseline = false } = {}) {
   const file = path.join(tmp, `${key}.tgz`);
   tar('-czf', file, '-C', out, KEY_FILE, v.route, 'assets');
   store.put(key, file);
+  rekey(store, key, oKey, v.route); // the output key finds this build again after a converter change
   const mb = (fs.statSync(file).size / 1e6).toFixed(1);
   fs.rmSync(tmp, { recursive: true, force: true });
   fs.rmSync(out, { recursive: true, force: true });

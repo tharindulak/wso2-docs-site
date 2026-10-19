@@ -2,10 +2,23 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { toMdx } from '../src/syntax.js';
 
+test('a deprecated admonition stays a deprecated admonition (the site renders it as a section deprecation notice), keeping its title', () => {
+  const { body } = toMdx('!!! deprecated "Deprecated feature"\n    Use the root organization name.\n');
+  assert.match(body, /^:::deprecated\[Deprecated feature\]\n\nUse the root organization name\.\n\n:::/m);
+  assert.match(toMdx('!!! deprecated\n    Old.\n').body, /^:::deprecated\n\nOld\.\n\n:::/m);
+});
+
 test('admonitions, including titled and nested in lists', () => {
   const { body } = toMdx('!!! warning "Before you start"\n    Read this.\n\n1. Step\n\n    !!! note\n        Inside.\n');
   assert.match(body, /^:::warning\[Before you start\]\n\nRead this\.\n\n:::/m);
   assert.match(body, /^ {4}:::note\n\n {4}Inside\.\n\n {4}:::/m);
+});
+
+// docs-is 5.x setup/setting-up-separate-databases-for-clustering.md: a tip nested in a warning. With equal fences the
+// first ::: closes the warning, the tip is left open and a stray ::: prints; Docusaurus wants the outer fence longer.
+test('an admonition holding an admonition gets the longer fence', () => {
+  const { body } = toMdx('!!! warning "H2"\n    Not for production.\n\n    !!! tip "Before you begin"\n        Optional.\n\nAfter.\n');
+  assert.match(body, /^::::warning\[H2\]\n\nNot for production\.\n\n:::tip\[Before you begin\]\n\nOptional\.\n\n:::\n\n::::\n\nAfter\./m);
 });
 
 test('collapsibles and tabs', () => {
@@ -14,6 +27,25 @@ test('collapsibles and tabs', () => {
   assert.match(body, /<Tabs>\n<TabItem value="tab-0" label="Java">/);
   assert.match(body, /<TabItem value="tab-1" label="Go">/);
   assert.equal(usesTabs, true);
+});
+
+// docs-choreo-dev manage-message-brokers/create-choreo-managed-kafka-services.md: a tab holding an indented Go sample.
+// MDX reads no indented code, so unfenced its lines showed as paragraphs with their braces escaped.
+test('an indented code block is fenced, in a tab or at the top level; list continuations and HTML stay as they are', () => {
+  const tab = toMdx('=== "Producer"\n\n\n        package main\n\n        func main() {\n            run()\n        }\n\nAfter.\n').body;
+  assert.match(tab, /<TabItem value="tab-0" label="Producer">\n+```\npackage main\n\nfunc main\(\) \{\n    run\(\)\n\}\n```\n\n<\/TabItem>/);
+  assert.match(toMdx('Run:\n\n    mvn {x}\n\nDone.\n').body, /^```\nmvn \{x\}\n```\n\nDone\./m);
+  assert.match(toMdx('1. Step\n\n    More about the step.\n').body, /^ {4}More about the step\.$/m);
+  assert.match(toMdx('- a\n- b\n\n    Still b.\n\nText.\n').body, /^ {4}Still b\.$/m);
+  assert.match(toMdx('<div>\n\n    Inside.\n\n</div>\n').body, /^ {4}Inside\.$/m);
+  assert.match(toMdx('??? "No type"\n\n    **Bold**\n').body, /^ {4}\*\*Bold\*\*$/m);
+});
+
+// docs-is 7.1.0 deploy/product-compatibility.md: a collapsible body whose first line is indented with a tab.
+test('a tab in the indentation counts to the next 4-column stop, as in Python-Markdown; fenced code keeps its tabs', () => {
+  const { body } = toMdx('??? note "IWA"\n\n\tNot supported.\n\n    Use Kerberos.\n\n```\n\tx\n```\n');
+  assert.match(body, /^<details>\n<summary>IWA<\/summary>\n+Not supported\.\n\nUse Kerberos\.\n\n<\/details>/m);
+  assert.match(body, /^```\n\tx\n```/m);
 });
 
 test('code is never rewritten; fence attributes become Docusaurus metadata', () => {
@@ -70,8 +102,8 @@ test('a line break in a link target is joined, as Python-Markdown and the browse
   assert.equal(toMdx('1. Item\n\n    see [Updating WSO2 Products](https://is.docs.wso2\n    .com/en/latest/administer/getting-wso2-updates/)\n').body,
     '1. Item\n\n    see [Updating WSO2 Products](https://is.docs.wso2.com/en/latest/administer/getting-wso2-updates/)\n');
   // docs-apim@53584be9c5ba .../configure-worker/active-passive.md:23-24, an image
-  assert.equal(toMdx('    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes\n    .png)').body,
-    '    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes.png)');
+  assert.equal(toMdx('1. Step\n\n    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes\n    .png)').body,
+    '1. Step\n\n    ![](/r/assets/img/setup-and-install/open_endpoint_after_active_member_changes.png)');
 });
 
 test('spaces in a link or image target are percent-encoded; a quoted title stays a title', () => {
@@ -103,6 +135,36 @@ test('joined and encoded targets compile as links', async () => {
   assert.match(js, /href="https:\/\/github\.com\/a"/);
   assert.match(js, /src="a%20b\.png" alt="y" title="T"/);
   assert.match(js, /href="mailto:A%20B-c@d\.com"/);
+});
+
+test('the explicit content components a source writes stay JSX', () => {
+  const { body } = toMdx('<Steps start="2">\n\n## A\n\n</Steps>\n\n<Prerequisites title="Before you begin">\n\nx\n\n</Prerequisites>\n\n<LinkCards>\n\n- [a](a.md)\n\n</LinkCards>\n');
+  assert.match(body, /^<Steps start="2">$/m);
+  assert.match(body, /^<\/Steps>$/m);
+  assert.match(body, /^<Prerequisites title="Before you begin">$/m);
+  assert.match(body, /^<LinkCards>$/m);
+  assert.doesNotMatch(body, /&lt;/);
+});
+
+// docs-is sdks/nextjs/middleware/asgardeo-middleware.md: Python-Markdown's tables keep a `|` inside a code span in the
+// cell; GFM splits the cell there unless the pipe is escaped (and then shows it unescaped in the code).
+test('a pipe inside a code span in a table row is escaped, so the cell keeps it', () => {
+  const { body } = toMdx('| Property | Type |\n|---|---|\n| `getSession` | `() => Promise<T | undefined>` |\n\nText `a | b` stays.\n');
+  assert.match(body, /^\| `getSession` \| `\(\) => Promise<T \\\| undefined>` \|$/m);
+  assert.match(body, /Text `a \| b` stays\./);
+});
+
+test('a table row inside fenced code keeps its pipes', () => {
+  assert.match(toMdx('```\n| `a | b` |\n```\n').body, /^\| `a \| b` \|$/m);
+});
+
+// docs-is asgardeo guides/account-configurations/login-security/bot-detection.md: a section commented out with its
+// code blocks. A browser hides the whole comment; read fence by fence, its last fence ("``` -->") never closes.
+test('an HTML comment holding code blocks is removed whole; comments inside code stay', () => {
+  const { body } = toMdx('Intro.\n\n<!-- ## Old\n\n```toml\n[a]\n```\n\nText.\n``` -->\n\nKept.\n\n```xml\n<!-- in code -->\n<a/>\n```\n');
+  assert.doesNotMatch(body, /Old|\[a\]|Text\./);
+  assert.match(body, /Intro\.\n+Kept\./);
+  assert.match(body, /```xml\n<!-- in code -->\n<a\/>\n```/);
 });
 
 test('HTML sectioning tags that start a line are kept; the same names inline (Synapse XML examples) stay text', async () => {
@@ -144,6 +206,6 @@ test('ATX headings without a space after the hashes are headings, as Python-Mark
   assert.match(body, /^### 1\.Updates$/m);
   assert.match(body, /^## Setup$/m);
   assert.match(body, /^#!\/usr\/bin\/env node\n#Option 1$/m, 'code stays');
-  assert.match(body, /^ {4}#indented code$/m, 'indented lines stay');
+  assert.match(body, /^```\n#indented code\n```$/m, 'indented code stays code (fenced)');
   assert.match(body, /^# Already$/m);
 });

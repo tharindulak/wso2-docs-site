@@ -32,3 +32,16 @@ test('repoOk accepts wso2/<name> only, never . or .. or extra segments', async (
   assert.equal(repoOk('wso2/docs.mi'), true);
   for (const bad of ['wso2/.', 'wso2/..', 'wso2/a/b', 'other/docs-is', 'wso2/', 'wso2/a b']) assert.equal(repoOk(bad), false, bad);
 });
+
+test('readLock accepts hide_from_navigation of product ids and account (the hub), and rejects any other id', () => {
+  const read = (ids) => {
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lock-hide-'));
+    const lock = path.join(dir, 'lock.yaml');
+    fs.writeFileSync(lock, `products:\n  - id: updates\n    sections: []\nhide_from_navigation: [${ids}]\n`);
+    return spawnSync(process.execPath, ['-e', `import(${JSON.stringify(LIB)}).then((m) => m.readLock())`], { env: { ...process.env, DOCS_SITE_LOCK: lock }, encoding: 'utf8' });
+  };
+  assert.equal(read('updates, account').status, 0);
+  const bad = read('updatez');
+  assert.notEqual(bad.status, 0);
+  assert.match(bad.stderr, /hide_from_navigation: no product updatez/);
+});

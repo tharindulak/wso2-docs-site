@@ -17,6 +17,26 @@
       "types": "./dist/src/rehype-valid-elements.d.ts",
       "import": "./dist/src/rehype-valid-elements.js",
       "default": "./dist/src/rehype-valid-elements.js"
+    },
+    "./remark-linked-tabs": {
+      "types": "./dist/src/remark-linked-tabs.d.ts",
+      "import": "./dist/src/remark-linked-tabs.js",
+      "default": "./dist/src/remark-linked-tabs.js"
+    },
+    "./remark-components": {
+      "types": "./dist/src/remark-components.d.ts",
+      "import": "./dist/src/remark-components.js",
+      "default": "./dist/src/remark-components.js"
+    },
+    "./remark-deprecated-sections": {
+      "types": "./dist/src/remark-deprecated-sections.d.ts",
+      "import": "./dist/src/remark-deprecated-sections.js",
+      "default": "./dist/src/remark-deprecated-sections.js"
+    },
+    "./lifecycle": {
+      "types": "./dist/src/lifecycle.d.ts",
+      "import": "./dist/src/lifecycle.js",
+      "default": "./dist/src/lifecycle.js"
     }
   },
   "bin": {
@@ -42,6 +62,7 @@
     "remark-gfm": "4.0.1"
   },
   "devDependencies": {
+    "@docusaurus/mdx-loader": "3.10.2",
     "@types/hast": "3.0.5",
     "@types/js-yaml": "4.0.9",
     "@types/mdast": "4.0.4",

@@ -1,40 +1,29 @@
-/* Oxygen UI look (WSO2Theme, @wso2/oxygen-ui 0.15.0) expressed as Infima variables.
-   Light-mode primary text uses primary.dark (#B25000): #FF7300 on white is ~2.9:1, below WCAG AA.
-   Values are copied, not imported: the package is not tree-shakeable yet (~480 KB gz per page). */
+/* Oxygen UI look (WSO2Theme) as Infima variables. The values come from oxygen-tokens.css, generated from the
+   @wso2/oxygen-ui package at build time (scripts/oxygen-tokens.mjs); browser code never imports the package.
+   Light-mode primary text uses primary.dark: #FF7300 on white is ~2.7:1, below WCAG AA (the generated file sets the
+   --ifm-color-primary scale). */
 @import '@fontsource-variable/inter';
+@import './oxygen-tokens.css';
 
 :root {
-  --ifm-color-primary: #b25000;
-  --ifm-color-primary-dark: #a04800;
-  --ifm-color-primary-darker: #974400;
-  --ifm-color-primary-darkest: #7c3800;
-  --ifm-color-primary-light: #c45800;
-  --ifm-color-primary-lighter: #cd5c00;
-  --ifm-color-primary-lightest: #e86800;
-  --ifm-font-family-base: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --ifm-background-color: #ffffff;
-  --ifm-font-color-base: #181818;
-  --ifm-toc-border-color: rgba(0, 0, 0, 0.12);
+  --ifm-font-family-base: var(--oxygen-typography-fontFamily), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ifm-background-color: var(--oxygen-palette-background-default);
+  --ifm-font-color-base: var(--oxygen-palette-text-primary);
+  --ifm-toc-border-color: var(--oxygen-palette-divider);
+  /* Radii follow the mockups, not WSO2Theme's 20px (map decision): 12 for cards and boxes, 8 for controls. */
   --ifm-global-radius: 12px;
   --ifm-code-border-radius: 8px;
-  --oxygen-accent: #ff7300;
+  --oxygen-accent: var(--oxygen-palette-primary-main);
   --deployment-cloud: #1f6fc5;
   --deployment-hybrid: #6b3fd0;
-  --deployment-self-hosted: #b25000;
+  --deployment-self-hosted: var(--oxygen-palette-primary-dark);
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary: #ff7300;
-  --ifm-color-primary-dark: #e66800;
-  --ifm-color-primary-darker: #d96200;
-  --ifm-color-primary-darkest: #b35100;
-  --ifm-color-primary-light: #ff8114;
-  --ifm-color-primary-lighter: #ff8a24;
-  --ifm-color-primary-lightest: #ffa04d;
-  --ifm-background-color: #0f172a;
-  --ifm-background-surface-color: #0f172a;
-  --ifm-font-color-base: #ffffff;
-  --ifm-toc-border-color: rgba(255, 255, 255, 0.12);
+  --ifm-background-color: var(--oxygen-palette-background-default);
+  --ifm-background-surface-color: var(--oxygen-palette-background-default);
+  --ifm-font-color-base: var(--oxygen-palette-text-primary);
+  --ifm-toc-border-color: var(--oxygen-palette-divider);
   --deployment-cloud: #6fb1ff;
   --deployment-hybrid: #b79bff;
   --deployment-self-hosted: #ffa04d;

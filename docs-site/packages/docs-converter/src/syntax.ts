@@ -5,12 +5,14 @@ const ADMONITION: Record<string, string> = {
   info: 'info', todo: 'info', question: 'info', help: 'info', faq: 'info',
   tip: 'tip', hint: 'tip', success: 'tip', check: 'tip', done: 'tip',
   important: 'warning', warning: 'warning', caution: 'warning', attention: 'warning',
+  // Lifecycle stage marking: the site registers `deprecated` as an admonition type (section deprecation notice).
+  deprecated: 'deprecated',
   danger: 'danger', error: 'danger', failure: 'danger', fail: 'danger', missing: 'danger', bug: 'danger',
 };
 
 /** Tags MDX may keep as JSX. Anything else that looks like a tag is escaped as text. */
 export const JSX_TAGS: readonly string[] = [
-  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect', 'ApiReference',
+  'Applies', 'DeploymentValue', 'Tabs', 'TabItem', 'ThemedImage', 'Redirect', 'ApiReference', 'Steps', 'Prerequisites', 'LinkCards',
   'a', 'abbr', 'b', 'blockquote', 'br', 'button', 'caption', 'center', 'code', 'col', 'colgroup', 'dd', 'del', 'details',
   'div', 'dl', 'dt', 'em', 'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'iframe', 'img',
   'input', 'ins', 'kbd', 'label', 'li', 'mark', 'ol', 'p', 'pre', 's', 'small', 'source', 'span', 'strong', 'sub',
@@ -42,10 +44,29 @@ function takeBlock(lines: string[], start: number, ind: number): { body: string;
 }
 const reindent = (text: string, ws: string): string => text.split('\n').map((l) => (l ? ws + l : l)).join('\n');
 
+const LIST_ITEM = /^ {0,3}(?:[-*+]|\d+\.)\s/;
+const MKDOCS_BLOCK = /^\s*(?:`{3,}|~{3,}|!!!|\?\?\?|===)/;
+
+/**
+ * An indented code block (a blank line, then lines indented 4 or more, outside a list), fenced: MDX reads no
+ * indented code, so its lines would show as paragraphs. A tab or admonition body starting with one is the common case.
+ */
+function indentedCode(lines: string[], i: number, inList: boolean): { fenced: string[]; next: number } | null {
+  if (inList || indentOf(lines[i]!) < 4 || !lines[i]!.trim() || (i > 0 && lines[i - 1]!.trim())) return null;
+  let prev = i - 1;
+  while (prev >= 0 && !lines[prev]!.trim()) prev--;
+  // After an HTML line or a MkDocs block header left unconverted (`??? "Title"`), the indent is not code's.
+  if (prev >= 0 && (indentOf(lines[prev]!) >= 4 || /^\s*(?:<|!!!|\?\?\?|===)/.test(lines[prev]!))) return null;
+  const { body, next } = takeBlock(lines, i, 0);
+  if (body.split('\n').some((l) => MKDOCS_BLOCK.test(l))) return null;
+  return { fenced: ['```', body, '```'], next };
+}
+
 function blocks(md: string, stats: SyntaxStats): string {
   const lines = md.split('\n');
   const out: string[] = [];
   let fence: string | null = null;
+  let inList = false;
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]!;
     const f = line.match(/^(\s*)(`{3,}|~{3,})(.*)$/);
@@ -58,6 +79,11 @@ function blocks(md: string, stats: SyntaxStats): string {
     const heading = line.match(/^( {0,3})(#{1,6})([^#\s].*?)[ \t]*#*[ \t]*$/);
     if (heading) { out.push(`${heading[1]}${heading[2]} ${heading[3]}`); continue; }
 
+    if (LIST_ITEM.test(line)) inList = true;
+    else if (line.trim() && indentOf(line) === 0 && !lines[i - 1]?.trim()) inList = false;
+    const code = indentedCode(lines, i, inList);
+    if (code) { out.push(...code.fenced); i = code.next - 1; continue; }
+
     let m = line.match(/^(\s*)(!!!|\?\?\?\+?)\s+([\w-]+)(?:\s+"([^"]*)")?\s*$/);
     if (m) {
       const [, ws = '', kind = '', type = '', title] = m;
@@ -65,7 +91,10 @@ function blocks(md: string, stats: SyntaxStats): string {
       const inner = reindent(blocks(body, stats), ws);
       if (kind === '!!!') {
         stats.admonitions++;
-        out.push(`${ws}:::${ADMONITION[type.toLowerCase()] ?? 'note'}${title ? `[${title.replace(/[[\]]/g, '')}]` : ''}`, '', inner, '', `${ws}:::`);
+        // An admonition holding admonitions takes a longer fence than theirs, so its own closes it (Docusaurus nesting).
+        const innerFence = Math.max(2, ...[...inner.matchAll(/^[ \t]*(:{3,})[a-z]/gm)].map((f) => f[1]!.length));
+        const fence = ':'.repeat(innerFence + 1);
+        out.push(`${ws}${fence}${ADMONITION[type.toLowerCase()] ?? 'note'}${title ? `[${title.replace(/[[\]]/g, '')}]` : ''}`, '', inner, '', `${ws}${fence}`);
       } else {
         stats.collapsibles++;
         out.push(`${ws}<details${kind.endsWith('+') ? ' open' : ''}>`, `${ws}<summary>${title || type}</summary>`, '', inner, '', `${ws}</details>`);
@@ -245,8 +274,19 @@ export function linkTargets(text: string): string {
   return last ? out + text.slice(last) : text;
 }
 
+/** In a table row, a `|` inside a code span is escaped: GFM would end the cell there; Python-Markdown does not. */
+function tablePipes(text: string): string {
+  let fence: string | null = null;
+  return text.split('\n').map((line) => {
+    const f = line.match(/^\s*(`{3,}|~{3,})/);
+    if (f && (!fence || (f[1]![0] === fence[0] && f[1]!.length >= fence.length))) { fence = fence ? null : f[1]!; return line; }
+    if (fence || !/^[ \t]*\|.*\|[ \t]*$/.test(line)) return line;
+    return line.replace(/(`+)([^`]+?)\1(?!`)/g, (_, ticks: string, code: string) => `${ticks}${code.replace(/(?<!\\)\|/g, '\\|')}${ticks}`);
+  }).join('\n');
+}
+
 function inline(text: string, stats: SyntaxStats): string {
-  return outsideCode(placeholderHostLinks(text), (t) => {
+  return outsideCode(placeholderHostLinks(tablePipes(text)), (t) => {
     let s = redocToApiReference(t).text;
     s = linkTargets(s);
     s = s.replace(/\{:?\s*[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?(\s+[.#]?[\w-]+(=("[^"]*"|'[^']*'|[^\s}]+))?)*\s*\}/g,
@@ -272,9 +312,48 @@ function inline(text: string, stats: SyntaxStats): string {
   });
 }
 
+/**
+ * HTML comments that open a line outside code and hold a code fence, removed whole: a browser hides them, fences and
+ * all, while read fence by fence their last fence (often "``` -->") never closes. Other comments go later (inline).
+ */
+function fencedComments(md: string): string {
+  const lines = md.split('\n');
+  const out: string[] = [];
+  let fence: string | null = null;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]!;
+    const f = line.match(/^\s*(`{3,}|~{3,})/);
+    if (f && (!fence || (f[1]![0] === fence[0] && f[1]!.length >= fence.length))) { fence = fence ? null : f[1]!; out.push(line); continue; }
+    if (!fence && /^\s*<!--/.test(line) && !line.includes('-->')) {
+      let j = i + 1;
+      while (j < lines.length && !lines[j]!.includes('-->')) j++;
+      const inside = lines.slice(i + 1, j);
+      if (j < lines.length && inside.concat(lines[j]!).some((l) => /^\s*(`{3,}|~{3,})/.test(l))) {
+        const after = lines[j]!.slice(lines[j]!.indexOf('-->') + 3);
+        if (after.trim()) out.push(after);
+        i = j;
+        continue;
+      }
+    }
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
+/** Tabs in a line's indentation as spaces, to 4-column stops (Python-Markdown's tab_length); code fences kept as written. */
+function expandIndentTabs(md: string): string {
+  let fence: string | null = null;
+  return md.split('\n').map((line) => {
+    const f = line.match(/^\s*(`{3,}|~{3,})/);
+    if (f && (!fence || (f[1]![0] === fence[0] && f[1]!.length >= fence.length))) { fence = fence ? null : f[1]!; return line; }
+    if (fence) return line;
+    return line.replace(/^[ \t]*\t[ \t]*/, (ws) => ws.split('').reduce((acc, c) => (c === '\t' ? acc + ' '.repeat(4 - (acc.length % 4)) : acc + c), ''));
+  }).join('\n');
+}
+
 /** Convert MkDocs Markdown to MDX. Returns the body and whether it needs the Tabs imports. */
 export function toMdx(md: string): { body: string; usesTabs: boolean; stats: SyntaxStats } {
   const stats: SyntaxStats = { admonitions: 0, collapsibles: 0, tabs: 0, attrLists: 0 };
-  const body = inline(blocks(md, stats), stats);
+  const body = inline(blocks(expandIndentTabs(fencedComments(md)), stats), stats);
   return { body, usesTabs: /<Tabs>/.test(body), stats };
 }

@@ -50,6 +50,21 @@ test('versionIndex maps version ids to product, section and Latest; confluence v
   assert.equal(index.get('account').productName, 'Account and billing');
 });
 
+test('products and the hub hidden from navigation are built but not searchable, and not reported as unknown', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'search-index-'));
+  const write = (file, html) => { fs.mkdirSync(path.dirname(path.join(dir, file)), { recursive: true }); fs.writeFileSync(path.join(dir, file), html); };
+  write('integration/micro-integrator/a/index.html', page({ body: '<h1>A</h1>' }));
+  write('account/index.html', page({ tag: 'account', body: '<h1>Account</h1>' }));
+  const hidden = { ...manifest, hiddenFromNavigation: ['integration', 'account'] };
+  assert.equal(versionIndex(hidden).get('integration-mi').hidden, true);
+  assert.equal(versionIndex(manifest).get('integration-mi').hidden, undefined);
+  const warnings = [];
+  assert.deepEqual([...buildRecords(dir, hidden, (w) => warnings.push(w))].map((r) => r.url), ['https://www.moesif.com/docs/']);
+  assert.deepEqual([...buildRecords(dir, manifest)].map((r) => r.url), ['/account/', '/integration/micro-integrator/a/', 'https://www.moesif.com/docs/']);
+  assert.deepEqual(warnings, []);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
 test('pageRecords: one page record, one per h2/h3, chrome left out', () => {
   const where = { ...versionIndex(manifest).get('integration-mi'), versionId: 'integration-mi' };
   const html = page({ body: `<header><h1>Mediators</h1></header><p>Intro <code>text</code>.</p>
@@ -66,6 +81,14 @@ test('pageRecords: one page record, one per h2/h3, chrome left out', () => {
   assert.equal(s2.content, '<call/> Detail More.', 'h4 and below stay in the section; buttons are left out');
   for (const r of records) assert.ok(!/Edit this page|Next|viewing|Products|Deployment options/.test(r.content), 'no page chrome');
   assert.equal(new Set(records.map((r) => r.id)).size, 3);
+});
+
+test('pageRecords: the lifecycle pill beside the title is page chrome, not content', () => {
+  const where = { ...versionIndex(manifest).get('integration-mi'), versionId: 'integration-mi' };
+  const html = page({ body: '<header><h1>Roles v1 API</h1></header><p>Old roles.</p>' })
+    .replace('<div class="theme-doc-markdown', '<span class="lifecycle-pill lifecycle-pill--title lifecycle--deprecated" title="Still works">Deprecated</span><div class="theme-doc-markdown');
+  const [p] = pageRecords(html, '/identity/apis/roles-v1/', where);
+  assert.equal(p.content, 'Old roles.');
 });
 
 test('pageRecords prefers the wso2:deployment meta and drops unknown options', () => {
