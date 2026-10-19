@@ -103,3 +103,19 @@ test('a convention whose components would not parse is left as written', () => {
   const src = ':::warning[H2]\n\nNot for production.\n\n:::tip[Before you begin]\n\nOptional.\n\n:::\n\n:::\n\nAfter.\n';
   assert.equal(writeComponents(src).text, src);
 });
+
+// docs-api-platform monetization/manage-paid-subscription-plans.md: `---` dividers between sections. A divider that
+// ends a block closes the section, not the box: it stays after the component, as the former site drew it.
+test('a thematic break that ends a Prerequisites block or a stepper stays outside the component', () => {
+  assert.equal(
+    write('Intro.\n\n---\n\n## Prerequisites\n\n- a\n\n---\n\n## Step 1: A\n\na\n\n---\n\n## Step 2: B\n\nb\n\n---\n\n## After\n\nDone.\n'),
+    'Intro.\n\n---\n\n<Prerequisites>\n\n## Prerequisites\n\n- a\n\n</Prerequisites>\n\n---\n\n<Steps>\n\n## A {/* #step-1-a */}\n\na\n\n---\n\n## B {/* #step-2-b */}\n\nb\n\n</Steps>\n\n---\n\n## After\n\nDone.\n',
+  );
+});
+
+test('a sub-stepper ends before a trailing thematic break too', () => {
+  assert.equal(
+    write('## Step 1: A\n\n### Step 1.1: X\n\nx\n\n### Step 1.2: Y\n\ny\n\n---\n\n## Step 2: B\n\nb\n'),
+    '<Steps>\n\n## A {/* #step-1-a */}\n\n<Steps>\n\n### X {/* #step-11-x */}\n\nx\n\n### Y {/* #step-12-y */}\n\ny\n\n</Steps>\n\n---\n\n## B {/* #step-2-b */}\n\nb\n\n</Steps>\n',
+  );
+});

@@ -96,3 +96,32 @@ test('a Docusaurus tree is taken as written: explicit components stay, conventio
   assert.equal(read('_partial.md'), steps);
   assert.match(read('new.md'), /<Steps>\n\n## Install \{\/\* #step-1-install \*\/\}\n\na\n\n<\/Steps>\n$/);
 });
+
+// docs-agent-platform and open-healthcare-docs: Docusaurus sources whose writers follow the Prerequisites and
+// "Step N" conventions without the explicit components.
+test('a Docusaurus source that opts in to the conventions gets the explicit components; by default it is taken as written', async () => {
+  const page = { 'docusaurus/docs/guide.md': '---\ntitle: Guide\n---\n\n# Guide\n\n## Prerequisites\n\n- An account\n\n## Step 1: Install\n\nInstall it.\n\n## Step 2: Run\n\nRun it.\n' };
+  const opted = (await prepare(migrated(page), 'docusaurus/docs', { conventions: true })).read('guide.md');
+  assert.match(opted, /<Prerequisites>[\s\S]*An account[\s\S]*<\/Prerequisites>/);
+  assert.match(opted, /<Steps>\n+## Install[\s\S]*## Run[\s\S]*<\/Steps>/);
+  const asWritten = (await prepare(migrated(page), 'docusaurus/docs')).read('guide.md');
+  assert.doesNotMatch(asWritten, /<Steps>|<Prerequisites>/);
+  assert.match(asWritten, /## Step 1: Install/);
+  const optOut = { 'docusaurus/docs/guide.md': page['docusaurus/docs/guide.md'].replace('title: Guide', 'title: Guide\nstepper: false') };
+  assert.doesNotMatch((await prepare(migrated(optOut), 'docusaurus/docs', { conventions: true })).read('guide.md'), /<Steps>/, 'page opt-out honoured');
+});
+
+test('githubEditUrl links to the editor on a branch, or to a pinned commit\'s view', async () => {
+  const { githubEditUrl } = await import('../src/site.js');
+  assert.equal(githubEditUrl('wso2/docs-x', 'main', '/r', 'edit')('/r/en/docs/a.md'), 'https://github.com/wso2/docs-x/edit/main/en/docs/a.md');
+  assert.equal(githubEditUrl('wso2/docs-x', 'abc123', '/r')('/r/en/docs/a.md'), 'https://github.com/wso2/docs-x/blob/abc123/en/docs/a.md');
+});
+
+// docs-integrator guides: ThemedImage sources written as useBaseUrl('/img/...') pointed at the site root.
+test('static paths given to useBaseUrl move under the section route, like Markdown image paths', async () => {
+  const page = { 'docusaurus/docs/themed.md': "---\ntitle: Themed\n---\n\nimport ThemedImage from '@theme/ThemedImage';\nimport useBaseUrl from '@docusaurus/useBaseUrl';\n\n# Themed\n\n<ThemedImage alt=\"A\" sources={{ light: useBaseUrl('/img/a.png'), dark: useBaseUrl(\"/img/a-dark.png\") }} />\n\n![B](/img/b.png)\n" };
+  const text = (await prepare(migrated(page), 'docusaurus/docs')).read('themed.md');
+  assert.match(text, /useBaseUrl\('\/identity\/img\/a\.png'\)/);
+  assert.match(text, /useBaseUrl\("\/identity\/img\/a-dark\.png"\)/);
+  assert.match(text, /!\[B\]\(\/identity\/img\/b\.png\)/);
+});

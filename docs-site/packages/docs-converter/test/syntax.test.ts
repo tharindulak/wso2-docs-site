@@ -166,3 +166,46 @@ test('an HTML comment holding code blocks is removed whole; comments inside code
   assert.match(body, /Intro\.\n+Kept\./);
   assert.match(body, /```xml\n<!-- in code -->\n<a\/>\n```/);
 });
+
+test('HTML sectioning tags that start a line are kept; the same names inline (Synapse XML examples) stay text', async () => {
+  const { compileCheck } = await import('../src/page.js');
+  const md = [
+    '<div>',
+    '    <header>',
+    '        <h1>Welcome</h1>',
+    '    </header>',
+    '    <section class="modal-content">Body</section>',
+    '</div>',
+    '',
+    '<aside class="warning">',
+    'Requires **Basic Auth**.',
+    '</aside>',
+    '',
+    '| Example | <header name="ReplyTo" action="remove"/> |',
+    '|---|---|',
+    '| Cell | <center><b>Request</b></center> capture_<wbr>payloads |',
+  ].join('\n');
+  const { body } = toMdx(md);
+  assert.match(body, /^ {4}<header>\n {8}<h1>Welcome<\/h1>\n {4}<\/header>$/m);
+  assert.match(body, /^ {4}<section className="modal-content">Body<\/section>$/m, 'the closing tag on the same line is kept too');
+  assert.match(body, /^<aside className="warning">\nRequires \*\*Basic Auth\*\*\.\n<\/aside>$/m);
+  assert.match(body, /\| &lt;header name="ReplyTo" action="remove"\/> \|/, 'an XML element in prose stays text');
+  assert.match(body, /<center><b>Request<\/b><\/center> capture_<wbr \/>payloads/);
+  await compileCheck(`---\n---\n${body}`);
+});
+
+test('stray <html>, <head> and <body> wrappers are dropped; the content they wrap stays', () => {
+  const { body } = toMdx('1. Step\n\n    <html>\n    <head>\n    </head>\n    <body>\n    <img src="a.png">\n    </body>\n    </html>\n\nBounded by 1 hr.<html><div class="admonition note">x</div></html>\n\nWrite the <html> tag first.');
+  assert.match(body, /^1\. Step\n\n {4}<img src="a\.png" \/>\n\n/m);
+  assert.match(body, /1 hr\.<div className="admonition note">x<\/div>\n/);
+  assert.match(body, /Write the &lt;html> tag first\./, 'the name in a sentence stays text');
+});
+
+test('ATX headings without a space after the hashes are headings, as Python-Markdown reads them', () => {
+  const { body } = toMdx('###1.Updates###\n\n##Setup\n\n```bash\n#!/usr/bin/env node\n#Option 1\n```\n\n    #indented code\n\n# Already\n');
+  assert.match(body, /^### 1\.Updates$/m);
+  assert.match(body, /^## Setup$/m);
+  assert.match(body, /^#!\/usr\/bin\/env node\n#Option 1$/m, 'code stays');
+  assert.match(body, /^```\n#indented code\n```$/m, 'indented code stays code (fenced)');
+  assert.match(body, /^# Already$/m);
+});

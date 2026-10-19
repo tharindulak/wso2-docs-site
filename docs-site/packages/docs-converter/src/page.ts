@@ -7,7 +7,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeValidElements from './rehype-valid-elements.js';
 import { applyHtmlPolicy, unexpandedMarkers, removeForbiddenElements, type PolicyResult } from './html-policy.js';
 import { htmlBlocksToJsx } from './html-blocks.js';
-import { isHomeLayout, nameIconLinks } from './home-layout.js';
+import { dropScriptedModals, hasHtmlH1, isHomeLayout, nameIconLinks } from './home-layout.js';
 import { toMdx, outsideCode, type SyntaxStats } from './syntax.js';
 import { writeComponents } from './conventions.js';
 import { repairMdx } from './mdx-repair.js';
@@ -90,8 +90,9 @@ export async function convertRendered(rendered: string, opts: ConvertOptions): P
     policy = { ...again, meta: again.meta ?? policy.meta };
     removed = stripped.removed;
   }
-  // Icon-only and empty links get visible text before any rewrite (see home-layout.ts).
-  policy = { ...policy, text: nameIconLinks(policy.text) };
+  // Script-driven lightboxes lose their hidden dialog, and icon-only and empty links get visible text, before any
+  // rewrite (see home-layout.ts).
+  policy = { ...policy, text: nameIconLinks(dropScriptedModals(policy.text)) };
   const withRemoved = (result: Omit<ConvertResult, 'yamlErrors'>): ConvertResult => ({ ...(removed.length ? { ...result, stats: { ...result.stats, removed } } : result), yamlErrors });
   const compileFailure = (e: unknown): void => { if (!(e instanceof PageError) || e.kind !== 'compile') throw e; };
   try {
@@ -167,9 +168,9 @@ async function assemble(
   // An empty MkDocs template page gets its title and overview links later (the docs site's fillTemplatePages).
   if (!(source.template && !mdxBody.trim()) && front.title === undefined && opts.fallbackTitle !== undefined) {
     front.title = opts.fallbackTitle;
-    // MkDocs Material shows a synthesized title as the H1, but a custom home layout does not; keep it for the
-    // browser tab, breadcrumb and search only.
-    if (isHomeLayout(mdxBody)) front.hide_title = true;
+    // MkDocs Material shows a synthesized title as the H1, but not on a custom home layout or over a page with its
+    // own <h1>; keep it for the browser tab, breadcrumb and search only.
+    if (isHomeLayout(mdxBody) || hasHtmlH1(mdxBody)) front.hide_title = true;
   }
   if (source.template) front.mkdocs_template = String(source.template).replace(/^templates\//, '').replace(/\.html$/, '');
   front.deployment_options = opts.deploymentOptions;

@@ -46,11 +46,21 @@ const SHIMS = {
   '@site/src/utils/eipPatternComponents': '@site/src/components/shims/eipPatternComponents',
 };
 
+/**
+ * Edit links of a source: GitHub's editor on the branch it tracks, for a wso2/ repository (where writers edit); a
+ * pinned commit's view when no branch is known. A personal fork gets none: its migrated pages carry their own
+ * custom_edit_url to the wso2/ source, and its other pages are generated, not edited. `edit: { repo, branch }` on a
+ * source names where its files are edited when that is not the repository read (a fork of a wso2/ source).
+ */
+const editUrlOf = (src, root) => (src.edit ? githubEditUrl(src.edit.repo, src.edit.branch, root, 'edit')
+  : !src.repo.startsWith('wso2/') ? undefined
+  : src.track ? githubEditUrl(src.repo, src.track, root, 'edit') : githubEditUrl(src.repo, src.sha, root));
+
 /** Lock-file fields of one MkDocs source (a section or its cloud companion) as converter options. */
 const mkdocsOptions = (src) => {
   const root = checkoutDir(src.repo, src.sha);
   return {
-    root, mkdocs: src.mkdocs, currentSite: src.current_site, editUrl: githubEditUrl(src.repo, src.sha, root),
+    root, mkdocs: src.mkdocs, currentSite: src.current_site, editUrl: editUrlOf(src, root),
     deployment_options: src.deployment_options, deployment_overrides: src.deployment_overrides,
     only: src.only, skip: src.skip, nav: { root: src.nav_root, drop: src.nav_drop, pick: src.nav_pick, release: src.docs_root ? String(src.version) : undefined },
     docsRoot: src.docs_root, linkOutside: outsideLinks(lock, src) ?? undefined,
@@ -67,7 +77,7 @@ async function buildSection(section, outDir, staticDir, sidebarsDir, report) {
     return companion ? placeCompanion(sidebar, await companionSidebar(), companion) : sidebar;
   }
   if (section.kind === 'mkdocs-merge') {
-    const side = (ref) => { const root = checkoutDir(ref.repo, ref.sha); return { root, mkdocs: ref.mkdocs, currentSite: ref.current_site, editUrl: githubEditUrl(ref.repo, ref.sha, root) }; };
+    const side = (ref) => { const root = checkoutDir(ref.repo, ref.sha); return { root, mkdocs: ref.mkdocs, currentSite: ref.current_site, editUrl: editUrlOf(ref, root) }; };
     return (await convertMergedSites({ cloud: side(section.cloud), self: side(section.self_hosted), sharedNames: section.shared_names ?? {}, partials }, out)).sidebar;
   }
   const root = checkoutDir(section.repo, section.sha);
@@ -75,9 +85,9 @@ async function buildSection(section, outDir, staticDir, sidebarsDir, report) {
   const productRoute = lock.products.flatMap((p) => p.sections).find((s) => s.id === section.sectionId)?.route ?? section.route;
   const routeStatic = section.status === 'latest' ? path.join(GENERATED, 'static', productRoute) : path.join(GENERATED, 'static-versions', section.id, productRoute);
   const { sidebarId, sidebar } = await prepareDocusaurusDocs({
-    root, docs: section.docs, sidebar: section.sidebar, currentSite: section.current_site, editUrl: githubEditUrl(section.repo, section.sha, root),
+    root, docs: section.docs, sidebar: section.sidebar, currentSite: section.current_site, editUrl: editUrlOf(section, root),
     shims: SHIMS, deployment_options: section.deployment_options, deployment_overrides: section.deployment_overrides,
-    treeRoot: section.tree_root, strict: Boolean(section.strict),
+    treeRoot: section.tree_root, strict: Boolean(section.strict), conventions: Boolean(section.conventions),
     static: section.tree_static ? { from: section.tree_static, to: routeStatic } : undefined,
     redirects: section.tree_redirects ? { file: section.tree_redirects, version: section.status === 'latest' ? 'current' : section.version } : undefined,
   }, out);

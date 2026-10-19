@@ -258,3 +258,52 @@ test('the key covers fetch-sources.mjs, the converter tsconfig and the Node.js m
   assert.equal(nodeMajor('22.20.5'), '22');
   assert.equal(inputHashes().node, process.versions.node.split('.')[0]);
 });
+
+// A converter change rebuilds only the snapshots whose converted output changed: the output key replaces the converter
+// code with a hash of what the conversion wrote for the version.
+test('the output key ignores the converter code but follows converted content, chrome, nav, Node.js, source and links', async () => {
+  const { outputKey } = await import('../snapshots.mjs');
+  const o = { content: 'c1', chrome: 't2', nav: 'n1', node: '22' };
+  const k = outputKey(v, o);
+  assert.match(k, /^[0-9a-f]{64}$/);
+  assert.equal(outputKey({ ...v }, { ...o, converter: 'anything' }), k, 'converter code is not an input');
+  assert.notEqual(k, snapshotKey(v, { ...o, converter: 'c1' }), 'never collides with an input key');
+  for (const changed of [outputKey(v, { ...o, content: 'c2' }), outputKey(v, { ...o, chrome: 'x' }), outputKey(v, { ...o, nav: 'n2' }),
+    outputKey(v, { ...o, node: '24' }), outputKey({ ...v, sha: 'd'.repeat(40) }, o), outputKey(v, { ...o, links: { a: 1 } })]) assert.notEqual(changed, k);
+});
+
+test('the content hash covers only the version\'s converted docs, sidebar, static files and deprecations', async () => {
+  const { contentHash } = await import('../snapshots.mjs');
+  const g = fs.mkdtempSync(path.join(os.tmpdir(), 'gen-'));
+  const put = (rel, text) => { fs.mkdirSync(path.dirname(path.join(g, rel)), { recursive: true }); fs.writeFileSync(path.join(g, rel), text); };
+  put('docs/a--v1/index.md', '# A'); put('sidebars/a--v1.json', '{}'); put('static-versions/a--v1/x/img.png', 'p'); put('deprecations/a--v1.json', '[]');
+  put('docs/b--v1/index.md', '# B');
+  const h0 = contentHash('a--v1', g);
+  assert.match(h0, /^[0-9a-f]{64}$/);
+  put('docs/b--v1/index.md', '# B changed');
+  assert.equal(contentHash('a--v1', g), h0, 'another version does not count');
+  for (const [rel, text] of [['docs/a--v1/index.md', '# A2'], ['sidebars/a--v1.json', '{"x":1}'], ['static-versions/a--v1/x/img.png', 'q'], ['deprecations/a--v1.json', '[1]'], ['docs/a--v1/new.md', 'n']]) {
+    const before = contentHash('a--v1', g);
+    put(rel, text);
+    assert.notEqual(contentHash('a--v1', g), before, `${rel} counts`);
+  }
+  fs.rmSync(g, { recursive: true, force: true });
+});
+
+test('a stored snapshot is re-keyed with its key file rewritten and its pages unchanged', async () => {
+  const { rekey } = await import('../snapshots.mjs');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rekey-'));
+  const store = createStore(`local:${path.join(tmp, 'store')}`);
+  const [from, to] = ['a'.repeat(64), 'b'.repeat(64)];
+  const src = path.join(tmp, 'src'); fs.mkdirSync(path.join(src, 'r/1.0.0'), { recursive: true }); fs.mkdirSync(path.join(src, 'assets'));
+  fs.writeFileSync(path.join(src, '.snapshot-key'), `${from}\n`); fs.writeFileSync(path.join(src, 'r/1.0.0/index.html'), 'page');
+  tar('-czf', path.join(tmp, 'f.tgz'), '-C', src, '.snapshot-key', 'r/1.0.0', 'assets');
+  store.put(from, path.join(tmp, 'f.tgz'));
+  rekey(store, from, to, 'r/1.0.0');
+  assert.ok(store.has(to));
+  const out = path.join(tmp, 'out'); fs.mkdirSync(out); store.get(to, path.join(tmp, 'g.tgz')); tar('-xzf', path.join(tmp, 'g.tgz'), '-C', out);
+  assert.equal(fs.readFileSync(path.join(out, '.snapshot-key'), 'utf8').trim(), to);
+  assert.equal(fs.readFileSync(path.join(out, 'r/1.0.0/index.html'), 'utf8'), 'page');
+  assert.ok(store.has(from), 'the source entry stays');
+  fs.rmSync(tmp, { recursive: true, force: true });
+});

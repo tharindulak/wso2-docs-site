@@ -155,6 +155,13 @@ class Writer {
   }
 }
 
+/** How many of `nodes`, from the end, are thematic breaks: a `---` that ends a block closes the section, not the box. */
+const trailingBreaks = (nodes: RootContent[]): number => {
+  let k = 0;
+  while (k < nodes.length && nodes[nodes.length - 1 - k].type === 'thematicBreak') k++;
+  return k;
+};
+
 const stepNumber = (node: RootContent): number | null => {
   if (node.type !== 'heading') return null;
   const m = STEP.exec(text(node));
@@ -187,7 +194,7 @@ function subSteps(w: Writer, body: RootContent[], depth: number, step: number): 
       continue;
     }
     if (group && depthOf(node) && depthOf(node) <= group.depth) close();
-    if (group) group.last = node;
+    if (group && node.type !== 'thematicBreak') group.last = node;
   }
   close();
 }
@@ -214,6 +221,7 @@ function wrapRuns(w: Writer, children: RootContent[]): RootContent[] {
     if (steps.length < 2 && first !== w.lastStep + 1) { out.push(...steps[0].nodes); continue; }
     w.lastStep = first + steps.length - 1;
     const lastStep = steps.at(-1)!.nodes;
+    const after = lastStep.splice(lastStep.length - trailingBreaks(lastStep.slice(1)));
     w.wrap(steps[0].nodes[0], lastStep.at(-1)!, `<Steps${first === 1 ? '' : ` start={${first}}`}>`, 'Steps');
     w.written.steps += steps.length;
     out.push(wrapped('steps', steps.map(({ n: num, nodes }, k) => {
@@ -222,6 +230,7 @@ function wrapRuns(w: Writer, children: RootContent[]): RootContent[] {
       subSteps(w, nodes.slice(1), depth, first + k);
       return wrapped('step', nodes);
     })));
+    out.push(...after);
   }
   return out;
 }
@@ -266,10 +275,11 @@ function wrapPrerequisites(w: Writer, children: RootContent[]): RootContent[] {
     if ((depth !== 2 && depth !== 3) || !PREREQUISITES.test(text(node).trim())) { out.push(node); continue; }
     const from = i;
     while (i < children.length && !isWrapped(children[i], 'steps') && !(depthOf(children[i]) && depthOf(children[i]) <= depth)) i++;
-    if (i === from) { out.push(node); continue; } // nothing to box
-    w.wrap(node, children[i - 1], '<Prerequisites>', 'Prerequisites');
+    const last = i - trailingBreaks(children.slice(from, i));
+    if (last === from) { out.push(node, ...children.slice(from, i)); continue; } // nothing to box
+    w.wrap(node, children[last - 1], '<Prerequisites>', 'Prerequisites');
     w.written.prerequisites++;
-    out.push(wrapped('prerequisites', [node, ...children.slice(from, i)]));
+    out.push(wrapped('prerequisites', [node, ...children.slice(from, last)]), ...children.slice(last, i));
   }
   return out;
 }
