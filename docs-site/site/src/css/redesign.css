@@ -118,3 +118,9 @@
 /* Section dividers (`---` in the sources, MkDocs habit) are not drawn: headings already separate sections, and the
    dividers doubled up around the Prerequisites box and between steps (user decision 2026-10-19). */
 .markdown hr { display: none; }
+
+/* Search centred in the header, as in the mockups (desktop only; narrow screens keep the icon on the right). */
+@media (min-width: 997px) {
+  .navbar__inner { position: relative; }
+  .navbar__items--right .search-button { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(460px, 36vw); }
+}
