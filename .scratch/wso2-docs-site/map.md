@@ -20,6 +20,10 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - Product scope: every doc set on wso2.com/documentation, one entry per product covering all its deployment options (no separate SaaS/open-source entries, no "Cloud" sections). For WSO2Con every product is migrated at Latest only (user decision 2026-10-07, option (a) after the [Conversion survey](research/16-conversion-survey.md); API Platform added later that day once the Devant approach was built, so only API Analytics Platform links out, to moesif.com). See [Product catalogue](assets/product-catalogue.md) and [Coverage check](assets/documentation-coverage.md) (user decision 2026-10-07).
 - Starting facts: [Initial facts](research/00-initial-facts.md). Oxygen UI is pre-1.0; Docusaurus advises fewer than 10 versions per docs instance.
 - Treat findings as planning input for human review; flag security, licensing and supply-chain concerns for new dependencies.
+- Identity Platform moves to a one-time migration instead of build-time conversion (user decision 2026-10-13): [Migrate Identity Platform docs (docs-is) to Docusaurus](../wso2-docs-is-migration/map.md).
+- Every product publishes Docs bundles that the site pulls; every product migrates to Docusaurus eventually (no forced deadline), and until then its bundles carry raw MkDocs that the site still converts (user decisions 2026-10-14): [Roll out the WSO2 docs site across all products](../wso2-docs-rollout/map.md).
+- Site features and content components (page feedback, llms.txt, steps, badges and the like) are planned on their own map: [Site features and content components for the WSO2 docs site](../wso2-docs-elements/map.md) (2026-10-12).
+- Superseded in part (2026-10-19): the site's look and the Oxygen UI approach ("variant C now, real package later") are now decided on [Docs site redesign](../wso2-docs-redesign/map.md), which imports the real `@wso2/oxygen-ui` package. Structure decisions here still stand.
 
 ## Decisions so far
 
@@ -36,8 +40,8 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - [Deployment-option label](issues/09-deployment-option-label.md): GitLab-style "Deployment options" box under the title, labelled callouts for one-option content, both values shown inline; set per page in front matter with section defaults.
 - [Navigation across hub and products](issues/10-navigation.md): HashiCorp model with a Products mega-menu, per-product second bar with section tabs and version selector; product names open an overview page; hub appears as "Account and billing"; provisional on the product catalogue.
 - [Measure conversion of every product's docs](issues/16-measure-conversion-all-products.md): 92% of 6,617 Latest pages across 16 sources compile clean; failures are mostly invalid HTML in MI, IS and APIM; single-source products are cheap to bring in.
-
 - [Search choice and behaviour](issues/11-search-choice.md): search starts scoped to the current product (whole product, Latest plus the viewed version) with an "All products" tab; hub pages in every scope; optional deployment-option filter; modal plus results page; re-index per deploy; skeleton uses self-hosted Typesense while the Algolia legal review is on hold.
+
 ## Not yet specified
 
 - Redirects from current docs URLs (wso2.com docs, Asgardeo, Devant) to the docs site.
