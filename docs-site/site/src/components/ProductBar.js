@@ -1,8 +1,7 @@
-// Second bar inside a product: product name, one tab per section, version selector.
+// Second bar inside a product: product name and one tab per section (the version selector is in the header).
 import React from 'react';
 import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
-import VersionSelect from './VersionSelect.js';
 import { useCatalogue, locate } from './catalogue.js';
 
 export default function ProductBar() {
@@ -18,8 +17,7 @@ export default function ProductBar() {
           ))}
         </div>
       )}
-      <span className="product-bar__spacer" />
-      <VersionSelect versionsUrl={section.versionsUrl} />
+      {/* The version selector moved to the header (redesign prototype, mockup 3). */}
     </div>
   );
 }

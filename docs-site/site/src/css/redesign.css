@@ -124,3 +124,6 @@
   .navbar__inner { position: relative; }
   .navbar__items--right .search-button { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(460px, 36vw); }
 }
+
+/* Version pill in the header, after the product picker (mockup 3). */
+.navbar-version { display: inline-flex; align-items: center; margin-left: 6px; }
