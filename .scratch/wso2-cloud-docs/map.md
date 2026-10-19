@@ -18,6 +18,7 @@ A WSO2 Cloud hub documentation plan, ready to hand to writers: information archi
 - Deadline: WSO2Con, 2026-11-20.
 - Starting facts: [Initial landscape](research/00-initial-landscape.md).
 - Treat all findings as planning input for human review; verify marketing claims (SLA, regions) with product teams before reuse.
+- Related (2026-10-19): the hub's look (home page, footer) is being redesigned on [Docs site redesign](../wso2-docs-redesign/map.md); the hub's structure and link decisions here still stand and feed its footer ticket.
 
 ## Decisions so far
 

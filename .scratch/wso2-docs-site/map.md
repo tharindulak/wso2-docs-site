@@ -23,6 +23,7 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - Identity Platform moves to a one-time migration instead of build-time conversion (user decision 2026-10-13): [Migrate Identity Platform docs (docs-is) to Docusaurus](../wso2-docs-is-migration/map.md).
 - Every product publishes Docs bundles that the site pulls; every product migrates to Docusaurus eventually (no forced deadline), and until then its bundles carry raw MkDocs that the site still converts (user decisions 2026-10-14): [Roll out the WSO2 docs site across all products](../wso2-docs-rollout/map.md).
 - Site features and content components (page feedback, llms.txt, steps, badges and the like) are planned on their own map: [Site features and content components for the WSO2 docs site](../wso2-docs-elements/map.md) (2026-10-12).
+- Superseded in part (2026-10-19): the site's look and the Oxygen UI approach ("variant C now, real package later") are now decided on [Docs site redesign](../wso2-docs-redesign/map.md), which imports the real `@wso2/oxygen-ui` package. Structure decisions here still stand.
 
 ## Decisions so far
 
