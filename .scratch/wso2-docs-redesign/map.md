@@ -30,11 +30,12 @@ The docs site restyled to the approved design direction ("WSO2 Cloud Docs - Vers
 - [Oxygen UI 0.16 in the docs site](issues/01-oxygen-ui-016-in-docusaurus.md): still not tree-shakeable (+422 KB gzip per page for any browser import), no `theme.css`; works as a build-time tokens source at 0 KB per page; no WSO2 blue theme (PaleIndigo closest); security flags on URL themes and bundled agent instructions.
 - [How the site imports Oxygen UI](issues/09-oxygen-import-mode.md): at build time, pinned 0.16.0, generated CSS variables, plain MUI islands (0 KB per page); deliberate upgrades with a reviewed diff; React pin accepted.
 - [Which Oxygen theme styles the docs site](issues/10-oxygen-theme-choice.md): WSO2Theme orange, links #B25000 for contrast; corner radii from the mockups, not the theme's 20.
+- [Which parts of the site get the new look for WSO2Con](issues/03-launch-critical-parts.md): all chrome, page furniture, boxes, cards, footer, home page and product picker; code blocks, tables, API pages and search dialog after launch.
 
 ## Not yet specified
 
 - Older versions in the new look: rebuilding all 33 snapshots after Latest ships, and whether the build pipeline needs changes to make that routine.
-- Styling of code blocks, tables, API reference (Redoc) pages and the search dialog: after launch, using Oxygen components where they exist.
+- Styling of code blocks, tables, API reference (Redoc) pages and the search dialog after launch (decided as post-launch), using Oxygen components where they exist.
 - Mobile and narrow layouts: the mockups are desktop only.
 - Dark mode in the new look: the mockups show light only; depends on what Oxygen's theme provides.
 - Home page content: the mockup's sections (what you get, product cards) against the hub's decided sections.
