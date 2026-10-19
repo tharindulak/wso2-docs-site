@@ -96,7 +96,23 @@ export default {
       return { ...result, frontMatter: withLifecycleSidebar(result.frontMatter) };
     },
   },
-  future: { v4: false }, // Faster bundler broke on near-identical versioned MDX in docs-agent-platform; re-test before enabling.
+  // Docusaurus Faster (Rspack, SWC, LightningCSS, parallel page rendering). Two parts stay off: mdxCrossCompilerCache
+  // (the Faster MDX bug once seen with near-identical versioned copies in docs-agent-platform) and swcHtmlMinimizer
+  // (it drops attribute quotes and optional </p> tags, which scripts/check-links.mjs relies on). DOCS_FASTER=0 turns
+  // the whole block off (standard webpack build) if a source misbehaves.
+  future: process.env.DOCS_FASTER === '0' ? { v4: false } : {
+    v4: { removeLegacyPostBuildHeadAttribute: true }, // ssgWorkerThreads requires it
+    faster: {
+      rspackBundler: true,
+      rspackPersistentCache: true,
+      swcJsLoader: true,
+      swcJsMinimizer: true,
+      swcHtmlMinimizer: false,
+      lightningCssMinimizer: true,
+      ssgWorkerThreads: true,
+      mdxCrossCompilerCache: false,
+    },
+  },
   // The last entry serves redoc.standalone.js for API pages (src/components/ApiReference.js).
   // A snapshot build serves only its own version's files: generated/static (every live product) stays with the live build.
   // Local search settings (.cache/search-public/search-config.json, written by scripts/search-index.mjs) reach dev and

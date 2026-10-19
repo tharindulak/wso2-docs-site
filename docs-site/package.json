@@ -38,6 +38,7 @@
     "redoc": "2.5.4"
   },
   "devDependencies": {
+    "@docusaurus/faster": "3.10.2",
     "@wso2/oxygen-ui": "0.16.0",
     "@wso2/oxygen-ui-icons-react": "0.16.0",
     "htmlparser2": "8.0.2",
