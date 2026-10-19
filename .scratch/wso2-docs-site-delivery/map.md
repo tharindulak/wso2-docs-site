@@ -14,7 +14,7 @@ A build-ready spec, handed off for implementation, for three GitHub workflows: *
 - Already in place (do not re-decide): `docs-site-ci.yml` (PR build), `docs-site-snapshots.yml`, `docs-site-content-bump.yml`, `docs-site-version-promotion.yml`, `scripts/migrate-docusaurus.mjs`, `scripts/search-index.mjs`, `search/compose.yaml`. The merged build is about 9.8 GB and needs about 12 GB of heap.
 - Charting decisions (user, 2026-10-19):
   - **Versions come from the lock.** A deploy publishes what `content-sources.yaml` pins at a commit of this repo; versions change only through the existing bump and promotion PRs. Ad hoc refs are for Preview only.
-  - **Deploy triggers:** after `docs-site snapshots` succeeds on main (`workflow_run`), plus manual dispatch. Assembles without `--allow-missing`.
+  - **Deploy triggers:** after `docs-site snapshots` succeeds on the default branch (`workflow_run`, guarded), manual dispatch, and a daily backstop (see [Bot identity and gates for lock changes](issues/13-bot-identity-and-gates-for-lock-changes.md)). Assembles without `--allow-missing`.
   - **One VM for now**, run by the user (others may get access later). nginx serves it; GitHub-hosted runners reach it over SSH. Hostnames and TLS: whatever the VM is configured for today.
   - **Releases:** rsync into a timestamped release folder with `--link-dest`, switch a `current` symlink, keep the last 3; rollback repoints the symlink.
   - **nginx config** versioned in this repo, applied by hand. The deploy user has no sudo.
@@ -35,13 +35,14 @@ A build-ready spec, handed off for implementation, for three GitHub workflows: *
 - [Release folders, rsync and restricted SSH on the VM](issues/04-release-pattern-on-the-vm.md): atomic `mv -T` symlink switch, no nginx reload, `open_file_cache` off; rrsync only for uploads (root-anchored `--link-dest`), a root-owned gate script for switch, prune, rollback and preview cleanup; `from=` impractical; host key from the console; a `workflow_run` deploy must check `head_branch`/`event`/`head_repository` because environment branch rules see the default branch.
 - [How bot changes reach CI, snapshots and deploy](issues/11-how-bot-changes-reach-ci-and-deploy.md): with `GITHUB_TOKEN`, bump CI needs manual approval and auto-merged bumps never start snapshots or Deploy; the snapshots trigger names branches that do not exist; the fork has Actions, auto-merge and bot PR creation off; an App token is the documented fix.
 - [CI and a lock pinned to forks](issues/12-ci-and-a-lock-pinned-to-forks.md): forks stand in for wso2 repos until cutover; CI honours fork owners from a repo variable, never when the repo owner is `wso2`; the VM is a `test` environment with `noindex`; every pinned SHA must be reachable from the lock's branch on the lock's repo.
+- [Bot identity and gates for lock changes](issues/13-bot-identity-and-gates-for-lock-changes.md): a separate single-repo docs-site bot App; bumps and fix releases deploy with no person in the loop; a required bump-shape check holds any structural lock change until the section's `owners:` team approves; Deploy runs on guarded `workflow_run`, dispatch and a daily backstop.
 
 ## Not yet specified
 
 - More environments (staging alongside production): how environments, secrets and hostnames multiply once there is more than one VM.
 - Giving others access to the VM and to the `production` environment (reviewers, key rotation, who can dispatch).
 - Previews started from content-repo PRs, so writers see their change without asking someone here.
-- Moving the workflows to the wso2-org repo: repo name, App installation, secrets handover, branch protection, re-pinning the lock from forks to `wso2/*`, and creating the `production` environment.
+- Moving the workflows to the wso2-org repo: repo name, App installation, secrets handover, branch protection, re-pinning the lock from forks to `wso2/*`, creating the `production` environment, installing the docs-site bot App, and giving each section's `owners:` team read access.
 - Sitemap: the merged `sitemap.xml` lists live pages only, not snapshot versions; whether that is intended is undecided.
 - Deploy monitoring and alerts: who hears about a failed deploy or a stale site, and how.
 
