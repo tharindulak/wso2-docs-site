@@ -12,7 +12,7 @@ From GitHub's docs: how does a workflow in one repo get a short-lived token to p
 
 ## Resolution
 
-Findings: `research/06-github-app-for-content-repo-prs.md` on branch `research/github-app-for-content-repo-prs` (commit b52316a).
+Findings: [06-github-app-for-content-repo-prs.md](../research/06-github-app-for-content-repo-prs.md).
 
 - **Token:** `actions/create-github-app-token@v3` with `owner: wso2`, one repo in `repositories`, `permission-contents: write`, `permission-pull-requests: write`. One-hour lifetime, revoked in the action's post step, so it cannot cross jobs. App permissions: Contents and Pull requests (write), Metadata (read); no Workflows permission, since the tree never writes the repo-root `.github/`. Unverified: GitHub may reject a force-push carrying edit-branch commits that changed workflow files.
 - **Fine-grained PAT:** stop-gap only (tied to one person, expires, needs org owner approval; GitHub recommends an App for org automation).

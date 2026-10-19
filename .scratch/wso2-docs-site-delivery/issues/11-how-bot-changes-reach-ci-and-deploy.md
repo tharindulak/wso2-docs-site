@@ -12,7 +12,7 @@ The content-bump and version-promotion workflows open (and the bump auto-merges)
 
 ## Resolution
 
-Findings: `research/11-how-bot-changes-reach-ci-and-deploy.md` on branch `research/how-bot-changes-reach-ci-and-deploy` (commit 8c4c4b7).
+Findings: [11-how-bot-changes-reach-ci-and-deploy.md](../research/11-how-bot-changes-reach-ci-and-deploy.md).
 
 - **Suppressed events:** bump PRs pushed with `GITHUB_TOKEN` do start `docs-site CI`, but awaiting approval (GitHub changelog 2026-06-11), so someone must approve every hourly push. A merge from a `GITHUB_TOKEN`-enabled auto-merge creates no push run: snapshots, `workflow_run` and Deploy never start. Merge commit attribution is undocumented (unverified). Promotion PRs are merged by a person, so their push triggers normally.
 - **Branches:** default is `docs-site-build`; `docs-site-snapshots.yml:7` listens on `main` and `docs-site-versions`, neither of which exists on the remote. Other triggers are fine.

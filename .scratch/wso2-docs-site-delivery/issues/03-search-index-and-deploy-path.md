@@ -12,7 +12,7 @@ Read `docs-site/scripts/search-index.mjs`, `snapshots.mjs`, `snapshot-store.mjs`
 
 ## Resolution
 
-Findings: `research/03-search-index-and-deploy-path.md` on branch `research/search-index-and-deploy-path` (commit 7c1bb89).
+Findings: [03-search-index-and-deploy-path.md](../research/03-search-index-and-deploy-path.md).
 
 - **Index without alias move:** not possible today; `publish()` in `search-index.mjs` creates, imports, moves the alias and drops every older collection in one call. Smallest change (about 40 lines): split into `index` (create and import, print the name), `promote <collection>` and `prune --keep N`. The site names the alias, so promoting needs no rebuild.
 - **Rollback:** today the previous collection is already dropped, so a symlink rollback would search the new index. Fix: keep the previous collection, record its name in each release, rollback = symlink switch plus `promote`.

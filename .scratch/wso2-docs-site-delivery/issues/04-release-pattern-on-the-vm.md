@@ -12,7 +12,7 @@ From primary sources (rsync, rrsync, OpenSSH, nginx and GitHub Actions docs): ho
 
 ## Resolution
 
-Findings: `research/04-release-pattern-on-the-vm.md` on branch `research/release-pattern-on-the-vm` (commit a780e58), including a gate script sketch.
+Findings: [04-release-pattern-on-the-vm.md](../research/04-release-pattern-on-the-vm.md), including a gate script sketch.
 
 - **Switch:** nginx follows a `current` symlink switch without reload. Switch with `ln -s` to a temp name then `mv -T` (atomic rename). Keep `open_file_cache` off (else up to 60 s stale). In-flight requests finish from old files. Add `disable_symlinks on from=$document_root`.
 - **rrsync:** `--link-dest` works only root-anchored (`--link-dest=/<prev-id>/`); a relative path silently links nothing on 3.2.7. rrsync cannot switch, prune, roll back or delete previews, so a small root-owned gate script is needed: rsync calls go to `rrsync -wo -no-del -munge`, every other command matched against a fixed list with validated arguments. Docusaurus rewrites every mtime, so `-a` defeats hard links; likely fix `--checksum` without `-t` (inference; test on the VM).

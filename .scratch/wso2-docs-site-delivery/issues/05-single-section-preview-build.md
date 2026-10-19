@@ -12,7 +12,7 @@ Can the build produce one section's Latest with that section's pin overridden by
 
 ## Resolution
 
-Findings: `research/05-single-section-preview-build.md` on branch `research/single-section-preview-build` (commit af500c4).
+Findings: [05-single-section-preview-build.md](../research/05-single-section-preview-build.md).
 
 - **One-section build exists:** `fetch-sources.mjs <id>`, `build-content.mjs <id>`, `build-sections.mjs build <id>` (sets `DOCS_SECTIONS`) build only that section's Latest into `site/build-quick`.
 - **Ref override:** write a temp lock with only that section's Latest SHA changed (structured edit, not `sed`: SHAs repeat across entries) and point `DOCS_SITE_LOCK` at it (`lib.mjs:11`). Verified locally on healthcare; the committed lock untouched. Merged and cloud-companion sections have two sources: which one the ref overrides is undecided.
