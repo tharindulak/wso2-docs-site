@@ -40,8 +40,7 @@ export default function VersionSelect({ versionsUrl, pill = false }) {
         {g.current.map(item)}
         {g.previous.length > 0 && <ListSubheader>Previous versions</ListSubheader>}
         {g.previous.map(item)}
-        {g.older.length > 0 && <ListSubheader>Older versions</ListSubheader>}
-        {g.older.map(item)}
+        {/* Pre-site releases (status "confluence", links to the former docs) are not listed (user decision 2026-10-19). */}
       </Menu>
     </MuiIsland>
   );
