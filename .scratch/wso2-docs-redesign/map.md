@@ -32,6 +32,7 @@ The docs site restyled to the approved design direction ("WSO2 Cloud Docs - Vers
 - [Which Oxygen theme styles the docs site](issues/10-oxygen-theme-choice.md): WSO2Theme orange, links #B25000 for contrast; corner radii from the mockups, not the theme's 20.
 - [Which parts of the site get the new look for WSO2Con](issues/03-launch-critical-parts.md): all chrome, page furniture, boxes, cards, footer, home page and product picker; code blocks, tables, API pages and search dialog after launch.
 - [Footer and call-to-action link targets](issues/04-footer-links.md): Docs, Products and Help columns from the hub and CONTEXT.md; forum, GitHub and blog dropped; console button held until its address is approved; legal links to WSO2's pages once confirmed.
+- [Doc page in the new look](issues/05-doc-page-prototype.md): variant A (mockup on Oxygen) signed off, plus no section dividers, centred search and the version pill in the header; prototype on `prototype/redesign-doc-page`.
 
 ## Not yet specified
 
