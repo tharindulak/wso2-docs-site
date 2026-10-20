@@ -4,7 +4,7 @@ import { siteUrl, noIndex, siteKeySuffix, DEFAULT_SITE_URL } from '../src/lib/si
 
 test('site URL: wso2.com unless a deploy names an https origin', () => {
   assert.equal(siteUrl({}), DEFAULT_SITE_URL);
-  assert.equal(siteUrl({ DOCS_SITE_URL: 'https://141-148-145-173.sslip.io' }), 'https://141-148-145-173.sslip.io');
+  assert.equal(siteUrl({ DOCS_SITE_URL: 'https://docs.example.test' }), 'https://docs.example.test');
   for (const bad of ['http://example.com', 'https://example.com/', 'https://example.com/docs', 'https://Example.com', 'javascript:alert(1)', 'https://-a.com'])
     assert.throws(() => siteUrl({ DOCS_SITE_URL: bad }), /https origin/, bad);
 });
