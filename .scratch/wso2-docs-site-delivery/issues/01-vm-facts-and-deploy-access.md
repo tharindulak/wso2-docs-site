@@ -56,3 +56,9 @@ Run by the agent over SSH after the user approved the command list.
 - **Checks (GNU rsync 3.5.1 client):** admin login still works; root refused; `id` and `ls /` with the deploy key refused by rrsync; upload into `releases/probe` works; `../previews`, read-back and `--delete` refused; an absolute path is confined under `releases/`. The probe was removed.
 - **Finding for the deploy spec:** without `-p`, uploaded folders kept the source's 0700 mode, which Caddy could not read. The deploy must set modes explicitly, e.g. `--chmod=D755,F644`.
 - **Still open:** the user confirms the host key against the OCI console; the deploy key, host and `known_hosts` go into the `test` environment as secrets only after a separate approval. Proposed secret names: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_KNOWN_HOSTS`.
+
+## Secrets (2026-10-20)
+
+- GitHub environment `test` on this fork, deployments limited to the default branch `docs-site-build`.
+- Secrets set by the user: `DEPLOY_SSH_KEY` (the deploy private key) and `DEPLOY_HOST` (the VM's IP, so SSH from CI does not depend on sslip.io DNS).
+- `DEPLOY_KNOWN_HOSTS` waits for the user to confirm the ED25519 host key against the OCI console.
