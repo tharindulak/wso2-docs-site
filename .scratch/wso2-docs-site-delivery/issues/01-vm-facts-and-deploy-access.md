@@ -34,3 +34,13 @@ Read-only, over SSH as the image's default admin user. The address, hostname and
 - **Preview hostnames:** subdomains of the VM's sslip.io hostname, each with its own Caddy certificate. Risks: depends on sslip.io (free third-party DNS); Let's Encrypt per-domain limits, so previews reuse names.
 - **Root SSH login off:** `PermitRootLogin no`.
 - **Who changes the VM:** the agent runs each reviewed command list over SSH. Deploy key generated on the user's Mac, never printed or committed. GitHub secrets set only after a separate approval.
+
+## Facts: the new Arm VM (2026-10-20)
+
+Replaces the 1 GB VM above. Read-only, over SSH as the image's default admin user.
+
+- **Host:** OCI Ampere A1, Ubuntu 24.04.5 LTS, **aarch64**, 4 OCPU, **23 GiB RAM**, no swap, 45 GB disk (42 GB free).
+- **Web server:** Caddy on 80 and 443, one site block for the VM's sslip.io hostname, `root * /var/www/site`, `file_server`; HTTPS answers 200.
+- **Same as before:** no Docker; rsync 3.2.7 (`3.2.7-1ubuntu1.5`) with `/usr/bin/rrsync`; `fs.protected_hardlinks = 1`; sshd key only with `permitrootlogin without-password`; Security List and iptables allow 22, 80, 443.
+- **Arm:** the Typesense image in `search/compose.yaml` is pinned by digest; whether that digest covers arm64 is for the hosting spec to check.
+- **Host key (ED25519):** `SHA256:i857mhRVs9gtXskfw4iuLBdn1sVYrzNpwITtmYrGEi8`, to be confirmed against the OCI console before it becomes the `known_hosts` secret.
