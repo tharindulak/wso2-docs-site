@@ -45,16 +45,17 @@ A build-ready spec, handed off for implementation, for three GitHub workflows: *
 
 ## Not yet specified
 
-- More environments (staging alongside production): how environments, secrets and hostnames multiply once there is more than one VM.
-- Giving others access to the VM and to the `production` environment (reviewers, key rotation, who can dispatch).
-- Previews started from content-repo PRs, so writers see their change without asking someone here.
-- Moving the workflows to the wso2-org repo: repo name, App installation, secrets handover, branch protection, re-pinning the lock from forks to `wso2/*`, creating the `production` environment, installing the docs-site bot App, and giving each section's `owners:` team read access.
-- Sitemap: the merged `sitemap.xml` lists live pages only, not snapshot versions; whether that is intended is undecided.
-- Web server config, test and production (the test VM's Caddy is temporary; the user decides later). Deploy and Preview expect: site from `/srv/docs/current`; preview `<name>` from `/srv/docs/previews/<name>/current`; dot files and `_search/` not published; a search hostname exposing only Typesense's `GET /collections/docs/documents/search`; `noindex` on the test VM; security headers, caching and CSP open.
-- Deploy monitoring and alerts: who hears about a failed deploy or a stale site, and how.
+<!-- empty: the destination is reached (2026-10-20) -->
 
 ## Out of scope
 
+- More environments (staging alongside production): how environments, secrets and hostnames multiply once there is more than one VM. Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
+- Giving others access to the VM and to the `production` environment (reviewers, key rotation, who can dispatch). Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
+- Previews started from content-repo PRs, so writers see their change without asking someone here. Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
+- Moving the workflows to the wso2-org repo: repo name, App installation, secrets handover, branch protection, re-pinning the lock from forks to `wso2/*`, creating the `production` environment, installing the docs-site bot App, and giving each section's `owners:` team read access. Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
+- Sitemap: the merged `sitemap.xml` lists live pages only, not snapshot versions; whether that is intended is undecided. Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
+- Web server config, test and production (the test VM's Caddy is temporary; the user decides later). Deploy and Preview expect: site from `/srv/docs/current`; preview `<name>` from `/srv/docs/previews/<name>/current`; dot files and `_search/` not published; a search hostname exposing only Typesense's `GET /collections/docs/documents/search`; `noindex` on the test VM; security headers, caching and CSP open. Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
+- Deploy monitoring and alerts: who hears about a failed deploy or a stale site, and how. Out of scope: beyond the three specs; seed for a follow-up effort such as "Taking the docs site workflows to production" (user decision 2026-10-20).
 - Fixing existing workflow defects found on the way (snapshots branch filter, promotion loop with more than one pending promotion, missing CODEOWNERS): separate fixes, not part of this spec; see [How bot changes reach CI, snapshots and deploy](issues/11-how-bot-changes-reach-ci-and-deploy.md).
 - Building the workflows themselves: this map ends at the spec (user decision 2026-10-19, charting Q1).
 - Rerunning the migration automatically after a bump: migration is manual dispatch only (user decision 2026-10-19).
