@@ -3,7 +3,7 @@
 Parent: [map](../map.md)
 Type: grilling (HITL)
 Status: open
-Assignee:
+Assignee: tharindulak
 Blocked by: 01, 02, 04
 
 ## Question
