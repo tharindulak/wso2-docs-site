@@ -133,11 +133,26 @@ test('treeHash sees dirty and untracked edits when root is the docs-site directo
 });
 
 test('a component snapshot key covers the lock fields its cross-section links read; other keys do not change', async () => {
-  const { readLock, liveWindow } = await import('../lib.mjs');
+  const { liveWindow } = await import('../lib.mjs');
   const { sectionVersions, outsideLinkInputs } = await import('../versions.mjs');
   const keys = (lock) => Object.fromEntries(lock.products.flatMap((p) => p.sections.flatMap((s) => sectionVersions(s, liveWindow(lock))))
     .filter((x) => x.status === 'snapshot').map((x) => [x.id, snapshotKey(x, { ...h, links: outsideLinkInputs(lock, x) })]));
-  const lock = readLock();
+  // Its own lock, not content-sources.yaml: the shape under test (components kept as version folders of one MkDocs
+  // source, docs_root) must not depend on how the real lock pins API Platform at the time.
+  const sha = (c) => c.repeat(40);
+  const vs = (...versions) => versions.map((version, i) => ({ version, ref: 'main', sha: sha('abcdef'[i]), ...(i ? {} : { track: true }) }));
+  const shared = { kind: 'mkdocs', repo: 'wso2/docs-api-platform', mkdocs: 'en/mkdocs.yml' };
+  const lock = { live_window: 1, products: [
+    { id: 'api-platform', sections: [
+      { ...shared, id: 'api-platform-platform', route: 'api-platform/platform', sha: sha('1'), track: 'main', skip: ['api-gateway/', 'ai-gateway/'] },
+      { ...shared, id: 'api-platform-api-gateway', route: 'api-platform/api-gateway', docs_root: 'api-gateway/{version}/', nav_root: 'API Gateway', versions: vs('1.2.0', '1.1.0', '1.0.0') },
+      { ...shared, id: 'api-platform-ai-gateway', route: 'api-platform/ai-gateway', docs_root: 'ai-gateway/{version}/', nav_root: 'AI Gateway', versions: vs('1.3.0', '1.2.0', '1.1.0') },
+      { id: 'api-platform-apim', kind: 'mkdocs', repo: 'wso2/docs-apim', mkdocs: 'en/mkdocs.yml', route: 'api-platform/apim', versions: vs('4.6.0', '4.5.0'),
+        cloud_companion: { ...shared, sha: sha('2'), track: 'main', only: 'cloud/' } },
+    ] },
+    { id: 'integration', sections: [{ id: 'integration-mi', kind: 'mkdocs', repo: 'wso2/docs-mi', mkdocs: 'en/mkdocs.yml', route: 'integration/micro-integrator', versions: vs('4.6.0', '4.5.0') }] },
+    { id: 'identity', sections: [{ id: 'identity', kind: 'mkdocs', repo: 'wso2/docs-is', mkdocs: 'en/mkdocs.yml', route: 'identity', versions: vs('7.3.0', '7.2.0') }] },
+  ] };
   const before = keys(lock);
   const section = (l, id) => l.products.flatMap((p) => p.sections).find((s) => s.id === id);
   const grown = structuredClone(lock);
