@@ -33,3 +33,9 @@ Decided with the user, 2026-10-20. Builds on the map's Notes and [Search index a
 **Concurrency:** one group `deploy-test` (deploys and rollbacks), no cancel in progress, a newer pending run replaces an older one. Preview has its own group, key, environment and folder.
 
 **Still to do on the VM** (hand-off): write and install the gate, create the gate key and its secret `DEPLOY_GATE_KEY`, Typesense and the admin key on the VM (see [Hosting config for Caddy and Typesense](08-hosting-config-caddy-and-typesense.md)).
+
+## Verified on the test VM (2026-10-20, hosting kit `build/hosting-kit`)
+
+- `--checksum --link-dest=/<prev-id>/` without `-t` through rrsync 3.2.7 hard-links unchanged files (same inode, link count 2): the inference above holds.
+- Upload key then `switch`, `rollback` through the gate against real Typesense 30.2: index, alias and symlink move together; analytics rules must be created after the alias exists (fixed in the gate).
+- Implementation note: the search alias moves before the symlink switch, so an alias failure leaves the site untouched. Previews upload to `previews/builds/<name>_<id>/` and go live through `previews/live/<name>`, so the preview upload key can never overwrite a live link.
