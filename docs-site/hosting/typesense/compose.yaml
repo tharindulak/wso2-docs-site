@@ -1,0 +1,29 @@
+# Typesense on the docs VM (installed by ../setup.sh as /opt/docs-site/typesense/compose.yaml). Same pinned image as
+# ../../search/compose.yaml (a multi-arch list: amd64 and arm64). Listens on loopback only: the gate indexes over
+# local HTTP and the web server proxies the search-only endpoint. The server is GPL-3.0, run unmodified (OSS policy
+# check cleared 2026-10-20). Keys and the CORS origin come from /etc/docs-site/typesense.env (root:deploy 0640).
+name: docs-typesense
+services:
+  typesense:
+    image: typesense/typesense:30.2@sha256:610f2d34b1f93d00762869da2c67736775e5798d19a2c8b91b014b8a0cc1e110
+    restart: unless-stopped
+    mem_limit: 8g
+    environment:
+      TYPESENSE_API_KEY: ${TYPESENSE_ADMIN_KEY:?set TYPESENSE_ADMIN_KEY}
+      TYPESENSE_DATA_DIR: /data
+      # No origin configured: CORS stays off, so browsers on other origins cannot call it.
+      TYPESENSE_ENABLE_CORS: ${DOCS_CORS_ENABLED:-false}
+      TYPESENSE_CORS_DOMAINS: ${DOCS_CORS_ORIGIN:-}
+      TYPESENSE_ENABLE_SEARCH_ANALYTICS: "true"
+      TYPESENSE_ANALYTICS_DIR: /analytics
+      TYPESENSE_ANALYTICS_FLUSH_INTERVAL: "60"
+      # A single node may come back on another internal address after a restart; any release can rebuild the index.
+      TYPESENSE_RESET_PEERS_ON_ERROR: "true"
+    ports:
+      - 127.0.0.1:8108:8108
+    volumes:
+      - typesense-data:/data
+      - typesense-analytics:/analytics
+volumes:
+  typesense-data:
+  typesense-analytics:
