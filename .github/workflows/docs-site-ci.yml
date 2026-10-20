@@ -27,6 +27,16 @@ jobs:
       run:
         working-directory: docs-site
     steps:
+      # Sources, converted content and the build outgrow a hosted runner's free disk (about 14 GB): the runner crashed
+      # with "No space left on device" in npm run content. Remove preinstalled toolchains the build never uses.
+      - name: Free runner disk
+        working-directory: /
+        run: |
+          set -eu
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/hostedtoolcache/CodeQL
+          free=$(df -Pk / | awk 'NR == 2 { print int($4 / 1048576) }')
+          echo "free: ${free} GB"
+          (( free >= 25 )) || { echo "less than 25 GB free" >&2; exit 1; }
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
