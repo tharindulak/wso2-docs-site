@@ -1,4 +1,4 @@
-# Hosting config for nginx and Typesense
+# Hosting config for Caddy and Typesense
 
 Parent: [map](../map.md)
 Type: grilling (HITL)
