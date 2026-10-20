@@ -2,8 +2,10 @@
 # Never auto-merges: one approval from the product's docs team is required (CODEOWNERS).
 name: docs-site version promotion
 on:
-  schedule:
-    - cron: '41 6 * * *'
+  # Schedule paused (2026-10-20): the script needs the converter built first and the fork-pinned lock needs
+  # DOCS_SITE_TEST_OWNER; restore once fixed and the docs-site bot App exists. Manual dispatch still works.
+  # schedule:
+  #   - cron: '41 6 * * *'
   workflow_dispatch:
 permissions:
   contents: write
