@@ -60,7 +60,19 @@ jobs:
           f=$( [ -f /mnt/docs-swap ] && echo /mnt/docs-swap || echo /docs-swap )
           sudo chmod 600 "$f" && sudo mkswap -q "$f" && sudo swapon "$f"
           nproc; free -h; df -h / /mnt 2>/dev/null || true
-      - run: npm run build # scripts/docusaurus.mjs: the DOCS_HEAP_MB heap
+      # The runner has died mid-build twice with no build error ("The operation was canceled"). Until the cause is known,
+      # memory and the largest processes are printed every 20 s next to Docusaurus's phase timings.
+      - name: npm run build (memory logged)
+        env:
+          DOCUSAURUS_PERF_LOGGER: 'true'
+        run: |
+          set -eu
+          ( while sleep 20; do
+              echo "::group::mem $(date -u +%T)"; free -m | sed -n '2,3p'; ps -eo rss=,comm= --sort=-rss | head -4 | awk '{ printf "%7.1f GB %s\n", $1/1048576, $2 }'; echo "::endgroup::"
+            done ) &
+          logger=$!
+          trap 'kill $logger 2>/dev/null || true' EXIT
+          npm run build # scripts/docusaurus.mjs: the DOCS_HEAP_MB heap
       # Merge stored snapshots in place (saves a copy of the live build). A snapshot whose key is not stored yet
       # (changed by this PR) is a pending warning: the snapshot workflow builds it after merge.
       - run: node scripts/snapshots.mjs assemble site/build site/build --allow-missing
