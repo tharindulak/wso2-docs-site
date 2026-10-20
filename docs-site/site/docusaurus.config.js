@@ -80,6 +80,15 @@ const catalogue = {
   ],
 };
 
+// A product's entry point, as the Products menu and home cards link it (src/components/catalogue.js productHref): its
+// first section's landing. Products have no page at /<product id>/ (API Platform and Integration Platform's sections sit
+// below it), so footer links to the bare product route were broken on every page.
+function productTo(id) {
+  const section = manifest.products.find((p) => p.id === id)?.sections[0];
+  if (!section) throw new Error(`footer: no product ${id} in generated/manifest.json`);
+  return `/${section.route}/${section.landing ?? ''}`;
+}
+
 export default {
   title: 'WSO2 Docs',
   tagline: 'Documentation for every WSO2 product, cloud and self-hosted.',
@@ -144,10 +153,10 @@ export default {
         { title: ' ', items: [{ html: '<div class="footer-about"><span class="footer-about__logo">W</span><p>Documentation for WSO2 products: Agent Manager, Identity Platform, API Platform, Integration Platform and API Analytics Platform.</p></div>' }] },
         { title: 'Docs', items: [{ label: 'Overview', to: '/' }, { label: 'Search', to: '/search/' }] },
         { title: 'Products', items: [
-          { label: 'Agent Manager', to: '/agent-manager/' },
-          { label: 'Identity Platform', to: '/identity/' },
-          { label: 'API Platform', to: '/api-platform/' },
-          { label: 'Integration Platform', to: '/integration/' },
+          { label: 'Agent Manager', to: productTo('agent-manager') },
+          { label: 'Identity Platform', to: productTo('identity') },
+          { label: 'API Platform', to: productTo('api-platform') },
+          { label: 'Integration Platform', to: productTo('integration') },
           { label: 'API Analytics Platform', href: 'https://www.moesif.com/docs/' },
         ] },
       ],
