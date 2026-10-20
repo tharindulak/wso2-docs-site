@@ -1,0 +1,298 @@
+#!/bin/bash
+# Forced command for the deploy user's two control keys. Runs as deploy, never as root. Decided in
+# .scratch/wso2-docs-site-delivery/issues/07-deploy-workflow-spec.md and 09-preview-workflow-spec.md.
+#   restrict,command="/usr/local/sbin/docs-gate site" ssh-ed25519 ...      the site gate key (Plan and Promote jobs)
+#   restrict,command="/usr/local/sbin/docs-gate preview" ssh-ed25519 ...   the preview gate key
+# Upload keys never reach this script: their forced command is rrsync, which can only write new folders.
+#
+# The verb is SSH_ORIGINAL_COMMAND, matched whole against an allow-list before it is split; it is never evaluated.
+#   site:    current | switch <id> | rollback | prune
+#   preview: preview-plan <name> | preview-switch <name> <id> | preview-delete <name> | preview-clean
+# Output is key=value lines for the workflow to read.
+#
+# Usage outside sshd (tests): SSH_ORIGINAL_COMMAND='<verb>' docs-gate <site|preview> [config file]
+set -euo pipefail
+export LC_ALL=C
+umask 022
+
+MODE=${1:-}
+CONF=${2:-/etc/docs-site/gate.conf}
+die() { echo "docs-gate: $1" >&2; exit "${2:-1}"; }
+
+# Settings (gate.conf is root-owned on the VM; setup.sh writes it).
+BASE=/srv/docs
+KEEP=3                       # complete site releases kept, the live one included
+STALE_MINUTES=1440           # an upload without its completion marker is abandoned after this
+TYPESENSE_URL=               # empty: search is not touched
+TYPESENSE_ENV=/etc/docs-site/typesense.env
+SEARCH_PUBLIC_URL=           # what browsers call; empty: no search-config.json is written
+PREVIEW_MAX=10
+PREVIEW_MIN_FREE_GB=10
+PREVIEW_DAYS=14
+[[ -r $CONF ]] || die "no config at $CONF" 78
+# shellcheck source=/dev/null
+source "$CONF"
+
+ID_RE='[0-9]{8}T[0-9]{6}Z-[0-9a-f]{7,40}'
+NAME_RE='[a-z0-9]([a-z0-9-]{0,38}[a-z0-9])?'
+ALIAS=docs
+
+cmd=${SSH_ORIGINAL_COMMAND-}
+case $MODE in
+  site)    allow="^(current|rollback|prune|switch ${ID_RE})$" ;;
+  preview) allow="^(preview-clean|preview-plan ${NAME_RE}|preview-delete ${NAME_RE}|preview-switch ${NAME_RE} ${ID_RE})$" ;;
+  *) die "unknown mode" 64 ;;
+esac
+command -v logger >/dev/null && logger -t docs-gate -- "$MODE: ${cmd:0:200}" || true
+(( ${#cmd} <= 200 )) && [[ $cmd =~ $allow ]] || die "refused: not an allowed command" 65
+read -r verb arg1 arg2 <<<"$cmd"
+
+RELEASES=$BASE/releases
+BUILDS=$BASE/previews/builds
+LIVE=$BASE/previews/live
+TMP=$(mktemp -d)
+trap 'rm -rf -- "$TMP"' EXIT
+
+exec 9>"$BASE/.gate.lock"
+flock -w 600 9 || die "another gate command holds the lock" 75
+
+# ---- helpers ----
+
+free_gb() { df -Pk -- "$BASE" | awk 'NR == 2 { print int($4 / 1048576) }'; }
+
+# A folder the gate may switch to: a real directory under $2 with both markers.
+complete() { [[ -d $1 && ! -L $1 && -f $1/.release-complete && -f $1/.release.json ]]; }
+under() { local real; real=$(realpath -e -- "$1") || return 1; [[ $real == "$(realpath -e -- "$2")"/* ]]; }
+
+# Point link $1 at $2 atomically (rename(2) over the old link).
+relink() { ln -sfn -- "$2" "$1.tmp" && mv -Tf -- "$1.tmp" "$1"; }
+
+current_id() { [[ -L $BASE/current ]] && basename -- "$(readlink -- "$BASE/current")" || true; }
+
+complete_ids() {   # complete site releases, newest first (ids sort by their timestamp)
+  local d
+  for d in "$RELEASES"/*/; do d=${d%/}; d=${d##*/}; [[ $d =~ ^${ID_RE}$ ]] && complete "$RELEASES/$d" && echo "$d" || true; done | sort -r
+}
+
+# Typesense, over local HTTP. The admin key is passed to curl on a file descriptor, never on its command line.
+search_on() {
+  [[ -n $TYPESENSE_URL ]] || return 1
+  [[ -r $TYPESENSE_ENV ]] || die "search is configured but $TYPESENSE_ENV is not readable"
+  # shellcheck source=/dev/null
+  source "$TYPESENSE_ENV"
+  [[ -n ${TYPESENSE_ADMIN_KEY:-} && -n ${TYPESENSE_SEARCH_KEY:-} ]] || die "$TYPESENSE_ENV lacks the admin or search key"
+}
+ts() {   # METHOD ROUTE [curl args]: body in $TMP/body, status in TS_CODE; true on 2xx
+  TS_CODE=$(curl -sS -o "$TMP/body" -w '%{http_code}' -X "$1" -H @<(printf 'X-TYPESENSE-API-KEY: %s\n' "$TYPESENSE_ADMIN_KEY") \
+    "${@:3}" "$TYPESENSE_URL$2") || TS_CODE=000
+  [[ $TS_CODE == 2* ]]
+}
+ts_json() { ts "$1" "$2" -H 'Content-Type: application/json' --data-binary "$3"; }
+ts_fail() { die "Typesense $1: HTTP $TS_CODE $(head -c 300 "$TMP/body" 2>/dev/null)"; }
+
+# The published key: search only, on the alias only (same rule as scripts/search-index.mjs).
+ensure_search_key() {
+  ts GET /keys || ts_fail "GET /keys"
+  local prefix=${TYPESENSE_SEARCH_KEY:0:4} ids
+  if jq -e --arg p "$prefix" --arg a "$ALIAS" 'any(.keys[]; .description == "docs-site search" and .value_prefix == $p
+      and .actions == ["documents:search"] and .collections == [$a])' "$TMP/body" >/dev/null; then return 0; fi
+  ids=$(jq -r --arg p "$prefix" '.keys[] | select(.description == "docs-site search" and .value_prefix == $p) | .id' "$TMP/body")
+  for id in $ids; do ts DELETE "/keys/$id" || ts_fail "DELETE key"; done
+  ts_json POST /keys "$(jq -nc --arg v "$TYPESENSE_SEARCH_KEY" --arg a "$ALIAS" \
+    '{description: "docs-site search", actions: ["documents:search"], collections: [$a], value: $v}')" || ts_fail "POST /keys"
+}
+
+# Aggregate analytics rules on the alias; a failure is reported, not fatal (as in scripts/search-index.mjs).
+ensure_analytics() {
+  local name type dest
+  while read -r name type dest; do
+    ts_json POST /collections "{\"name\":\"$dest\",\"fields\":[{\"name\":\"q\",\"type\":\"string\"},{\"name\":\"count\",\"type\":\"int32\"}]}" \
+      || [[ $TS_CODE == 409 ]] || { echo "analytics=off" ; return 0; }
+    if ts GET "/analytics/rules/$name" && [[ $(jq -r .collection "$TMP/body") == "$ALIAS" ]]; then continue; fi
+    [[ $TS_CODE == 2* ]] && { ts DELETE "/analytics/rules/$name" || true; }
+    ts_json POST /analytics/rules "$(jq -nc --arg n "$name" --arg t "$type" --arg d "$dest" --arg a "$ALIAS" \
+      '{name: $n, type: $t, collection: $a, event_type: "search",
+        params: {destination_collection: $d, limit: 1000, capture_search_requests: true, expand_query: false}}')" \
+      || { echo "analytics=off"; return 0; }
+  done <<'RULES'
+docs_popular_queries popular_queries search_queries
+docs_nohits_queries nohits_queries search_nohits
+RULES
+}
+
+alias_target() { ts GET "/aliases/$ALIAS" && jq -r '.collection_name // empty' "$TMP/body" || true; }
+move_alias() { ts_json PUT "/aliases/$ALIAS" "{\"collection_name\":\"$1\"}"; }
+
+# Index a release's records into docs_<id>; prints the collection name. On failure the collection is dropped.
+index_release() {
+  local id=$1 dir=$RELEASES/$1 coll="docs_$1" bad
+  jq -e 'type == "object" and (.fields | type == "array")' "$dir/_search/schema.json" >/dev/null || die "$id: _search/schema.json is not a schema"
+  jq -c --arg n "$coll" '. + {name: $n}' "$dir/_search/schema.json" >"$TMP/schema.json"
+  ts DELETE "/collections/$coll" || true   # a rerun of the same release starts clean; the alias never points here yet
+  ts POST /collections -H 'Content-Type: application/json' --data-binary @"$TMP/schema.json" || ts_fail "create $coll"
+  if ! ts POST "/collections/$coll/documents/import?action=create&batch_size=500" -H 'Content-Type: text/plain' \
+      --data-binary @"$dir/_search/records.jsonl"; then
+    local code=$TS_CODE; ts DELETE "/collections/$coll" || true; TS_CODE=$code; ts_fail "import into $coll"
+  fi
+  bad=$(jq -s '[.[] | select(.success != true)] | length' "$TMP/body")
+  if (( bad > 0 )); then
+    jq -c 'select(.success != true)' "$TMP/body" | head -1 >&2
+    ts DELETE "/collections/$coll" || true
+    die "$id: $bad records failed to import"
+  fi
+  echo "$coll"
+}
+
+write_search_config() {   # into the release folder, before it goes live
+  [[ -n $SEARCH_PUBLIC_URL ]] || return 0
+  [[ $SEARCH_PUBLIC_URL =~ ^https://[a-z0-9.-]+(:[0-9]+)?$ || $SEARCH_PUBLIC_URL =~ ^http://(localhost|127\.0\.0\.1)(:[0-9]+)?$ ]] \
+    || die "SEARCH_PUBLIC_URL must be an https origin"
+  [[ $TYPESENSE_SEARCH_KEY =~ ^[A-Za-z0-9_-]{8,128}$ ]] || die "TYPESENSE_SEARCH_KEY must be 8 to 128 of [A-Za-z0-9_-]"
+  # Written to a new file and renamed: a file in a release may be a hard link shared with older releases.
+  jq -n --arg url "$SEARCH_PUBLIC_URL" --arg key "$TYPESENSE_SEARCH_KEY" --arg c "$ALIAS" '{url: $url, key: $key, collection: $c}' \
+    >"$1/.search-config.json.new" && mv -f -- "$1/.search-config.json.new" "$1/search-config.json"
+}
+
+set_release_field() { jq --arg v "$3" ".$2 = \$v" "$1/.release.json" >"$1/.release.json.new" && mv -f -- "$1/.release.json.new" "$1/.release.json"; }
+
+# ---- site verbs ----
+
+site_current() {
+  local id; id=$(current_id)
+  echo "id=$id"
+  echo "commit=$([[ -n $id ]] && jq -r '.commit // empty' "$RELEASES/$id/.release.json" 2>/dev/null || true)"
+  echo "free_gb=$(free_gb)"
+}
+
+# Go live: index (when search is on), move the alias, then switch the symlink. Any failure before the switch leaves
+# the live site as it was.
+site_switch() {
+  local id=$1 dir=$RELEASES/$1 coll='' before
+  complete "$dir" && under "$dir" "$RELEASES" || die "$id is not a complete release" 66
+  [[ $(jq -r '.id // empty' "$dir/.release.json") == "$id" ]] || die "$id: .release.json names another release" 66
+  [[ $(current_id) == "$id" ]] && { echo "switched=$id"; echo "note=already live"; return 0; }
+  if search_on && [[ -f $dir/_search/records.jsonl && -f $dir/_search/schema.json ]]; then
+    coll=$(index_release "$id")
+    ensure_search_key
+    write_search_config "$dir"
+    set_release_field "$dir" collection "$coll"
+    before=$(alias_target)
+    move_alias "$coll" || { ts DELETE "/collections/$coll" || true; ts_fail "move alias to $coll"; }
+    relink "$BASE/current" "releases/$id" || { [[ -n $before ]] && move_alias "$before"; die "symlink switch failed"; }
+    ensure_analytics   # rules attach to the alias, so it must exist first
+  else
+    relink "$BASE/current" "releases/$id"
+    [[ -n $TYPESENSE_URL ]] && echo "note=release has no search records; the index was not changed"
+  fi
+  echo "switched=$id"
+  echo "collection=$coll"
+  site_prune
+}
+
+site_rollback() {
+  local cur prev='' id coll
+  cur=$(current_id); [[ -n $cur ]] || die "nothing is live" 66
+  while read -r id; do [[ $id < $cur ]] && { prev=$id; break; }; done < <(complete_ids)
+  [[ -n $prev ]] || die "no complete release older than $cur" 66
+  coll=$(jq -r '.collection // empty' "$RELEASES/$prev/.release.json")
+  if [[ -n $coll ]] && search_on; then
+    ts GET "/collections/$coll" || ts_fail "$prev's collection $coll"
+    move_alias "$coll" || ts_fail "move alias to $coll"
+  fi
+  relink "$BASE/current" "releases/$prev"
+  echo "switched=$prev"
+  echo "collection=$coll"
+}
+
+# Keep the newest $KEEP complete releases and the live one; drop abandoned uploads and collections no kept release uses.
+site_prune() {
+  local cur keep=() id n=0 d coll
+  cur=$(current_id)
+  while read -r id; do
+    if (( n < KEEP )) || [[ $id == "$cur" ]]; then keep+=("$id"); n=$((n + 1)); else rm -rf -- "${RELEASES:?}/$id"; echo "pruned=$id"; fi
+  done < <(complete_ids)
+  while IFS= read -r -d '' d; do
+    id=${d##*/}
+    [[ $id =~ ^${ID_RE}$ && $id != "$cur" ]] && ! complete "$d" && { rm -rf -- "$d"; echo "pruned=$id"; }
+  done < <(find "$RELEASES" -mindepth 1 -maxdepth 1 -type d -mmin +"$STALE_MINUTES" -print0)
+  if search_on; then
+    local kept_colls; kept_colls=" $(alias_target) "
+    for id in "${keep[@]}"; do kept_colls+="$(jq -r '.collection // empty' "$RELEASES/$id/.release.json") "; done
+    ts GET /collections || ts_fail "GET /collections"
+    for coll in $(jq -r '.[].name' "$TMP/body"); do
+      [[ $coll =~ ^docs_${ID_RE}$ && $kept_colls != *" $coll "* ]] && { ts DELETE "/collections/$coll" || true; echo "dropped=$coll"; }
+    done
+  fi
+  return 0
+}
+
+# ---- preview verbs ----
+
+preview_live_id() { [[ -L $LIVE/$1 ]] && { local t; t=$(basename -- "$(readlink -- "$LIVE/$1")"); echo "${t#"$1"_}"; } || true; }
+preview_count() { find "$LIVE" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' '; }
+
+preview_allowed() {   # NAME: why a switch would be refused, or nothing
+  if (( $(free_gb) < PREVIEW_MIN_FREE_GB )); then echo "less than ${PREVIEW_MIN_FREE_GB} GB free"; return; fi
+  if [[ ! -L $LIVE/$1 ]] && (( $(preview_count) >= PREVIEW_MAX )); then echo "${PREVIEW_MAX} previews already exist"; fi
+}
+
+preview_plan() {
+  local why; why=$(preview_allowed "$1")
+  echo "id=$(preview_live_id "$1")"
+  echo "allowed=$([[ -z $why ]] && echo yes || echo no)"
+  echo "reason=$why"
+}
+
+preview_switch() {
+  local name=$1 id=$2 dir=$BUILDS/${1}_$2 prev why d
+  complete "$dir" && under "$dir" "$BUILDS" || die "${name}_$id is not a complete preview build" 66
+  why=$(preview_allowed "$name"); [[ -z $why ]] || die "refused: $why" 69
+  prev=$(preview_live_id "$name")
+  relink "$LIVE/$name" "../builds/${name}_$id"
+  for d in "$BUILDS/${name}"_*; do   # keep the live copy, the one before it, and any newer upload
+    [[ -d $d && ${d##*/} =~ ^${name}_${ID_RE}$ ]] || continue
+    local other=${d##*/}; other=${other#"${name}"_}
+    [[ $other == "$id" || $other == "$prev" || $other > "$id" ]] && continue
+    rm -rf -- "$d"; echo "pruned=${d##*/}"
+  done
+  echo "switched=$id"
+}
+
+preview_delete() {
+  local d
+  rm -f -- "$LIVE/$1"
+  for d in "$BUILDS/$1"_*; do [[ -d $d && ${d##*/} =~ ^${1}_${ID_RE}$ ]] && rm -rf -- "$d"; done
+  echo "deleted=$1"
+}
+
+# Expire previews not updated for $PREVIEW_DAYS; drop dangling links, builds of deleted previews and abandoned uploads.
+preview_clean() {
+  local link name d
+  for link in "$LIVE"/*; do
+    [[ -L $link ]] || continue
+    name=${link##*/}
+    if [[ ! -f $link/.release-complete ]]; then rm -f -- "$link"; echo "removed=$name"
+    elif [[ -n $(find "$link/.release-complete" -mmin +$((PREVIEW_DAYS * 1440))) ]]; then preview_delete "$name" >/dev/null; echo "expired=$name"; fi
+  done
+  while IFS= read -r -d '' d; do
+    name=${d##*/}; name=${name%%_*}
+    [[ ${d##*/} =~ ^${NAME_RE}_${ID_RE}$ ]] || continue
+    if [[ ! -L $LIVE/$name ]] && { complete "$d" || [[ -n $(find "$d" -maxdepth 0 -mmin +"$STALE_MINUTES") ]]; }; then
+      rm -rf -- "$d"; echo "pruned=${d##*/}"
+    elif ! complete "$d" && [[ -n $(find "$d" -maxdepth 0 -mmin +"$STALE_MINUTES") ]]; then
+      rm -rf -- "$d"; echo "pruned=${d##*/}"
+    fi
+  done < <(find "$BUILDS" -mindepth 1 -maxdepth 1 -type d -print0)
+  return 0
+}
+
+case $verb in
+  current)        site_current ;;
+  switch)         site_switch "$arg1" ;;
+  rollback)       site_rollback ;;
+  prune)          site_prune ;;
+  preview-plan)   preview_plan "$arg1" ;;
+  preview-switch) preview_switch "$arg1" "$arg2" ;;
+  preview-delete) preview_delete "$arg1" ;;
+  preview-clean)  preview_clean ;;
+esac
