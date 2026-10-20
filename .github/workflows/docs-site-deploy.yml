@@ -144,6 +144,17 @@ jobs:
       - run: npm ci --ignore-scripts && npm run build:converter
       - run: node scripts/fetch-sources.mjs # Latest only; snapshots come from the store
       - run: npm run content
+      # Hosted runners for private repositories have about 8 GB of RAM and no swap; the build ran the runner out of memory
+      # (the job was reported as canceled mid-build). Swap on the freed disk lets the 12 GB heap fit; memory is logged.
+      - name: Add swap
+        working-directory: /
+        run: |
+          set -eu
+          sudo swapoff -a || true
+          sudo fallocate -l 12G /mnt/docs-swap 2>/dev/null || sudo fallocate -l 12G /docs-swap
+          f=$( [ -f /mnt/docs-swap ] && echo /mnt/docs-swap || echo /docs-swap )
+          sudo chmod 600 "$f" && sudo mkswap -q "$f" && sudo swapon "$f"
+          nproc; free -h; df -h / /mnt 2>/dev/null || true
       - run: npm run build # scripts/docusaurus.mjs: the DOCS_HEAP_MB heap
       # A deploy needs every snapshot stored. ALLOW_MISSING_SNAPSHOTS (test only) deploys Latest without the missing ones.
       - id: assemble
