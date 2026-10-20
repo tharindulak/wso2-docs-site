@@ -2,7 +2,7 @@
 
 Parent: [map](../map.md)
 Type: task (HITL)
-Status: open
+Status: closed
 Assignee: tharindulak
 Blocked by: 
 
@@ -62,3 +62,8 @@ Run by the agent over SSH after the user approved the command list.
 - GitHub environment `test` on this fork, deployments limited to the default branch `docs-site-build`.
 - Secrets set by the user: `DEPLOY_SSH_KEY` (the deploy private key) and `DEPLOY_HOST` (the VM's IP, so SSH from CI does not depend on sslip.io DNS).
 - `DEPLOY_KNOWN_HOSTS` waits for the user to confirm the ED25519 host key against the OCI console.
+- `DEPLOY_KNOWN_HOSTS` set by the user (2026-10-20T09:12Z) from the first-connect `known_hosts` line, ED25519 `SHA256:i857mhRVs9gtXskfw4iuLBdn1sVYrzNpwITtmYrGEi8`, after the console check.
+
+## Resolution
+
+The test VM is an OCI Ampere A1 (Ubuntu 24.04, aarch64, 4 OCPU, 23 GiB) serving its sslip.io hostname with Caddy. Decisions on the way: keep Caddy instead of nginx; a larger Arm VM so Typesense fits; previews on sslip.io subdomains; root SSH login off. Deploy access: a `deploy` user without sudo owns `/srv/docs/{releases,previews}`; its ed25519 key is limited to `rrsync -wo -no-del -munge /srv/docs/releases`, checked end to end. Secrets on the `test` environment (default branch only): `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_KNOWN_HOSTS`. For the deploy spec: set file modes explicitly (`--chmod=D755,F644`); the gate script for switch, prune, rollback and preview cleanup still has to be written and installed; Caddy still serves `/var/www/site`. Retire the two earlier VMs in the OCI console when convenient.
