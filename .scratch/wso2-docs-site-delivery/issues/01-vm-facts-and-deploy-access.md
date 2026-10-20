@@ -44,3 +44,15 @@ Replaces the 1 GB VM above. Read-only, over SSH as the image's default admin use
 - **Same as before:** no Docker; rsync 3.2.7 (`3.2.7-1ubuntu1.5`) with `/usr/bin/rrsync`; `fs.protected_hardlinks = 1`; sshd key only with `permitrootlogin without-password`; Security List and iptables allow 22, 80, 443.
 - **Arm:** the Typesense image in `search/compose.yaml` is pinned by digest; whether that digest covers arm64 is for the hosting spec to check.
 - **Host key (ED25519):** `SHA256:i857mhRVs9gtXskfw4iuLBdn1sVYrzNpwITtmYrGEi8`, to be confirmed against the OCI console before it becomes the `known_hosts` secret.
+
+## Deploy access set up (2026-10-20)
+
+Run by the agent over SSH after the user approved the command list.
+
+- **`deploy` user:** no sudo, password locked, shell `/bin/bash` (needed for the forced command).
+- **Folders:** `/srv/docs`, `/srv/docs/releases`, `/srv/docs/previews`, owned by `deploy`, mode 755. Caddy still serves `/var/www/site`; repointing it is for [Hosting config for Caddy and Typesense](08-hosting-config-caddy-and-typesense.md).
+- **Deploy key:** a new ed25519 key with no passphrase, generated on the user's Mac and kept in the user's VM keys folder (not in this repo); fingerprint `SHA256:g0b0rwdL1bjAH+D75KBD4NaWpA5Q3MBqfUv6TBifC2M`. Its `authorized_keys` line: `restrict,command="/usr/bin/rrsync -wo -no-del -munge /srv/docs/releases"`.
+- **Root SSH login off:** `/etc/ssh/sshd_config.d/99-docs-hardening.conf` with `PermitRootLogin no`, validated with `sshd -t`; `sshd -T` reports `permitrootlogin no`.
+- **Checks (GNU rsync 3.5.1 client):** admin login still works; root refused; `id` and `ls /` with the deploy key refused by rrsync; upload into `releases/probe` works; `../previews`, read-back and `--delete` refused; an absolute path is confined under `releases/`. The probe was removed.
+- **Finding for the deploy spec:** without `-p`, uploaded folders kept the source's 0700 mode, which Caddy could not read. The deploy must set modes explicitly, e.g. `--chmod=D755,F644`.
+- **Still open:** the user confirms the host key against the OCI console; the deploy key, host and `known_hosts` go into the `test` environment as secrets only after a separate approval. Proposed secret names: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_KNOWN_HOSTS`.
