@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { pagePath, versionIndex, pageRecords, linkOutRecords, badgesFor, buildRecords, recordsWithBadges, writeConfig } from '../search-index.mjs';
+import { pagePath, versionIndex, pageRecords, linkOutRecords, badgesFor, buildRecords, recordsWithBadges, writeConfig, writeRelease, SCHEMA } from '../search-index.mjs';
 
 const manifest = {
   products: [
@@ -136,6 +136,18 @@ test('buildRecords and recordsWithBadges over a build directory', async () => {
   assert.deepEqual(records.map((r) => [r.version_id, r.latest, r.badges]), [
     ['integration-mi--v4-5-0', false, ['Self-hosted']], ['integration-mi', true, []], ['api-analytics', true, []],
   ]);
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test('writeRelease writes the records and the schema the gate indexes, inside the build', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'search-release-'));
+  async function* records() { yield { id: 'a', title: 'A' }; yield { id: 'b', title: 'B' }; }
+  assert.equal(await writeRelease(records(), dir), 2);
+  const lines = fs.readFileSync(path.join(dir, '_search/records.jsonl'), 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+  assert.deepEqual(lines.map((r) => r.id), ['a', 'b']);
+  const schema = JSON.parse(fs.readFileSync(path.join(dir, '_search/schema.json'), 'utf8'));
+  assert.deepEqual(schema, JSON.parse(JSON.stringify(SCHEMA)));
+  assert.equal(schema.name, undefined, 'the gate names the collection');
   fs.rmSync(dir, { recursive: true, force: true });
 });
 

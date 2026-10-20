@@ -10,8 +10,14 @@ export const CACHE = path.join(ROOT, '.cache', 'sources');
 export const GENERATED = path.join(ROOT, 'generated');
 export const LOCK = process.env.DOCS_SITE_LOCK ? path.resolve(process.env.DOCS_SITE_LOCK) : path.join(ROOT, 'content-sources.yaml');
 
-// A fork owner is honoured for local dry runs only; CI never reads DOCS_SITE_TEST_OWNER.
-const OWNERS = ['wso2', ...(process.env.CI ? [] : (process.env.DOCS_SITE_TEST_OWNER ?? '').split(',').filter((o) => /^[A-Za-z0-9-]+$/.test(o)))];
+// A fork owner (DOCS_SITE_TEST_OWNER, comma-separated) is honoured in local runs and in CI outside the wso2 organization, so
+// a test copy of this repository can build from content forks (a repository variable there). A wso2 repository accepts
+// wso2 sources only, whatever the variable says.
+export function owners(env = process.env) {
+  const inWso2 = (env.GITHUB_REPOSITORY_OWNER ?? '').toLowerCase() === 'wso2';
+  return ['wso2', ...(inWso2 ? [] : (env.DOCS_SITE_TEST_OWNER ?? '').split(',').filter((o) => /^[A-Za-z0-9-]+$/.test(o)))];
+}
+const OWNERS = owners();
 export const repoOk = (repo) => { const [owner, name, extra] = String(repo).split('/'); return extra === undefined && OWNERS.includes(owner) && /^(?!\.{1,2}$)[A-Za-z0-9._-]+$/.test(name ?? ''); };
 const SHA = /^[0-9a-f]{40}$/;
 const BRANCH = /^[A-Za-z0-9._\/-]+$/;

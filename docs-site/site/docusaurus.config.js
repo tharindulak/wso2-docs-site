@@ -8,6 +8,7 @@ import remarkLinkedTabs from '@wso2/docs-converter/remark-linked-tabs';
 import remarkDeprecatedSections from '@wso2/docs-converter/remark-deprecated-sections';
 import remarkComponents from '@wso2/docs-converter/remark-components';
 import { withLifecycleSidebar } from './src/lib/lifecycle.mjs';
+import { siteUrl, noIndex } from './src/lib/site-url.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const generated = path.resolve(here, '../generated');
@@ -82,8 +83,9 @@ const catalogue = {
 export default {
   title: 'WSO2 Docs',
   tagline: 'Documentation for every WSO2 product, cloud and self-hosted.',
-  url: 'https://wso2.com',
+  url: siteUrl(), // DOCS_SITE_URL for a deploy (src/lib/site-url.mjs)
   baseUrl: '/',
+  noIndex: noIndex(), // DOCS_NO_INDEX=1: the test VM
   trailingSlash: true,
   onBrokenLinks: 'warn',
   onBrokenAnchors: 'warn',

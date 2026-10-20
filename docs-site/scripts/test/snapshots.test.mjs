@@ -259,6 +259,13 @@ test('the key covers fetch-sources.mjs, the converter tsconfig and the Node.js m
   assert.equal(inputHashes().node, process.versions.node.split('.')[0]);
 });
 
+test('the site URL and noindex setting key the chrome; the default site does not', () => {
+  // (A tree with uncommitted changes hashes with a timestamp, so compare the suffix only.)
+  assert.ok(!/\+(url=|noindex)/.test(inputHashes(undefined, {}).chrome));
+  assert.match(inputHashes(undefined, { DOCS_SITE_URL: 'https://a.example' }).chrome, /\+url=https:\/\/a\.example$/);
+  assert.match(inputHashes(undefined, { DOCS_NO_INDEX: '1' }).chrome, /\+noindex$/);
+});
+
 // A converter change rebuilds only the snapshots whose converted output changed: the output key replaces the converter
 // code with a hash of what the conversion wrote for the version.
 test('the output key ignores the converter code but follows converted content, chrome, nav, Node.js, source and links', async () => {

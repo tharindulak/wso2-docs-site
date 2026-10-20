@@ -45,3 +45,13 @@ test('readLock accepts hide_from_navigation of product ids and account (the hub)
   assert.notEqual(bad.status, 0);
   assert.match(bad.stderr, /hide_from_navigation: no product updatez/);
 });
+
+test('fork owners: honoured locally and in CI outside wso2, never in a wso2 repository', async () => {
+  const { owners } = await import('../lib.mjs');
+  assert.deepEqual(owners({}), ['wso2']);
+  assert.deepEqual(owners({ DOCS_SITE_TEST_OWNER: 'tharindulak' }), ['wso2', 'tharindulak']);
+  assert.deepEqual(owners({ CI: 'true', GITHUB_REPOSITORY_OWNER: 'tharindulak', DOCS_SITE_TEST_OWNER: 'tharindulak' }), ['wso2', 'tharindulak']);
+  assert.deepEqual(owners({ CI: 'true', GITHUB_REPOSITORY_OWNER: 'wso2', DOCS_SITE_TEST_OWNER: 'tharindulak' }), ['wso2']);
+  assert.deepEqual(owners({ GITHUB_REPOSITORY_OWNER: 'WSO2', DOCS_SITE_TEST_OWNER: 'x' }), ['wso2']);
+  assert.deepEqual(owners({ DOCS_SITE_TEST_OWNER: 'a,b/c,,d e' }), ['wso2', 'a'], 'only plain owner names');
+});

@@ -2,7 +2,9 @@
 // Typesense. Reads the final HTML (live build or merged with snapshots), so no crawler or running site is needed.
 // Behaviour is decided in .scratch/wso2-docs-site/issues/11-search-choice.md.
 //
-// Usage: node scripts/search-index.mjs <build dir> [--manifest generated/manifest.json] [--dry-run <out.jsonl>]
+// Usage: node scripts/search-index.mjs <build dir> [--manifest generated/manifest.json] [--dry-run <out.jsonl> | --release]
+//   --release: write <build dir>/_search/records.jsonl and schema.json for the docs VM's gate, which indexes them when
+//   the release goes live (hosting/docs-gate); no Typesense access, no keys.
 // Env (not with --dry-run):
 //   TYPESENSE_URL         admin endpoint, for example http://localhost:8108
 //   TYPESENSE_ADMIN_KEY   admin key (CI secret; never written anywhere)
@@ -271,6 +273,17 @@ async function ensureAnalytics(url, adminKey, log) {
   }
 }
 
+/** The release's search files: records (one JSON object per line) and the collection schema, without a name. */
+export async function writeRelease(records, buildDir) {
+  const dir = path.join(buildDir, '_search');
+  fs.mkdirSync(dir, { recursive: true });
+  const fd = fs.openSync(path.join(dir, 'records.jsonl'), 'w');
+  let n = 0;
+  try { for await (const r of records) { fs.writeSync(fd, `${JSON.stringify(r)}\n`); n++; } } finally { fs.closeSync(fd); }
+  fs.writeFileSync(path.join(dir, 'schema.json'), `${JSON.stringify(SCHEMA)}\n`);
+  return n;
+}
+
 /** Where local builds pick up the search settings (a static directory in docusaurus.config.js; gitignored). */
 export const SEARCH_PUBLIC = path.join(ROOT, '.cache', 'search-public');
 
@@ -292,6 +305,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const opt = (name) => { const i = args.indexOf(name); return i === -1 ? null : args.splice(i, 2)[1]; };
   const manifestFile = path.resolve(opt('--manifest') ?? path.join(GENERATED, 'manifest.json'));
   const dryRun = opt('--dry-run');
+  const release = args.includes('--release');
+  if (release) args.splice(args.indexOf('--release'), 1);
   const [buildArg] = args;
   if (!buildArg) { console.error('Usage: node scripts/search-index.mjs <build dir> [--manifest <file>] [--dry-run <out.jsonl>]'); process.exit(2); }
   const buildDir = path.resolve(ROOT, buildArg);
@@ -299,7 +314,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'docs-search-'));
   const records = recordsWithBadges(buildDir, manifest, path.join(tmpDir, 'records.jsonl'));
   try {
-    if (dryRun) {
+    if (release) {
+      console.log(`wrote ${await writeRelease(records, buildDir)} records to ${path.join(buildDir, '_search')}`);
+    } else if (dryRun) {
       const fd = fs.openSync(dryRun, 'w');
       let n = 0;
       for await (const r of records) { fs.writeSync(fd, `${JSON.stringify(r)}\n`); n++; }
