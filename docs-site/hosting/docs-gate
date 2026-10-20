@@ -174,12 +174,12 @@ site_switch() {
   if search_on && [[ -f $dir/_search/records.jsonl && -f $dir/_search/schema.json ]]; then
     coll=$(index_release "$id")
     ensure_search_key
-    ensure_analytics
     write_search_config "$dir"
     set_release_field "$dir" collection "$coll"
     before=$(alias_target)
     move_alias "$coll" || { ts DELETE "/collections/$coll" || true; ts_fail "move alias to $coll"; }
     relink "$BASE/current" "releases/$id" || { [[ -n $before ]] && move_alias "$before"; die "symlink switch failed"; }
+    ensure_analytics   # rules attach to the alias, so it must exist first
   else
     relink "$BASE/current" "releases/$id"
     [[ -n $TYPESENSE_URL ]] && echo "note=release has no search records; the index was not changed"

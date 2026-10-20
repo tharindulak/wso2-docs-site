@@ -58,7 +58,7 @@ function fakeTypesense() {
         return send(201, key);
       }
       if ((m = p.match(/^\/analytics\/rules(?:\/([^/]+))?$/))) {
-        if (req.method === 'POST') { const r = JSON.parse(body); state.rules.set(r.name, r); return send(201, r); }
+        if (req.method === 'POST') { const r = JSON.parse(body); if (r.collection === 'docs' && !state.alias) return send(404, { message: 'Collection not found' }); state.rules.set(r.name, r); return send(201, r); }
         if (req.method === 'GET') return state.rules.has(m[1]) ? send(200, state.rules.get(m[1])) : send(404, { message: 'Rule not found' });
         state.rules.delete(m[1]);
         return send(200, {});
@@ -143,6 +143,7 @@ test('switch indexes, moves the alias, then goes live; current reports it', { sk
   assert.equal(ts.state.collections.get(`docs_${ID(1)}`).docs.length, 1);
   assert.deepEqual(ts.state.keys.map((k) => [k.actions, k.collections]), [[['documents:search'], ['docs']]]);
   assert.ok(ts.state.rules.has('docs_popular_queries') && ts.state.rules.has('docs_nohits_queries'));
+  assert.ok(!r.out.includes('analytics=off'), 'analytics rules are set up on the first switch');
   const dir = path.join(base, 'releases', ID(1));
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 'search-config.json'), 'utf8')),
     { url: 'https://search.example.test', key: 'search-key-456', collection: 'docs' });
