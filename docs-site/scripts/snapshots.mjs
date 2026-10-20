@@ -24,6 +24,7 @@ import { createStore } from './snapshot-store.mjs';
 import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
 import { writeSnapshotRootRedirect, checkVersionRoots } from './redirect.mjs';
+import { siteKeySuffix } from '../site/src/lib/site-url.mjs';
 
 export const CHROME = ['site/src', 'site/plugins', 'site/account', 'site/account-sidebars.js', 'site/static', 'site/docusaurus.config.js', 'scripts/build-content.mjs', 'scripts/fetch-sources.mjs', 'scripts/lib.mjs', 'scripts/versions.mjs', 'package-lock.json'];
 // tsconfig.json decides how src compiles to the dist that build-content.mjs runs.
@@ -124,8 +125,9 @@ export function treeHash(paths, root = ROOT, prefix = 'docs-site/') {
 /** Major version of the running Node.js (a snapshot key input). */
 export const nodeMajor = (version = process.versions.node) => version.split('.')[0];
 
-export function inputHashes(root = ROOT) {
-  return { converter: treeHash(CONVERTER, root), chrome: treeHash(CHROME, root), nav: navHash(), node: nodeMajor() };
+export function inputHashes(root = ROOT, env = process.env) {
+  // The site URL and noindex setting change every page's HTML, so they key the chrome (empty for the default site).
+  return { converter: treeHash(CONVERTER, root), chrome: `${treeHash(CHROME, root)}${siteKeySuffix(env)}`, nav: navHash(), node: nodeMajor() };
 }
 
 export function checkTarEntries(names, route) {

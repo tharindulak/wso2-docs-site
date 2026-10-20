@@ -98,6 +98,16 @@ The script writes `search-config.json` into the build it indexed and into `.cach
 
 `TYPESENSE_PUBLIC_URL` must be https outside localhost. In production, also allow the Typesense host in the site's Content-Security-Policy `connect-src` (explicitly, no wildcard) and set `TYPESENSE_CORS_DOMAINS` to the site's origin.
 
+## Deploying
+
+The Deploy and Preview workflows publish to a VM set up with `hosting/` (see its README). Settings the build reads:
+
+- `DOCS_SITE_URL`: the https origin the site is published at (canonical links, sitemap); default `https://wso2.com`.
+- `DOCS_NO_INDEX=1`: every page `noindex` (the test VM, while the lock pins content forks).
+- `DOCS_SITE_TEST_OWNER`: GitHub owners accepted besides `wso2` in the lock, comma-separated. Honoured locally and in CI outside the wso2 organization (a repository variable on a test copy); ignored in any wso2 repository.
+
+Both site settings join the snapshot key, so snapshots built for another site are not reused; the default site keeps its keys. `node scripts/search-index.mjs <build> --release` writes `_search/records.jsonl` and `_search/schema.json` for the VM to index. Every fetch checks that each pinned commit is reachable from the branch or tag the lock names for it, on the repository the lock names.
+
 ## Content source rules (summary)
 
 Allowed: Jinja `if/elif/else`, comparisons, `and/or/not`, `in`, `is defined`, `include`, `set`, `raw`, `{{ variable }}`; MkDocs admonitions, collapsibles, tabs, `attr_list`, fenced code. Not allowed: ternaries, filters, macros, loops; `<script>` (except the quick-start `const meta = {…}` literal), `<style>`, `<form>`, `<object>`, `<embed>`, event-handler attributes, `javascript:` URLs, iframes outside YouTube and Vimeo. Full contract: `.scratch/wso2-docs-site/issues/13-conversion-contract.md`.

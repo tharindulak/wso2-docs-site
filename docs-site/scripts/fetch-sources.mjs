@@ -1,5 +1,7 @@
 // Fetch every pinned content source: shallow, blob-filtered, sparse checkout of exactly the locked commit.
 // Usage: node scripts/fetch-sources.mjs [sectionId | versionId ...]     FETCH_ASSETS=0 skips images and other assets.
+// Every pinned commit must be reachable from the branch or tag the lock names for it (track, or the version's ref) on the
+// repository the lock names: GitHub serves a fork's commits through the parent's URL, so a SHA alone proves nothing.
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
@@ -30,7 +32,10 @@ for (const product of lock.products) {
       if (v.status === 'snapshot' ? !only.has(v.id) : only.size && !only.has(section.id) && !only.has(v.id)) continue;
       for (const ref of refsOf(v)) {
         const key = `${ref.repo}@${ref.sha}`;
-        if (!wanted.has(key)) wanted.set(key, { ...ref, sparse: new Set() });
+        const on = ref.track ?? (ref === v.cloud_companion ? null : v.ref);
+        if (!on || !/^[A-Za-z0-9._][A-Za-z0-9._\/-]*$/.test(on)) throw new Error(`${v.id ?? section.id}: ${ref.repo}@${ref.sha.slice(0, 12)} names no valid branch or tag to check it against`);
+        if (!wanted.has(key)) wanted.set(key, { ...ref, sparse: new Set(), on: new Set() });
+        wanted.get(key).on.add(on);
         const sparse = ref === v.cloud_companion ? v.cloud_companion.sparse : v.sparse;
         for (const p of sparse ?? ['/']) wanted.get(key).sparse.add(p);
       }
@@ -38,7 +43,7 @@ for (const product of lock.products) {
   }
 }
 
-for (const { repo, sha, sparse } of wanted.values()) {
+for (const { repo, sha, sparse, on } of wanted.values()) {
   const dir = checkoutDir(repo, sha);
   const patterns = [...sparse].flatMap((p) => {
     const base = `/${p.replace(/^\/|\/$/g, '')}`;
@@ -57,6 +62,12 @@ for (const { repo, sha, sparse } of wanted.values()) {
   git(dir, 'checkout', '-q', 'FETCH_HEAD');
   const head = git(dir, 'rev-parse', 'HEAD');
   if (head !== sha) throw new Error(`${repo}: fetched ${head}, expected ${sha}`);
+  // Reachability: commits only (no trees or blobs) of each named branch or tag, then an ancestry check.
+  for (const ref of on) {
+    git(dir, 'fetch', '-q', '--filter=tree:0', 'origin', ref);
+    try { git(dir, 'merge-base', '--is-ancestor', sha, 'FETCH_HEAD'); }
+    catch { throw new Error(`${repo}: ${sha} is not reachable from ${ref}; pin a commit on the branch or tag the lock names`); }
+  }
   fs.writeFileSync(marker, `${new Date().toISOString()}\n`);
   console.log(`fetched  ${repo}@${sha.slice(0, 12)} (${assets ? 'with assets' : 'text only'})`);
 }
