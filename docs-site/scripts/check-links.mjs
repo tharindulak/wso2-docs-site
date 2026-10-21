@@ -58,6 +58,14 @@ export function findBrokenLinks(dir, { under } = {}) {
   return broken;
 }
 
+/**
+ * Routes of the snapshots `snapshots.mjs assemble --allow-missing` left out of the build (pull-request CI): links into
+ * them cannot resolve here, so the check skips them. A deploy assembles every snapshot and writes no file.
+ */
+export const PENDING_FILE = '.pending-snapshots.json';
+export const pendingRoutes = (dir) => (fs.existsSync(path.join(dir, PENDING_FILE)) ? JSON.parse(fs.readFileSync(path.join(dir, PENDING_FILE), 'utf8')) : []);
+export const intoPending = (broken, routes) => broken.filter((b) => routes.some((r) => b.target.startsWith(`/${r}/`)));
+
 /** Literal Markdown link/image syntax in one paragraph's text: `![alt](` or `[text](` counts once, a lone `![` or `](` once. */
 export function literalMarkdownCount(text) {
   return (text.match(/!?\[[^\]\n]*\]\(|!\[|\]\(/g) ?? []).length;
@@ -117,7 +125,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const record = args.includes('--record-live');
   const usage = () => { console.error('Usage: node scripts/check-links.mjs <dir> [--under <prefix>] [--baselines <dir> [--record-live]]'); process.exit(2); };
   if (!dir || dir.startsWith('--') || (args.includes('--under') && !under) || (args.includes('--baselines') && !baselines) || (record && !baselines)) usage();
-  const broken = findBrokenLinks(dir, { under });
+  const all = findBrokenLinks(dir, { under });
+  const skipped = new Set(intoPending(all, pendingRoutes(dir)));
+  const broken = all.filter((b) => !skipped.has(b));
+  if (skipped.size) console.log(`${skipped.size} broken link(s) into pending snapshots not checked (${pendingRoutes(dir).length} pending)`);
   const literal = findLiteralMarkdown(dir, { under });
   const reportLiteral = (over) => {
     for (const f of over.slice(0, 50)) console.error(`${f.page}: ${f.count} literal Markdown sequence(s) in paragraph text`);

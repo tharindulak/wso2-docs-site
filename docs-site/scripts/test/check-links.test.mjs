@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { findBrokenLinks, targetOf, notIn, readBaselines, findLiteralMarkdown, literalMarkdownCount, literalOverBaseline } from '../check-links.mjs';
+import { findBrokenLinks, intoPending, pendingRoutes, PENDING_FILE, targetOf, notIn, readBaselines, findLiteralMarkdown, literalMarkdownCount, literalOverBaseline } from '../check-links.mjs';
 
 const site = (files) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'links-'));
@@ -104,4 +104,15 @@ test('literal Markdown fails only above the baseline count, and its baseline fil
   const known = readBaselines(dir);
   assert.deepEqual(known.versions, []);
   assert.deepEqual(known.literal, { 'a/index.html': 2 });
+});
+
+test('links into a pending snapshot are skipped only while assemble lists it as pending', () => {
+  const dir = site({
+    'p/index.html': '<a href="/p/1.0.0/x/">old</a><a href="../p/1.0.0/">root</a><a href="/p/missing/">m</a><a href="/q/1.0.0/">other</a>',
+  });
+  const broken = findBrokenLinks(dir);
+  assert.deepEqual(pendingRoutes(dir), []);
+  assert.deepEqual(intoPending(broken, pendingRoutes(dir)), []);
+  fs.writeFileSync(path.join(dir, PENDING_FILE), JSON.stringify(['p/1.0.0']));
+  assert.deepEqual(intoPending(broken, pendingRoutes(dir)).map((b) => b.link).sort(), ['../p/1.0.0/', '/p/1.0.0/x/']);
 });
