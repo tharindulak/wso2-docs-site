@@ -13,7 +13,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import {
   convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, githubEditUrl, emptyReport, walk,
-  splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile,
+  splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile, redirectPageHtml, redirectPageTarget, collapseRedirects,
   deprecationIndex, readDeprecationsList, deprecationsPage, withDeprecationsEntry, DEPRECATIONS_ID,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
@@ -206,9 +206,15 @@ function rewriteLinksToHostedPages(lock) {
     const page = (f) => fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
     // A README.md without a slug is its folder's index (MkDocs serves it there); a pinned one answers at README/.
     const readmeIndex = (f) => page(f) && !/^slug:/m.test(fs.readFileSync(f, 'utf8').split('\n---')[0]);
+    // An old URL this version answers with a redirect page (redirects.ts) is a target too: the browser follows it here.
+    const redirectPage = (sub, p) => {
+      const f = path.join(staticDirOf(v), sub, p, 'index.html');
+      return p !== '' && !p.split('/').includes('..') && fs.existsSync(f) && fs.readFileSync(f, 'utf8').includes('<title>Redirecting</title>');
+    };
     const hosts = (sub) => (p) => {
       const base = path.join(docsDir, sub, p);
-      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')]).some(page) || readmeIndex(path.join(base, 'README.md'));
+      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')]).some(page) || readmeIndex(path.join(base, 'README.md'))
+        || redirectPage(sub, p);
     };
     // Files (images, downloads) the version's pages are served with; the caller copies a linked one to static.
     // The real path must stay inside the version's folder: a symbolic link never pulls in a file from elsewhere.
@@ -229,6 +235,7 @@ function rewriteLinksToHostedPages(lock) {
     }
   }
   let total = 0;
+  const redirects = []; // every old-URL redirect page: { owner, self, file, to }
   const liveSites = sites.filter((x) => !x.snapshot);
   for (const { v } of all) {
     const docsDir = path.join(GENERATED, 'docs', v.id);
@@ -249,6 +256,24 @@ function rewriteLinksToHostedPages(lock) {
         fs.copyFileSync(from, to);
       }
     }
+    // Old-URL redirect pages (the redirects plugin's maps) sent to a current site: to the page here when it is hosted.
+    const staticDir = staticDirOf(v);
+    for (const rel of fs.existsSync(staticDir) ? walk(staticDir, (r) => r.endsWith('index.html')) : []) {
+      const file = path.join(staticDir, rel);
+      const url = redirectPageTarget(fs.readFileSync(file, 'utf8'));
+      if (!url) continue;
+      const self = `/${v.route}/${rel.split(path.sep).join('/').replace(/index\.html$/, '')}`;
+      let to = /^https:\/\//.test(url) ? rewriteSiteLinks(`](${url})`, own).text.slice(2, -1) : url;
+      if (!to.startsWith('/') || to.split('#')[0] === self) to = url;
+      if (to !== url) { fs.writeFileSync(file, redirectPageHtml(to)); total++; }
+      redirects.push({ owner: v.id, self, file, to });
+    }
+  }
+  // A redirect to an old URL that itself redirects here goes straight to the end of the chain (within one version).
+  for (const owner of new Set(redirects.map((r) => r.owner))) {
+    const own = redirects.filter((r) => r.owner === owner);
+    const files = new Map(own.map((r) => [r.self, r.file]));
+    for (const [self, to] of collapseRedirects(new Map(own.map((r) => [r.self, r.to])))) fs.writeFileSync(files.get(self), redirectPageHtml(to));
   }
   return total;
 }

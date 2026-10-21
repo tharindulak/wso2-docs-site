@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { redirectMaps, redirectTarget, redirectPageHtml, writeRedirectPages, type RedirectContext } from '../src/redirects.js';
+import { redirectMaps, redirectTarget, redirectPageHtml, redirectPageTarget, collapseRedirects, writeRedirectPages, type RedirectContext } from '../src/redirects.js';
 
 const published = new Set(['get-started/streaming-quick-start-guide.md', 'get-started/api-manager-quick-start-guide.md', 'index.md', 'guides/index.md']);
 const ctx: RedirectContext = {
@@ -65,4 +65,21 @@ test('redirectPageHtml escapes the target and is not indexed', () => {
   const html = redirectPageHtml('/a/?x="1"&y=<2>');
   assert.match(html, /url=\/a\/\?x=&quot;1&quot;&amp;y=&lt;2&gt;/);
   assert.match(html, /<meta name="robots" content="noindex">/);
+});
+
+test('redirectPageTarget reads only the pages redirectPageHtml writes', () => {
+  assert.equal(redirectPageTarget(redirectPageHtml('https://x.example/a?b=1&c=2')), 'https://x.example/a?b=1&c=2');
+  assert.equal(redirectPageTarget(redirectPageHtml('/p/a/#s')), '/p/a/#s');
+  assert.equal(redirectPageTarget('<html><head><meta http-equiv="refresh" content="0; url=https://x.example/"></head></html>'), null);
+});
+
+test('collapseRedirects sends each old URL to the end of its chain and leaves loops and self-targets alone', () => {
+  const pages = new Map([
+    ['/p/a/', '/p/b/'], ['/p/b/', '/p/c/#part'], ['/p/c/', '/p/page/'], // a -> b -> c -> page
+    ['/p/x/', '/p/y/'], ['/p/y/', '/p/x/'], // a loop
+    ['/p/s/', '/p/t/'], ['/p/t/', '/p/s/'],
+    ['/p/out/', 'https://old.example/gone/'],
+    ['/p/in/', '/p/out/'],
+  ]);
+  assert.deepEqual(Object.fromEntries(collapseRedirects(pages)), { '/p/a/': '/p/page/', '/p/b/': '/p/page/', '/p/in/': 'https://old.example/gone/' });
 });

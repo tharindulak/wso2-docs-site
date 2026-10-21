@@ -20,7 +20,7 @@ export {
 export { loadConfig, ConfigError, type SourceConfig } from './config.js';
 export { convertSource, CONTRACT_VERSION } from './source.js';
 export { writeDocusaurusTree, withoutComponentImports, TREE_MARKER, type TreeVersion, type TreeOptions } from './tree.js';
-export { redirectMaps } from './redirects.js';
+export { redirectMaps, redirectPageHtml, redirectPageTarget, collapseRedirects } from './redirects.js';
 export { STAGES, BY_OPTION, LIFECYCLE_FIELDS, checkLifecycle, checkPageLifecycle, applyLifecycle, lifecycleBadge, lifecycleFrontMatter, withoutDeprecatedSuffix, withoutDeprecatedLabels, deprecationOf, replacementDocId, replacementTitle, isDeprecatedAdmonition, type Stage, type Lifecycle, type OptionDeprecation } from './lifecycle.js';
 export { repairMdx } from './mdx-repair.js';
 export { writeComponents, subStepReview, headingIds, type ComponentsResult, type WrittenComponents } from './conventions.js';
