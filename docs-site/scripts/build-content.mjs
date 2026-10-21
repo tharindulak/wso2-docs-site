@@ -340,6 +340,9 @@ for (const product of lock.products) {
       id: v.id, version: v.version, label: v.versionLabel, status: v.status, route: v.route,
       sidebar: fs.existsSync(sidebarsOf(v.id)) ? `${v.id}.json` : fs.readdirSync(sidebarsDir).find((f) => f.startsWith(`${v.id}.`)),
       landing: landingOf(v),
+      // A native Docusaurus doc set (no sidebar in the lock) has its number prefixes ("01-intro") stripped, as Docusaurus
+      // does; every other set keeps them, as its URLs and sidebar ids do (API Manager's connectors/1.x/).
+      ...(v.kind === 'docusaurus' && !v.sidebar ? { stripNumberPrefixes: true } : {}),
     }));
     const confluence = confluenceEntries(section);
     if (!listed && typeof section.older_versions === 'string') confluence.push({ version: 'older', label: 'Older versions', status: 'confluence', href: section.older_versions });

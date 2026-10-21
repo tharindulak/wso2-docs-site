@@ -49,8 +49,8 @@ const docsPlugins = included.map(({ section, v }) => [
     admonitions: { keywords: ['deprecated'] },
     rehypePlugins: [rehypeValidElements], // CommonMark (fallback) pages: text like <mail@address> is not an element
     // MkDocs keeps number prefixes ("2.x/", "01-intro") in URLs; only native Docusaurus doc sets expect them stripped.
-    // A tree migrated from MkDocs ships its own sidebar with the prefixes kept (API Manager's connectors/1.x/).
-    ...(section.kind === 'docusaurus' && !section.sidebar ? {} : { numberPrefixParser: false }),
+    // Decided per version (scripts/build-content.mjs): a snapshot build has no Latest sidebar to go by.
+    ...(v.stripNumberPrefixes ? {} : { numberPrefixParser: false }),
     versions: { current: { label: v.label } },
   },
 ]);
