@@ -121,6 +121,19 @@ test('one MkDocs site: an include two pages use becomes a partial; one only one 
   assert.ok(!fs.existsSync(path.join(out, '_partials/design/single.mdx')));
 });
 
+test('a partial include renders the site variables, as the same text inlined into a page does', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\nplugins:\n  - markdownextradata\nextra:\n  product_name: Product P\n',
+    'en/docs/a.md': '# A\n\n{!includes/shared.md!}\n',
+    'en/docs/b.md': '# B\n\n{!includes/shared.md!}\n',
+    'en/docs/guides/x.md': '# X\n',
+    'en/docs/includes/shared.md': 'See [X]({{base_path}}/guides/x/) in {{ product_name }}.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'], skip: ['includes/'], partials: true }, { outDir: out, route: 'p' });
+  assert.equal(fs.readFileSync(path.join(out, '_partials/shared.mdx'), 'utf8').trim(), 'See [X](/p/guides/x/) in Product P.');
+});
+
 test('one MkDocs site without partials inlines every include', async () => {
   const root = tempSource({
     'en/mkdocs.yml': 'site_name: A\n',
