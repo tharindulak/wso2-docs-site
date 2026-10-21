@@ -82,4 +82,17 @@ jobs:
           SNAPSHOT_STORE: github-release:docs-site-snapshots
           GH_TOKEN: ${{ github.token }}
       # Fails on broken links that no committed baseline lists (link-baselines/: per-version files and live.json).
-      - run: node scripts/check-links.mjs site/build --baselines link-baselines
+      - id: links
+        run: node scripts/check-links.mjs site/build --baselines link-baselines
+      # When the check fails, re-record the baselines from this build and upload them: accepting breakage means
+      # committing the recorded files in a reviewed PR (see the README on re-recording live.json).
+      - if: failure() && steps.links.outcome == 'failure'
+        run: |
+          cp -R link-baselines "$RUNNER_TEMP/link-baselines"
+          node scripts/check-links.mjs site/build --baselines "$RUNNER_TEMP/link-baselines" --record-live
+      - if: failure() && steps.links.outcome == 'failure'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: link-baselines-recorded
+          path: ${{ runner.temp }}/link-baselines
+          retention-days: 7
