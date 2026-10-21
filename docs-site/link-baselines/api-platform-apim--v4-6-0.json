@@ -513,6 +513,10 @@
  },
  {
   "page": "api-platform/api-manager/4.6.0/api-gateway/federated-gateways/overview/index.html",
+  "link": "/api-platform/api-manager/4.6.0/api-gateway/federated-gateways/EnvoyGateway/eg-k8s/discover-apis-on-eg-gateway-in-kubernetes/"
+ },
+ {
+  "page": "api-platform/api-manager/4.6.0/api-gateway/federated-gateways/overview/index.html",
   "link": "/api-platform/api-manager/4.6.0/deploy-and-publish/federated-gateways/azure/deploy-on-azure-api-gateway/"
  },
  {

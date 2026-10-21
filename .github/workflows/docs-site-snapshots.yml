@@ -63,7 +63,8 @@ jobs:
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: snapshot-${{ matrix.snapshot.key }}
-          path: ${{ runner.temp }}/snapshots/*.tgz
+          # The planned key only: the build also stores an output-key copy, whose name the upload job cannot check.
+          path: ${{ runner.temp }}/snapshots/${{ matrix.snapshot.key }}.tgz
           if-no-files-found: error
           retention-days: 1
   # Upload only: no checkout, no npm and no repository script runs here, so nothing the build job could have

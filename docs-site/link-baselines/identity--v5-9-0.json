@@ -148,6 +148,10 @@
   "link": "../../learn/configuring-user-stores"
  },
  {
+  "page": "identity/5.9.0/learn/saml-2.0-web-sso/index.html",
+  "link": "/identity/5.9.0/learn/configuring-saml2-web-single-sign-On/"
+ },
+ {
   "page": "identity/5.9.0/learn/self-registration-and-account-confirmation/index.html",
   "link": "../../learn/configuring_google_recaptcha_for_security_question_based_password_recovery"
  },
