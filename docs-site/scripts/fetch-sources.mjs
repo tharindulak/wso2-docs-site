@@ -48,7 +48,8 @@ for (const { repo, sha, sparse, on } of wanted.values()) {
   const patterns = [...sparse].flatMap((p) => {
     const base = `/${p.replace(/^\/|\/$/g, '')}`;
     if (/\.[a-z]+$/i.test(p)) return [base];
-    return assets ? [`${base}/`] : ['md', 'mdx', 'yml', 'yaml', 'json', 'js', 'ts'].map((e) => `${base}/**/*.${e}`);
+    // Text only: page and config files, and migrated trees' markers (their converter stamp; build-content.mjs staleTrees).
+    return assets ? [`${base}/`] : [...['md', 'mdx', 'yml', 'yaml', 'json', 'js', 'ts'].map((e) => `${base}/**/*.${e}`), `${base}/**/.wso2-docs-tree`];
   });
   // The marker names the sparse patterns too: a checkout fetched for fewer paths is not reused for more.
   const marker = `${dir}/.fetched-${assets ? 'full' : 'text'}-${crypto.createHash('sha256').update(patterns.sort().join('\n')).digest('hex').slice(0, 8)}`;
