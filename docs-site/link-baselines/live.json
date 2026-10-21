@@ -180,6 +180,10 @@
   "link": "/api-platform/api-manager/3.0.0install-and-setup/deploying-wso2-api-manager/security-guidelines-for-production-deployment/"
  },
  {
+  "page": "api-platform/api-manager/3.0.0/install-and-setup/sso/configure-identity-server-as-external-idp-using-saml/index.html",
+  "link": "../../../../assets/img/setup-and-install/upload-certificate-in-sp-for-saml2-sso.png"
+ },
+ {
   "page": "api-platform/api-manager/3.0.0/learn/api-monetization/monetizing-an-api/index.html",
   "link": "/learn/rate-limiting/adding-new-throttling-policies/#Adding-a-new-subscription---level-throttling-tier"
  },
@@ -222,6 +226,42 @@
  {
   "page": "api-platform/api-manager/3.0.0/learn/consume-api/generating-sdks/write-a-client-application-using-the-sdk/index.html",
   "link": "/learn/consume-api/manage-application/generate-keys/obtain-access-token/changing-the-default-token-expiration-time/"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/customize-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/api-lifecycle-veiw.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/customize-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/custom-lifecycle-state.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/customize-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/default-lifecycle-image.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/customize-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/default-lifecycle.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/customize-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/lifecycle-menu.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/extending-the-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/api-lifecycle-veiw.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/extending-the-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/default-lifecycle.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/extending-the-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/lifecycle-image-with-checklist.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.0.0/learn/design-api/lifecycle-management/extending-the-api-life-cycle/index.html",
+  "link": "../../../../../assets/img/Learn/lifecycle-image-with-custom-transition.png"
  },
  {
   "page": "api-platform/api-manager/3.0.0/learn/tutorials/expose-a-soap-service-as-a-rest-api/index.html",
@@ -286,6 +326,14 @@
  {
   "page": "api-platform/api-manager/3.1.0/develop/customizations/log-in-to-the-dev-portal-using-social-media/index.html",
   "link": "/administer/product-security/General/logins-and-passwords/maintaining-logins-and-passwords/#setting-up-an-e-mail-login"
+ },
+ {
+  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/sso/configuring-identity-server-as-external-idp-using-saml/index.html",
+  "link": "../../../../../assets/img/setup-and-install/upload-certificate-in-sp-for-saml2-sso.png"
+ },
+ {
+  "page": "api-platform/api-manager/3.1.0/install-and-setup/setup/sso/configuring-sso-for-admin-portal-using-saml/index.html",
+  "link": "../../../../../assets/img/setup-and-install/upload-certificate-in-sp-for-saml2-sso.png"
  },
  {
   "page": "api-platform/api-manager/3.1.0/learn/api-monetization/monetizing-an-api/index.html",
@@ -1286,6 +1334,10 @@
  {
   "page": "api-platform/api-manager/4.4.0/includes/install_setup/configuring_gateway_node/index.html",
   "link": "/api-platform/api-manager/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
+ },
+ {
+  "page": "api-platform/api-manager/4.4.0/install-and-setup/setup/deployment-best-practices/performance-tests-results/index.html",
+  "link": "../../../../../assets/img/setup-and-install/performance-test-results/response_time_summary_1KiB_0ms.png"
  },
  {
   "page": "api-platform/api-manager/4.4.0/reference/customize-product/customizations/customizing-login-pages-for-dev-portal-and-publisher/index.html",
@@ -3854,6 +3906,22 @@
  {
   "page": "developer-platform/platform-engineers/search-results.html",
   "link": "assets/stylesheets/palette.a0c5b2b5.min.css"
+ },
+ {
+  "page": "financial-services/3.0.0/conformance/ciba-conformance/index.html",
+  "link": "../../../assets/attachments/well-known-config-resources.zip"
+ },
+ {
+  "page": "financial-services/3.0.0/conformance/ciba-conformance/index.html",
+  "link": "/financial-services/assets/attachments/automated-endpoint.zip"
+ },
+ {
+  "page": "financial-services/3.0.0/develop/developer-guide/index.html",
+  "link": "../../../assets/attachments/install-scripts.zip"
+ },
+ {
+  "page": "financial-services/3.0.0/develop/developer-guide/index.html",
+  "link": "../../../assets/attachments/open-banking-sample-toolkit.zip"
  },
  {
   "page": "financial-services/3.0.0/develop/developer-guide/index.html",
@@ -6880,8 +6948,32 @@
   "link": "/integration/streaming-integrator/admin/managing-grafana-dashboards.md/#organizing-dashboards-in-folders"
  },
  {
+  "page": "kubernetes-gateway/1.1.0/administration/prometheus-metric-support/index.html",
+  "link": "../../../assets/_versions/1.1.0/img/prometheus/grafana-dashboards/WSO2%20APK%20Grafana%20Dashboards.zip"
+ },
+ {
+  "page": "kubernetes-gateway/1.1.0/administration/prometheus-metric-support/index.html",
+  "link": "../../../assets/img/prometheus/grafana-dashboards/WSO2%20APK%20Grafana%20Dashboard%20Images.zip"
+ },
+ {
   "page": "kubernetes-gateway/1.1.0/includes/create-apk-conf-api/index.html",
   "link": "/api-management-overview/apk-conf-lang-support/"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/administration/prometheus-metric-support/index.html",
+  "link": "../../../assets/_versions/1.2.0/img/prometheus/grafana-dashboards/WSO2%20APK%20Grafana%20Dashboards.zip"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/administration/prometheus-metric-support/index.html",
+  "link": "../../../assets/img/prometheus/grafana-dashboards/WSO2%20APK%20Grafana%20Dashboard%20Images.zip"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/create-api/create-and-deploy-apis/grpc/create-grpc-api-using-crs/index.html",
+  "link": "../../../../../assets/files/get-started/OrderDefinition.zip"
+ },
+ {
+  "page": "kubernetes-gateway/1.2.0/create-api/create-and-deploy-apis/grpc/create-grpc-api-with-multiple-proto-files/index.html",
+  "link": "../../../../../assets/files/get-started/OrderDefinition.zip"
  },
  {
   "page": "kubernetes-gateway/1.2.0/includes/create-apk-conf-api/index.html",
