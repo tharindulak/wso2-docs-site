@@ -380,6 +380,14 @@
   "link": "../../../../assets/img/streaming/working-with-the design-view/Generate-Stream.png"
  },
  {
+  "page": "api-platform/api-manager/4.0.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "../../../../assets/img/streaming/working-with-the%20design-view/Connect-Siddhi-Components.gif"
+ },
+ {
+  "page": "api-platform/api-manager/4.0.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "../../../../assets/img/streaming/working-with-the%20design-view/Drag-And-Drop-Siddhi-Component.gif"
+ },
+ {
   "page": "api-platform/api-manager/4.0.0/includes/deploy/backend-jwt-gw-note/index.html",
   "link": "/api-platform/api-manager/install-and-setup/deploying-wso2-api-manager/distributed-deployment/deploying-wso2-api-m-in-a-distributed-setup/"
  },
@@ -428,12 +436,28 @@
   "link": "/api-platform/api-manager/deploy-and-publish/deploy-on-gateway/api-gateway/passing-enduser-attributes-to-the-backend-via-api-gateway/"
  },
  {
+  "page": "api-platform/api-manager/4.0.0/install-and-setup/setup/mi-setup/dynamic_server_configurations/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/env-variable-support/k8s-project-deployment-file.img"
+ },
+ {
+  "page": "api-platform/api-manager/4.0.0/install-and-setup/setup/sso/configuring-identity-server-as-external-idp-using-saml/index.html",
+  "link": "../../../../../assets/img/setup-and-install/upload-certificate-in-sp-for-saml2-sso.png"
+ },
+ {
   "page": "api-platform/api-manager/4.0.0/integrate/develop/integration-development-kickstart/index.html",
   "link": "../../../../assets/img/integrate/developing-first-integration/19-dev-get-started-embedded-server-startup.jpg"
  },
  {
   "page": "api-platform/api-manager/4.0.0/mi-analytics/setting-up-mi-analytics/index.html",
   "link": "/integrate/develop/importing-projects/"
+ },
+ {
+  "page": "api-platform/api-manager/4.0.0/reference/connectors/salesforce-connectors/salesforcebulk-connector-example/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/connectors/salesforcebulk-drag-and-drop-addBatch.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.0.0/reference/connectors/smpp-connector/smpp-connector-example/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/connectors/smpp-drag-and-drop-sendsms-parameters.png"
  },
  {
   "page": "api-platform/api-manager/4.0.0/reference/synapse-properties/transport-parameters/vfs-transport-parameters/index.html",
@@ -672,6 +696,10 @@
   "link": "/install-and-setup/setup/api-controller/managing-integrations/managing-integrations-with-ctl/"
  },
  {
+  "page": "api-platform/api-manager/4.1.0/install-and-setup/setup/mi-setup/dynamic_server_configurations/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/env-variable-support/k8s-project-deployment-file.img"
+ },
+ {
   "page": "api-platform/api-manager/4.1.0/integrate/develop/create-integration-project/index.html",
   "link": "/integrate/develop/create-kubernetes-project"
  },
@@ -777,6 +805,10 @@
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/salesforce-connectors/salesforcebulk-connector-example/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/connectors/salesforcebulk-drag-and-drop-addBatch.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/reference/connectors/salesforce-connectors/salesforcebulk-connector-example/index.html",
   "link": "/install-and-setup/setup/api-controller/managing-integrations/managing-integrations-with-ctl/"
  },
  {
@@ -802,6 +834,10 @@
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/servicenow-connector/servicenow-connector-example/index.html",
   "link": "/install-and-setup/setup/api-controller/managing-integrations/managing-integrations-with-ctl/"
+ },
+ {
+  "page": "api-platform/api-manager/4.1.0/reference/connectors/smpp-connector/smpp-connector-example/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/connectors/smpp-drag-and-drop-sendSMS.png"
  },
  {
   "page": "api-platform/api-manager/4.1.0/reference/connectors/smpp-connector/smpp-connector-example/index.html",
@@ -842,6 +878,22 @@
  {
   "page": "api-platform/api-manager/4.2.0/design/api-monetization/monetizing-an-api/index.html",
   "link": "/design/api-monetization/monetizing-an-api/#monetization-support-via-elasticsearch"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "../../../../assets/img/streaming/working-with-the%20design-view/Configure-Siddhi-Component-In-Design-View.png"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "../../../../assets/img/streaming/working-with-the%20design-view/Connect-Siddhi-Components.gif"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "../../../../assets/img/streaming/working-with-the%20design-view/Drag-And-Drop-Siddhi-Component.gif"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/develop/streaming-apps/working-with-the-design-view/index.html",
+  "link": "/api-platform/api-manager/assets/img/streaming/working-with-the%20design-view/Generate-Stream.png"
  },
  {
   "page": "api-platform/api-manager/4.2.0/includes/analytics/configure-synapse-gateway/index.html",
@@ -918,6 +970,14 @@
  {
   "page": "api-platform/api-manager/4.2.0/includes/reference/connectors/deploy-capp/index.html",
   "link": "/install-and-setup/setup/api-controller/managing-integrations/managing-integrations-with-ctl/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/dynamic_server_configurations/index.html",
+  "link": "/api-platform/api-manager/assets/img/integrate/env-variable-support/k8s-project-deployment-file.img"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/setup/si-deployment/deploying-si-as-minimum-ha-cluster-in-aws-ecs/index.html",
+  "link": "../../../../../assets/img/streaming/si-as-minimum-ha-cluster-in-aws-ecs/rd-instance-settings.png"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/connectors/amazondynamodb-connector/amazondynamodb-connector-example/index.html",
@@ -1074,6 +1134,10 @@
  {
   "page": "api-platform/api-manager/4.2.0/reference/wso2-api-manager-best-practices/index.html",
   "link": "/troubleshooting/error-handling/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/use-cases/streaming-tutorials/creating-business-rules-templates/index.html",
+  "link": "../../../../assets/img/streaming/working-with-business-rules/select-input.png"
  },
  {
   "page": "api-platform/api-manager/4.3.0/consume/generating-sdks/write-a-client-application-using-the-sdk/index.html",
@@ -6310,6 +6374,10 @@
  {
   "page": "integration/integrator/reference/appendix/faq/index.html",
   "link": "/guides/migration/from-tibco/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/gmail-connector/gmail-connector-example/index.html",
+  "link": "/integration/micro-integrator/assets/attachments/connectors/gmailconnector.zip"
  },
  {
   "page": "integration/micro-integrator/4.3.0/includes/build-and-run/index.html",

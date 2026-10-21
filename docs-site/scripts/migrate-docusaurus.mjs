@@ -12,6 +12,7 @@ import path from 'node:path';
 import { mkdocsSite, redirectMaps, writeDocusaurusTree } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, ROOT } from './lib.mjs';
 import { sectionVersions } from './versions.mjs';
+import { inputHashes } from './snapshots.mjs';
 
 const args = process.argv.slice(2);
 const flag = (name) => { const i = args.indexOf(name); return i >= 0 ? args.splice(i, 2)[1] : undefined; };
@@ -57,7 +58,9 @@ const tree = versions.map((v) => ({
   // A version kept on its own branch (API Manager 4.6.0) is edited there; versions sharing one branch get the same.
   editBranch: typeof v.ref === 'string' && /^[A-Za-z0-9._\/-]+$/.test(v.ref) ? v.ref : undefined,
 }));
-const { review } = writeDocusaurusTree(tree, path.resolve(outDir), { route: section.route, editBranch: editBranch ?? editBranchOf(section, versions) });
+// The converter that wrote the tree: a build warns when its own converter differs (build-content.mjs, staleTrees).
+const stamp = { converter: inputHashes().converter, generated: new Date().toISOString().slice(0, 10) };
+const { review } = writeDocusaurusTree(tree, path.resolve(outDir), { route: section.route, editBranch: editBranch ?? editBranchOf(section, versions), stamp });
 console.log(`Wrote ${path.resolve(outDir)}: Latest ${versions[0].version} and ${versions.length - 1} older version(s).`);
 // Not in the tree: the tree holds pages only.
 const reviewFile = path.join(GENERATED, 'tree-review.txt');
