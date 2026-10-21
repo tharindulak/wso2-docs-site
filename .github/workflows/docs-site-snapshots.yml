@@ -4,11 +4,16 @@
 name: docs-site snapshots
 on:
   push:
-    branches: [main, docs-site-versions]
+    branches: [main, docs-site-build, docs-site-versions] # docs-site-build: this repository's default branch
     paths: ['docs-site/**', '.github/workflows/docs-site-*.yml']
   workflow_dispatch:
 permissions:
   contents: read
+# Same build settings as docs-site deploy, so snapshot keys match what a deploy assembles (they join the key).
+env:
+  DOCS_SITE_URL: ${{ vars.DOCS_SITE_URL }}
+  DOCS_NO_INDEX: ${{ vars.DOCS_NO_INDEX }}
+  DOCS_SITE_TEST_OWNER: ${{ vars.DOCS_SITE_TEST_OWNER }}
 concurrency:
   group: docs-site-snapshots
   cancel-in-progress: false
