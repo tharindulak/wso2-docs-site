@@ -224,9 +224,11 @@ function rewriteLinksToHostedPages(lock) {
       if (!url) return;
       const route = sub ? `${v.route}/${sub}` : v.route;
       const sectionHome = `/${sub ? `${section.route}/${sub}` : section.route}/`;
+      // The version's first page, not its root: a snapshot's root page is only written when snapshots are assembled.
+      const home = `/${route}/${sub ? '' : landingOf(v)}`;
       const prefixes = new Set([url, ...(latest ? [url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')] : [])]);
       const files = { from: path.join(docsDir, sub), to: path.join(staticDirOf(v), sub) };
-      for (const prefix of prefixes) sites.push({ prefix, route, sectionHome, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
+      for (const prefix of prefixes) sites.push({ prefix, route, home, sectionHome, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
     };
     const refs = latest && v.kind === 'mkdocs-merge' ? [v.cloud, v.self_hosted] : [v];
     for (const ref of refs) add(ref.current_site);
@@ -285,7 +287,7 @@ function rewriteLinksToHostedPages(lock) {
   function homeOf(url, own) {
     const pick = (list) => list.filter((x) => url.startsWith(x.prefix)).sort((a, b) => b.prefix.length - a.prefix.length)[0];
     const mine = pick(own);
-    return mine ? `/${mine.route}/` : pick(sites)?.sectionHome ?? null;
+    return mine ? mine.home : pick(sites)?.sectionHome ?? null;
   }
 }
 
