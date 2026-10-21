@@ -15,8 +15,11 @@ export function insideRoot(source: Source, candidate: string): string {
   return resolved;
 }
 
+/** A source file's text without a leading byte order mark, as MkDocs reads it (utf-8-sig): front matter after a BOM counts. */
+export const readSource = (file: string): string => fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
+
 function readInside(source: Source, file: string): string {
-  return fs.readFileSync(insideRoot(source, file), 'utf8');
+  return readSource(insideRoot(source, file));
 }
 
 export function findInclude(source: Source, fromFile: string, target: string): string {
@@ -61,6 +64,7 @@ export function loadFrontMatter(block: string): { data: Record<string, unknown>;
 }
 
 const FRONT_MATTER = /^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/;
+const LATE_FRONT_MATTER = /^(?:[ \t]*\r?\n)+---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/;
 const QUICK_START_META = /<script>\s*(?:const|let|var)\s+meta\s*=\s*([\s\S]*?);?\s*<\/script>\s*/;
 
 export interface PageData { frontMatter: Record<string, unknown>; meta?: unknown; /** Why the front matter gave no fields (invalid YAML). */ error?: string }
@@ -75,7 +79,10 @@ export function splitPageData(text: string): PageData & { body: string } {
   let frontMatter: Record<string, unknown> = {};
   let error: string | undefined;
   let meta: unknown;
-  const fm = body.match(FRONT_MATTER);
+  let fm = body.match(FRONT_MATTER);
+  // Blank lines before the block (MkDocs would print it as a heading): front matter when it is a valid YAML mapping.
+  const late = !fm ? body.match(LATE_FRONT_MATTER) : null;
+  if (late && !loadFrontMatter(late[1]!).error && Object.keys(loadFrontMatter(late[1]!).data).length) fm = late;
   if (fm) {
     ({ data: frontMatter, error } = loadFrontMatter(fm[1]!));
     body = body.slice(fm[0].length);

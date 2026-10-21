@@ -18,7 +18,8 @@ import { applyLifecycle, lifecycleBadge, withoutDeprecatedSuffix, BY_OPTION, LIF
 const KEEP_FRONT_MATTER = ['title', 'description', 'keywords', 'sidebar_label', 'sidebar_position', 'slug', 'tags', 'image'];
 
 /** Split leading YAML front matter from Markdown. */
-export function splitFrontMatter(text: string): { data: Record<string, unknown>; body: string; error?: string } {
+export function splitFrontMatter(raw: string): { data: Record<string, unknown>; body: string; error?: string } {
+  const text = raw.replace(/^\uFEFF/, '');
   const m = text.match(/^---[ \t]*\r?\n([\s\S]*?)\r?\n---[ \t]*\r?\n?/);
   if (!m) return { data: {}, body: text };
   const { data, error } = loadFrontMatter(m[1]!);
