@@ -13,7 +13,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import {
   convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, githubEditUrl, emptyReport, walk,
-  splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile,
+  splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile, redirectPageHtml, redirectPageTarget, collapseRedirects,
   deprecationIndex, readDeprecationsList, deprecationsPage, withDeprecationsEntry, DEPRECATIONS_ID, readTreeStamp, TREE_MARKER,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
@@ -35,9 +35,9 @@ const REDIRECT_MARK = '<!-- wso2-docs: section root redirect -->';
 const escapeHtml = (t) => t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const redirectHtml = (target) => { const to = escapeHtml(target); return `<!doctype html>\n${REDIRECT_MARK}\n<html lang="en"><head><meta charset="utf-8"><title>Redirecting</title><meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${to}"><meta name="robots" content="noindex"></head>\n<body><p><a href="${to}">Continue to the documentation</a></p></body></html>\n`; };
 
-/** Excluded and failing pages send readers to the same page on the product's current site. */
-function redirectPage({ title, to, deploymentOptions }) {
-  return `---\n${yaml.dump({ title, deployment_options: deploymentOptions, pagination_next: null, pagination_prev: null })}---\n\nimport Redirect from '@site/src/components/Redirect';\n\n<Redirect to="${to}" />\n`;
+/** Excluded and failing pages: a notice that the page is not published here yet, with its source file on GitHub. */
+function redirectPage({ title, source, deploymentOptions }) {
+  return `---\n${yaml.dump({ title, deployment_options: deploymentOptions, pagination_next: null, pagination_prev: null })}---\n\nimport Redirect from '@site/src/components/Redirect';\n\n<Redirect${source ? ` source={${JSON.stringify(source)}}` : ''} />\n`;
 }
 
 // Custom components some Docusaurus sources import, mapped to site stand-ins (source-repo code never reaches the bundle).
@@ -207,9 +207,15 @@ function rewriteLinksToHostedPages(lock) {
     const page = (f) => fs.existsSync(f) && !fs.readFileSync(f, 'utf8').includes("from '@site/src/components/Redirect'");
     // A README.md without a slug is its folder's index (MkDocs serves it there); a pinned one answers at README/.
     const readmeIndex = (f) => page(f) && !/^slug:/m.test(fs.readFileSync(f, 'utf8').split('\n---')[0]);
+    // An old URL this version answers with a redirect page (redirects.ts) is a target too: the browser follows it here.
+    const redirectPage = (sub, p) => {
+      const f = path.join(staticDirOf(v), sub, p, 'index.html');
+      return p !== '' && !p.split('/').includes('..') && fs.existsSync(f) && fs.readFileSync(f, 'utf8').includes('<title>Redirecting</title>');
+    };
     const hosts = (sub) => (p) => {
       const base = path.join(docsDir, sub, p);
-      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')]).some(page) || readmeIndex(path.join(base, 'README.md'));
+      return (p === '' ? [path.join(base, 'index.md')] : [`${base}.md`, path.join(base, 'index.md')]).some(page) || readmeIndex(path.join(base, 'README.md'))
+        || redirectPage(sub, p);
     };
     // Files (images, downloads) the version's pages are served with; the caller copies a linked one to static.
     // The real path must stay inside the version's folder: a symbolic link never pulls in a file from elsewhere.
@@ -217,9 +223,10 @@ function rewriteLinksToHostedPages(lock) {
     const add = (url, sub = '') => {
       if (!url) return;
       const route = sub ? `${v.route}/${sub}` : v.route;
+      const sectionHome = `/${sub ? `${section.route}/${sub}` : section.route}/`;
       const prefixes = new Set([url, ...(latest ? [url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')] : [])]);
       const files = { from: path.join(docsDir, sub), to: path.join(staticDirOf(v), sub) };
-      for (const prefix of prefixes) sites.push({ prefix, route, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
+      for (const prefix of prefixes) sites.push({ prefix, route, sectionHome, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
     };
     const refs = latest && v.kind === 'mkdocs-merge' ? [v.cloud, v.self_hosted] : [v];
     for (const ref of refs) add(ref.current_site);
@@ -230,6 +237,7 @@ function rewriteLinksToHostedPages(lock) {
     }
   }
   let total = 0;
+  const redirects = []; // every old-URL redirect page: { owner, self, file, to }
   const liveSites = sites.filter((x) => !x.snapshot);
   for (const { v } of all) {
     const docsDir = path.join(GENERATED, 'docs', v.id);
@@ -250,8 +258,35 @@ function rewriteLinksToHostedPages(lock) {
         fs.copyFileSync(from, to);
       }
     }
+    // Old-URL redirect pages (the redirects plugin's maps) sent to a current site: to the page here when it is hosted.
+    const staticDir = staticDirOf(v);
+    for (const rel of fs.existsSync(staticDir) ? walk(staticDir, (r) => r.endsWith('index.html')) : []) {
+      const file = path.join(staticDir, rel);
+      const url = redirectPageTarget(fs.readFileSync(file, 'utf8'));
+      if (!url) continue;
+      const self = `/${v.route}/${rel.split(path.sep).join('/').replace(/index\.html$/, '')}`;
+      let to = /^https:\/\//.test(url) ? rewriteSiteLinks(`](${url})`, own).text.slice(2, -1) : url;
+      // A page no longer published anywhere (its product site is retired): the section's home here (user decision 2026-10-21).
+      if (!to.startsWith('/') || to.split('#')[0] === self) to = homeOf(url, own) ?? url;
+      if (to.split('#')[0] === self) to = url;
+      if (to !== url) { fs.writeFileSync(file, redirectPageHtml(to)); total++; }
+      redirects.push({ owner: v.id, self, file, to });
+    }
+  }
+  // A redirect to an old URL that itself redirects here goes straight to the end of the chain (within one version).
+  for (const owner of new Set(redirects.map((r) => r.owner))) {
+    const own = redirects.filter((r) => r.owner === owner);
+    const files = new Map(own.map((r) => [r.self, r.file]));
+    for (const [self, to] of collapseRedirects(new Map(own.map((r) => [r.self, r.to])))) fs.writeFileSync(files.get(self), redirectPageHtml(to));
   }
   return total;
+
+  /** The home on this site of the section whose current site `url` is on: its own version first, else the section's Latest. */
+  function homeOf(url, own) {
+    const pick = (list) => list.filter((x) => url.startsWith(x.prefix)).sort((a, b) => b.prefix.length - a.prefix.length)[0];
+    const mine = pick(own);
+    return mine ? `/${mine.route}/` : pick(sites)?.sectionHome ?? null;
+  }
 }
 
 /**

@@ -7,7 +7,7 @@ import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
 import { parse } from './template.js';
 import { redirectMaps, writeRedirectPages } from './redirects.js';
-import { expandMarkers, loadPage, loadPlain, renderSingle, readPageData, inlining } from './render.js';
+import { expandMarkers, loadPage, loadPlain, renderSingle, readPageData, inlining, readSource } from './render.js';
 import { mergePage, renderMergedInclude, finishMerged, CLOUD, SELF_HOSTED } from './merge.js';
 import { PartialPlan, insertPartials, type RenderMode } from './partials.js';
 import { outsideCode } from './syntax.js';
@@ -66,7 +66,12 @@ const shownStage = (pageFile: string): Stage | undefined => {
 };
 
 /** What to write for a page that is excluded or fails: the docs site writes a redirect; the CLI writes nothing. */
-export interface FallbackInfo { rel: string; title: string; to: string; deploymentOptions: DeploymentOption[] }
+/** to: the page on the product's current site; source: the source file on GitHub (view, not edit), when known. */
+export interface FallbackInfo { rel: string; title: string; to: string; source?: string; deploymentOptions: DeploymentOption[] }
+
+/** A GitHub file URL as its view page: an edit link (/edit/<ref>/...) becomes /blob/<ref>/...; anything else, none. */
+const sourceView = (url: unknown): string | undefined => (typeof url === 'string' && /^https:\/\/github\.com\/[^/\s]+\/[^/\s]+\/(?:edit|blob)\/[^\s"<>]+$/.test(url)
+  ? url.replace(/^(https:\/\/github\.com\/[^/]+\/[^/]+)\/edit\//, '$1/blob/') : undefined);
 export type FallbackPage = (info: FallbackInfo) => string | null;
 
 export interface SiteOutput {
@@ -462,7 +467,7 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     try {
       plan!.begin(rel, p.mode);
       // Templated with the site's variables, as the include's text is where a page inlines it ({{ base_path }} links).
-      const marked = outdentContinuation(expandMarkers(fs.readFileSync(p.target, 'utf8'), p.target, source));
+      const marked = outdentContinuation(expandMarkers(readSource(p.target), p.target, source));
       const text = site.templating ? renderSingle(parse(marked), env(), p.target, source) : marked;
       const nested = plan!.pagePartials;
       const result = await convertRendered(resolveBase(text, route, host), { deploymentOptions: [], iframeHosts: src.iframeHosts, fallbackTitle: p.name });
@@ -478,7 +483,7 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
   }
   for (const rel of pageFiles) {
     const file = path.join(pages, rel);
-    const raw = fs.readFileSync(file, 'utf8');
+    const raw = readSource(file);
     const deploymentOptions = optionsFor(src, rel);
     const fallbackTitle = mkdocsTitle(rel, labels.get(docPath(`${docsRoot ?? ''}${rel}`)));
     await emit(out, report, withPrefix(rel), async () => {
@@ -501,7 +506,7 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
       }) : result.mdx;
       const withImages = relativeImages(mdx, withPrefix(rel), out.route, (a) => fs.existsSync(path.join(pages, prefix ? a.slice(prefix.length + 1) : a)));
       return insertPartials(withImages, withPrefix(rel).split(path.sep).join('/'), used);
-    }, { title: titleOf(raw, fallbackTitle), to: (src.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions }, { readmeIndex: readmeIsIndex(rel, [pages]) });
+    }, { title: titleOf(raw, fallbackTitle), to: (src.currentSite ?? '') + mkdocsUrl(rel), source: sourceView(src.editUrl?.(file)), deploymentOptions }, { readmeIndex: readmeIsIndex(rel, [pages]) });
   }
   delete source.markerPartials;
   if (out.staticDir) copyReferencedAssets(pages, prefix ? path.join(out.outDir, prefix) : out.outDir, prefix ? path.join(out.staticDir, prefix) : out.staticDir, route);
@@ -553,7 +558,7 @@ function chooseMarkerPartials(plan: PartialPlan, pages: string[], renderPage: (r
   }
   const plain: Source = { root: source.root, includeBases: source.includeBases };
   const partials = plan.choose(root, (target) => {
-    const text = expandMarkers(fs.readFileSync(target, 'utf8'), target, plain);
+    const text = expandMarkers(readSource(target), target, plain);
     if (RELATIVE_LINK.test(text)) throw new Error('relative links resolve against the including page');
     return text;
   }, minPages);
@@ -704,7 +709,7 @@ export async function convertMergedSites(opts: MergedSitesOptions, out: SiteOutp
       noteFrontMatter(report, rel, { ...result, problems: [...sideProblems, ...result.problems] });
       const mdx = relativeImages(result.mdx, rel, out.route, (a) => fs.existsSync(path.join(c.site.docsDir, a)) || fs.existsSync(path.join(s.site.docsDir, a)));
       return insertPartials(mdx, path.join(out.prefix ?? '', rel).split(path.sep).join('/'), used);
-    }, { title: titleOf(fs.readFileSync(file, 'utf8'), fallbackTitle), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), deploymentOptions },
+    }, { title: titleOf(readSource(file), fallbackTitle), to: (primary.o.currentSite ?? '') + mkdocsUrl(rel), source: sourceView(primary.o.editUrl?.(file)), deploymentOptions },
     { readmeIndex: readmeIsIndex(rel, [c.site.docsDir, s.site.docsDir]) });
   }
   setPartialHook(c, s, undefined);
@@ -802,7 +807,7 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
   const docsDir = path.join(src.root, src.docs);
   for (const rel of walk(docsDir, isPage)) {
     const file = path.join(docsDir, rel);
-    const raw = fs.readFileSync(file, 'utf8');
+    const raw = readSource(file);
     const deploymentOptions = optionsFor(src, rel);
     await emit(out, report, rel, async () => {
       const { data, body, error } = splitFrontMatter(raw);
@@ -838,7 +843,8 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
         await compileCheck(md, { format: 'md' });
         return md;
       }
-    }, { title: titleOf(raw, path.basename(rel, path.extname(rel))), to: (src.currentSite ?? '') + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'), deploymentOptions });
+    }, { title: titleOf(raw, path.basename(rel, path.extname(rel))), to: (src.currentSite ?? '') + rel.replace(/\.mdx?$/, '').replace(/(^|\/)index$/, '$1'),
+      source: sourceView(splitFrontMatter(raw).data.custom_edit_url ?? src.editUrl?.(file)), deploymentOptions });
   }
   if (out.staticDir) copyAssets(docsDir, out.staticDir);
   copyAssets(docsDir, out.outDir);

@@ -64,6 +64,33 @@ export const redirectPageHtml = (target: string): string => {
   return `<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><title>Redirecting</title><meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${to}"><meta name="robots" content="noindex"></head>\n<body><p><a href="${to}">Continue to the page</a></p></body></html>\n`;
 };
 
+/** The target of a page redirectPageHtml wrote (entities decoded), or null for any other HTML. */
+export function redirectPageTarget(html: string): string | null {
+  if (!html.includes('<title>Redirecting</title>')) return null;
+  const to = html.match(/<meta http-equiv="refresh" content="0; url=([^"<>\s]+)">/)?.[1];
+  return to ? to.replaceAll('&quot;', '"').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&') : null;
+}
+
+/**
+ * Old-URL redirects that lead to another old URL answered by a redirect page go straight to the end of the chain.
+ * `pages` maps each redirect page's site path (`/route/old/`) to its target; returns the changed targets only. A chain
+ * that comes back to a page it passed (a loop) or ends on the page itself is left as it is.
+ */
+export function collapseRedirects(pages: Map<string, string>): Map<string, string> {
+  const changed = new Map<string, string>();
+  for (const [self, first] of pages) {
+    let to = first;
+    const seen = new Set([self]);
+    for (let next; (next = pages.get(to.split('#')[0]!)) !== undefined;) {
+      if (seen.has(to.split('#')[0]!)) { to = first; break; }
+      seen.add(to.split('#')[0]!);
+      to = next;
+    }
+    if (to !== first && to.split('#')[0] !== self) changed.set(self, to);
+  }
+  return changed;
+}
+
 /**
  * Write a redirect page at each old URL in `maps` that the section owns and that no published page uses, under
  * staticDir (served at /<route>/). Returns how many pages were written.

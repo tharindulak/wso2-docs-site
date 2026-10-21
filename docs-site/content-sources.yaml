@@ -793,7 +793,7 @@ products:
         tree_static: docusaurus/static
         tree_redirects: docusaurus/redirects.json
         strict: true
-        sha: 632c26f50263d8d2b99869ada9d32e3e6b74bbc3
+        sha: 9fe7564cc507704ffaf536bf1a93ba04a5d4767b
         track: docusaurus-migration
         docs: docusaurus/docs
         sidebar: docusaurus/sidebars.json

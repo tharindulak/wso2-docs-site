@@ -476,3 +476,31 @@ test('pages the MkDocs exclude plugin leaves out by glob are not converted; its 
   for (const gone of ['wip/a.md', 'wip/deep/b.md', 'notes.tmp.md']) assert.ok(!fs.existsSync(path.join(out, gone)), gone);
   assert.ok(fs.existsSync(path.join(out, 'drafts/c.md')), 'regex patterns are ignored');
 });
+
+test('front matter after a byte order mark is front matter, as MkDocs reads files (utf-8-sig)', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\n',
+    'en/docs/a.md': '﻿---\ntitle: Endpoint\ndescription: About endpoints.\n---\n\n# Endpoint\n\nText.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'] }, { outDir: out, route: 'p' });
+  const page = fs.readFileSync(path.join(out, 'a.md'), 'utf8');
+  assert.match(page, /^---\ntitle: Endpoint\ndescription: About endpoints\.\n/);
+  assert.equal(page.match(/^---$/gm)?.length, 2);
+  assert.ok(!page.includes('﻿') && !page.includes('title: Endpoint description'));
+});
+
+test('front matter after leading blank lines is front matter when it is a YAML mapping; a rule and text stay content', async () => {
+  const root = tempSource({
+    'en/mkdocs.yml': 'site_name: A\n',
+    'en/docs/a.md': '\n---\ntitle: "CVE-1"\ncategory: security-announcements\n---\n\n# CVE-1\n',
+    'en/docs/b.md': '\n---\n\nJust a rule, then text.\n\n---\n\nMore.\n',
+  });
+  const out = fs.mkdtempSync(path.join(root, 'out-'));
+  await convertMkdocsSite({ root, mkdocs: 'en/mkdocs.yml', deployment_options: ['Self-hosted'] }, { outDir: out, route: 'p' });
+  const a = fs.readFileSync(path.join(out, 'a.md'), 'utf8');
+  assert.match(a, /^---\ntitle: CVE-1\n/);
+  assert.equal(a.match(/^---$/gm)?.length, 2);
+  assert.ok(!a.includes('category: security-announcements'));
+  assert.match(fs.readFileSync(path.join(out, 'b.md'), 'utf8'), /Just a rule, then text\./);
+});
