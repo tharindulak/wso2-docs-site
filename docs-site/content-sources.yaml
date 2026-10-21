@@ -485,7 +485,7 @@ products:
         versions:
           - version: 4.7.0
             ref: docusaurus-migration
-            sha: 3ffee4c555beaa647da2393c8d1148bb7d65ec4e
+            sha: 1f8d601e73afbf900c5d0cb7cec8f62f3ac26914
             docs: docusaurus/docs
             sidebar: docusaurus/sidebars.json
             track: true
