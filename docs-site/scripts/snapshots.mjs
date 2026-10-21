@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { readLock, liveWindow, ROOT, GENERATED } from './lib.mjs';
 import { sectionVersions, outsideLinkInputs } from './versions.mjs';
 import { createStore } from './snapshot-store.mjs';
-import { findBrokenLinks, notIn, sortedPairs } from './check-links.mjs';
+import { findBrokenLinks, notIn, sortedPairs, PENDING_FILE } from './check-links.mjs';
 import { withHeap } from './docusaurus.mjs';
 import { writeSnapshotRootRedirect, checkVersionRoots } from './redirect.mjs';
 import { siteKeySuffix } from '../site/src/lib/site-url.mjs';
@@ -253,6 +253,9 @@ function assemble(liveDir, outDir, { allowMissing = false } = {}) {
     console.log(`merged   ${v.id}`);
   }
   if (pending.length) console.log(`${pending.length} snapshot(s) pending: ${pending.join(', ')}`);
+  // For check-links.mjs: links into a pending snapshot's route cannot resolve in this build.
+  if (pending.length) fs.writeFileSync(path.join(outDir, PENDING_FILE), `${JSON.stringify(pendingRoutes)}\n`);
+  else fs.rmSync(path.join(outDir, PENDING_FILE), { force: true });
   checkVersionRoots(outDir, new Set(pendingRoutes.map((r) => `/${r}/`)));
 }
 
