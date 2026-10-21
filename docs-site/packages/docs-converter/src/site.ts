@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 import yaml from 'js-yaml';
 import { mkdocsSite } from './mkdocs-config.js';
+import { parse } from './template.js';
 import { redirectMaps, writeRedirectPages } from './redirects.js';
 import { expandMarkers, loadPage, loadPlain, renderSingle, readPageData, inlining } from './render.js';
 import { mergePage, renderMergedInclude, finishMerged, CLOUD, SELF_HOSTED } from './merge.js';
@@ -460,7 +461,9 @@ export async function convertMkdocsSite(src: MkdocsSiteOptions, out: SiteOutput)
     const rel = withPrefix(`_partials/${p.name}`);
     try {
       plan!.begin(rel, p.mode);
-      const text = outdentContinuation(expandMarkers(fs.readFileSync(p.target, 'utf8'), p.target, source));
+      // Templated with the site's variables, as the include's text is where a page inlines it ({{ base_path }} links).
+      const marked = outdentContinuation(expandMarkers(fs.readFileSync(p.target, 'utf8'), p.target, source));
+      const text = site.templating ? renderSingle(parse(marked), env(), p.target, source) : marked;
       const nested = plan!.pagePartials;
       const result = await convertRendered(resolveBase(text, route, host), { deploymentOptions: [], iframeHosts: src.iframeHosts, fallbackTitle: p.name });
       if (result.stats.format === 'md') throw new PageError('compile', 'does not compile as MDX');
