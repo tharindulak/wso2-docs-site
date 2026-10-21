@@ -16,6 +16,26 @@
   "link": "/api-platform/api-gateway/1.1.0/policies/overview.md/"
  },
  {
+  "page": "api-platform/ai-gateway/README/index.html",
+  "link": "/api-platform/ai-gateway/README/analytics/"
+ },
+ {
+  "page": "api-platform/ai-gateway/README/index.html",
+  "link": "/api-platform/ai-gateway/README/gateway-controller-management-api/"
+ },
+ {
+  "page": "api-platform/ai-gateway/README/index.html",
+  "link": "/api-platform/ai-gateway/README/llm/"
+ },
+ {
+  "page": "api-platform/ai-gateway/README/index.html",
+  "link": "/api-platform/ai-gateway/README/mcp/"
+ },
+ {
+  "page": "api-platform/ai-gateway/README/index.html",
+  "link": "/api-platform/ai-gateway/README/observability/"
+ },
+ {
   "page": "api-platform/ai-gateway/ai-workspace/connect-the-gateway/index.html",
   "link": "/api-platform/ai-workspace/next/ai-gateways/setting-up.md/"
  },
@@ -1993,6 +2013,10 @@
  },
  {
   "page": "api-platform/api-manager/api-gateway/federated-gateways/overview/index.html",
+  "link": "/api-platform/api-manager/api-gateway/federated-gateways/EnvoyGateway/eg-k8s/discover-apis-on-eg-gateway-in-kubernetes/"
+ },
+ {
+  "page": "api-platform/api-manager/api-gateway/federated-gateways/overview/index.html",
   "link": "/api-platform/api-manager/deploy-and-publish/federated-gateways/azure/deploy-on-azure-api-gateway/"
  },
  {
@@ -2062,6 +2086,14 @@
  {
   "page": "api-platform/api-manager/api-security/runtime/authorization/role-based-access-control-using-xacml/index.html",
   "link": "/api-platform/api-manager/reference/customize-product/extending-api-manager/saml2-sso/configuring-identity-server-as-idp-for-sso.md/#sharing-the-user-store"
+ },
+ {
+  "page": "api-platform/api-manager/api-security/runtime/opa-validation/overview/index.html",
+  "link": "/api-platform/api-manager/assets/img/design/security/opa/configure-opa-policy.png"
+ },
+ {
+  "page": "api-platform/api-manager/api-security/runtime/opa-validation/overview/index.html",
+  "link": "/api-platform/api-manager/assets/img/design/security/opa/opa-policy-selection.png"
  },
  {
   "page": "api-platform/api-manager/apiops/cli/advanced-topics/configuring-different-endpoint-security-types/index.html",
@@ -2473,7 +2505,15 @@
  },
  {
   "page": "api-platform/api-manager/cloud/ai-gateway/llm/quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/cloud/ai-gateway/1.2.0/reference/default-ports.md/"
+ },
+ {
+  "page": "api-platform/api-manager/cloud/ai-gateway/llm/quick-start-guide/index.html",
   "link": "/api-platform/api-manager/cloud/ai-gateway/llm/quick-start-guide/llm/guardrails/aws-bedrock-guardrail/"
+ },
+ {
+  "page": "api-platform/api-manager/cloud/ai-gateway/mcp/quick-start-guide/index.html",
+  "link": "/api-platform/api-manager/cloud/ai-gateway/1.2.0/reference/default-ports.md/"
  },
  {
   "page": "api-platform/api-manager/cloud/develop-api-proxy/authentication-and-authorization/secure-api-access-with-azure-ad/index.html",
@@ -3184,6 +3224,10 @@
   "link": "/api-platform/api-manager/consume/customizations/customizing-the-developer-portal/overriding-developer-portal-theme/#uploading-via-the-admin-portal-tenants-only"
  },
  {
+  "page": "api-platform/api-manager/reference/customize-product/customizations/customize-the-api-store-and-gateway-urls-for-tenants/index.html",
+  "link": "/api-platform/api-manager/assets/img/develop/customizations/per-tenant-sp-creation-config.png"
+ },
+ {
   "page": "api-platform/api-manager/reference/customize-product/customizations/customizing-login-pages-for-dev-portal-and-publisher/index.html",
   "link": "/administer/product-security/saml2-sso/configuring-identity-server-as-idp-for-sso/"
  },
@@ -3393,6 +3437,10 @@
  },
  {
   "page": "api-platform/api-manager/tutorials/create-and-publish-websocket-api/index.html",
+  "link": "/api-platform/api-manager/manage-apis/design/create-api/create-a-websocket-api"
+ },
+ {
+  "page": "api-platform/api-manager/tutorials/create-and-publish-websocket-api/index.html",
   "link": "/api-platform/api-manager/manage-apis/design/create-api/create-a-websocket-api/"
  },
  {
@@ -3406,6 +3454,10 @@
  {
   "page": "api-platform/api-manager/tutorials/create-and-publish-websocket-api/index.html",
   "link": "/api-platform/api-manager/manage-apis/design/endpoints/resiliency/prevent-api-suspension/"
+ },
+ {
+  "page": "api-platform/api-manager/tutorials/develop-an-integration-with-a-managed-api/index.html",
+  "link": "/api-platform/api-manager/assets/img/tutorials/service-endpoint-dropdown.png"
  },
  {
   "page": "api-platform/api-manager/tutorials/develop-an-integration-with-a-managed-api/index.html",
@@ -3636,8 +3688,36 @@
   "link": "/developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/choreo-insights-api/graphiql-explorer/index.html/"
  },
  {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/choreo-insights-api/index.html",
+  "link": "/developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html/"
+ },
+ {
   "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
   "link": "./favicon.png"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./insight.config.js"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./manifest.json"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/css/2.dff3c244.chunk.css"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/css/main.dd389ba7.chunk.css"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/js/2.e5757962.chunk.js"
+ },
+ {
+  "page": "developer-platform/developers/monitoring-and-insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/js/main.78fb288a.chunk.js"
  },
  {
   "page": "developer-platform/developers/search-results.html",
@@ -3704,8 +3784,36 @@
   "link": "/developer-platform/platform-engineers/insights/work-with-choreo-insights-api/choreo-insights-api/graphiql-explorer/index.html/"
  },
  {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/choreo-insights-api/index.html",
+  "link": "/developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html/"
+ },
+ {
   "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
   "link": "./favicon.png"
+ },
+ {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./insight.config.js"
+ },
+ {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./manifest.json"
+ },
+ {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/css/2.dff3c244.chunk.css"
+ },
+ {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/css/main.dd389ba7.chunk.css"
+ },
+ {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/js/2.e5757962.chunk.js"
+ },
+ {
+  "page": "developer-platform/platform-engineers/insights/work-with-choreo-insights-api/graphiql-explorer/index.html",
+  "link": "./static/js/main.78fb288a.chunk.js"
  },
  {
   "page": "developer-platform/platform-engineers/search-results.html",
@@ -3750,6 +3858,14 @@
  {
   "page": "financial-services/3.0.0/develop/developer-guide/index.html",
   "link": "/develop/custom-request-object-validator/#configuring-a-custom-request-object-validator"
+ },
+ {
+  "page": "financial-services/conformance/ciba-conformance/index.html",
+  "link": "../../assets/attachments/well-known-config-resources.zip"
+ },
+ {
+  "page": "financial-services/conformance/ciba-conformance/index.html",
+  "link": "/financial-services/assets/attachments/automated-endpoint.zip"
  },
  {
   "page": "financial-services/develop/develop-is-toolkit/index.html",
@@ -3984,6 +4100,14 @@
   "link": "/financial-services/get-started/assets/attachments/transport-certs/"
  },
  {
+  "page": "financial-services/install-and-setup/distributed-gateway-control-plane-traffic-manager/index.html",
+  "link": "..%2Fassets%2Fimg%2Finstall-and-setup%2Fdeployment-patterns%2Fdistributed_gateway_control_plane.png"
+ },
+ {
+  "page": "financial-services/install-and-setup/distributed-gateway-control-plane/index.html",
+  "link": "..%2Fassets%2Fimg%2Finstall-and-setup%2Fdeployment-patterns%2Fdistributed_gateway_control_plane.png"
+ },
+ {
   "page": "financial-services/learn/consent-authorization-intro/index.html",
   "link": "../assets/img/learn/consent-manager/consent-page-confirm.png"
  },
@@ -4022,6 +4146,10 @@
  {
   "page": "financial-services/learn/token-authentication/index.html",
   "link": "/financial-services/learn/develop/token-filters.md/"
+ },
+ {
+  "page": "financial-services/tryout-flows/accelerator-with-is-and-apim/deploy-apis-dcr/index.html",
+  "link": "../../../assets/attachments/backend.zip"
  },
  {
   "page": "financial-services/tryout-flows/accelerator-with-is-and-apim/dynamic-client-registration/index.html",
@@ -5152,6 +5280,10 @@
   "link": "/get-started/install-wso2-integrator-bi/"
  },
  {
+  "page": "integration/bi/deploy/vm-based-deployment/centralized-deployment/index.html",
+  "link": "/integration/bi/assets/img/deploy/build-executable.png"
+ },
+ {
   "page": "integration/bi/deploy/vm-based-deployment/de-centralized-deployment/index.html",
   "link": "/get-started/install-wso2-integrator-bi/"
  },
@@ -5394,6 +5526,10 @@
  {
   "page": "integration/integrator/cloud/assets/img/administer/configure-domain/configure-a-custom-domain-for-your-organization/index.html",
   "link": "../assets/img/administer/configure-domain/developer-portal-cname-target-value.png"
+ },
+ {
+  "page": "integration/integrator/cloud/assets/img/administer/configure-domain/configure-a-custom-domain-for-your-organization/index.html",
+  "link": "../assets/img/administer/configure-domain/upload-certificate-chain.png"
  },
  {
   "page": "integration/integrator/cloud/assets/img/administer/configure-domain/configure-a-custom-domain-for-your-organization/index.html",
@@ -6160,6 +6296,10 @@
   "link": "/integration/micro-integrator/install-and-setup/setup/user-stores/setting-up-a-userstore/"
  },
  {
+  "page": "integration/micro-integrator/develop/customizations/ballerina-module/overview/index.html",
+  "link": "/integration/micro-integrator/assets/img/develop/ballerina-module/importCon.png"
+ },
+ {
   "page": "integration/micro-integrator/develop/externalized-configuration/index.html",
   "link": "/integration/micro-integrator/reference/synapse-properties/inbound-endpoints/polling-inbound-endpoints/file-inbound-endpoint-properties"
  },
@@ -6278,6 +6418,18 @@
  {
   "page": "integration/micro-integrator/learn/enterprise-integration-patterns/messaging-channels/message-bus/index.html",
   "link": "/integration/micro-integrator/learn/enterprise-integration-patterns/messaging-channels/message-bus/&quot;/integration/micro-integrator/develop/deploy-artifacts/#build-and-run%22"
+ },
+ {
+  "page": "integration/micro-integrator/learn/enterprise-integration-patterns/messaging-endpoints/polling-consumer/index.html",
+  "link": "/integration/micro-integrator/assets/attachments/learn/enterprise-integration-patterns/PollingConsumer.zip"
+ },
+ {
+  "page": "integration/micro-integrator/learn/enterprise-integration-patterns/messaging-endpoints/transactional-client/index.html",
+  "link": "/integration/micro-integrator/assets/attachments/jar/MessageCounter.jar"
+ },
+ {
+  "page": "integration/micro-integrator/learn/enterprise-integration-patterns/messaging-endpoints/transactional-client/index.html",
+  "link": "/integration/micro-integrator/assets/attachments/learn/enterprise-integration-patterns/TransactionalClient.zip"
  },
  {
   "page": "integration/micro-integrator/learn/enterprise-integration-patterns/messaging-systems/message-endpoint/index.html",
@@ -6736,6 +6888,14 @@
   "link": "../../../../api-management-overview/apk-conf-lang-support"
  },
  {
+  "page": "kubernetes-gateway/administration/prometheus-metric-support/index.html",
+  "link": "../../assets/img/prometheus/grafana-dashboards/WSO2%20APK%20Grafana%20Dashboard%20Images.zip"
+ },
+ {
+  "page": "kubernetes-gateway/administration/prometheus-metric-support/index.html",
+  "link": "../../assets/img/prometheus/grafana-dashboards/WSO2%20APK%20Grafana%20Dashboards.zip"
+ },
+ {
   "page": "kubernetes-gateway/control-plane/overview/index.html",
   "link": "../control-plane/api-management/control-plane-api-management-overview"
  },
@@ -6750,6 +6910,14 @@
  {
   "page": "kubernetes-gateway/control-plane/start-apk-dp-to-cp-vms/index.html",
   "link": "/control-plane/apk-deploy/"
+ },
+ {
+  "page": "kubernetes-gateway/create-api/create-and-deploy-apis/grpc/create-grpc-api-using-crs/index.html",
+  "link": "../../../../assets/files/get-started/OrderDefinition.zip"
+ },
+ {
+  "page": "kubernetes-gateway/create-api/create-and-deploy-apis/grpc/create-grpc-api-with-multiple-proto-files/index.html",
+  "link": "../../../../assets/files/get-started/OrderDefinition.zip"
  },
  {
   "page": "kubernetes-gateway/includes/create-apk-conf-api/index.html",
@@ -6781,7 +6949,15 @@
  },
  {
   "page": "platform-security/security-announcements/security-advisories/2024/WSO2-2024-3561/index.html",
+  "link": "../../../../assets/attachments/WSO2-2024-3561_temporary_mitigation.zip"
+ },
+ {
+  "page": "platform-security/security-announcements/security-advisories/2024/WSO2-2024-3561/index.html",
   "link": "/platform-security/public-artifacts/WSO2-2024-3561_temporary_mitigation.zip/"
+ },
+ {
+  "page": "platform-security/security-announcements/security-advisories/2025/WSO2-2025-4494/index.html",
+  "link": "../../../../assets/attachments/WSO2-2025-4494/case-3.pdf"
  },
  {
   "page": "updates/updates/archive/migrating-to-updates2.0/index.html",
