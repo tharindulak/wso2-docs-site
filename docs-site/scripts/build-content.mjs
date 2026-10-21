@@ -14,9 +14,10 @@ import yaml from 'js-yaml';
 import {
   convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, githubEditUrl, emptyReport, walk,
   splitFrontMatter, sidebarDocIds, normalizeSidebar, overviewLinks, placeCompanion, rewriteSiteLinks, containedFile,
-  deprecationIndex, readDeprecationsList, deprecationsPage, withDeprecationsEntry, DEPRECATIONS_ID,
+  deprecationIndex, readDeprecationsList, deprecationsPage, withDeprecationsEntry, DEPRECATIONS_ID, readTreeStamp, TREE_MARKER,
 } from '@wso2/docs-converter';
 import { readLock, liveWindow, checkoutDir, GENERATED, LOCK, ROOT } from './lib.mjs';
+import { inputHashes } from './snapshots.mjs';
 import { sectionVersions, confluenceEntries, replaceExclude, pagePaths, pagePath, outsideLinks, formerRouteRedirects } from './versions.mjs';
 
 const args = process.argv.slice(2);
@@ -253,6 +254,30 @@ function rewriteLinksToHostedPages(lock) {
   return total;
 }
 
+/**
+ * Migrated trees (tree_root) that may be out of date: written by a converter other than this one (its source hash, as
+ * snapshot keys use it), or before trees recorded theirs. One line per tree read by this run, naming its versions.
+ */
+function staleTrees(lock) {
+  const current = inputHashes().converter;
+  const trees = new Map();
+  for (const product of lock.products) for (const section of product.sections) for (const v of sectionVersions(section, liveWindow(lock))) {
+    if (!v.tree_root || !v.repo || !v.sha) continue;
+    const marker = path.join(checkoutDir(v.repo, v.sha), v.tree_root, TREE_MARKER);
+    if (!fs.existsSync(marker)) continue; // not fetched in this run
+    const key = `${v.repo}@${v.sha.slice(0, 12)} ${v.tree_root}`;
+    if (!trees.has(key)) trees.set(key, { stamp: readTreeStamp(fs.readFileSync(marker, 'utf8')), ids: [] });
+    trees.get(key).ids.push(v.id);
+  }
+  const lines = [];
+  for (const [key, { stamp, ids }] of trees) {
+    if (stamp.converter === current) continue;
+    const why = stamp.converter ? `written by another converter (${stamp.converter.slice(0, 12)}, ${stamp.generated ?? 'date unknown'})` : 'written before trees recorded their converter';
+    lines.push(`tree ${key} (${ids.join(', ')}): ${why}; converter changes since may not be in it. Regenerate it with scripts/migrate-docusaurus.mjs.`);
+  }
+  return lines;
+}
+
 const lock = readLock();
 const manifest = { groups: lock.groups, products: [], linkOut: lock.link_out ?? [], hiddenFromNavigation: lock.hide_from_navigation ?? [] };
 const reports = [];
@@ -391,6 +416,8 @@ for (const product of lock.products) for (const section of product.sections) {
   for (const { file, target } of redirects) write(file, redirectHtml(target));
   if (skipped.length) console.warn(`${section.id}: no former_route redirect for unsafe page path(s): ${skipped.join(', ')}`);
 }
+// Migrated trees are converted once, when written: a converter change reaches them only when they are regenerated.
+for (const line of staleTrees(lock)) console.warn(`${process.env.GITHUB_ACTIONS ? '::warning::' : ''}${line}`);
 write(path.join(GENERATED, 'manifest.json'), JSON.stringify(manifest, null, 2));
 write(path.join(GENERATED, 'content-report.json'), JSON.stringify(reports, null, 2));
 if (lockChanged) {
