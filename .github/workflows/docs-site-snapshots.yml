@@ -59,7 +59,17 @@ jobs:
       - env:
           SNAPSHOT_ID: ${{ matrix.snapshot.id }}
           SNAPSHOT_STORE: local:${{ runner.temp }}/snapshots
+          SNAPSHOT_BASELINE_OUT: ${{ runner.temp }}/baseline/${{ matrix.snapshot.id }}.json
         run: node scripts/snapshots.mjs build "$SNAPSHOT_ID"
+      # New broken links fail the leg: upload its baseline re-recorded here (Linux: case-sensitive paths, as on the
+      # server) for a reviewed PR. Nothing from this artifact is stored or deployed.
+      - if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: baseline-${{ matrix.snapshot.id }}
+          path: ${{ runner.temp }}/baseline/
+          if-no-files-found: ignore
+          retention-days: 7
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: snapshot-${{ matrix.snapshot.key }}

@@ -199,6 +199,11 @@ function build(id, { recordBaseline = false } = {}) {
   }
   const baseline = fs.existsSync(baselineFile) ? JSON.parse(fs.readFileSync(baselineFile, 'utf8')) : [];
   const fresh = newBrokenLinks(broken, baseline);
+  if (fresh.length && process.env.SNAPSHOT_BASELINE_OUT) {
+    // CI uploads this: the version's baseline re-recorded on Linux, for a reviewed PR when the breakage is accepted.
+    fs.mkdirSync(path.dirname(process.env.SNAPSHOT_BASELINE_OUT), { recursive: true });
+    fs.writeFileSync(process.env.SNAPSHOT_BASELINE_OUT, `${JSON.stringify(sortedPairs(broken), null, 1)}\n`);
+  }
   if (fresh.length) { for (const b of fresh.slice(0, 50)) console.error(`${b.page}: ${b.link}`); throw new Error(`${id}: ${fresh.length} broken link(s) inside the snapshot not in ${path.relative(ROOT, baselineFile)}`); }
   fs.writeFileSync(path.join(out, KEY_FILE), `${key}\n`);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'snap-'));

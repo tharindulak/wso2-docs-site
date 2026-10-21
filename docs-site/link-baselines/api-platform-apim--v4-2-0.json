@@ -152,6 +152,18 @@
   "link": "/api-platform/api-manager/4.2.0/assets/img/get_started/try-out.png"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/databases/setting-up-IBM-DB2"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/databases/setting-up-MSSQL"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/install-and-setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/databases/setting-up-Oracle"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/install-and-setup/install/installing-the-product/installing-api-m-analytics-as-a-windows-service/index.html",
   "link": "/api-platform/api-manager/4.2.0/administer/product-security/General/logins-and-passwords/admin-carbon-secure-vault-implementation/"
  },
@@ -361,6 +373,14 @@
  },
  {
   "page": "api-platform/api-manager/4.2.0/install-and-setup/setup/setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/brokers/deploy-rabbitMQ/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/setup/setup-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/databases/setting-up-MySQL/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/install-and-setup/setup/setup-overview/index.html",
   "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/security/creating_keystore/"
  },
  {
@@ -432,6 +452,10 @@
   "link": "/api-platform/api-manager/4.2.0/integrate/develop/creating-artifacts/creating-smooks-artifacts/"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/integrate/develop/intro-integration-development/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/develop/customizations/creating-custom-Inbound-endpoint/"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/integrate/examples/endpoint_examples/using-failover-endpoints/index.html",
   "link": "/api-platform/api-manager/4.2.0/integrate/develop/deploy-and-run/"
  },
@@ -464,8 +488,100 @@
   "link": "/api-platform/api-manager/4.2.0/install-and-setup/setup/mi-setup/transport_configurations/configuring-transport/#configuring-the-jms-transport"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/integrate/examples/message_transformation_examples/pox-to-json-conversion/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-reference/generic-Properties/#messagetype"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/integrate/examples/transport_examples/tcp-transport-examples/index.html",
   "link": "/api-platform/api-manager/4.2.0/integrate/develop/deploy-and-run/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/file-processing/Accessing_Windows_Share_Using_VFS_Transport"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_between_FIX_versions"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_between_HTTP_and_MSMQ"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_FIX_to_AMQP"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_FIX_to_HTTP"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_FTP_listener_to_mail_sender"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_HTTPS_to_JMS"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_HTTP_to_FIX"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_JMS_to_HTTP/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_TCP_to_HTTPS"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_UDP_to_HTTPS"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/file-processing-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/file-processing/Accessing_Windows_Share_Using_VFS_Transport"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_between_FIX_versions"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_between_HTTP_and_MSMQ"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_FIX_to_AMQP"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_FIX_to_HTTP"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_FTP_listener_to_mail_sender"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_HTTPS_to_JMS"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_HTTP_to_FIX"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_JMS_to_HTTP"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_TCP_to_HTTPS"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/integrate/integration-use-case/protocol-switching-overview/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/protocol-switching/switching_from_UDP_to_HTTPS"
  },
  {
   "page": "api-platform/api-manager/4.2.0/observe/si-observe/viewing-on-demand-query-statistics/index.html",
@@ -538,6 +654,14 @@
  {
   "page": "api-platform/api-manager/4.2.0/reference/connectors/file-connector/3.x/file-connector-3.x-example/index.html",
   "link": "/api-platform/api-manager/4.2.0/assets/img/integrate/connectors/adding-an-api.jpg"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/connectors/google-pubsub-connector/googlepubsub-connector-example/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/respond-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/connectors/iso8583-connector/iso8583-inbound-endpoint-example/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/connectors/ISO8583-connector/ISO8583-connector-configuration/"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/connectors/microsoft-azure-storage-connector/2.x/microsoft-azure-storage-connector-example/index.html",
@@ -617,7 +741,87 @@
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/about-mediators/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/enrich-Mediator"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/about-mediators/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/about-mediators/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/about-mediators/index.html",
   "link": "/api-platform/api-manager/4.2.0/reference/synapse-properties/sequence-properties/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/callout-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/clone-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/enrich-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/filter-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/header-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/respond-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/callout-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/call-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/callout-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/class-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/class-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/enrich-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/enrich-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/entitlement-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/fault-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/entitlement-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/entitlement-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/respond-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/entitlement-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator/"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/fastxslt-mediator/index.html",
@@ -628,6 +832,26 @@
   "link": "/api-platform/api-manager/4.2.0/concepts/message-processing-units/#classification-of-mediators"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/call-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/callout-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/iterate-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator/"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/header-mediator/index.html",
   "link": "/api-platform/api-manager/4.2.0/concepts/message-processing-units/#classification-of-mediators"
  },
@@ -636,8 +860,20 @@
   "link": "/api-platform/api-manager/4.2.0/concepts/message-processing-units/#classification-of-mediators"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/iterate-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/clone-Mediator/"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/log-mediator/index.html",
   "link": "/api-platform/api-manager/4.2.0/concepts/message-processing-units/#classification-of-mediators"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-reference/generic-Properties"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/accessing-properties-with-xpath/index.html",
@@ -656,12 +892,88 @@
   "link": "/api-platform/api-manager/4.2.0/integrate/develop/creating-artifacts/creating-an-api.md/"
  },
  {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/accessing-properties-with-xpath/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/class-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/accessing-properties-with-xpath/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/enrich-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/accessing-properties-with-xpath/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/axis2-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/axis2-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/generic-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/generic-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/generic-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/smooks-Mediator"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/http-transport-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/http-transport-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/message-context-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/property-reference/message-context-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/sequence-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/send-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/sequence-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/store-Mediator/"
+ },
+ {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/store-mediator/index.html",
   "link": "/api-platform/api-manager/4.2.0/concepts/message-processing-units/#classification-of-mediators"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/mediators/switch-mediator/index.html",
   "link": "/api-platform/api-manager/4.2.0/concepts/message-processing-units/#classification-of-mediators"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/switch-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/validate-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/fault-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/validate-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/mediators/validate-mediator/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/payloadFactory-Mediator/"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/synapse-properties/endpoint-properties/index.html",
+  "link": "/api-platform/api-manager/4.2.0/reference/mediators/property-Mediator"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/synapse-properties/endpoint-properties/index.html",
@@ -702,6 +1014,10 @@
  {
   "page": "api-platform/api-manager/4.2.0/reference/synapse-properties/transport-parameters/fix-transport-parameters/index.html",
   "link": "/api-platform/api-manager/4.2.0/install-and-setup/transport_configurations/configuring-transports/#configuring-the-fix-transport"
+ },
+ {
+  "page": "api-platform/api-manager/4.2.0/reference/synapse-properties/transport-parameters/hl7-transport-parameters/index.html",
+  "link": "/api-platform/api-manager/4.2.0/integrate/examples/hl7-examples/HL7_proxy_service/"
  },
  {
   "page": "api-platform/api-manager/4.2.0/reference/synapse-properties/transport-parameters/mailto-transport-parameters/index.html",

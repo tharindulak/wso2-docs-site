@@ -24,6 +24,26 @@
   "link": "/integration/micro-integrator/4.2.0/assets/img/assets/img/integrate/broker-configs/hornetq/delete-package.jpg"
  },
  {
+  "page": "integration/micro-integrator/4.2.0/install-and-setup/setup/deployment-best-practices/monitoring-transaction-counts/index.html",
+  "link": "/integration/micro-integrator/4.2.0/install-and-setup/setup/databases/setting-up-IBM-DB2/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/install-and-setup/setup/deployment-best-practices/monitoring-transaction-counts/index.html",
+  "link": "/integration/micro-integrator/4.2.0/install-and-setup/setup/databases/setting-up-MSSQL/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/install-and-setup/setup/deployment-best-practices/monitoring-transaction-counts/index.html",
+  "link": "/integration/micro-integrator/4.2.0/install-and-setup/setup/databases/setting-up-MySQL/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/install-and-setup/setup/deployment-best-practices/monitoring-transaction-counts/index.html",
+  "link": "/integration/micro-integrator/4.2.0/install-and-setup/setup/databases/setting-up-Oracle/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/install-and-setup/setup/deployment-best-practices/monitoring-transaction-counts/index.html",
+  "link": "/integration/micro-integrator/4.2.0/install-and-setup/setup/databases/setting-up-PostgreSQL/"
+ },
+ {
   "page": "integration/micro-integrator/4.2.0/learn/integration-tutorials/develop-an-integration-with-a-managed-api/index.html",
   "link": "/integration/micro-integrator/4.2.0/assets/img/tutorials/service-endpoint-dropdown.png"
  },
@@ -58,6 +78,38 @@
  {
   "page": "integration/micro-integrator/4.2.0/reference/connectors/file-connector/3.x/file-connector-3.x-example/index.html",
   "link": "/integration/micro-integrator/4.2.0/assets/img/integrate/connectors/filecon-3.x/adding-an-api.png"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/google-pubsub-connector/googlepubsub-connector-example/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/respond-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-connector-configuration/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-connector-configuration/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-connector-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-connector-reference/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-inbound-endpoint-config/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-connector-overview/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-inbound-endpoint-example/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/connectors/iso8583-connector/iso8583-inbound-endpoint-example/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/connectors/ISO8583-connector/ISO8583-connector-configuration/"
  },
  {
   "page": "integration/micro-integrator/4.2.0/reference/connectors/kafka-connector/kafka-connector-avro-producer-example/index.html",
@@ -96,7 +148,127 @@
   "link": "/integration/micro-integrator/4.2.0/assets/attachments/connectors/snowflake-connector.zip"
  },
  {
+  "page": "integration/micro-integrator/4.2.0/reference/mediation-sequences/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/drop-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/callout-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/clone-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/filter-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/header-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/payloadFactory-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/call-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/respond-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/callout-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/call-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/class-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/develop/WSO2-Integration-Studio/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/enrich-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/entitlement-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/fault-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/entitlement-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/respond-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/call-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/callout-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/iterate-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/foreach-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/iterate-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/clone-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/property-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/property-reference/axis2-properties/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/property-reference/generic-properties/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/property-reference/generic-properties/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/smooks-Mediator"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/property-reference/http-transport-properties/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/property-reference/message-context-properties/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/property-Group-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/sequence-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/payloadFactory-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/sequence-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/store-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/validate-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/fault-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/validate-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/log-Mediator/"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/mediators/validate-mediator/index.html",
+  "link": "/integration/micro-integrator/4.2.0/reference/mediators/payloadFactory-Mediator/"
+ },
+ {
   "page": "integration/micro-integrator/4.2.0/reference/synapse-properties/template-properties/index.html",
   "link": "/integration/micro-integrator/4.2.0/reference/synapse-properties/template-properties/call-Template-Mediator"
+ },
+ {
+  "page": "integration/micro-integrator/4.2.0/reference/synapse-properties/transport-parameters/hl7-transport-parameters/index.html",
+  "link": "/integration/micro-integrator/4.2.0/learn/examples/hl7-examples/HL7-proxy-service/"
  }
 ]
