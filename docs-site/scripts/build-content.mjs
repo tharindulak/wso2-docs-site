@@ -34,9 +34,9 @@ const REDIRECT_MARK = '<!-- wso2-docs: section root redirect -->';
 const escapeHtml = (t) => t.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const redirectHtml = (target) => { const to = escapeHtml(target); return `<!doctype html>\n${REDIRECT_MARK}\n<html lang="en"><head><meta charset="utf-8"><title>Redirecting</title><meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${to}"><meta name="robots" content="noindex"></head>\n<body><p><a href="${to}">Continue to the documentation</a></p></body></html>\n`; };
 
-/** Excluded and failing pages send readers to the same page on the product's current site. */
-function redirectPage({ title, to, deploymentOptions }) {
-  return `---\n${yaml.dump({ title, deployment_options: deploymentOptions, pagination_next: null, pagination_prev: null })}---\n\nimport Redirect from '@site/src/components/Redirect';\n\n<Redirect to="${to}" />\n`;
+/** Excluded and failing pages: a notice that the page is not published here yet, with its source file on GitHub. */
+function redirectPage({ title, source, deploymentOptions }) {
+  return `---\n${yaml.dump({ title, deployment_options: deploymentOptions, pagination_next: null, pagination_prev: null })}---\n\nimport Redirect from '@site/src/components/Redirect';\n\n<Redirect${source ? ` source={${JSON.stringify(source)}}` : ''} />\n`;
 }
 
 // Custom components some Docusaurus sources import, mapped to site stand-ins (source-repo code never reaches the bundle).
@@ -222,9 +222,10 @@ function rewriteLinksToHostedPages(lock) {
     const add = (url, sub = '') => {
       if (!url) return;
       const route = sub ? `${v.route}/${sub}` : v.route;
+      const sectionHome = `/${sub ? `${section.route}/${sub}` : section.route}/`;
       const prefixes = new Set([url, ...(latest ? [url.replace(/\/en\/\d[\w.-]*\/$/, '/en/latest/')] : [])]);
       const files = { from: path.join(docsDir, sub), to: path.join(staticDirOf(v), sub) };
-      for (const prefix of prefixes) sites.push({ prefix, route, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
+      for (const prefix of prefixes) sites.push({ prefix, route, sectionHome, hosts: hosts(sub), hasFile: hasFile(sub), files, owner: v.id, snapshot: v.status === 'snapshot' });
     };
     const refs = latest && v.kind === 'mkdocs-merge' ? [v.cloud, v.self_hosted] : [v];
     for (const ref of refs) add(ref.current_site);
@@ -264,7 +265,9 @@ function rewriteLinksToHostedPages(lock) {
       if (!url) continue;
       const self = `/${v.route}/${rel.split(path.sep).join('/').replace(/index\.html$/, '')}`;
       let to = /^https:\/\//.test(url) ? rewriteSiteLinks(`](${url})`, own).text.slice(2, -1) : url;
-      if (!to.startsWith('/') || to.split('#')[0] === self) to = url;
+      // A page no longer published anywhere (its product site is retired): the section's home here (user decision 2026-10-21).
+      if (!to.startsWith('/') || to.split('#')[0] === self) to = homeOf(url, own) ?? url;
+      if (to.split('#')[0] === self) to = url;
       if (to !== url) { fs.writeFileSync(file, redirectPageHtml(to)); total++; }
       redirects.push({ owner: v.id, self, file, to });
     }
@@ -276,6 +279,13 @@ function rewriteLinksToHostedPages(lock) {
     for (const [self, to] of collapseRedirects(new Map(own.map((r) => [r.self, r.to])))) fs.writeFileSync(files.get(self), redirectPageHtml(to));
   }
   return total;
+
+  /** The home on this site of the section whose current site `url` is on: its own version first, else the section's Latest. */
+  function homeOf(url, own) {
+    const pick = (list) => list.filter((x) => url.startsWith(x.prefix)).sort((a, b) => b.prefix.length - a.prefix.length)[0];
+    const mine = pick(own);
+    return mine ? `/${mine.route}/` : pick(sites)?.sectionHome ?? null;
+  }
 }
 
 const lock = readLock();
