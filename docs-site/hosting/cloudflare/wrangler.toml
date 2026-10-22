@@ -7,7 +7,7 @@ workers_dev = true
 
 [vars]
 NOINDEX = "1"     # the test site; "" when the site is meant to be indexed
-SEARCH_URL = ""   # https://search-<host>; set with SEARCH_KEY (`wrangler secret put SEARCH_KEY`)
+SEARCH_URL = "https://search-141-148-145-173.sslip.io"   # the docs VM; with SEARCH_KEY (`wrangler secret put SEARCH_KEY`)
 
 [[r2_buckets]]
 binding = "SITE"
