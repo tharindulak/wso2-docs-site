@@ -1,0 +1,14 @@
+# The Worker that serves the docs site from R2 (worker.js). The account comes from `wrangler login` or
+# CLOUDFLARE_ACCOUNT_ID, so the same file deploys to a trial account and to WSO2's.
+name = "wso2-docs-site"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+[vars]
+NOINDEX = "1"     # the test site; "" when the site is meant to be indexed
+SEARCH_URL = ""   # https://search-<host>; set with SEARCH_KEY (`wrangler secret put SEARCH_KEY`)
+
+[[r2_buckets]]
+binding = "SITE"
+bucket_name = "wso2-docs-site"
