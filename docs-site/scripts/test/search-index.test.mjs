@@ -105,6 +105,15 @@ test('pageRecords: redirect pages and pages without an article give nothing; emp
   assert.equal(pageRecords(page({ body: '<h1>T</h1><h2 id="a">A</h2><p>x</p>' }), '/a/', where)[0].content, 'Page description.');
 });
 
+test('pageRecords: the site-wide noindex of a DOCS_NO_INDEX build does not empty the index; page-level noindex still does', () => {
+  const where = { ...versionIndex(manifest).get('integration-mi'), versionId: 'integration-mi' };
+  const site = page({ meta: '<meta data-rh="true" name="robots" content="noindex, nofollow">', body: '<h1>T</h1><p>x</p>' });
+  const excluded = page({ meta: '<meta data-rh="true" name="robots" content="noindex">', body: '<h1>T</h1><p>x</p>' });
+  assert.equal(pageRecords(site, '/a/', where, { siteNoIndex: true }).length, 1);
+  assert.deepEqual(pageRecords(site, '/a/', where), []);
+  assert.deepEqual(pageRecords(excluded, '/a/', where, { siteNoIndex: true }), []);
+});
+
 test('linkOutRecords: one record per https link-out product', () => {
   const records = linkOutRecords(manifest);
   assert.equal(records.length, 1);

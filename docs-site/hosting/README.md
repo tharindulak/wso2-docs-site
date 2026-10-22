@@ -1,6 +1,8 @@
 # Docs VM hosting kit
 
-What the Deploy and Preview workflows need on the VM that serves the docs site: Typesense, the deploy user's folders, a gate that is the only thing the control keys may run, and the deploy keys. Decided on the [delivery map](../../.scratch/wso2-docs-site-delivery/map.md) (Deploy workflow spec, Preview workflow spec, Hosting config). The web server is not part of this kit.
+What the Deploy and Preview workflows need on the docs VM: Typesense, the deploy user's folders, a gate that is the only thing the control keys may run, and the deploy keys. Decided on the [delivery map](../../.scratch/wso2-docs-site-delivery/map.md) (Deploy workflow spec, Preview workflow spec, Hosting config). The web server is not part of this kit.
+
+The site's pages are served from Cloudflare R2 ([cloudflare/](cloudflare/README.md)). The Deploy workflow still uploads each release to the VM, but a site release now holds only `_search/` and `.release.json`: the VM indexes search and keeps track of what is live. `switch` still moves `current`, which no longer serves pages; `rollback` is not used by the workflow (rollback is a deploy of an older commit). Previews still upload whole builds to the VM.
 
 | File | Installed as | |
 |---|---|---|

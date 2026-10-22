@@ -1,13 +1,19 @@
-# Deploy the docs site to the docs VM (docs-site/hosting/). Decided in
-# .scratch/wso2-docs-site-delivery/issues/07-deploy-workflow-spec.md:
+# Deploy the docs site: pages to Cloudflare R2, served by the Worker in docs-site/hosting/cloudflare/; search on the
+# docs VM (docs-site/hosting/). Decided in .scratch/wso2-docs-site-delivery/issues/07-deploy-workflow-spec.md, with
+# hosting moved to Cloudflare (one copy in R2, updated in place, to stay within R2's free storage):
 #   plan     gate key, no repository code: what is live, what to deploy, or nothing to do
-#   build    read-only token and the upload key only (it runs content code): build, check, upload a new release folder
-#   promote  gate key, no repository code: the gate indexes search on the VM, moves the alias, switches `current`
-# Rollback: dispatch with action=rollback (promote only). The Typesense admin key never leaves the VM.
+#   build    read-only token, the R2 key and the VM upload key (it runs content code): build, check, publish the pages to
+#            R2 in place, upload the search records to the VM as a release folder
+#   promote  gate key, no repository code: the gate indexes search on the VM and moves the alias
+# The R2 key is limited to the site's bucket, but publishing in place means the build job changes the live site: the
+# old rule that a build job cannot go live holds only for search. Rollback: dispatch with an older commit (a full
+# deploy). The Typesense admin key never leaves the VM.
 #
 # Environment (DEPLOY_ENVIRONMENT, default test) secrets: DEPLOY_HOST, DEPLOY_KNOWN_HOSTS, DEPLOY_SSH_KEY (upload),
-# DEPLOY_GATE_KEY. Repository variables: DOCS_SITE_URL, DOCS_NO_INDEX, DOCS_SITE_TEST_OWNER (test copies only) and
-# ALLOW_MISSING_SNAPSHOTS=true (test only, until the snapshot store is filled: Latest only, flagged in the release).
+# DEPLOY_GATE_KEY, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY (Object Read & Write on the bucket only).
+# Repository variables: R2_BUCKET, DOCS_SITE_URL (the Worker's address), DOCS_NO_INDEX, DOCS_SITE_TEST_OWNER (test
+# copies only) and ALLOW_MISSING_SNAPSHOTS=true (test only, until the snapshot store is filled: Latest only, flagged
+# in the release).
 name: docs-site deploy
 on:
   workflow_run:
@@ -15,12 +21,8 @@ on:
     types: [completed]
   workflow_dispatch:
     inputs:
-      action:
-        type: choice
-        options: [deploy, rollback]
-        default: deploy
       commit:
-        description: '40-character commit on the default branch (default: its head)'
+        description: '40-character commit on the default branch (default: its head; an older one rolls back)'
         type: string
         required: false
   schedule:
@@ -28,7 +30,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: docs-site-deploy # deploys and rollbacks never overlap; a newer pending run replaces an older one
+  group: docs-site-deploy # deploys never overlap; a newer pending run replaces an older one
   cancel-in-progress: false
 env:
   DEPLOY_USER: deploy
@@ -46,10 +48,8 @@ jobs:
     timeout-minutes: 10
     environment: ${{ vars.DEPLOY_ENVIRONMENT || 'test' }}
     outputs:
-      action: ${{ steps.what.outputs.action }}
       commit: ${{ steps.what.outputs.commit }}
       id: ${{ steps.what.outputs.id }}
-      current: ${{ steps.live.outputs.id }}
       skip: ${{ steps.what.outputs.skip }}
     steps:
       - name: Connect to the gate
@@ -76,14 +76,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           EVENT: ${{ github.event_name }}
           RUN_SHA: ${{ github.event.workflow_run.head_sha }}
-          INPUT_ACTION: ${{ inputs.action }}
           INPUT_COMMIT: ${{ inputs.commit }}
           LIVE_COMMIT: ${{ steps.live.outputs.commit }}
         run: |
           set -eu
-          action=${INPUT_ACTION:-deploy}
-          echo "action=$action" >>"$GITHUB_OUTPUT"
-          if [[ $action == rollback ]]; then echo "skip=false" >>"$GITHUB_OUTPUT"; exit 0; fi
           branch=$(gh api "repos/$GITHUB_REPOSITORY" --jq .default_branch)
           case $EVENT in
             workflow_run) sha=$RUN_SHA ;;
@@ -106,7 +102,7 @@ jobs:
 
   build:
     needs: plan
-    if: needs.plan.outputs.action == 'deploy' && needs.plan.outputs.skip == 'false'
+    if: needs.plan.outputs.skip == 'false'
     # The Latest-only build needs about 12 GB of heap and about 11 GB of disk for the merged output: a public
     # repository's ubuntu-latest (16 GB RAM) after removing preinstalled toolchains. A private one needs a larger runner.
     runs-on: ubuntu-latest
@@ -119,7 +115,6 @@ jobs:
       DOCS_SITE_TEST_OWNER: ${{ vars.DOCS_SITE_TEST_OWNER }}
       ID: ${{ needs.plan.outputs.id }}
       COMMIT: ${{ needs.plan.outputs.commit }}
-      CURRENT: ${{ needs.plan.outputs.current }}
     defaults:
       run:
         working-directory: docs-site
@@ -186,7 +181,39 @@ jobs:
           jq -n --arg id "$ID" --arg commit "$COMMIT" --arg run "$RUN_URL" --arg built "$(date -u +%FT%TZ)" \
             --argjson partial "$PARTIAL" '{id: $id, commit: $commit, built_at: $built, run: $run, snapshots_missing: $partial}' \
             >site/build/.release.json
-      - name: Upload the release
+      - name: Install rclone
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -eu
+          zip=rclone-v1.75.1-linux-amd64.zip
+          curl -fsSLO "https://downloads.rclone.org/v1.75.1/$zip"
+          echo "982b5aa772841168f8e380f139e9e787b2a105403e32b94da8676a0e1c0a13ab  $zip" | sha256sum -c -
+          unzip -q -j "$zip" '*/rclone' -d bin && echo "$RUNNER_TEMP/bin" >>"$GITHUB_PATH"
+      - name: Publish the pages to R2
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_NO_CHECK_BUCKET: 'true'
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          ACCOUNT: ${{ secrets.R2_ACCOUNT_ID }}
+          BUCKET: ${{ vars.R2_BUCKET }}
+        run: |
+          set -eu
+          [[ $ACCOUNT =~ ^[0-9a-f]{32}$ ]] || { echo "R2_ACCOUNT_ID is not a Cloudflare account id" >&2; exit 1; }
+          [[ $BUCKET =~ ^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$ ]] || { echo "R2_BUCKET is not a bucket name" >&2; exit 1; }
+          export RCLONE_CONFIG_R2_ENDPOINT="https://$ACCOUNT.r2.cloudflarestorage.com"
+          # In place, ordered so a page never links to a file not yet uploaded: non-HTML files (content-hashed assets
+          # among them) first, then pages, then deletions. --checksum: Docusaurus rewrites every mtime, so only content
+          # decides what is sent. Dot files and _search/ never go to R2 (the Worker refuses them too), and a
+          # search-config.json in the bucket is left alone (the Worker answers it from its settings when they are set).
+          filters=(--exclude '.*' --exclude '.*/**' --exclude '/_search/**' --exclude '/search-config.json')
+          opts=(--checksum --fast-list --transfers 32 --checkers 32 --stats 60s --stats-one-line)
+          rclone copy site/build "r2:$BUCKET" "${opts[@]}" "${filters[@]}" --exclude '*.html'
+          rclone copy site/build "r2:$BUCKET" "${opts[@]}" "${filters[@]}"
+          rclone sync site/build "r2:$BUCKET" "${opts[@]}" "${filters[@]}"
+          echo "Published commit \`${COMMIT:0:12}\` to R2 bucket \`$BUCKET\`." >>"$GITHUB_STEP_SUMMARY"
+      - name: Upload the search records
         env:
           KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
@@ -198,43 +225,39 @@ jobs:
           printf '%s\n' "$KEY" >"$RUNNER_TEMP/upload_key"
           printf '%s\n' "$KNOWN_HOSTS" >"$RUNNER_TEMP/known_hosts"
           ssh="ssh -i $RUNNER_TEMP/upload_key -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/known_hosts -o ConnectTimeout=20"
-          # --checksum without -t: Docusaurus rewrites every mtime, so only content decides what hard-links to the live release.
-          link=(); [[ -n $CURRENT ]] && link=(--link-dest="/$CURRENT/")
-          rsync -r --checksum --chmod=D755,F644 "${link[@]}" --exclude=.release-complete -e "$ssh" site/build/ "$DEPLOY_USER@$HOST:$ID/"
+          # A release folder on the VM now holds only what the gate needs to index search: _search/ and .release.json.
+          rsync -r --checksum --chmod=D755,F644 --include=/_search/ --include='/_search/**' --include=/.release.json --exclude='*' \
+            -e "$ssh" site/build/ "$DEPLOY_USER@$HOST:$ID/"
           : >"$RUNNER_TEMP/.release-complete"
           rsync --chmod=F644 -e "$ssh" "$RUNNER_TEMP/.release-complete" "$DEPLOY_USER@$HOST:$ID/.release-complete"
-          echo "Uploaded release \`$ID\` (commit \`${COMMIT:0:12}\`)." >>"$GITHUB_STEP_SUMMARY"
+          echo "Uploaded the search records as release \`$ID\`." >>"$GITHUB_STEP_SUMMARY"
       - if: always()
         working-directory: /
         run: rm -f "$RUNNER_TEMP/upload_key"
 
   promote:
     needs: [plan, build]
-    if: >-
-      always() && needs.plan.result == 'success' && (
-        (needs.plan.outputs.action == 'deploy' && needs.build.result == 'success') ||
-        needs.plan.outputs.action == 'rollback')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: ${{ vars.DEPLOY_ENVIRONMENT || 'test' }}
     steps:
-      - name: Switch
+      # The gate indexes the release's search records, moves the alias and records the release as live (what plan reads
+      # next time). The pages are already live: the build job published them.
+      - name: Switch search
         env:
           KEY: ${{ secrets.DEPLOY_GATE_KEY }}
           KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
           HOST: ${{ secrets.DEPLOY_HOST }}
-          ACTION: ${{ needs.plan.outputs.action }}
           ID: ${{ needs.plan.outputs.id }}
         run: |
           set -eu
           [[ $HOST =~ ^[A-Za-z0-9.-]+$ ]] || { echo "DEPLOY_HOST is not a host name or address" >&2; exit 1; }
+          [[ $ID =~ ^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{7}$ ]] || { echo "bad release id" >&2; exit 1; }
           umask 077
           printf '%s\n' "$KEY" >"$RUNNER_TEMP/gate_key"
           printf '%s\n' "$KNOWN_HOSTS" >"$RUNNER_TEMP/known_hosts"
-          gate() { ssh -i "$RUNNER_TEMP/gate_key" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
-            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" -o ConnectTimeout=20 "$DEPLOY_USER@$HOST" "$1"; }
-          if [[ $ACTION == rollback ]]; then gate rollback | tee "$RUNNER_TEMP/out"
-          else [[ $ID =~ ^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{7}$ ]] || { echo "bad release id" >&2; exit 1; }; gate "switch $ID" | tee "$RUNNER_TEMP/out"; fi
-          { echo "### ${ACTION^}"; echo '```'; cat "$RUNNER_TEMP/out"; echo '```'; } >>"$GITHUB_STEP_SUMMARY"
+          ssh -i "$RUNNER_TEMP/gate_key" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts" -o ConnectTimeout=20 "$DEPLOY_USER@$HOST" "switch $ID" | tee "$RUNNER_TEMP/out"
+          { echo "### Search switch"; echo '```'; cat "$RUNNER_TEMP/out"; echo '```'; } >>"$GITHUB_STEP_SUMMARY"
       - if: always()
         run: rm -f "$RUNNER_TEMP/gate_key"
