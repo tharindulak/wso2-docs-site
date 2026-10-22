@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { parseDocument, DomUtils } from 'htmlparser2';
 import { ROOT, GENERATED } from './lib.mjs';
 import { HUB, HUB_NAME, DEPLOYMENT_OPTIONS, readSearchConfig } from '../site/src/lib/search.mjs';
+import { noIndex } from '../site/src/lib/site-url.mjs';
 
 export const ALIAS = 'docs';
 const MAX_CONTENT = 3000;
@@ -81,13 +82,19 @@ export function versionIndex(manifest) {
   return index;
 }
 
+// What Docusaurus' noIndex (DOCS_NO_INDEX=1, site-url.mjs) writes on every page; a page's own noindex (Redirect.js)
+// replaces it with plain "noindex".
+const SITE_NOINDEX = 'noindex, nofollow';
+
 /**
- * Records for one built page, or [] when it is not a docs page or is a redirect. `where` comes from versionIndex.
+ * Records for one built page, or [] when it is not a docs page, is a redirect or is noindex. `where` comes from
+ * versionIndex. siteNoIndex: the build marks every page noindex, so only a page's own noindex leaves it out.
  * Deployment options come from <meta name="wso2:deployment">, else the "Deployment options" box.
  */
-export function pageRecords(html, url, where) {
+export function pageRecords(html, url, where, { siteNoIndex = false } = {}) {
   const doc = parseDocument(html);
-  if (meta(doc, 'refresh') || /noindex/i.test(meta(doc, 'robots') ?? '')) return [];
+  const robots = meta(doc, 'robots') ?? '';
+  if (meta(doc, 'refresh') || (/noindex/i.test(robots) && !(siteNoIndex && robots === SITE_NOINDEX))) return [];
   const article = DomUtils.findOne((e) => e.name === 'article', doc.children);
   if (!article) return [];
 
@@ -159,7 +166,7 @@ const walkHtml = (dir) => fs.readdirSync(dir, { recursive: true, withFileTypes: 
   .filter((e) => e.isFile() && e.name.endsWith('.html')).map((e) => path.relative(dir, path.join(e.parentPath, e.name)).split(path.sep).join('/')).sort();
 
 /** Every record for a build directory, without badges. Pages of version ids the manifest does not know are skipped. */
-export function* buildRecords(buildDir, manifest, warn = console.warn) {
+export function* buildRecords(buildDir, manifest, warn = console.warn, siteNoIndex = noIndex()) {
   const index = versionIndex(manifest);
   const unknown = new Map();
   for (const file of walkHtml(buildDir)) {
@@ -169,7 +176,7 @@ export function* buildRecords(buildDir, manifest, warn = console.warn) {
     const where = index.get(tag);
     if (!where) { unknown.set(tag, (unknown.get(tag) ?? 0) + 1); continue; }
     if (where.hidden) continue;
-    yield* pageRecords(html, pagePath(file), { ...where, versionId: tag });
+    yield* pageRecords(html, pagePath(file), { ...where, versionId: tag }, { siteNoIndex });
   }
   for (const [tag, n] of unknown) warn(`skipped ${n} pages of unknown version id ${tag}`);
   yield* linkOutRecords(manifest);
