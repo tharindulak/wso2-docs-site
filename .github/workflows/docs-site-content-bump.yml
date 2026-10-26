@@ -11,6 +11,9 @@ permissions:
 concurrency:
   group: docs-site-content-bump
   cancel-in-progress: false
+# The lock may pin forks (test copies outside the wso2 organization); scripts/lib.mjs accepts their owner from this.
+env:
+  DOCS_SITE_TEST_OWNER: ${{ vars.DOCS_SITE_TEST_OWNER }}
 jobs:
   bump:
     runs-on: ubuntu-latest
@@ -27,7 +30,7 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: docs-site/package-lock.json
-      - run: npm ci --ignore-scripts
+      - run: npm ci --ignore-scripts && npm run build:converter # bump-sources.mjs imports helpers from the converter package (built, not committed)
       - name: Bump pinned commits
         id: bump
         run: |
