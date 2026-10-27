@@ -11,7 +11,7 @@ on:
 permissions: {}
 env:
   DOCS_SITE_REPO: tharindulak/wso2-docs-site
-  CONVERTER_SHA: 0000000000000000000000000000000000000000 # set when v1 moves; must contain `wso2-docs bundle`
+  CONVERTER_SHA: 837b7950f5af5fea99ef8c27f3dd733362a6cc4f # moves with v1; must contain `wso2-docs bundle`
 jobs:
   # Pull requests: the required status check ("bundle / check"). Read-only; nothing is packed or published.
   check:
