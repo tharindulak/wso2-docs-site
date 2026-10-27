@@ -4,13 +4,13 @@ Label: wayfinder:map
 
 ## Destination
 
-A build-ready spec, handed off for implementation, for publishing docs from docs bundles: the content-repo release flow (branch, review gate, reusable bundle workflow), the docs-site intake (30-minute poll, verification, lock PR that auto-merges, GA check), the changes to Deploy (a GitHub Release on the docs-site repo for every deploy, target 141 only), and cutover from git pins to bundles for every section. Done when nothing is left to decide.
+A build-ready spec, handed off for implementation, for publishing docs from docs bundles: the content-repo release flow (branch, review gate, reusable bundle workflow), the docs-site intake (30-minute poll, verification, lock PR that auto-merges, GA check), the changes to Deploy (a GitHub Release on the docs-site repo for every deploy, target 141 only), and cutover from git pins to bundles for every section. Done when nothing is left to decide **and** the workflows are built and proven on the user's forks: the reusable bundle workflow, intake with the bundle-based lock and backfill, and the deploy release record (user decision 2026-10-27). Cutting over the real wso2 repos is handed off.
 
 ## Notes
 
 - Domain: documentation platform delivery. Vocabulary lives in [CONTEXT.md](../../CONTEXT.md): use Docs site, Content source, Product, Section, **Docs bundle** (added 2026-10-27). A team's "product" in this effort means one section of the lock (AI Gateway, API Gateway, API Portal, API Manager are sections of API Platform).
 - Builds on the [WSO2 docs site on Docusaurus](../wso2-docs-site/map.md) map, the delivery map "Deploying, previewing and migrating the docs site with GitHub workflows" (`.scratch/wso2-docs-site-delivery/map.md` in the `plan-docs-site-delivery` worktree), `docs-site/README.md` and `docs-site/CONTENT-RELEASES.md`. Its Deploy, snapshots, bot App and fork decisions stand unless a ticket here changes them.
-- Planning only: tickets produce decisions, not workflows. Building them is handed off.
+- **This map builds as well as plans** (user decision 2026-10-27, after the reusable workflow and intake specs closed). Build order: (1) the reusable bundle workflow on branch `feat/docs-bundle-workflow` (cut from `docs-site-build`), proven on `tharindulak/docs-api-platform`; (2) settle [Backfill bundle store](issues/07-backfill-bundle-store.md) and [Deploy release record and rollback](issues/08-deploy-release-record-and-rollback.md) meanwhile; (3) intake, the bundle-based lock, backfill and the deploy record as one change, so snapshots rebuild once; (4) cutover per team. Build work is tracked as `task` tickets; code follows `docs-site/README.md` conventions, tests first.
 - Skills every session should consult: grilling, domain-modeling. Research tickets use research.
 - Charting decisions (user, 2026-10-27):
   - **One docs bundle per section per version**, attached to a GitHub Release on the content source. Zip-only: after cutover no section is fetched from git, including Latest.
@@ -53,4 +53,4 @@ A build-ready spec, handed off for implementation, for publishing docs from docs
 - Moving to the wso2 org, the `production` environment, more environments, VM access for others, monitoring and alerts: the delivery map's follow-up effort "Taking the docs site workflows to production".
 - Changes to the MkDocs-to-Docusaurus migration workflow, beyond the bundle recording its content format (user decision 2026-10-27).
 - Any deploy to the 129 VM.
-- Building the workflows themselves: this map ends at the spec.
+- Cutting over the real `wso2/*` repos: handed off once the workflows are proven on the forks.
