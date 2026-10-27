@@ -36,14 +36,14 @@ A build-ready spec, handed off for implementation, for publishing docs from docs
 - [Release facts on the forks](issues/11-release-facts-on-the-forks.md): immutable releases and cross-repo reads with `GITHUB_TOKEN` work on user repos; the workflow-file mismatch rejection did not reproduce; Actions cannot bypass a tag ruleset on user repos, so forks use no tag ruleset and rely on attestation; wso2 org plan and roles unknown.
 - [Rehearse a bundle release on the API Platform fork](issues/12-rehearse-a-bundle-release-on-the-api-platform-fork.md): API Gateway 1.2.0 released as a prerelease bundle; check, attestation and byte-identical contents all held; navigation page items may carry a `label`; rehearsal cleaned up.
 - [Reusable bundle workflow spec](issues/05-reusable-bundle-workflow-spec.md): docs-site `docs-bundle.yml` at a moving `v1` (converter pinned inside), a 10-line no-input caller added once by a docs-site owner; check-only on PRs, publish on push; deterministic zip, 200 MB / 20,000 files; one manifest per `release_tag` prefix; `.github/**` and manifests on `main` gated; AI Workspace prefix becomes `ai-workspace/v`.
+- [Docs-site intake spec](issues/06-docs-site-intake-spec.md): poll at :07 and :37; verify digest, attestation (signer `docs-bundle.yml@v1`), immutability, safe zip and manifest once, then trust the lock's sha256; new lock version shape; one auto-merging PR per section for fixes, new versions after GA, `release/latest` and withdrawals (supersedes promotion approval); failures become `bundle-intake` issues; link-baseline failures stay blocked.
 
 ## Not yet specified
 
 - Content repos that hold several sections (docs-api-platform's components and cloud tree, Identity's merged cloud and self-hosted pages, `cloud_companion` placement): whether one release can carry several bundles, and how a companion's bundle lines up with the version it is merged into. Sharpens once the bundle layout and release flow are decided.
-- Link-baseline failures need a reviewed PR to re-record, which would hold an auto-merging lock PR: whether intake may re-record baselines for a bundle, or a failing bundle always stops.
-- What happens to the hourly content bump and daily promotion workflows, `CONTENT-RELEASES.md` and the `wso2-docs check` PR action after cutover: retired, folded into intake, or kept for transition.
+- How `CONTENT-RELEASES.md`, the `wso2-docs check` PR action and the retired content bump and promotion workflows are wound down during cutover (intake replaces the two workflows).
 - How a docs bundle digest enters snapshot keys and link baselines (bundles are deterministic, so a byte-identical release has the same digest).
-- Failure handling beyond an issue per failed bundle (who is told, repeated failures, a bundle withdrawn by its team).
+- Repeated intake failures for one section (issue noise, when to stop retrying).
 
 ## Out of scope
 
