@@ -1,0 +1,119 @@
+# Reusable: content repos call this to check (pull requests to release/**) or publish (pushes to release/**) a docs
+# bundle, one section version per release branch. Decided in
+# .scratch/wso2-docs-bundle-publishing/issues/05-reusable-bundle-workflow-spec.md; usage in docs-site/DOCS-BUNDLES.md.
+#
+# Callers pin @v1, a moving tag docs-site owners move. CONVERTER_SHA below moves with it: the converter that checks and
+# packs is always this repository's code at that commit, never code from the content repo. Intake accepts only bundles
+# whose provenance attestation names this file at refs/tags/v1 and the release branch as its source ref.
+name: docs bundle
+on:
+  workflow_call:
+permissions: {}
+env:
+  DOCS_SITE_REPO: tharindulak/wso2-docs-site
+  CONVERTER_SHA: 0000000000000000000000000000000000000000 # set when v1 moves; must contain `wso2-docs bundle`
+jobs:
+  # Pull requests: the required status check ("bundle / check"). Read-only; nothing is packed or published.
+  check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: content
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.DOCS_SITE_REPO }}
+          ref: ${{ env.CONVERTER_SHA }}
+          path: docs-site
+          persist-credentials: false
+          sparse-checkout: docs-site/packages/docs-converter
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Build the converter
+        working-directory: docs-site/docs-site/packages/docs-converter
+        run: npm ci --ignore-scripts --no-audit --no-fund && npm run build
+      - name: Check the bundle
+        working-directory: content
+        env:
+          BRANCH: ${{ github.base_ref }}
+          CLI: ${{ github.workspace }}/docs-site/docs-site/packages/docs-converter/dist/src/cli.js
+        run: node "$CLI" bundle --branch "$BRANCH" --check-only --format github
+
+  # Pushes to a release branch: check, pack, attest and publish. One run per branch at a time.
+  publish:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/heads/release/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: docs-bundle-${{ github.repository }}-${{ github.ref }}
+      cancel-in-progress: false
+    permissions:
+      contents: write     # create the release
+      id-token: write     # sign the provenance attestation
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: content
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.DOCS_SITE_REPO }}
+          ref: ${{ env.CONVERTER_SHA }}
+          path: docs-site
+          persist-credentials: false
+          sparse-checkout: docs-site/packages/docs-converter
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Build the converter
+        working-directory: docs-site/docs-site/packages/docs-converter
+        run: npm ci --ignore-scripts --no-audit --no-fund && npm run build
+      - name: Existing tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/" --paginate --jq '.[].ref | sub("^refs/tags/"; "")' >"$RUNNER_TEMP/tags.txt"
+      - name: Check and pack
+        working-directory: content
+        env:
+          CLI: ${{ github.workspace }}/docs-site/docs-site/packages/docs-converter/dist/src/cli.js
+        run: node "$CLI" bundle --branch "$GITHUB_REF_NAME" --commit "$GITHUB_SHA" --tags "$RUNNER_TEMP/tags.txt" --out "$RUNNER_TEMP/bundle" --format github
+      - name: Read the bundle
+        id: bundle
+        run: |
+          set -eu
+          info="$RUNNER_TEMP/bundle/bundle.json"
+          for k in tag asset title sha256 section version source_commit files; do
+            v=$(jq -r ".$k" "$info")
+            [[ $v =~ ^[A-Za-z0-9./\ _-]+$ ]] || { echo "unexpected $k in bundle.json" >&2; exit 1; }
+            echo "$k=$v" >>"$GITHUB_OUTPUT"
+          done
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ runner.temp }}/bundle/${{ steps.bundle.outputs.asset }}
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.bundle.outputs.tag }}
+          ASSET: ${{ steps.bundle.outputs.asset }}
+          TITLE: ${{ steps.bundle.outputs.title }}
+          SHA256: ${{ steps.bundle.outputs.sha256 }}
+          SECTION: ${{ steps.bundle.outputs.section }}
+          FILES: ${{ steps.bundle.outputs.files }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -eu
+          # shellcheck disable=SC2016 # the backticks are Markdown code spans in the release notes
+          notes=$(printf 'Docs bundle for the WSO2 docs site.\n\n- Section: `%s`\n- Version: `%s`\n- Source commit: `%s`\n- Asset: `%s` (%s files)\n- sha256: `%s`\n- Built by: %s\n' \
+            "$SECTION" "${TAG##*v}" "$GITHUB_SHA" "$ASSET" "$FILES" "$SHA256" "$RUN_URL")
+          # Draft first, then publish: an immutable release locks its assets when published.
+          gh release create "$TAG" "$RUNNER_TEMP/bundle/$ASSET" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "$TITLE" --notes "$notes" --draft --latest=false
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest=false
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '{tag_name, immutable, assets: [.assets[] | {name, digest}]}' | tee -a "$GITHUB_STEP_SUMMARY"

@@ -43,6 +43,7 @@ Navigation still lists every product; links into sections left out of a quick bu
 | `scripts/snapshots.mjs` | Builds, stores and assembles frozen versions (snapshots): `list`, `build`, `assemble`. |
 | `scripts/check-links.mjs` | Checks internal links in a built site, including the merged live and snapshot output. |
 | `scripts/search-index.mjs`, `site/src/components/search/` | Search. The script indexes a built site (live or merged) into Typesense; the dialog (Ctrl/Cmd+K) and `/search` page query it with a search-only key. See Search below. |
+| `.github/workflows/docs-bundle.yml`, `DOCS-BUNDLES.md`, `scripts/setup-content-repo.sh` | Docs bundles: the reusable workflow content repos call to check and publish one section version per release branch, the guide for teams and docs-site owners, and the one-time repo settings. The docs site does not read bundles yet. |
 | `wso2-docs` CLI, `check-action/` | The same conversion for content repos: `wso2-docs check` on pull requests (the Action annotates failing lines), `wso2-docs convert` to produce a converted artifact. |
 | `.github/workflows/docs-site-*.yml` | CI build and merged link check, snapshot builds, hourly content bump, daily version promotion. Actions pinned by commit, least-privilege tokens, no credentials persisted, no tokens in content repos. |
 

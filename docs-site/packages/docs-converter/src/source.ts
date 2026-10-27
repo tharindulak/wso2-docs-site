@@ -2,6 +2,7 @@
 import { convertMkdocsSite, convertMergedSites, prepareDocusaurusDocs, emptyReport, type SiteOutput, type SiteReport, type EditUrl } from './site.js';
 import type { SourceConfig } from './config.js';
 import type { SidebarInput } from './types.js';
+import { navToSidebar } from './manifest.js';
 import path from 'node:path';
 
 /** Version of the output layout (docs/, sidebar.json, manifest.json). The docs site rejects versions it does not know. */
@@ -27,8 +28,12 @@ export async function convertSource(cfg: SourceConfig, root: string, out: Omit<S
     }, target);
     return { sidebarId: 'docs', sidebar, report };
   }
+  // A docs manifest's navigation replaces the sidebars file (plain data: no sidebar code runs).
+  const fromNav = cfg.nav ? navToSidebar(cfg.nav, root, cfg.docs!) : undefined;
+  if (fromNav) for (const page of fromNav.missing) report.droppedNav.push(page);
   const { sidebarId, sidebar } = await prepareDocusaurusDocs({
-    root, docs: cfg.docs!, sidebar: cfg.sidebar!, currentSite: cfg.current_site, editUrl: edit, shims: cfg.shims,
+    root, docs: cfg.docs!, sidebar: cfg.sidebar ?? '', sidebarItems: fromNav?.items, currentSite: cfg.current_site, editUrl: edit, shims: cfg.shims,
+    redirects: cfg.redirects,
     deployment_options: cfg.deployment_options, deployment_overrides: cfg.deployment_overrides,
   }, target);
   return { sidebarId, sidebar, report };

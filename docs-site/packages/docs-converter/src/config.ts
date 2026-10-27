@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import type { DeploymentOption } from './types.js';
+import { parseNav, parseSection, type ManifestSection, type NavItem } from './manifest.js';
 
 export interface SourceConfig {
   kind: 'mkdocs' | 'mkdocs-merge' | 'docusaurus';
@@ -32,6 +33,12 @@ export interface SourceConfig {
   /** Prefix for "Edit this page" links, for example https://github.com/wso2/docs-is/blob/master/ */
   edit_url?: string;
   iframe_hosts?: string[];
+  /** Docs manifest: what a docs bundle releases (see manifest.ts). */
+  section?: ManifestSection;
+  /** Docs manifest: the side navigation. Replaces `sidebar` for Docusaurus sources. */
+  nav?: NavItem[];
+  /** A Docusaurus tree's redirects file and the version key whose entries this section keeps. */
+  redirects?: { file: string; version: string };
 }
 
 export class ConfigError extends Error {
@@ -58,7 +65,13 @@ export function loadConfig(file: string, root: string): SourceConfig & { exclude
   if (!Array.isArray(raw.deployment_options) && kind !== 'mkdocs-merge') throw new ConfigError('deployment_options must list the deployment options of the pages');
   if (kind === 'mkdocs') relPath(raw.mkdocs, 'mkdocs');
   if (kind === 'mkdocs-merge') { relPath(raw.cloud?.mkdocs, 'cloud.mkdocs'); relPath(raw.self_hosted?.mkdocs, 'self_hosted.mkdocs'); }
-  if (kind === 'docusaurus') { relPath(raw.docs, 'docs'); relPath(raw.sidebar, 'sidebar'); }
+  const nav = raw.nav !== undefined ? parseNav(raw.nav) : undefined;
+  const section = raw.section !== undefined ? parseSection(raw.section) : undefined;
+  if (kind === 'docusaurus') { relPath(raw.docs, 'docs'); if (!nav) relPath(raw.sidebar, 'sidebar'); }
+  if (raw.redirects !== undefined) {
+    if (!raw.redirects || typeof raw.redirects.version !== 'string') throw new ConfigError('redirects must be { file, version }');
+    relPath(raw.redirects.file, 'redirects.file');
+  }
   for (const s of raw.skip ?? []) relPath(s, 'skip');
   if (raw.only) relPath(raw.only, 'only');
   let excludeList: string[] = [];
@@ -67,5 +80,5 @@ export function loadConfig(file: string, root: string): SourceConfig & { exclude
     const f = path.join(root, relPath(raw.exclude, 'exclude'));
     excludeList = fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#')) : [];
   }
-  return { ...(raw as SourceConfig), kind, route, deployment_options: raw.deployment_options ?? [], excludeList };
+  return { ...(raw as SourceConfig), kind, route, deployment_options: raw.deployment_options ?? [], excludeList, nav, section };
 }

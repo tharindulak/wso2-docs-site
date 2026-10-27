@@ -4,8 +4,14 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
+import yaml from 'js-yaml';
 import { loadConfig, ConfigError, type SourceConfig } from './config.js';
+import { parseReleaseBranch, nextTag, findManifest, collectBundle, type BundleProblem } from './bundle.js';
+import { parseNav, parseSection, sidebarToNav } from './manifest.js';
+import { loadSidebarFile } from './site.js';
+import { zipEntries } from './zip.js';
 import { convertSource, CONTRACT_VERSION } from './source.js';
 import { mkdocsSite } from './mkdocs-config.js';
 import type { SiteReport } from './site.js';
@@ -19,15 +25,25 @@ Usage:
   wso2-docs check   [--config wso2-docs.yaml] [--root .] [--format text|github|json]
                     [--release-tag v7.4.0 --version-folder en/identity-server/{version}]
   wso2-docs convert [--config wso2-docs.yaml] [--root .] [--out dist] [--format text|github|json]
+  wso2-docs bundle  --branch release/<component>/<x.y.z> [--root .] [--format text|github]
+                    (--check-only | --commit <sha> --tags <file> --out <dir>)
+  wso2-docs manifest init [--config wso2-docs.yaml] [--root .] --id <section id> --prefix <v|component/v>
+                    --section-version <x.y.z|latest> [--label <label>] [--write]
 
 check     converts every page in memory and reports pages that would not reach the site;
           with --release-tag and --version-folder it also warns when the release's version has no folder
 convert   writes dist/docs/ (pages and images), dist/sidebar.json and dist/manifest.json
+bundle    checks the section the release branch releases (its wso2-docs.yaml) and, unless --check-only, writes
+          <out>/<section>-<version>.docs.zip, its .sha256 and bundle.json (tag, asset, title, sha256)
+manifest init  adds section and nav (from the sidebars file) to a Docusaurus section's wso2-docs.yaml
 
 Exit codes: 0 all pages convert (or are on the exclude list), 1 new failures or bad lifecycle stage values in front matter,
             2 usage or config error. Front matter that is not valid YAML is a warning.`;
 
-interface Args { command?: string; config: string; root: string; out: string; format: 'text' | 'github' | 'json'; releaseTag?: string; versionFolder?: string }
+interface Args {
+  command?: string; sub?: string; config: string; root: string; out: string; format: 'text' | 'github' | 'json'; releaseTag?: string; versionFolder?: string;
+  branch?: string; commit?: string; tags?: string; checkOnly?: boolean; write?: boolean; id?: string; label?: string; prefix?: string; sectionVersion?: string;
+}
 
 function parseArgs(argv: string[]): Args {
   const args: Args = { config: 'wso2-docs.yaml', root: '.', out: 'dist', format: 'text' };
@@ -39,6 +55,15 @@ function parseArgs(argv: string[]): Args {
     else if (a === '--out') args.out = value();
     else if (a === '--release-tag') args.releaseTag = value();
     else if (a === '--version-folder') args.versionFolder = value();
+    else if (a === '--branch') args.branch = value();
+    else if (a === '--commit') args.commit = value();
+    else if (a === '--tags') args.tags = value();
+    else if (a === '--check-only') args.checkOnly = true;
+    else if (a === '--write') args.write = true;
+    else if (a === '--id') args.id = value();
+    else if (a === '--label') args.label = value();
+    else if (a === '--prefix') args.prefix = value();
+    else if (a === '--section-version') args.sectionVersion = value();
     else if (a === '--format') {
       const f = value();
       if (f !== 'text' && f !== 'github' && f !== 'json') throw new ConfigError('--format must be text, github or json');
@@ -46,6 +71,7 @@ function parseArgs(argv: string[]): Args {
     } else if (a === '--help' || a === '-h') args.command = 'help';
     else if (a === '--version' || a === '-v') args.command = 'version';
     else if (!a.startsWith('-') && !args.command) args.command = a;
+    else if (!a.startsWith('-') && args.command === 'manifest' && !args.sub) args.sub = a;
     else throw new ConfigError(`Unknown argument: ${a}`);
   }
   return args;
@@ -107,6 +133,96 @@ function checkReleaseFolder(root: string, tag: string, pattern: string): void {
   if (!fs.existsSync(abs)) process.stderr.write(`warning: release ${tag} has no folder ${folder}\n`);
 }
 
+function annotate(format: Args['format'], level: 'error' | 'warning', file: string, kind: string, message: string): void {
+  if (format === 'github') {
+    const text = `${kind}: ${message}`.replace(/%/g, '%25').replace(/\r/g, '%0D').replace(/\n/g, '%0A');
+    process.stdout.write(`::${level} file=${file},title=wso2-docs ${kind}::${text}\n`);
+  } else {
+    process.stdout.write(`${level === 'error' ? '✖' : '⚠'} ${file}\n    ${kind.padEnd(8)} ${message}\n`);
+  }
+}
+
+/** `bundle`: check the release branch's section and pack its docs bundle. */
+async function bundle(args: Args, root: string): Promise<number> {
+  if (!args.branch) throw new ConfigError('bundle needs --branch');
+  if (args.format === 'json') throw new ConfigError('bundle prints text or github annotations');
+  const { component, version } = parseReleaseBranch(args.branch);
+  const manifestFile = findManifest(root, component);
+  const cfg = loadConfig(path.join(root, manifestFile), root);
+  if (!cfg.section) throw new ConfigError(`${manifestFile} has no section`);
+  if (cfg.section.version !== version) throw new ConfigError(`section.version ${cfg.section.version} in ${manifestFile} does not match branch ${args.branch}`);
+
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wso2-docs-bundle-'));
+  let checked: number;
+  try {
+    const { report: r } = await convertSource(cfg, root, { outDir: path.join(tmp, 'docs'), exclude: cfg.excludeList });
+    const missingNav = r.droppedNav.splice(0); // nav pages that do not exist fail a bundle (check only counts them)
+    checked = report(r, cfg, root, cfg.excludeList, args.format);
+    for (const page of missingNav) annotate(args.format, 'error', manifestFile, 'navigation', `nav page ${page} does not exist under ${cfg.docs}`);
+    if (missingNav.length) checked = 1;
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+  const files = collectBundle(root, manifestFile, cfg);
+  for (const p of files.problems) annotate(args.format, 'error', p.file, p.kind, p.detail);
+  const problems: BundleProblem[] = files.problems;
+  if (checked !== 0 || problems.length) return 1;
+  if (args.checkOnly) {
+    if (args.format === 'text') process.stdout.write(`✔ ${manifestFile}: ${files.files.length} files would be bundled\n`);
+    return 0;
+  }
+
+  if (!args.commit || !/^[0-9a-f]{40}$/.test(args.commit)) throw new ConfigError('bundle needs --commit with a 40-character commit (or --check-only)');
+  if (!args.out) throw new ConfigError('bundle needs --out');
+  const tags = args.tags ? fs.readFileSync(path.resolve(args.tags), 'utf8').split('\n').map((t) => t.trim()).filter(Boolean) : [];
+  const prefix = cfg.section.release_tag;
+  const tag = nextTag(prefix, version, tags);
+  const tagVersion = tag.slice(prefix.length);
+  const asset = `${cfg.section.id}-${tagVersion}.docs.zip`;
+  const raw = yaml.load(fs.readFileSync(path.join(root, manifestFile), 'utf8'), { schema: yaml.JSON_SCHEMA }) as Record<string, unknown> & { section: Record<string, unknown> };
+  raw.section = { ...raw.section, source_commit: args.commit };
+  const entries = [
+    ...files.files.map((name) => ({ name, data: fs.readFileSync(path.join(root, name)) })),
+    ...Object.entries(files.generated).map(([name, data]) => ({ name, data })),
+    { name: 'wso2-docs.yaml', data: Buffer.from(yaml.dump(raw, { lineWidth: -1, noRefs: true })) },
+  ];
+  // Generated files replace the checkout's copy at the same path.
+  const byName = new Map(entries.map((e) => [e.name, e]));
+  const zip = zipEntries([...byName.values()]);
+  const sha256 = createHash('sha256').update(zip).digest('hex');
+  const out = path.resolve(args.out);
+  fs.mkdirSync(out, { recursive: true });
+  fs.writeFileSync(path.join(out, asset), zip);
+  fs.writeFileSync(path.join(out, `${asset}.sha256`), `${sha256}  ${asset}\n`);
+  const info = {
+    section: cfg.section.id, title: `${cfg.section.label ?? cfg.section.id} ${tagVersion}`, version, tag, asset, sha256,
+    source_commit: args.commit, manifest: manifestFile, files: byName.size,
+  };
+  fs.writeFileSync(path.join(out, 'bundle.json'), `${JSON.stringify(info, null, 2)}\n`);
+  if (args.format === 'text') process.stdout.write(`Wrote ${asset} (${byName.size} files, sha256 ${sha256}) for ${tag}\n`);
+  return 0;
+}
+
+/** `manifest init`: add section and nav to a Docusaurus section's wso2-docs.yaml, from its sidebars file. */
+function manifestInit(args: Args, root: string): number {
+  if (args.sub !== 'init') throw new ConfigError('Usage: wso2-docs manifest init --id <id> --prefix <v|component/v> --section-version <x.y.z|latest>');
+  const file = path.resolve(root, args.config);
+  const cfg = loadConfig(file, root);
+  if (cfg.kind !== 'docusaurus' || !cfg.docs) throw new ConfigError('manifest init supports kind: docusaurus sections');
+  if (!cfg.sidebar || !cfg.sidebar.endsWith('.json')) throw new ConfigError('manifest init reads a sidebars .json file (a .ts/.js sidebar would run code)');
+  const section = parseSection({ id: args.id, ...(args.label ? { label: args.label } : {}), version: args.sectionVersion, release_tag: args.prefix });
+  const [, items = []] = Object.entries(loadSidebarFile(path.join(root, cfg.sidebar)))[0] ?? [];
+  const { nav, problems } = sidebarToNav(items, root, cfg.docs);
+  parseNav(nav);
+  const raw = yaml.load(fs.readFileSync(file, 'utf8'), { schema: yaml.JSON_SCHEMA }) as Record<string, unknown>;
+  delete raw.sidebar;
+  const text = yaml.dump({ ...raw, section, nav }, { lineWidth: -1, noRefs: true });
+  for (const p of problems) process.stderr.write(`warning: ${p}\n`);
+  if (args.write) fs.writeFileSync(file, text);
+  else process.stdout.write(text);
+  return problems.length ? 1 : 0;
+}
+
 function gitCommit(root: string): string | null {
   try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); } catch { return null; }
 }
@@ -115,9 +231,11 @@ async function main(): Promise<number> {
   const args = parseArgs(process.argv.slice(2));
   if (!args.command || args.command === 'help') { process.stdout.write(`${HELP}\n`); return args.command ? 0 : 2; }
   if (args.command === 'version') { process.stdout.write(`${VERSION}\n`); return 0; }
+  const root = path.resolve(args.root);
+  if (args.command === 'bundle') return bundle(args, root);
+  if (args.command === 'manifest') return manifestInit(args, root);
   if (args.command !== 'check' && args.command !== 'convert') throw new ConfigError(`Unknown command: ${args.command}`);
 
-  const root = path.resolve(args.root);
   const cfg = loadConfig(path.resolve(root, args.config), root);
 
   if (args.command === 'check') {

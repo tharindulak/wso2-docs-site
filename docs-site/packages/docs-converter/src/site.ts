@@ -745,6 +745,8 @@ export interface DocusaurusDocsOptions extends DeploymentDefaults {
   docs: string;
   /** Sidebars file inside root (.json, .js or .ts). */
   sidebar: string;
+  /** Sidebar items from a docs manifest's navigation; used instead of the sidebars file when given. */
+  sidebarItems?: SidebarInput[];
   currentSite?: string;
   editUrl?: EditUrl;
   /** Component imports to replace, for example the source site's own components with site stand-ins. */
@@ -862,7 +864,7 @@ export async function prepareDocusaurusDocs(src: DocusaurusDocsOptions, out: Sit
     if (!from.startsWith(path.resolve(src.root) + path.sep)) throw new Error(`static folder outside the content source: ${src.static.from}`);
     copyAssets(from, src.static.to, [], { yml: true }); // a static folder holds no mkdocs.yml; its .yml files are specs
   }
-  const sidebars = loadSidebarFile(path.join(src.root, src.sidebar));
+  const sidebars = src.sidebarItems ? { docs: src.sidebarItems } : loadSidebarFile(path.join(src.root, src.sidebar));
   const [sidebarId, items] = Object.entries(sidebars)[0] ?? ['docs', []];
   return { sidebarId, sidebar: withoutDeprecatedLabels(items, (id) => shownStage(path.join(out.outDir, `${id}.md`))), report };
 }

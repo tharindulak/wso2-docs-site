@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tharindulak/wso2-docs-site/docs-site/packages/docs-converter/schema/wso2-docs.schema.json",
+  "title": "wso2-docs.yaml: docs manifest and converter config",
+  "description": "Editor support. The converter's validation (config.ts, manifest.ts) is authoritative.",
+  "type": "object",
+  "required": ["kind"],
+  "properties": {
+    "kind": { "enum": ["mkdocs", "mkdocs-merge", "docusaurus"] },
+    "route": { "type": "string", "pattern": "^[a-z0-9][a-z0-9/-]*$" },
+    "deployment_options": { "type": "array", "items": { "enum": ["WSO2 Cloud", "Hybrid", "Self-hosted"] } },
+    "docs": { "$ref": "#/$defs/path" },
+    "sidebar": { "$ref": "#/$defs/path" },
+    "mkdocs": { "$ref": "#/$defs/path" },
+    "current_site": { "type": "string" },
+    "edit_url": { "type": "string" },
+    "exclude": { "oneOf": [{ "type": "array", "items": { "type": "string" } }, { "$ref": "#/$defs/path" }] },
+    "redirects": {
+      "type": "object", "additionalProperties": false, "required": ["file", "version"],
+      "properties": { "file": { "$ref": "#/$defs/path" }, "version": { "type": "string" } }
+    },
+    "section": {
+      "type": "object", "additionalProperties": false, "required": ["id", "version", "release_tag"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "label": { "$ref": "#/$defs/text" },
+        "version": { "type": "string", "pattern": "^(\\d+\\.\\d+\\.\\d+|latest)$" },
+        "release_tag": { "type": "string", "pattern": "^([a-z0-9][a-z0-9-]*/)?v$" },
+        "include": { "type": "array", "items": { "$ref": "#/$defs/path" } },
+        "source_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      }
+    },
+    "nav": { "type": "array", "items": { "$ref": "#/$defs/navItem" } }
+  },
+  "$defs": {
+    "path": { "type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/@ -]+$" },
+    "text": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "navItem": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["page"],
+          "properties": { "page": { "$ref": "#/$defs/path" }, "label": { "$ref": "#/$defs/text" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["category", "items"],
+          "properties": {
+            "category": { "$ref": "#/$defs/text" },
+            "collapsed": { "type": "boolean" },
+            "overview": { "$ref": "#/$defs/path" },
+            "items": { "type": "array", "items": { "$ref": "#/$defs/navItem" } }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["link", "label"],
+          "properties": { "link": { "type": "string", "pattern": "^https://\\S+$" }, "label": { "$ref": "#/$defs/text" } }
+        }
+      ]
+    }
+  }
+}

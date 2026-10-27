@@ -13,6 +13,7 @@ Written in TypeScript; published as compiled JavaScript with type definitions. N
 ```sh
 npx wso2-docs check                 # convert every page in memory; report pages that would not reach the site
 npx wso2-docs convert --out dist    # write dist/docs/, dist/sidebar.json, dist/manifest.json
+npx wso2-docs bundle --branch release/gateway/1.2.0 --check-only   # check what a release branch would publish
 ```
 
 | Option | Default | |
@@ -45,6 +46,8 @@ current_site: https://mi.docs.wso2.com/en/latest/
 edit_url: https://github.com/wso2/docs-mi/blob/main/   # optional: "Edit this page" prefix
 exclude: exclude.txt               # optional: known failing pages (list, or a file, one path per line); may only shrink
 ```
+
+For `kind: docusaurus`, a docs manifest's `nav` replaces `sidebar`, and `section` names what a docs bundle releases (`wso2-docs bundle`, `wso2-docs manifest init`; see `docs-site/DOCS-BUNDLES.md`). The schema for editors is `schema/wso2-docs.schema.json`.
 
 For `kind: mkdocs-merge`, give `cloud: { mkdocs, current_site }`, `self_hosted: { mkdocs, current_site }` and `shared_names` (for example `product_name: WSO2 Identity Platform`). For `kind: docusaurus`, give `docs`, `sidebar` and optionally `shims`.
 
