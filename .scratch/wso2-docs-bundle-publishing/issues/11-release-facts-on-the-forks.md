@@ -26,7 +26,7 @@ Record what was done and each result; delete the throwaway repo afterwards after
 
 ## Resolution
 
-Done 2026-10-27 on a throwaway public repo `tharindulak/docs-bundle-release-spike` (README, `mode`, one workflow; dummy zip, no docs content). Runs 40477593350, 40477593633, 40477593251, 40477593411 (release/1.0.0 to 4.0.0) and one for release/5.0.0; runner gh 2.102.0. Repo deletion: pending the user granting the `delete_repo` scope (`gh auth refresh -h github.com -s delete_repo`).
+Done 2026-10-27 on a throwaway public repo `tharindulak/docs-bundle-release-spike` (README, `mode`, one workflow; dummy zip, no docs content). Runs 40477593350, 40477593633, 40477593251, 40477593411 (release/1.0.0 to 4.0.0) and one for release/5.0.0; runner gh 2.102.0. Repo deleted by the user, 2026-10-27 (confirmed gone).
 
 1. **Immutable releases on user-owned repos: yes.** `PUT /repos/{owner}/{repo}/immutable-releases` returned 204; every release published from a draft came out `immutable: true` with a sha256 `digest` on its asset. Intake can require `immutable: true` on the forks too; no test-only switch needed.
 2. **`GITHUB_TOKEN` reads other public repos: yes.** A `contents: read` job read `tharindulak/docs-api-platform` releases, read `cli/cli` attestations by digest, and `gh attestation verify --repo cli/cli` passed. Polling public content repos needs no App token; the lock PR still does.
