@@ -1,0 +1,254 @@
+{
+  "pages": 58,
+  "navPages": 58,
+  "labelsDropped": [
+    {
+      "page": "docusaurus/api-gateway/docs/overview.mdx",
+      "label": "Overview",
+      "title": "API Platform Gateway Overview"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/quick-start-guide.mdx",
+      "label": "Quick Start Guide",
+      "title": "API Platform Gateway quick start guide"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/setup/configuration.mdx",
+      "label": "Configuration & Interpolation",
+      "title": "Gateway Configuration and Environment Interpolation"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/setup/health-checks.mdx",
+      "label": "Health Checks",
+      "title": "Health checks for the Gateway Controller and Gateway Runtime"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/resiliency/timeouts.mdx",
+      "label": "Timeouts",
+      "title": "Configure Timeouts"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/policies/overview.mdx",
+      "label": "Overview",
+      "title": "API Platform Policies Overview"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/policies/add-or-update-policies.mdx",
+      "label": "Add or Update Policies",
+      "title": "Add or Update Policies in a Gateway"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/policies/custom-policies/writing-a-custom-policy.mdx",
+      "label": "Writing a Custom Policy",
+      "title": "Write a Custom Gateway Policy"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/policies/custom-policies/building-gateway-with-custom-policies.mdx",
+      "label": "Building Gateway with Custom Policies",
+      "title": "Build a Gateway Image with Custom Policies"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/deployment-modes/kubernetes/overview.mdx",
+      "label": "Overview",
+      "title": "API Platform Kubernetes Gateway (V2.0.0)"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/deployment-modes/kubernetes/kubernetes-standalone.mdx",
+      "label": "Standalone Mode",
+      "title": "Deploy in Kubernetes Standalone Mode"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/deployment-modes/kubernetes/gateway-operator.mdx",
+      "label": "Kubernetes Operator Mode",
+      "title": "Deploy with the Kubernetes Gateway Operator"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/deployment-modes/kubernetes/gateway-operator-management-crds.mdx",
+      "label": "Management CRDs",
+      "title": "Gateway Operator Management CRDs"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/high-availability-production-deployment.mdx",
+      "label": "Overview",
+      "title": "High-Availability Production Deployment"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/production-deployment/resources-and-scaling.mdx",
+      "label": "Resources & Scaling",
+      "title": "Configure Resources and Scaling"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/production-deployment/deploy-and-verify.mdx",
+      "label": "Deploy & Verify",
+      "title": "Deploy and Verify the Gateway"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/deployment/deploying-apis/bottom-up-api-deployment.mdx",
+      "label": "Bottom-Up Deployment",
+      "title": "Bottom-Up API Deployment Guide"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/logging.mdx",
+      "label": "Centralized Logging",
+      "title": "Configure Centralized Logging"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/traffic-logging.mdx",
+      "label": "Traffic Logging",
+      "title": "Configure Traffic Logging"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/tracing/overview.mdx",
+      "label": "Overview",
+      "title": "Distributed Tracing Overview"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/tracing/enabling-tracing.mdx",
+      "label": "Enabling and Disabling Tracing",
+      "title": "Enable Distributed Tracing"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/tracing/viewing-traces-in-jaeger.mdx",
+      "label": "Viewing Traces in Jaeger",
+      "title": "View Traces in Jaeger"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/tracing/configuration.mdx",
+      "label": "Tracing Configuration",
+      "title": "Tracing Configuration Options"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/tracing/alternative-backends.mdx",
+      "label": "Alternative Tracing Backends",
+      "title": "Export Traces to Alternative Backends"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/tracing/best-practices-and-troubleshooting.mdx",
+      "label": "Best Practices and Troubleshooting",
+      "title": "Tracing Best Practices and Troubleshooting"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/metrics/overview.mdx",
+      "label": "Overview",
+      "title": "Gateway Metrics"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/metrics/enabling-metrics.mdx",
+      "label": "Enabling and Disabling Metrics",
+      "title": "Enable Metrics"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/metrics/viewing-metrics-in-grafana.mdx",
+      "label": "Viewing Metrics in Grafana",
+      "title": "View Metrics in Grafana"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/metrics/configuration.mdx",
+      "label": "Configuration Options",
+      "title": "Metrics Configuration Options"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/metrics/alternative-backends.mdx",
+      "label": "Alternative Metrics Backends",
+      "title": "Export Metrics to Alternative Backends"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/observability/metrics/best-practices-and-troubleshooting.mdx",
+      "label": "Best Practices and Troubleshooting",
+      "title": "Metrics Best Practices and Troubleshooting"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/analytics/analytics-header-filter.mdx",
+      "label": "Analytics Header Filter",
+      "title": "Analytics Header Filter Policy"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/analytics/moesif-analytics.mdx",
+      "label": "Moesif Analytics",
+      "title": "Configure Moesif Analytics"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/analytics/opentelemetry-analytics.mdx",
+      "label": "OpenTelemetry Analytics",
+      "title": "Configure OpenTelemetry analytics"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/overview.mdx",
+      "label": "Overview",
+      "title": "Gateway Controller Management API"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/authentication.mdx",
+      "label": "Authentication",
+      "title": "Authenticate to the Management API"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/rest-api-management.mdx",
+      "label": "Rest API Management",
+      "title": "Management API: REST API Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/mcp-proxy-management.mdx",
+      "label": "MCP Proxy Management",
+      "title": "Management API: MCP Proxy Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/certificate-management.mdx",
+      "label": "Certificate Management",
+      "title": "Management API: Certificate Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/llm-provider-template-management.mdx",
+      "label": "LLM Provider Template Management",
+      "title": "Management API: LLM Provider Template Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/llm-provider-management.mdx",
+      "label": "LLM Provider Management",
+      "title": "Management API: LLM Provider Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/llm-proxy-management.mdx",
+      "label": "LLM Proxy Management",
+      "title": "Management API: LLM Proxy Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/secrets-management.mdx",
+      "label": "Secrets Management",
+      "title": "Management API: Secrets Management"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/gateway-controller-management-api/schemas.mdx",
+      "label": "Schemas",
+      "title": "Management API Schemas"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/performance/overview.mdx",
+      "label": "Overview",
+      "title": "API Platform Gateway Performance"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/performance/gateway-runtime-with-two-cpus.mdx",
+      "label": "Gateway runtime with two CPUs",
+      "title": "Gateway Runtime with Two CPUs - Performance Results"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/performance/gateway-runtime-with-four-cpus.mdx",
+      "label": "Gateway runtime with four CPUs",
+      "title": "Gateway Runtime with Four CPUs - Performance Results"
+    },
+    {
+      "page": "docusaurus/api-gateway/docs/about-this-release.mdx",
+      "label": "About this release",
+      "title": "API Gateway Changelog"
+    }
+  ],
+  "missingDocs": [],
+  "unsupported": [],
+  "refsOutside": [],
+  "refsMissing": [],
+  "symlinks": [],
+  "treeWide": [
+    "docusaurus/api-gateway/redirects.json"
+  ]
+}

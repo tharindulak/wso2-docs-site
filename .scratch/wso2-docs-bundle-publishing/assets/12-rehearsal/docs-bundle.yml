@@ -1,0 +1,99 @@
+# Prototype only: docs bundle rehearsal (wso2-docs-site planning, "Rehearse a bundle release on the API Platform fork").
+# On a push to release/<component>/<x.y.z>: check the section with the docs-site converter at a pinned commit, write a
+# draft docs manifest, pack <section>-<version>.docs.zip, attest it and publish a prerelease. Lives on the release
+# branch only; delete with the branch after the rehearsal.
+name: docs bundle (prototype)
+on:
+  push:
+    branches: ['release/**']
+permissions: {}
+concurrency:
+  group: docs-bundle-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  DOCS_SITE_REPO: tharindulak/wso2-docs-site
+  DOCS_SITE_SHA: 7b7db59d08c90d259009d3e9ec7aa96b7e565a53 # docs-site-build, converter used by the site today
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write     # create the release
+      id-token: write     # sign the provenance attestation
+      attestations: write
+    steps:
+      - name: Section from the branch name
+        id: section
+        run: |
+          set -eu
+          [[ $GITHUB_REF_NAME =~ ^release/([a-z0-9-]+)/([0-9]+\.[0-9]+\.[0-9]+)$ ]] || { echo "branch must be release/<component>/<x.y.z>" >&2; exit 1; }
+          component=${BASH_REMATCH[1]} version=${BASH_REMATCH[2]}
+          case "$component" in
+            gateway) id=api-platform-api-gateway root=docusaurus/api-gateway route=api-platform/api-gateway ;;
+            *) echo "component $component is not in this prototype" >&2; exit 1 ;;
+          esac
+          { echo "component=$component"; echo "version=$version"; echo "id=$id"; echo "root=$root"; echo "route=$route"
+            echo "tag=$component/v$version"; echo "asset=${id#api-platform-}-$version.docs.zip"; } >>"$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: content
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.DOCS_SITE_REPO }}
+          ref: ${{ env.DOCS_SITE_SHA }}
+          path: docs-site
+          persist-credentials: false
+          sparse-checkout: docs-site/packages/docs-converter
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Build the converter
+        working-directory: docs-site/docs-site/packages/docs-converter
+        run: npm ci --ignore-scripts --no-audit --no-fund && npm run build
+      - name: wso2-docs check
+        working-directory: content
+        env:
+          ROOT: ${{ steps.section.outputs.root }}
+          ROUTE: ${{ steps.section.outputs.route }}
+        run: |
+          set -eu
+          cfg="$RUNNER_TEMP/check.yaml"
+          printf 'kind: docusaurus\nroute: %s\ndeployment_options: [Self-hosted]\ndocs: %s/docs\nsidebar: %s/sidebars.json\ncurrent_site: https://wso2.com/bijira/docs/\n' "$ROUTE" "$ROOT" "$ROOT" >"$cfg"
+          cp "$cfg" _bundle-check.yaml
+          node "$GITHUB_WORKSPACE/docs-site/docs-site/packages/docs-converter/dist/src/cli.js" check --root . --config _bundle-check.yaml --format github
+          rm _bundle-check.yaml
+      - name: Draft manifest and file list
+        working-directory: content
+        env:
+          ROOT: ${{ steps.section.outputs.root }}
+          ID: ${{ steps.section.outputs.id }}
+          VERSION: ${{ steps.section.outputs.version }}
+        run: node .github/docs-bundle/pack.mjs "$ROOT" "$ID" "$VERSION" "$GITHUB_SHA" "$RUNNER_TEMP/bundle"
+      - name: Pack
+        working-directory: content
+        env:
+          ASSET: ${{ steps.section.outputs.asset }}
+        run: |
+          set -eu
+          mkdir -p "$RUNNER_TEMP/out"
+          zip -X -q "$RUNNER_TEMP/out/$ASSET" -@ <"$RUNNER_TEMP/bundle/files.txt"
+          (cd "$RUNNER_TEMP/bundle" && zip -X -q "$RUNNER_TEMP/out/$ASSET" wso2-docs.yaml)
+          cd "$RUNNER_TEMP/out" && sha256sum "$ASSET" | tee "$ASSET.sha256"
+          unzip -l "$ASSET" | tail -1
+          cat "$RUNNER_TEMP/bundle/report.json" >>"$GITHUB_STEP_SUMMARY"
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ runner.temp }}/out/${{ steps.section.outputs.asset }}
+      - name: Publish prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.section.outputs.tag }}
+          ASSET: ${{ steps.section.outputs.asset }}
+        run: |
+          set -eu
+          cd "$RUNNER_TEMP/out"
+          gh release create "$TAG" "$ASSET" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease --draft \
+            --title "$TAG (bundle rehearsal)" --notes "Prototype docs bundle; not a docs release. sha256: $(cut -d' ' -f1 "$ASSET.sha256")"
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '{tag_name, prerelease, immutable, assets: [.assets[] | {name, size, digest}]}'

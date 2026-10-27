@@ -48,6 +48,18 @@ _Avoid_: Shared topic, common docs
 A product team's own docs repository, which the team owns and from which the docs site draws that product's pages.
 _Avoid_: Docs repo (when ambiguous with the docs site's own repository), upstream
 
+**Docs bundle**:
+A zip a product team publishes with a docs release, holding one section's source content at one version; the only way content reaches the docs site.
+_Avoid_: Docs zip, product zip, package
+
+**Docs manifest**:
+The file in each section's folder of a content source that names the section and its version and holds its navigation; the docs site takes the side navigation from it and nowhere else.
+_Avoid_: Sidebar file, nav file, config
+
+**Cloud entry**:
+The first, default choice in a product's version switcher, showing only the content that applies to WSO2 Cloud; choosing a self-hosted version shows none of it.
+_Avoid_: Cloud version, SaaS toggle, cloud tab
+
 **Primary reader**:
 The reader a page is written for first: a new customer onboarding, or a customer of one product discovering the others.
 _Avoid_: Persona, audience

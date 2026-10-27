@@ -14,6 +14,7 @@ A build-ready spec for the WSO2 docs site, plus a working site in this repo: Doc
 - Reference models: [developer.hashicorp.com](https://developer.hashicorp.com/) for product navigation; GitLab docs for the per-page deployment-option block.
 - Content stays federated: each product team keeps its content source repo.
 - Versioning follows the GitLab model: Latest holds WSO2 Cloud plus the newest self-hosted release; older self-hosted releases are frozen snapshots.
+- **Superseded 2026-10-27 (user decision):** the version switcher gets a **Cloud entry**, first and selected by default, showing only cloud content; each self-hosted version shows no cloud content. Cloud comes from the Latest release's content (or a separate cloud repo's bundle). This replaces "Latest holds WSO2 Cloud plus the newest self-hosted release" and the destination's "no cloud/self-hosted toggle". Decided while charting [Publishing docs from docs bundles](../wso2-docs-bundle-publishing/map.md), in [Docs bundle layout and manifest](../wso2-docs-bundle-publishing/issues/03-docs-bundle-layout-and-manifest.md). Rendering it (switcher, per-view filtering, search scope) is not specified yet.
 - The hub's IA from [WSO2 Cloud hub documentation plan](../wso2-cloud-docs/map.md) becomes the docs site's home and cross-cutting sections.
 - Skeleton lives in this repo (`Wso2-Cloud`) for now.
 - Hand-off follow-up for the Oxygen UI team: tree-shakeable build or tokens package, fully specified ESM imports. See [How Oxygen UI themes the docs site](issues/04-oxygen-ui-in-docusaurus.md).
